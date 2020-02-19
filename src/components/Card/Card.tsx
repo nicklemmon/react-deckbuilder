@@ -1,11 +1,16 @@
 import React from 'react'
 import { default as CardInterface } from '../../interfaces/Card'
 
-function Card(props: CardInterface) {
-  const { name, rarity, description } = props
+interface CardProps extends CardInterface {
+  key: string
+  isRevealed?: boolean
+}
+
+function Card(props: CardProps) {
+  const { name, rarity, description, id } = props
 
   return (
-    <div>
+    <div id={`card-${id}`}>
       <h3>{name}</h3>
 
       <div>{rarity}</div>

@@ -1,3 +1,1 @@
-export default interface Deck {
-  numberOfCards: number
-}
+export default interface Deck {}
