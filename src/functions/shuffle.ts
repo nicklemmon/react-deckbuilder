@@ -1,14 +1,7 @@
-import Card from '../interfaces/Card'
-
 export default function shuffle(cards: Array<object>) {
-  let cardsArr = cards
-
-  for (var i = cardsArr.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1))
-    var temp = cardsArr[i]
-    cardsArr[i] = cardsArr[j]
-    cardsArr[j] = temp
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[cards[i], cards[j]] = [cards[j], cards[i]]
   }
-
-  return cardsArr
+  return cards
 }

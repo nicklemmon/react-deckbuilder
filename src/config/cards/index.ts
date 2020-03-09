@@ -44,4 +44,26 @@ const dwarf: Card = {
   },
 }
 
-export { knight, peasant, goblin, dwarf }
+const cyclops: Card = {
+  id: 'cyclops',
+  name: 'Cyclops',
+  rarity: 2,
+  description: 'A hulking cyclops',
+  stats: {
+    attack: 5,
+    defense: 5,
+  },
+}
+
+const gorgon: Card = {
+  id: 'gorgon',
+  name: 'Gorgon',
+  rarity: 3,
+  description: 'A slithering gorgon',
+  stats: {
+    attack: 6,
+    defense: 3,
+  },
+}
+
+export default [knight, peasant, goblin, dwarf, cyclops, gorgon]
