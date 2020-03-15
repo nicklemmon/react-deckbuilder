@@ -11,6 +11,7 @@ interface CardProps extends CardInterface {
 
 const StyledCard = styled('div')`
   ${buttonReset}
+  position: relative; /* allows absolute positioning within */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,6 +25,12 @@ const StyledCard = styled('div')`
   text-align: center;
 `
 
+const Rarity = styled('div')`
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+`
+
 function Card(props: CardProps) {
   const { name, rarity, description, id, onClick } = props
 
@@ -33,7 +40,7 @@ function Card(props: CardProps) {
 
       <div>{description}</div>
 
-      <div>{rarity}</div>
+      <Rarity>{rarity}</Rarity>
     </StyledCard>
   )
 }
