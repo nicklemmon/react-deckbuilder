@@ -21,6 +21,7 @@ const StyledCard = styled('div')`
   height: 17.5rem;
   width: 11.25rem;
   padding: 1rem;
+  text-align: center;
 `
 
 function Card(props: CardProps) {

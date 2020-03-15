@@ -1,5 +1,6 @@
 import { Machine, assign } from 'xstate'
 import shuffle from '../../functions/shuffle'
+import rng from '../../functions/rng'
 import config from '../../config'
 
 const machineConfig = {
@@ -11,6 +12,7 @@ const machineConfig = {
     currentHand: [],
     cardInPlay: undefined,
     discardPile: [],
+    monster: config.monsters[rng(config.monsters.length)],
   },
   states: {
     idle: {

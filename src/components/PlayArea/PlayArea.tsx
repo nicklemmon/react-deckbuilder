@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import PlayAreaMachine from './PlayAreaMachine'
 import { Deck } from '../Deck'
 import { Card } from '../Card'
+import { Monster } from '../Monster'
 import { StateMachineViewer } from '../StateMachineViewer'
 import CardInterface from '../../interfaces/Card'
 
@@ -12,9 +13,7 @@ interface PlayAreaProps {
 }
 
 const StyledPlayArea = styled('div')`
-  background-color: #f7f7f7;
-  padding: 3rem;
-  border: 1px solid #ccc;
+  padding: 2rem;
 `
 
 const StyledControls = styled('div')`
@@ -25,6 +24,7 @@ export default function PlayArea(props: PlayAreaProps) {
   const [current, send] = useMachine(PlayAreaMachine)
   const { context } = current
   const cardInPlay: any = context.cardInPlay
+  const monster: any = context.monster
 
   console.log(context)
 
@@ -79,6 +79,12 @@ export default function PlayArea(props: PlayAreaProps) {
         />
       ) : (
         <p>No card currently in play.</p>
+      )}
+
+      <h3>Monster:</h3>
+
+      {monster && (
+        <Monster id={monster.id} name={monster.name} level={monster.level} stats={monster.stats} />
       )}
 
       <h3>Discard Pile:</h3>
