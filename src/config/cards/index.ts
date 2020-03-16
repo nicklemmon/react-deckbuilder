@@ -26,7 +26,7 @@ const block: Card = {
   description: 'Block incoming damage',
   rarity: 0,
   stats: {
-    defend: 3,
+    defense: 3,
   },
 }
 

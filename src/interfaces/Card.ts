@@ -3,5 +3,8 @@ export default interface Card {
   name: string
   rarity: number
   description: string
-  stats: object
+  stats: {
+    attack?: number
+    defense?: number
+  }
 }

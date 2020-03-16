@@ -1,47 +1,90 @@
 import React from 'react'
 import styled from 'styled-components'
 import { default as CardInterface } from '../../interfaces/Card'
-import { buttonReset } from '../../styles/resets'
 
 interface CardProps extends CardInterface {
   key: string
   isRevealed?: boolean
-  onClick?(event: React.MouseEvent<HTMLButtonElement>): void
+  isDisabled?: boolean
+  onClick?: () => void
 }
 
-const StyledCard = styled('div')`
-  ${buttonReset}
-  position: relative; /* allows absolute positioning within */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+const Wrapper = styled('div')`
+  display: grid;
+  grid-template-rows: 1fr 4fr 1fr;
   background-color: #fff;
   border: 1px solid #ccc;
   /* based on the standard width/height ratios of casino playing cards */
   height: 17.5rem;
   width: 11.25rem;
-  padding: 1rem;
   text-align: center;
 `
 
-const Rarity = styled('div')`
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
+const Header = styled('div')`
+  padding: 2rem 1rem 1rem 1rem;
+  font-weight: 700;
 `
 
+const Content = styled('div')`
+  padding: 1rem;
+  align-self: center;
+`
+
+const Footer = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: #f7f7f7;
+`
+
+const Stats = styled('div')``
+
+const Rarity = styled('div')``
+
 function Card(props: CardProps) {
-  const { name, rarity, description, id, onClick } = props
+  const { name, rarity, description, id, onClick, isDisabled, stats } = props
 
   return (
-    <StyledCard as={onClick ? 'button' : 'div'} id={`card-${id}`} onClick={onClick}>
-      <h3>{name}</h3>
+    <Wrapper
+      id={`card-${id}`}
+      onClick={onClick}
+      style={{ pointerEvents: isDisabled ? 'none' : 'initial' }}
+    >
+      <Header>
+        <h3>{name}</h3>
+      </Header>
 
-      <div>{description}</div>
+      <Content>
+        <div>{description}</div>
+      </Content>
 
-      <Rarity>{rarity}</Rarity>
-    </StyledCard>
+      <Footer>
+        <Stats>
+          {stats.attack && (
+            <div>
+              <span role="img" aria-label="Attack:">
+                ⚔️
+              </span>
+
+              {stats.attack}
+            </div>
+          )}
+
+          {stats.defense && (
+            <div>
+              <span role="img" aria-label="Defense:">
+                🛡️
+              </span>
+
+              {stats.defense}
+            </div>
+          )}
+        </Stats>
+
+        <Rarity>{rarity}</Rarity>
+      </Footer>
+    </Wrapper>
   )
 }
 

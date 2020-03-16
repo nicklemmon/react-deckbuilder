@@ -4,12 +4,13 @@ import styled from 'styled-components'
 const StyledStateMachineViewer = styled('div')`
   position: fixed;
   z-index: 5;
-  top: 0;
-  right: 0;
+  top: 1rem;
+  right: 1rem;
   background-color: #293845d1;
   color: #fff;
-  padding: 30px;
+  padding: 1rem;
   width: 300px;
+  font-family: monospace;
 `
 
 export default function StateMachineViewer(props) {

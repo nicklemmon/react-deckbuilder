@@ -16,17 +16,14 @@ const StyledPlayArea = styled('div')`
   padding: 2rem;
 `
 
-const StyledControls = styled('div')`
-  padding-top: 3rem;
-`
-
 export default function PlayArea(props: PlayAreaProps) {
   const [current, send] = useMachine(PlayAreaMachine)
   const { context } = current
   const cardInPlay: any = context.cardInPlay
   const monster: any = context.monster
 
-  console.log(context)
+  console.log('current', current)
+  console.log('context', context)
 
   return (
     <StyledPlayArea>
@@ -58,6 +55,7 @@ export default function PlayArea(props: PlayAreaProps) {
             <Card
               key={`current-hand-card-${index}`}
               onClick={() => send({ type: 'CHOOSE', data: { card } })}
+              isDisabled={current.value !== 'choosing'}
               {...card}
             />
           ))}
@@ -87,6 +85,12 @@ export default function PlayArea(props: PlayAreaProps) {
         <Monster id={monster.id} name={monster.name} level={monster.level} stats={monster.stats} />
       )}
 
+      {context.feedback && (
+        <p>
+          <em>{context.feedback}</em>
+        </p>
+      )}
+
       <h3>Discard Pile:</h3>
 
       <Deck>
@@ -94,10 +98,6 @@ export default function PlayArea(props: PlayAreaProps) {
           <Card key={`discard-pile-card-${index}`} {...card} />
         ))}
       </Deck>
-
-      <StyledControls>
-        <button onClick={() => send('DRAW')}>Draw Cards</button>
-      </StyledControls>
     </StyledPlayArea>
   )
 }
