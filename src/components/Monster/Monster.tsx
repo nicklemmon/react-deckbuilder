@@ -21,7 +21,7 @@ function Monster(props: MonsterInterface) {
   const { name, level, id, stats } = props
 
   return (
-    <Wrapper>
+    <Wrapper id={id}>
       <Header>
         <h3>{name}</h3>
       </Header>

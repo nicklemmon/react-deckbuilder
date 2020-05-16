@@ -22,9 +22,6 @@ export default function PlayArea(props: PlayAreaProps) {
   const cardInPlay: any = context.cardInPlay
   const monster: any = context.monster
 
-  console.log('current', current)
-  console.log('context', context)
-
   return (
     <StyledPlayArea>
       <h2>PlayArea</h2>

@@ -91,9 +91,10 @@ const PlayAreaMachine = Machine(machineConfig, {
     '@drawHand': assign(ctx => {
       const drawnCards = ctx.drawPile.filter((card, index) => index < 3) // First 3 cards
       const remainingCards = ctx.drawPile.filter((card, index) => index >= 3)
+      const currentHand = [...ctx.currentHand, ...drawnCards]
 
       return {
-        currentHand: drawnCards,
+        currentHand,
         drawPile: remainingCards,
       }
     }),
