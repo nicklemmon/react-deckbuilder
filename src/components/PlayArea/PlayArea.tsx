@@ -1,20 +1,16 @@
 import React from 'react'
 import { useMachine } from '@xstate/react'
-import styled from 'styled-components'
 import PlayAreaMachine from './PlayAreaMachine'
 import { Deck } from '../Deck'
 import { Card } from '../Card'
 import { Monster } from '../Monster'
 import { StateMachineViewer } from '../StateMachineViewer'
 import CardInterface from '../../interfaces/Card'
+import { PlayAreaWrapper } from './styles'
 
 interface PlayAreaProps {
   children?: any
 }
-
-const StyledPlayArea = styled('div')`
-  padding: 2rem;
-`
 
 export default function PlayArea(props: PlayAreaProps) {
   const [current, send] = useMachine(PlayAreaMachine)
@@ -23,7 +19,7 @@ export default function PlayArea(props: PlayAreaProps) {
   const monster: any = context.monster
 
   return (
-    <StyledPlayArea>
+    <PlayAreaWrapper>
       <h2>PlayArea</h2>
 
       <StateMachineViewer currentState={current} />
@@ -47,7 +43,7 @@ export default function PlayArea(props: PlayAreaProps) {
       <h3>Current Hand:</h3>
 
       {context.currentHand.length ? (
-        <Deck>
+        <Deck isStacked={false}>
           {context.currentHand.map((card: CardInterface, index: number) => (
             <Card
               key={`current-hand-card-${index}`}
@@ -64,14 +60,7 @@ export default function PlayArea(props: PlayAreaProps) {
       <h3>Card In Play:</h3>
 
       {cardInPlay ? (
-        <Card
-          key="card-in-play"
-          id={cardInPlay.id}
-          name={cardInPlay.name}
-          rarity={cardInPlay.rarity}
-          description={cardInPlay.description}
-          stats={cardInPlay.stats}
-        />
+        <Card key="card-in-play" isRevealed={true} {...cardInPlay} />
       ) : (
         <p>No card currently in play.</p>
       )}
@@ -95,6 +84,6 @@ export default function PlayArea(props: PlayAreaProps) {
           <Card key={`discard-pile-card-${index}`} {...card} />
         ))}
       </Deck>
-    </StyledPlayArea>
+    </PlayAreaWrapper>
   )
 }
