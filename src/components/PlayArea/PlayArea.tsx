@@ -49,7 +49,7 @@ export default function PlayArea(props: PlayAreaProps) {
       </DrawPileWrapper>
 
       <CurrentHandWrapper>
-        {context.currentHand.length ? (
+        {context.currentHand && (
           <Deck isStacked={false}>
             {context.currentHand.map((card: CardInterface, index: number) => (
               <Card
@@ -61,8 +61,6 @@ export default function PlayArea(props: PlayAreaProps) {
               />
             ))}
           </Deck>
-        ) : (
-          <p>No current hand.</p>
         )}
       </CurrentHandWrapper>
 

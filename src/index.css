@@ -1,14 +1,2 @@
+@import url('https://fonts.googleapis.com/css2?family=Eczar:wght@600;800&display=swap');
 @import '../node_modules/reset-css/reset.css';
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  font-size: 16px;
-}
-
-body {
-  font-family: sans-serif;
-  margin: 0;
-}

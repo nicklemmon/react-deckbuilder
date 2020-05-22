@@ -21,12 +21,13 @@ const slam: Card = {
 }
 
 const block: Card = {
-  id: 'block',
-  name: 'Block',
-  description: 'Block incoming damage',
-  rarity: 0,
+  id: 'shield-slam',
+  name: 'Shield Slam',
+  description: 'Slam your shield, creating a shockwave',
+  rarity: 3,
   stats: {
-    defense: 3,
+    defense: 1,
+    attack: 5,
   },
 }
 

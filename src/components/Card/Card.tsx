@@ -1,6 +1,19 @@
 import React from 'react'
 import { default as CardInterface } from '../../interfaces/Card'
-import { CardWrapper, Header, Content, Main, Footer, Stats, Rarity, Back } from './CardStyles'
+import SwordImg from '../../images/sword.png'
+import {
+  CardWrapper,
+  CardIcon,
+  Header,
+  Content,
+  Main,
+  Footer,
+  Stats,
+  Stat,
+  StatNumber,
+  Rarity,
+  Back,
+} from './CardStyles'
 
 interface CardProps extends CardInterface {
   key: string
@@ -48,16 +61,14 @@ function Card(props: CardProps) {
         <Footer>
           <Stats>
             {stats.attack && (
-              <div>
-                <span role="img" aria-label="Attack:">
-                  ⚔️
-                </span>
+              <Stat>
+                <CardIcon src={SwordImg} alt="Attack:" />
 
-                {stats.attack}
-              </div>
+                <StatNumber>{stats.attack}</StatNumber>
+              </Stat>
             )}
 
-            {stats.defense && (
+            {/* {stats.defense && (
               <div>
                 <span role="img" aria-label="Defense:">
                   🛡️
@@ -65,7 +76,7 @@ function Card(props: CardProps) {
 
                 {stats.defense}
               </div>
-            )}
+            )} */}
           </Stats>
 
           <Rarity>{rarity}</Rarity>

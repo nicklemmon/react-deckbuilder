@@ -19,13 +19,13 @@ const machineConfig = {
     idle: {
       entry: '@createDrawPile',
       after: {
-        250: 'drawing',
+        500: 'drawing',
       },
     },
     drawing: {
       entry: '@drawHand',
       after: {
-        250: 'choosing',
+        500: 'choosing',
       },
     },
     choosing: {
@@ -38,13 +38,13 @@ const machineConfig = {
     },
     playing: {
       after: {
-        250: 'battling',
+        500: 'battling',
       },
     },
     battling: {
       entry: '@battle',
       after: {
-        250: 'defending',
+        500: 'defending',
       },
     },
     defending: {
@@ -57,7 +57,7 @@ const machineConfig = {
         + Otherwise, return to "drawing"
       */
       after: {
-        250: 'drawing',
+        500: 'drawing',
       },
     },
     victory: {},

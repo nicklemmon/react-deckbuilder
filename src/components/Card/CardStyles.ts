@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { cardWidth, cardOffset, cardHeight } from '../../styles/constants'
+import { cardWidth, cardOffset, cardHeight, secondaryFontFamily } from '../../styles/constants'
 
 export const CardWrapper = styled.div<{ cardIndex: number; isStacked?: boolean; align?: string }>`
   display: inline-flex;
@@ -59,8 +59,11 @@ export const Back = styled.div<{ isVisible: boolean }>`
 `
 
 export const Header = styled('div')`
+  ${secondaryFontFamily()}
   padding: 2rem 1rem 1rem 1rem;
-  font-weight: 700;
+  font-weight: 600;
+  font-size: 1.25rem;
+  letter-spacing: 0.01rem;
 `
 
 export const Main = styled('div')`
@@ -78,4 +81,20 @@ export const Footer = styled('div')`
 
 export const Stats = styled('div')``
 
+export const Stat = styled('div')`
+  display: flex;
+  align-items: center;
+`
+
+export const StatNumber = styled('span')`
+  margin-left: 0.5rem;
+`
+
 export const Rarity = styled('div')``
+
+export const CardIcon = styled('img')`
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 0.25rem;
+  overflow: hidden;
+`
