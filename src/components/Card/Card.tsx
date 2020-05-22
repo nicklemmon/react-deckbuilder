@@ -6,6 +6,7 @@ import {
   CardIcon,
   Header,
   Content,
+  Description,
   Main,
   Footer,
   Stats,
@@ -55,7 +56,7 @@ function Card(props: CardProps) {
         </Header>
 
         <Main>
-          <div>{description}</div>
+          <Description>{description}</Description>
         </Main>
 
         <Footer>

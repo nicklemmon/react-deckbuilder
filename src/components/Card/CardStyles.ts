@@ -1,10 +1,10 @@
 import styled from 'styled-components'
-import { cardWidth, cardOffset, cardHeight, secondaryFontFamily } from '../../styles/constants'
+import { cardWidth, cardOffset, cardHeight } from '../../styles/constants'
 
 export const CardWrapper = styled.div<{ cardIndex: number; isStacked?: boolean; align?: string }>`
   display: inline-flex;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: ${props => props.theme.radii[1]};
   overflow: hidden;
   height: ${cardHeight};
   width: ${cardWidth};
@@ -44,8 +44,17 @@ export const Content = styled.div<{ isVisible: boolean }>`
   text-align: center;
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  border: 0.5rem solid ${props => props.theme.colors.white};
+  background-color: ${props => props.theme.colors.offWhite};
+  font-family: ${props => props.theme.fonts.body};
   opacity: ${props => (props.isVisible ? 1 : 0)};
+`
+
+export const Description = styled.p`
+  font-family: ${props => props.theme.fonts.body};
+  font-size: ${props => props.theme.fontSizes[0]};
+  line-height: 1.25;
+  color: ${props => props.theme.colors.darkGray};
 `
 
 export const Back = styled.div<{ isVisible: boolean }>`
@@ -54,13 +63,13 @@ export const Back = styled.div<{ isVisible: boolean }>`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #293845;
+  background-color: ${props => props.theme.colors.darkGray};
   opacity: ${props => (props.isVisible ? 1 : 0)};
 `
 
 export const Header = styled('div')`
-  ${secondaryFontFamily()}
   padding: 2rem 1rem 1rem 1rem;
+  font-family: ${props => props.theme.fonts.heading};
   font-weight: 600;
   font-size: 1.25rem;
   letter-spacing: 0.01rem;
