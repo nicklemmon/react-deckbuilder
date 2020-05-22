@@ -1,13 +1,15 @@
 import React from 'react'
 import { default as CardInterface } from '../../interfaces/Card'
-import { CardWrapper, Header, Content, Main, Footer, Stats, Rarity, Back } from './styles'
+import { CardWrapper, Header, Content, Main, Footer, Stats, Rarity, Back } from './CardStyles'
 
 interface CardProps extends CardInterface {
   key: string
-  cardIndex?: number
+  cardIndex: number
   isStacked?: boolean
   isDisabled?: boolean
+  isRevealed?: boolean
   onClick?: () => void
+  align?: string
 }
 
 function Card(props: CardProps) {
@@ -19,7 +21,9 @@ function Card(props: CardProps) {
     id,
     onClick,
     isDisabled = true,
+    isRevealed = false,
     isStacked = true,
+    align = 'left',
     stats,
   } = props
 
@@ -27,11 +31,12 @@ function Card(props: CardProps) {
     <CardWrapper
       cardIndex={cardIndex}
       isStacked={isStacked}
+      align={align}
       id={`card-${id}`}
       onClick={onClick}
       style={{ pointerEvents: isDisabled ? 'none' : 'initial' }}
     >
-      <Content isVisible={!isDisabled}>
+      <Content isVisible={isRevealed}>
         <Header>
           <h3>{name}</h3>
         </Header>
@@ -67,7 +72,7 @@ function Card(props: CardProps) {
         </Footer>
       </Content>
 
-      <Back role="presentation" isVisible={isDisabled} />
+      <Back role="presentation" isVisible={!isRevealed} />
     </CardWrapper>
   )
 }

@@ -5,25 +5,35 @@ import { default as DeckInterface } from '../../interfaces/Deck'
 interface DeckProps extends DeckInterface {
   children?: any
   isStacked?: boolean
+  align?: string
 }
 
-const DeckGrid = styled.div`
-  display: grid;
-  grid-gap: 1rem;
-  grid-template-columns: repeat(7, 1fr);
+const DeckWrapper = styled.div`
+  position: relative; /* allows absolute positioning within */
+`
+
+const ClearFix = styled.div`
+  clear: both;
 `
 
 export default function Deck(props: DeckProps) {
-  const { children, isStacked = true } = props
+  const { children, isStacked = true, align = 'left' } = props
 
   function renderChildren() {
     return React.Children.map(children, (child, index) => {
       return React.cloneElement(child, {
         cardIndex: index,
         isStacked,
+        align,
       })
     })
   }
 
-  return <DeckGrid>{renderChildren()}</DeckGrid>
+  return (
+    <DeckWrapper>
+      {renderChildren()}
+
+      {isStacked && <ClearFix />}
+    </DeckWrapper>
+  )
 }

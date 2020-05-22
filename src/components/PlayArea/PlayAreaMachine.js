@@ -19,13 +19,13 @@ const machineConfig = {
     idle: {
       entry: '@createDrawPile',
       after: {
-        1000: 'drawing',
+        250: 'drawing',
       },
     },
     drawing: {
       entry: '@drawHand',
       after: {
-        1000: 'choosing',
+        250: 'choosing',
       },
     },
     choosing: {
@@ -38,13 +38,13 @@ const machineConfig = {
     },
     playing: {
       after: {
-        1000: 'battling',
+        250: 'battling',
       },
     },
     battling: {
       entry: '@battle',
       after: {
-        1000: 'defending',
+        250: 'defending',
       },
     },
     defending: {
@@ -57,7 +57,7 @@ const machineConfig = {
         + Otherwise, return to "drawing"
       */
       after: {
-        1000: 'drawing',
+        250: 'drawing',
       },
     },
     victory: {},
@@ -79,7 +79,7 @@ const PlayAreaMachine = Machine(machineConfig, {
           },
         },
         cardInPlay: null,
-        discardPile: [...ctx.discardPile, cardInPlay],
+        discardPile: [...ctx.discardPile, { ...cardInPlay, isRevealed: false }],
         feedback: `${cardInPlay.stats.attack} damage dealt to ${monster.name}`,
       }
     }),

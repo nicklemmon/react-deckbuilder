@@ -3,14 +3,10 @@ import styled from 'styled-components'
 import { default as MonsterInterface } from '../../interfaces/Monster'
 
 const Wrapper = styled('div')`
-  background-color: pink;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-radius: 1rem;
-  height: 17.5rem;
-  width: 11.25rem;
+  background: pink;
+  height: 10rem;
+  width: 10rem;
+  padding: 1rem;
 `
 
 const Header = styled('div')`

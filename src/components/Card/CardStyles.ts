@@ -1,8 +1,8 @@
 import styled from 'styled-components'
-import { cardWidth, cardHeight } from '../../styles/constants'
+import { cardWidth, cardOffset, cardHeight } from '../../styles/constants'
 
-export const CardWrapper = styled.div<{ cardIndex?: number; isStacked?: boolean }>`
-  position: relative; /* allows absolute positioning within */
+export const CardWrapper = styled.div<{ cardIndex: number; isStacked?: boolean; align?: string }>`
+  display: inline-flex;
   border: 1px solid #ccc;
   border-radius: 5px;
   overflow: hidden;
@@ -12,10 +12,28 @@ export const CardWrapper = styled.div<{ cardIndex?: number; isStacked?: boolean 
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.0875);
 
   ${props => {
-    console.log('props', props)
-    if (props.isStacked && props.cardIndex) {
+    if (!props.isStacked) {
+      return {
+        'margin-left': props.cardIndex === 0 ? '0' : '1rem',
+      }
+    }
+
+    if (props.isStacked) {
       // Each card index dynamically transforms the card in to what visually looks like a stacked deck
-      return { transform: `translateX(-${12 * props.cardIndex}rem)` }
+
+      if (props.align === 'left') {
+        return {
+          float: 'left',
+          transform: `translateX(-${cardOffset * props.cardIndex}rem)`,
+        }
+      }
+
+      if (props.align === 'right') {
+        return {
+          float: 'right',
+          transform: `translateX(${cardOffset * props.cardIndex}rem)`,
+        }
+      }
     }
   }}
 `

@@ -1,26 +1,24 @@
 import React from 'react'
-import styled from 'styled-components'
+import { createGlobalStyle } from 'styled-components'
 import { PlayArea } from './components/PlayArea'
 
-const Header = styled('header')`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: 1rem;
-  background-color: #f7f7f7;
+const GlobalStyles = createGlobalStyle`
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
+
+  html {
+    margin: 0;
+  }
 `
 
 export default function App() {
   return (
     <>
-      <Header>Deck Builder!</Header>
-
-      <main>
-        <PlayArea />
-      </main>
-
-      <footer></footer>
+      <GlobalStyles />
+      <PlayArea />
     </>
   )
 }

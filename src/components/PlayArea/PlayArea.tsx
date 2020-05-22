@@ -4,9 +4,19 @@ import PlayAreaMachine from './PlayAreaMachine'
 import { Deck } from '../Deck'
 import { Card } from '../Card'
 import { Monster } from '../Monster'
+import { PlayerAvatar } from '../PlayerAvatar'
 import { StateMachineViewer } from '../StateMachineViewer'
 import CardInterface from '../../interfaces/Card'
-import { PlayAreaWrapper } from './styles'
+import {
+  CardInPlayWrapper,
+  CurrentHandWrapper,
+  DiscardPileWrapper,
+  DrawPileWrapper,
+  Feedback,
+  BattleWrapper,
+  PlayAreaWrapper,
+  PlayerDeckWrapper,
+} from './PlayAreaStyles'
 
 interface PlayAreaProps {
   children?: any
@@ -20,70 +30,80 @@ export default function PlayArea(props: PlayAreaProps) {
 
   return (
     <PlayAreaWrapper>
-      <h2>PlayArea</h2>
-
       <StateMachineViewer currentState={current} />
 
-      <h3>Player Deck:</h3>
-
-      <Deck>
-        {context.playerDeck.map((card: CardInterface, index: number) => (
-          <Card key={`player-deck-card-${index}`} {...card} />
-        ))}
-      </Deck>
-
-      <h3>Draw Pile:</h3>
-
-      <Deck>
-        {context.drawPile.map((card: CardInterface, index: number) => (
-          <Card key={`draw-pile-card-${index}`} {...card} />
-        ))}
-      </Deck>
-
-      <h3>Current Hand:</h3>
-
-      {context.currentHand.length ? (
-        <Deck isStacked={false}>
-          {context.currentHand.map((card: CardInterface, index: number) => (
-            <Card
-              key={`current-hand-card-${index}`}
-              onClick={() => send({ type: 'CHOOSE', data: { card } })}
-              isDisabled={current.value !== 'choosing'}
-              {...card}
-            />
+      <PlayerDeckWrapper numberOfCards={context.playerDeck.length}>
+        <Deck isStacked={true}>
+          {context.playerDeck.map((card: CardInterface, index: number) => (
+            <Card cardIndex={index} key={`player-deck-card-${index}`} {...card} />
           ))}
         </Deck>
-      ) : (
-        <p>No current hand.</p>
-      )}
+      </PlayerDeckWrapper>
 
-      <h3>Card In Play:</h3>
+      <DrawPileWrapper>
+        <Deck isStacked={true} align="right">
+          {context.drawPile.map((card: CardInterface, index: number) => (
+            <Card cardIndex={index} key={`draw-pile-card-${index}`} {...card} />
+          ))}
+        </Deck>
+      </DrawPileWrapper>
 
-      {cardInPlay ? (
-        <Card key="card-in-play" isRevealed={true} {...cardInPlay} />
-      ) : (
-        <p>No card currently in play.</p>
-      )}
+      <CurrentHandWrapper>
+        {context.currentHand.length ? (
+          <Deck isStacked={false}>
+            {context.currentHand.map((card: CardInterface, index: number) => (
+              <Card
+                cardIndex={index}
+                key={`current-hand-card-${index}`}
+                onClick={() => send({ type: 'CHOOSE', data: { card } })}
+                isDisabled={current.value !== 'choosing'}
+                {...card}
+              />
+            ))}
+          </Deck>
+        ) : (
+          <p>No current hand.</p>
+        )}
+      </CurrentHandWrapper>
 
-      <h3>Monster:</h3>
+      <CardInPlayWrapper>
+        {cardInPlay && <Card isDisabled={false} cardIndex={0} key="card-in-play" {...cardInPlay} />}
+      </CardInPlayWrapper>
 
-      {monster && (
-        <Monster id={monster.id} name={monster.name} level={monster.level} stats={monster.stats} />
-      )}
+      <BattleWrapper>
+        <PlayerAvatar
+          name="Hello"
+          level={3}
+          stats={{
+            hitPoints: 33,
+            attack: 3,
+            defense: 4,
+          }}
+        />
+
+        {monster && (
+          <Monster
+            id={monster.id}
+            name={monster.name}
+            level={monster.level}
+            stats={monster.stats}
+          />
+        )}
+      </BattleWrapper>
 
       {context.feedback && (
-        <p>
-          <em>{context.feedback}</em>
-        </p>
+        <Feedback>
+          <p>{context.feedback}</p>
+        </Feedback>
       )}
 
-      <h3>Discard Pile:</h3>
-
-      <Deck>
-        {context.discardPile.map((card: CardInterface, index: number) => (
-          <Card key={`discard-pile-card-${index}`} {...card} />
-        ))}
-      </Deck>
+      <DiscardPileWrapper>
+        <Deck isStacked={true} align="right">
+          {context.discardPile.map((card: CardInterface, index: number) => (
+            <Card cardIndex={index} key={`discard-pile-card-${index}`} {...card} />
+          ))}
+        </Deck>
+      </DiscardPileWrapper>
     </PlayAreaWrapper>
   )
 }
