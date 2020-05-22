@@ -1,6 +1,6 @@
 import React from 'react'
 import { default as CardInterface } from '../../interfaces/Card'
-import SwordImg from '../../images/sword.png'
+import swordImg from '../../images/sword.png'
 import {
   CardWrapper,
   CardIcon,
@@ -63,7 +63,7 @@ function Card(props: CardProps) {
           <Stats>
             {stats.attack && (
               <Stat>
-                <CardIcon src={SwordImg} alt="Attack:" />
+                <CardIcon src={swordImg} alt="Attack:" />
 
                 <StatNumber>{stats.attack}</StatNumber>
               </Stat>
