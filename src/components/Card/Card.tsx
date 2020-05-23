@@ -5,6 +5,7 @@ import {
   CardWrapper,
   CardIcon,
   Header,
+  Heading,
   Content,
   Description,
   Main,
@@ -52,7 +53,7 @@ function Card(props: CardProps) {
     >
       <Content isVisible={isRevealed}>
         <Header>
-          <h3>{name}</h3>
+          <Heading>{name}</Heading>
         </Header>
 
         <Main>

@@ -1,6 +1,18 @@
 import styled from 'styled-components'
 import { cardWidth, cardOffset, cardHeight } from '../../styles/constants'
 
+export const Content = styled.div<{ isVisible: boolean }>`
+  display: grid;
+  grid-template-rows: 1fr 4fr 1fr;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  border: 0.5rem solid ${props => props.theme.colors.white};
+  background-color: ${props => props.theme.colors.offWhite};
+  font-family: ${props => props.theme.fonts.body};
+  opacity: ${props => (props.isVisible ? 1 : 0)};
+`
+
 export const CardWrapper = styled.div<{ cardIndex: number; isStacked?: boolean; align?: string }>`
   display: inline-flex;
   border: 1px solid #ccc;
@@ -9,7 +21,15 @@ export const CardWrapper = styled.div<{ cardIndex: number; isStacked?: boolean; 
   height: ${cardHeight};
   width: ${cardWidth};
   perspective: 1000px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.0875);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transition-duration: ${props => props.theme.duration[1]};
+  transition-timing-function: ease-in-out;
+  transition-property: transform, box-shadow;
+
+  :hover {
+    transform: translateY(-0.33rem);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+  }
 
   ${props => {
     if (!props.isStacked) {
@@ -38,22 +58,10 @@ export const CardWrapper = styled.div<{ cardIndex: number; isStacked?: boolean; 
   }}
 `
 
-export const Content = styled.div<{ isVisible: boolean }>`
-  display: grid;
-  grid-template-rows: 1fr 4fr 1fr;
-  text-align: center;
-  width: 100%;
-  height: 100%;
-  border: 0.5rem solid ${props => props.theme.colors.white};
-  background-color: ${props => props.theme.colors.offWhite};
-  font-family: ${props => props.theme.fonts.body};
-  opacity: ${props => (props.isVisible ? 1 : 0)};
-`
-
 export const Description = styled.p`
   font-family: ${props => props.theme.fonts.body};
   font-size: ${props => props.theme.fontSizes[0]};
-  line-height: 1.25;
+  line-height: 1.33;
   color: ${props => props.theme.colors.darkGray};
 `
 
@@ -68,15 +76,24 @@ export const Back = styled.div<{ isVisible: boolean }>`
 `
 
 export const Header = styled('div')`
-  padding: 2rem 1rem 1rem 1rem;
+  padding: ${props => props.theme.space[2]};
+  padding-top: ${props => props.theme.space[5]};
+`
+
+export const Heading = styled('h3')`
   font-family: ${props => props.theme.fonts.heading};
   font-weight: 600;
   font-size: 1.25rem;
-  letter-spacing: 0.01rem;
+  letter-spacing: 0.0125rem;
+  color: ${props => props.theme.colors.white};
+  background-color: ${props => props.theme.colors.darkGray};
+  padding: ${props => props.theme.space[1]};
+  clip-path: polygon(100% 0, 97.5% 50%, 100% 100%, 0% 100%, 2.5% 50%, 0% 0%);
+  box-shadow: 0 ${props => props.theme.space[2]} 0 -0.25rem rgba(0, 0, 0, 0.25);
 `
 
 export const Main = styled('div')`
-  padding: 1rem;
+  padding: 0 ${props => props.theme.space[3]};
   align-self: center;
 `
 
