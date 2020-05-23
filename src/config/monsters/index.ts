@@ -22,4 +22,15 @@ const troll: Monster = {
   },
 }
 
-export default [imp, troll]
+const orc: Monster = {
+  id: 'orc',
+  name: 'Orc',
+  level: 1,
+  stats: {
+    hitPoints: 25,
+    attack: 3,
+    defense: 3,
+  },
+}
+
+export default [imp, troll, orc]

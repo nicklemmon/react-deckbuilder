@@ -70,13 +70,9 @@ export default function PlayArea(props: PlayAreaProps) {
 
       <BattleWrapper>
         <PlayerAvatar
-          name="Hello"
-          level={3}
-          stats={{
-            hitPoints: 33,
-            attack: 3,
-            defense: 4,
-          }}
+          name={context.player.name}
+          level={context.player.level}
+          stats={context.player.stats}
         />
 
         {monster && (

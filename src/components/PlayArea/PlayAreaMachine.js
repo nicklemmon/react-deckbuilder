@@ -8,6 +8,7 @@ const machineConfig = {
   initial: 'idle',
   context: {
     playerDeck: config.cards,
+    player: config.player,
     drawPile: [],
     currentHand: [],
     cardInPlay: undefined,
@@ -19,13 +20,13 @@ const machineConfig = {
     idle: {
       entry: '@createDrawPile',
       after: {
-        500: 'drawing',
+        300: 'drawing',
       },
     },
     drawing: {
       entry: '@drawHand',
       after: {
-        500: 'choosing',
+        300: 'choosing',
       },
     },
     choosing: {
@@ -38,13 +39,13 @@ const machineConfig = {
     },
     playing: {
       after: {
-        500: 'battling',
+        300: 'battling',
       },
     },
     battling: {
-      entry: '@battle',
+      entry: '@playerAttack',
       after: {
-        500: 'defending',
+        300: 'defending',
       },
     },
     defending: {
@@ -57,7 +58,7 @@ const machineConfig = {
         + Otherwise, return to "drawing"
       */
       after: {
-        500: 'drawing',
+        300: 'drawing',
       },
     },
     victory: {},
@@ -67,7 +68,20 @@ const machineConfig = {
 
 const PlayAreaMachine = Machine(machineConfig, {
   actions: {
-    '@battle': assign(ctx => {
+    '@monsterAttack': assign(ctx => {
+      const { monster, player } = ctx
+
+      return {
+        player: {
+          ...player,
+          stats: {
+            ...player.stats,
+            hitPoints: player.stats.hitPoints - (monster.stats.attack - player.stats.defense),
+          },
+        },
+      }
+    }),
+    '@playerAttack': assign(ctx => {
       const { monster, cardInPlay } = ctx
 
       return {
