@@ -77,7 +77,7 @@ export const Back = styled.div<{ isVisible: boolean }>`
 
 export const Header = styled('div')`
   padding: ${props => props.theme.space[2]};
-  padding-top: ${props => props.theme.space[5]};
+  padding-top: ${props => props.theme.space[4]};
 `
 
 export const Heading = styled('h3')`
@@ -102,7 +102,6 @@ export const Footer = styled('div')`
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
-  /* background-color: #f7f7f7; */
 `
 
 export const Stats = styled('div')``
@@ -116,7 +115,7 @@ export const StatNumber = styled('span')`
   margin-left: 0.5rem;
 `
 
-export const Rarity = styled('div')``
+export const Rarity = styled.div<{ rarity: number }>``
 
 export const CardIcon = styled('img')`
   width: 1.85rem;

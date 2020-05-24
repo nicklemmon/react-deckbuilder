@@ -25,7 +25,7 @@ const troll: Monster = {
 const orc: Monster = {
   id: 'orc',
   name: 'Orc',
-  level: 1,
+  level: 2,
   stats: {
     hitPoints: 25,
     attack: 3,
@@ -33,4 +33,15 @@ const orc: Monster = {
   },
 }
 
-export default [imp, troll, orc]
+const bat: Monster = {
+  id: 'bat',
+  name: 'Bat',
+  level: 1,
+  stats: {
+    hitPoints: 5,
+    attack: 2,
+    defense: 0,
+  },
+}
+
+export default [imp, troll, orc, bat]

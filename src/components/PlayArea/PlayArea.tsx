@@ -2,6 +2,7 @@ import React from 'react'
 import { useMachine } from '@xstate/react'
 import PlayAreaMachine from './PlayAreaMachine'
 import { Deck } from '../Deck'
+import { Banner } from '../Banner'
 import { Card } from '../Card'
 import { Monster } from '../Monster'
 import { PlayerAvatar } from '../PlayerAvatar'
@@ -31,6 +32,14 @@ export default function PlayArea(props: PlayAreaProps) {
   return (
     <PlayAreaWrapper>
       <StateMachineViewer currentState={current} />
+
+      {current.value === 'victory' && (
+        <Banner>
+          Victory! <button onClick={() => send('NEXT_BATTLE_CLICK')}>Next Battle</button>
+        </Banner>
+      )}
+
+      {current.value === 'defeat' && <Banner>Defeat!</Banner>}
 
       <PlayerDeckWrapper numberOfCards={context.playerDeck.length}>
         <Deck isStacked={true}>

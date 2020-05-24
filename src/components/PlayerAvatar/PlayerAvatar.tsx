@@ -30,6 +30,7 @@ const Name = styled.div`
 
 function PlayerAvatar(props: PlayerAvatar) {
   const { name, level, stats } = props
+  const hitPoints = stats.hitPoints < 0 ? 0 : stats.hitPoints
 
   return (
     <Wrapper>
@@ -38,7 +39,7 @@ function PlayerAvatar(props: PlayerAvatar) {
 
         <div>Level {level}</div>
 
-        <div>{stats.hitPoints} HP</div>
+        <div>{hitPoints} HP</div>
       </div>
     </Wrapper>
   )

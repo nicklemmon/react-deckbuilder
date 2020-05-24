@@ -2,8 +2,8 @@ import styled from 'styled-components'
 
 const padding = '2rem'
 const monsterLayer = 0
-const playLayer = 1
-const cardsLayer = 2
+const cardsLayer = 1
+const playLayer = 2
 
 export const PlayAreaWrapper = styled.div`
   position: relative;
@@ -33,9 +33,11 @@ export const DiscardPileWrapper = styled.div`
 `
 
 export const CurrentHandWrapper = styled.div`
+  display: flex;
+  justify-content: center;
   position: absolute;
   bottom: ${() => padding};
-  left: ${() => padding};
+  width: 100%;
   z-index: ${() => cardsLayer};
 `
 

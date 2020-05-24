@@ -81,7 +81,7 @@ function Card(props: CardProps) {
             )} */}
           </Stats>
 
-          <Rarity>{rarity}</Rarity>
+          <Rarity rarity={rarity}>{rarity}</Rarity>
         </Footer>
       </Content>
 

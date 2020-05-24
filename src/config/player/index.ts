@@ -2,7 +2,7 @@ export default {
   name: 'Billie Jean',
   level: 3,
   stats: {
-    hitPoints: 120,
+    hitPoints: 45,
     attack: 3,
     defense: 1,
   },

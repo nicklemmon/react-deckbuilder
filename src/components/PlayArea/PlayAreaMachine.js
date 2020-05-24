@@ -7,18 +7,21 @@ const machineConfig = {
   id: 'play-area-machine',
   initial: 'idle',
   context: {
+    player: {
+      ...config.player,
+      isDefeated: false,
+    },
     playerDeck: config.cards,
-    player: config.player,
     drawPile: [],
     currentHand: [],
     cardInPlay: undefined,
     discardPile: [],
-    monster: config.monsters[rng(config.monsters.length)],
+    monster: undefined,
     feedback: undefined,
   },
   states: {
     idle: {
-      entry: '@createDrawPile',
+      entry: ['@createDrawPile', '@getMonster'],
       after: {
         300: 'drawing',
       },
@@ -39,35 +42,45 @@ const machineConfig = {
     },
     playing: {
       after: {
-        300: 'battling',
+        300: 'attacking',
       },
     },
-    battling: {
+    attacking: {
       entry: '@playerAttack',
-      after: {
-        300: 'defending',
-      },
+      after: [
+        { delay: 300, target: 'drawing', cond: '#monsterIsAlive' },
+        { delay: 300, target: 'victory', cond: '#monsterIsDead' },
+      ],
     },
     defending: {
       entry: '@monsterAttack',
-      /*
-        TODO:
-        // Lots of conditions to check for:
-        + In case the monster is defeated, go to "victory"
-        + In case the player is defeated, go to "defeat"
-        + Otherwise, return to "drawing"
-      */
-      after: {
-        300: 'drawing',
+      after: [
+        { delay: 300, target: 'drawing', cond: '#playerIsAlive' },
+        { delay: 300, target: 'defeat', cond: '#playerIsDead' },
+      ],
+    },
+    victory: {
+      on: {
+        NEXT_BATTLE_CLICK: {
+          actions: ['@getMonster', '@discardHand', '@discardDrawPile'],
+          target: 'idle',
+        },
       },
     },
-    victory: {},
     defeat: {},
   },
 }
 
 const PlayAreaMachine = Machine(machineConfig, {
   actions: {
+    '@getMonster': assign(ctx => {
+      return {
+        monster: {
+          ...config.monsters[rng(config.monsters.length)],
+          isDefeated: false,
+        },
+      }
+    }),
     '@monsterAttack': assign(ctx => {
       const { monster, player } = ctx
 
@@ -102,6 +115,16 @@ const PlayAreaMachine = Machine(machineConfig, {
         drawPile: shuffle([...ctx.playerDeck]), // Required to not mutate initial state...probably a better way to handle this
       }
     }),
+    '@discardDrawPile': assign(ctx => {
+      return {
+        drawPile: [],
+      }
+    }),
+    '@discardHand': assign(ctx => {
+      return {
+        currentHand: [],
+      }
+    }),
     '@drawHand': assign(ctx => {
       const drawnCards = ctx.drawPile.filter((card, index) => index < 3) // First 3 cards
       const remainingCards = ctx.drawPile.filter((card, index) => index >= 3)
@@ -126,6 +149,12 @@ const PlayAreaMachine = Machine(machineConfig, {
         cardInPlay: chosenCard,
       }
     }),
+  },
+  guards: {
+    '#playerIsAlive': ctx => ctx.player.stats.hitPoints > 0,
+    '#playerIsDead': ctx => ctx.player.stats.hitPoints <= 0,
+    '#monsterIsAlive': ctx => ctx.monster.stats.hitPoints > 0,
+    '#monsterIsDead': ctx => ctx.monster.stats.hitPoints <= 0,
   },
 })
 

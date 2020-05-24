@@ -15,6 +15,7 @@ const Header = styled('div')`
 
 function Monster(props: MonsterInterface) {
   const { name, level, id, stats } = props
+  const hitPoints = stats.hitPoints < 0 ? 0 : stats.hitPoints
 
   return (
     <Wrapper id={id}>
@@ -25,7 +26,7 @@ function Monster(props: MonsterInterface) {
       <div>Level {level}</div>
 
       <div>
-        <strong>{stats.hitPoints}</strong> HP
+        <strong>{hitPoints}</strong> HP
       </div>
     </Wrapper>
   )
