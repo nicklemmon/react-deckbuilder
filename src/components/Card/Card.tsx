@@ -13,7 +13,6 @@ import {
   Stats,
   Stat,
   StatNumber,
-  Rarity,
   Back,
 } from './CardStyles'
 
@@ -40,6 +39,7 @@ function Card(props: CardProps) {
     isStacked = true,
     align = 'left',
     stats,
+    artwork,
   } = props
 
   return (
@@ -50,8 +50,9 @@ function Card(props: CardProps) {
       id={`card-${id}`}
       onClick={onClick}
       style={{ pointerEvents: isDisabled ? 'none' : 'initial' }}
+      artwork={artwork}
     >
-      <Content isVisible={isRevealed}>
+      <Content rarity={rarity} isVisible={isRevealed}>
         <Header>
           <Heading>{name}</Heading>
         </Header>
@@ -80,8 +81,6 @@ function Card(props: CardProps) {
               </div>
             )} */}
           </Stats>
-
-          <Rarity rarity={rarity}>{rarity}</Rarity>
         </Footer>
       </Content>
 

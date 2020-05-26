@@ -1,19 +1,25 @@
 import styled from 'styled-components'
 import { cardWidth, cardOffset, cardHeight } from '../../styles/constants'
 
-export const Content = styled.div<{ isVisible: boolean }>`
+const contentLayer = 1
+
+export const Content = styled.div<{ isVisible: boolean; rarity: number }>`
   display: grid;
   grid-template-rows: 1fr 4fr 1fr;
   text-align: center;
   width: 100%;
   height: 100%;
-  border: 0.5rem solid ${props => props.theme.colors.white};
-  background-color: ${props => props.theme.colors.offWhite};
   font-family: ${props => props.theme.fonts.body};
+  border: ${props => props.theme.space[2]} solid ${props => props.theme.colors.white};
   opacity: ${props => (props.isVisible ? 1 : 0)};
 `
 
-export const CardWrapper = styled.div<{ cardIndex: number; isStacked?: boolean; align?: string }>`
+export const CardWrapper = styled.div<{
+  artwork?: string
+  cardIndex: number
+  isStacked?: boolean
+  align?: string
+}>`
   display: inline-flex;
   border: 1px solid #ccc;
   border-radius: ${props => props.theme.radii[1]};
@@ -22,6 +28,10 @@ export const CardWrapper = styled.div<{ cardIndex: number; isStacked?: boolean; 
   width: ${cardWidth};
   perspective: 1000px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  background-image: ${props => `url(${props.artwork})`};
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: ${props => props.theme.colors.offWhite};
   transition-duration: ${props => props.theme.duration[1]};
   transition-timing-function: ease-in-out;
   transition-property: transform, box-shadow;
@@ -59,10 +69,25 @@ export const CardWrapper = styled.div<{ cardIndex: number; isStacked?: boolean; 
 `
 
 export const Description = styled.p`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative; /* allows use of z-index */
+  z-index: ${() => contentLayer};
   font-family: ${props => props.theme.fonts.body};
   font-size: ${props => props.theme.fontSizes[0]};
   line-height: 1.33;
-  color: ${props => props.theme.colors.darkGray};
+  color: ${props => props.theme.colors.white};
+  padding-top: ${props => props.theme.space[1]};
+  padding-right: ${props => props.theme.space[1]};
+  padding-bottom: ${props => props.theme.space[2]};
+  padding-left: ${props => props.theme.space[1]};
+  height: 5rem;
+  text-shadow: 0 3px 7px rgba(0, 0, 0, 0.66);
+  background-color: ${props => props.theme.colors.darkGray};
+  transform: translateY(0.75rem);
+  clip-path: polygon(50% 10%, 100% 0, 100% 90%, 50% 100%, 0% 90%, 0 0);
 `
 
 export const Back = styled.div<{ isVisible: boolean }>`
@@ -77,7 +102,7 @@ export const Back = styled.div<{ isVisible: boolean }>`
 
 export const Header = styled('div')`
   padding: ${props => props.theme.space[2]};
-  padding-top: ${props => props.theme.space[4]};
+  padding-top: ${props => props.theme.space[3]};
 `
 
 export const Heading = styled('h3')`
@@ -86,22 +111,24 @@ export const Heading = styled('h3')`
   font-size: 1.25rem;
   letter-spacing: 0.0125rem;
   color: ${props => props.theme.colors.white};
-  background-color: ${props => props.theme.colors.darkGray};
-  padding: ${props => props.theme.space[1]};
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: ${props => props.theme.space[2]};
   clip-path: polygon(100% 0, 97.5% 50%, 100% 100%, 0% 100%, 2.5% 50%, 0% 0%);
   box-shadow: 0 ${props => props.theme.space[2]} 0 -0.25rem rgba(0, 0, 0, 0.25);
 `
 
 export const Main = styled('div')`
-  padding: 0 ${props => props.theme.space[3]};
-  align-self: center;
+  align-self: end;
 `
 
 export const Footer = styled('div')`
+  position: relative;
+  background-color: ${props => props.theme.colors.white};
+  z-index: ${() => contentLayer};
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
+  padding-top: ${props => props.theme.space[1]};
 `
 
 export const Stats = styled('div')``
@@ -113,9 +140,10 @@ export const Stat = styled('div')`
 
 export const StatNumber = styled('span')`
   margin-left: 0.5rem;
+  font-family: ${props => props.theme.fonts.heading};
+  font-size: ${props => props.theme.fontSizes[1]};
+  color: ${props => props.theme.colors.darkGray};
 `
-
-export const Rarity = styled.div<{ rarity: number }>``
 
 export const CardIcon = styled('img')`
   width: 1.85rem;

@@ -23,6 +23,19 @@ const machineConfig = {
     idle: {
       entry: ['@createDrawPile', '@getMonster'],
       after: {
+        300: 'assessing',
+      },
+    },
+    assessing: {
+      after: [
+        { delay: 300, target: 'reshuffling', cond: '#playerCannotDraw' },
+        { delay: 300, target: 'drawing', cond: '#playerCanDraw' },
+        { delay: 300, target: 'choosing', cond: '#drawingIsNotNeeded' },
+      ],
+    },
+    reshuffling: {
+      entry: '@reshuffle',
+      after: {
         300: 'drawing',
       },
     },
@@ -48,21 +61,21 @@ const machineConfig = {
     attacking: {
       entry: '@playerAttack',
       after: [
-        { delay: 300, target: 'drawing', cond: '#monsterIsAlive' },
+        { delay: 300, target: 'defending', cond: '#monsterIsAlive' },
         { delay: 300, target: 'victory', cond: '#monsterIsDead' },
       ],
     },
     defending: {
       entry: '@monsterAttack',
       after: [
-        { delay: 300, target: 'drawing', cond: '#playerIsAlive' },
+        { delay: 300, target: 'assessing', cond: '#playerIsAlive' },
         { delay: 300, target: 'defeat', cond: '#playerIsDead' },
       ],
     },
     victory: {
       on: {
         NEXT_BATTLE_CLICK: {
-          actions: ['@getMonster', '@discardHand', '@discardDrawPile'],
+          actions: ['@getMonster', '@discardHand', '@discardDrawPile', '@discardDiscardPile'],
           target: 'idle',
         },
       },
@@ -83,15 +96,18 @@ const PlayAreaMachine = Machine(machineConfig, {
     }),
     '@monsterAttack': assign(ctx => {
       const { monster, player } = ctx
+      const rawDamage = monster.stats.attack - player.stats.defense
+      const damage = rawDamage > 0 ? rawDamage : 0
 
       return {
         player: {
           ...player,
           stats: {
             ...player.stats,
-            hitPoints: player.stats.hitPoints - (monster.stats.attack - player.stats.defense),
+            hitPoints: player.stats.hitPoints - damage,
           },
         },
+        feedback: `${damage} damage dealt to ${player.name}`,
       }
     }),
     '@playerAttack': assign(ctx => {
@@ -115,9 +131,22 @@ const PlayAreaMachine = Machine(machineConfig, {
         drawPile: shuffle([...ctx.playerDeck]), // Required to not mutate initial state...probably a better way to handle this
       }
     }),
+    '@reshuffle': assign(ctx => {
+      const discardPile = ctx.discardPile
+
+      return {
+        drawPile: shuffle([...discardPile]), // Required to not mutate initial state...probably a better way to handle this
+        discardPile: [],
+      }
+    }),
     '@discardDrawPile': assign(ctx => {
       return {
         drawPile: [],
+      }
+    }),
+    '@discardDiscardPile': assign(ctx => {
+      return {
+        discardPile: [],
       }
     }),
     '@discardHand': assign(ctx => {
@@ -155,6 +184,13 @@ const PlayAreaMachine = Machine(machineConfig, {
     '#playerIsDead': ctx => ctx.player.stats.hitPoints <= 0,
     '#monsterIsAlive': ctx => ctx.monster.stats.hitPoints > 0,
     '#monsterIsDead': ctx => ctx.monster.stats.hitPoints <= 0,
+    '#drawPileIsEmpty': ctx => ctx.drawPile.length === 0,
+    '#drawPileIsNotEmpty': ctx => ctx.drawPile.length > 0,
+    '#currentHandIsEmpty': ctx => ctx.currentHand.length === 0,
+    '#currentHandIsNotEmpty': ctx => ctx.currentHand.length > 0,
+    '#playerCanDraw': ctx => ctx.drawPile.length > 0,
+    '#drawingIsNotNeeded': ctx => ctx.drawPile.length === 0 && ctx.currentHand.length > 0,
+    '#playerCannotDraw': ctx => ctx.drawPile.length === 0 && ctx.currentHand.length === 0,
   },
 })
 

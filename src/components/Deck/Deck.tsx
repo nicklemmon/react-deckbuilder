@@ -10,6 +10,7 @@ interface DeckProps extends DeckInterface {
 
 const DeckWrapper = styled.div`
   position: relative; /* allows absolute positioning within */
+  pointer-events: none; /* allows clicking "through" the deck */
 `
 
 const ClearFix = styled.div`

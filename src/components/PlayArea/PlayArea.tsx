@@ -64,7 +64,11 @@ export default function PlayArea(props: PlayAreaProps) {
               <Card
                 cardIndex={index}
                 key={`current-hand-card-${index}`}
-                onClick={() => send({ type: 'CHOOSE', data: { card } })}
+                onClick={() => {
+                  console.log('onClick')
+                  console.log('card', card)
+                  send({ type: 'CHOOSE', data: { card } })
+                }}
                 isDisabled={current.value !== 'choosing'}
                 {...card}
               />

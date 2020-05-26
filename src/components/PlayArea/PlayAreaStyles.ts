@@ -38,7 +38,7 @@ export const CurrentHandWrapper = styled.div`
   position: absolute;
   bottom: ${() => padding};
   width: 100%;
-  z-index: ${() => cardsLayer};
+  z-index: ${() => playLayer};
 `
 
 export const BattleWrapper = styled.div`
