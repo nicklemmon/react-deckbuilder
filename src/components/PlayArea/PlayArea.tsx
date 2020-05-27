@@ -64,11 +64,7 @@ export default function PlayArea(props: PlayAreaProps) {
               <Card
                 cardIndex={index}
                 key={`current-hand-card-${index}`}
-                onClick={() => {
-                  console.log('onClick')
-                  console.log('card', card)
-                  send({ type: 'CHOOSE', data: { card } })
-                }}
+                onClick={() => send({ type: 'CHOOSE', data: { card } })}
                 isDisabled={current.value !== 'choosing'}
                 {...card}
               />
@@ -78,7 +74,21 @@ export default function PlayArea(props: PlayAreaProps) {
       </CurrentHandWrapper>
 
       <CardInPlayWrapper>
-        {cardInPlay && <Card isDisabled={false} cardIndex={0} key="card-in-play" {...cardInPlay} />}
+        {cardInPlay && (
+          <Card
+            animate={{ y: -30, rotate: 12.5, scale: 1.05, opacity: 1 }}
+            initial={{ y: 30, opacity: 0 }}
+            transition={{
+              duration: 0.15,
+              type: 'tween',
+              ease: 'linear',
+            }}
+            isDisabled={false}
+            cardIndex={0}
+            key="card-in-play"
+            {...cardInPlay}
+          />
+        )}
       </CardInPlayWrapper>
 
       <BattleWrapper>
