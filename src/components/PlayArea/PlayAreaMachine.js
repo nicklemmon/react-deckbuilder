@@ -55,7 +55,7 @@ const machineConfig = {
     },
     playing: {
       after: {
-        300: 'attacking',
+        800: 'attacking',
       },
     },
     attacking: {
