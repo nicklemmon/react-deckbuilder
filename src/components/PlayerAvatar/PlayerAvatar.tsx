@@ -13,7 +13,7 @@ interface PlayerAvatarProps {
   }
 }
 
-const Wrapper = styled.div<{ artwork?: string }>`
+const Portrait = styled.div<{ artwork?: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,9 +26,26 @@ const Wrapper = styled.div<{ artwork?: string }>`
   border-radius: 50%;
   background-image: ${props => `url(${props.artwork})`};
   background-size: cover;
+  border: ${props => props.theme.space[2]} solid ${props => props.theme.colors.white};
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
+  margin-bottom: ${props => props.theme.space[3]};
+`
+
+const Stats = styled.div`
+  color: ${props => props.theme.colors.darkGray};
+  text-align: center;
+`
+
+const Stat = styled.div`
+  color: ${props => props.theme.colors.gray};
+  font-size: ${props => props.theme.fontSizes[1]};
+  margin-top: ${props => props.theme.space[1]};
 `
 
 const Name = styled.div`
+  font-family: ${props => props.theme.fonts.heading};
+  letter-spacing: 0.0125rem;
+  font-size: ${props => props.theme.fontSizes[2]};
   font-weight: 700;
 `
 
@@ -37,15 +54,17 @@ function PlayerAvatar(props: PlayerAvatarProps) {
   const hitPoints = stats.hitPoints < 0 ? 0 : stats.hitPoints
 
   return (
-    <Wrapper artwork={artwork}>
-      <div>
+    <div>
+      <Portrait artwork={artwork} />
+
+      <Stats>
         <Name>{name}</Name>
 
-        <div>Level {level}</div>
+        <Stat>Level {level}</Stat>
 
-        <div>{hitPoints} HP</div>
-      </div>
-    </Wrapper>
+        <Stat>{hitPoints} HP</Stat>
+      </Stats>
+    </div>
   )
 }
 
