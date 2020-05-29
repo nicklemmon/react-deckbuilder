@@ -3,4 +3,5 @@ export default interface Player {
   level: number
   hitPoints: number
   actionPoints: number
+  artwork?: string
 }

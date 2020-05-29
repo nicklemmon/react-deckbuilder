@@ -1,9 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 
-interface PlayerAvatar {
+interface PlayerAvatarProps {
   name: string
   level: number
+  artwork?: string
+
   stats: {
     hitPoints: number
     attack: number
@@ -11,7 +13,7 @@ interface PlayerAvatar {
   }
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ artwork?: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,18 +24,20 @@ const Wrapper = styled.div`
   width: 10rem;
   padding: 1rem;
   border-radius: 50%;
+  background-image: ${props => `url(${props.artwork})`};
+  background-size: cover;
 `
 
 const Name = styled.div`
   font-weight: 700;
 `
 
-function PlayerAvatar(props: PlayerAvatar) {
-  const { name, level, stats } = props
+function PlayerAvatar(props: PlayerAvatarProps) {
+  const { name, level, stats, artwork } = props
   const hitPoints = stats.hitPoints < 0 ? 0 : stats.hitPoints
 
   return (
-    <Wrapper>
+    <Wrapper artwork={artwork}>
       <div>
         <Name>{name}</Name>
 
