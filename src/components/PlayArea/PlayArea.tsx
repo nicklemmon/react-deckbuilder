@@ -1,6 +1,8 @@
 import React from 'react'
 import { useMachine } from '@xstate/react'
+import { AnimatePresence } from 'framer-motion'
 import PlayAreaMachine from './PlayAreaMachine'
+import rng from '../../functions/rng'
 import { Deck } from '../Deck'
 import { Banner } from '../Banner'
 import { Card } from '../Card'
@@ -74,21 +76,24 @@ export default function PlayArea(props: PlayAreaProps) {
       </CurrentHandWrapper>
 
       <CardInPlayWrapper>
-        {cardInPlay && (
-          <Card
-            animate={{ y: -30, rotate: 12.5, scale: 1.05, opacity: 1 }}
-            initial={{ y: 30, opacity: 0 }}
-            transition={{
-              duration: 0.15,
-              type: 'tween',
-              ease: 'linear',
-            }}
-            isDisabled={false}
-            cardIndex={0}
-            key="card-in-play"
-            {...cardInPlay}
-          />
-        )}
+        <AnimatePresence>
+          {cardInPlay && (
+            <Card
+              key="card-in-play"
+              initial={{ y: 130, opacity: 0 }}
+              animate={{ y: -30, rotate: -rng(25) + rng(25), opacity: 1 }}
+              exit={{ y: -130, opacity: 0 }}
+              transition={{
+                duration: 0.25,
+                type: 'tween',
+                ease: 'linear',
+              }}
+              isDisabled={false}
+              cardIndex={0}
+              {...cardInPlay}
+            />
+          )}
+        </AnimatePresence>
       </CardInPlayWrapper>
 
       <BattleWrapper>
@@ -96,6 +101,7 @@ export default function PlayArea(props: PlayAreaProps) {
           name={context.player.name}
           level={context.player.level}
           stats={context.player.stats}
+          artwork={context.player.artwork}
         />
 
         {monster && (
