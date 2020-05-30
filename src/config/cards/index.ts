@@ -1,11 +1,11 @@
-import Card from '../../interfaces/Card'
-import fireboltImg from '../../images/firebolt.png'
-import knucklesImg from '../../images/knuckles.png'
-import handAxeImg from '../../images/hand-axe.png'
-import earthquakeImg from '../../images/earthquake.png'
-import lightningImg from '../../images/lightning.png'
-import stilletoImg from '../../images/stilleto.png'
-import shieldImg from '../../images/shield.png'
+import Card from 'src/interfaces/Card'
+import fireboltImg from 'src/images/firebolt.png'
+import knucklesImg from 'src/images/knuckles.png'
+import handAxeImg from 'src/images/hand-axe.png'
+import earthquakeImg from 'src/images/earthquake.png'
+import lightningImg from 'src/images/lightning.png'
+import stilletoImg from 'src/images/stilleto.png'
+import shieldImg from 'src/images/shield.png'
 
 const strike: Card = {
   id: 'strike',

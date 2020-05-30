@@ -1,10 +1,10 @@
-import Monster from '../../interfaces/Monster'
-import batImg from '../../images/bat.png'
-import impImg from '../../images/imp.png'
-import stagImg from '../../images/stag.png'
-import theCouncilImg from '../../images/the-council.png'
-import arachnidImg from '../../images/arachnid.png'
-import trollImg from '../../images/troll.png'
+import Monster from 'src/interfaces/Monster'
+import batImg from 'src/images/bat.png'
+import impImg from 'src/images/imp.png'
+import stagImg from 'src/images/stag.png'
+import theCouncilImg from 'src/images/the-council.png'
+import arachnidImg from 'src/images/arachnid.png'
+import trollImg from 'src/images/troll.png'
 
 const imp: Monster = {
   id: 'imp',

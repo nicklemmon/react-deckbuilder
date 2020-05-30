@@ -1,4 +1,4 @@
-import mageImg from '../../images/hooded-mage.png'
+import mageImg from 'src/images/hooded-mage.png'
 
 export default {
   name: 'Billie Jean',
