@@ -68,6 +68,7 @@ export default function PlayArea(props: PlayAreaProps) {
                 key={`current-hand-card-${index}`}
                 onClick={() => send({ type: 'CHOOSE', data: { card } })}
                 isDisabled={current.value !== 'choosing'}
+                positionTransition={true}
                 {...card}
               />
             ))}
@@ -80,13 +81,13 @@ export default function PlayArea(props: PlayAreaProps) {
           {cardInPlay && (
             <Card
               key="card-in-play"
-              initial={{ y: 130, opacity: 0 }}
-              animate={{ y: -30, rotate: -rng(25) + rng(25), opacity: 1 }}
-              exit={{ y: -130, opacity: 0 }}
+              initial={{ y: 100, opacity: 0 }}
+              animate={{ y: -20, rotate: -rng(25) + rng(25), opacity: 1 }}
+              exit={{ y: -20, x: 200, opacity: 0 }}
               transition={{
-                duration: 0.25,
+                duration: 0.2,
                 type: 'tween',
-                ease: 'linear',
+                ease: 'easeIn',
               }}
               isDisabled={false}
               cardIndex={0}
@@ -110,6 +111,7 @@ export default function PlayArea(props: PlayAreaProps) {
             name={monster.name}
             level={monster.level}
             stats={monster.stats}
+            artwork={monster.artwork}
           />
         )}
       </BattleWrapper>

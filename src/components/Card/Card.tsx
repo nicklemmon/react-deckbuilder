@@ -28,6 +28,7 @@ interface CardProps extends CardInterface {
   animate?: TargetAndTransition
   exit?: TargetAndTransition
   transition?: Transition
+  positionTransition?: boolean
   initial?: any // :(
 }
 
@@ -49,14 +50,11 @@ function Card(props: CardProps) {
     transition,
     initial,
     exit,
+    positionTransition = false,
   } = props
 
   return (
     <CardWrapper
-      initial={initial}
-      animate={animate}
-      exit={exit}
-      transition={transition}
       cardIndex={cardIndex}
       isStacked={isStacked}
       align={align}
@@ -64,6 +62,11 @@ function Card(props: CardProps) {
       onClick={onClick}
       style={{ pointerEvents: isDisabled ? 'none' : 'initial' }}
       artwork={artwork}
+      initial={initial}
+      animate={animate}
+      exit={exit}
+      transition={transition}
+      positionTransition={positionTransition}
     >
       <Content rarity={rarity} isVisible={isRevealed}>
         <Header>

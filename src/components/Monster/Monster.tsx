@@ -1,34 +1,23 @@
 import React from 'react'
-import styled from 'styled-components'
-import { default as MonsterInterface } from '../../interfaces/Monster'
-
-const Wrapper = styled('div')`
-  background: pink;
-  height: 10rem;
-  width: 10rem;
-  padding: 1rem;
-`
-
-const Header = styled('div')`
-  font-weight: 700;
-`
+import { Avatar } from 'src/components/Avatar'
+import { default as MonsterInterface } from 'src/interfaces/Monster'
 
 function Monster(props: MonsterInterface) {
-  const { name, level, id, stats } = props
+  const { name, level, stats, artwork } = props
   const hitPoints = stats.hitPoints < 0 ? 0 : stats.hitPoints
 
   return (
-    <Wrapper id={id}>
-      <Header>
-        <h3>{name}</h3>
-      </Header>
+    <Avatar>
+      <Avatar.Portrait artwork={artwork} />
 
-      <div>Level {level}</div>
+      <Avatar.Stats>
+        <Avatar.Name>{name}</Avatar.Name>
 
-      <div>
-        <strong>{hitPoints}</strong> HP
-      </div>
-    </Wrapper>
+        <Avatar.Stat>Level {level}</Avatar.Stat>
+
+        <Avatar.Stat>{hitPoints} HP</Avatar.Stat>
+      </Avatar.Stats>
+    </Avatar>
   )
 }
 
