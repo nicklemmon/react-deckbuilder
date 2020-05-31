@@ -73,6 +73,7 @@ const machineConfig = {
       ],
     },
     victory: {
+      entry: '@killMonster',
       on: {
         NEXT_BATTLE_CLICK: {
           actions: ['@getMonster', '@discardHand', '@discardDrawPile', '@discardDiscardPile'],
@@ -176,6 +177,11 @@ const PlayAreaMachine = Machine(machineConfig, {
       return {
         currentHand: remainingCards,
         cardInPlay: chosenCard,
+      }
+    }),
+    '@killMonster': assign(ctx => {
+      return {
+        monster: undefined,
       }
     }),
   },

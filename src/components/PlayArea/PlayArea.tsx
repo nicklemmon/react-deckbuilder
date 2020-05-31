@@ -1,13 +1,13 @@
 import React from 'react'
 import { useMachine } from '@xstate/react'
-import { AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import PlayAreaMachine from './PlayAreaMachine'
 import rng from 'src/functions/rng'
 import { Deck } from 'src/components/Deck'
 import { Banner } from 'src/components/Banner'
 import { Card } from 'src/components/Card'
 import { Monster } from 'src/components/Monster'
-import { PlayerAvatar } from 'src/components/PlayerAvatar'
+import { Player } from 'src/components/Player'
 import { StateMachineViewer } from 'src/components/StateMachineViewer'
 import CardInterface from 'src/interfaces/Card'
 import {
@@ -98,22 +98,37 @@ export default function PlayArea(props: PlayAreaProps) {
       </CardInPlayWrapper>
 
       <BattleWrapper>
-        <PlayerAvatar
-          name={context.player.name}
-          level={context.player.level}
-          stats={context.player.stats}
-          artwork={context.player.artwork}
-        />
-
-        {monster && (
-          <Monster
-            id={monster.id}
-            name={monster.name}
-            level={monster.level}
-            stats={monster.stats}
-            artwork={monster.artwork}
+        <motion.div
+          initial={{ x: -50, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 1, delay: 0 }}
+        >
+          <Player
+            name={context.player.name}
+            level={context.player.level}
+            stats={context.player.stats}
+            artwork={context.player.artwork}
           />
-        )}
+        </motion.div>
+
+        <AnimatePresence>
+          {monster && (
+            <motion.div
+              initial={{ x: 50, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: 0, y: 50, opacity: 0 }}
+              transition={{ duration: 1, delay: 0.5 }}
+            >
+              <Monster
+                id={monster.id}
+                name={monster.name}
+                level={monster.level}
+                stats={monster.stats}
+                artwork={monster.artwork}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </BattleWrapper>
 
       {context.feedback && (
