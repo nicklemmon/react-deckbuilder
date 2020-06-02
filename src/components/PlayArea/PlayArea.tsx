@@ -5,6 +5,7 @@ import PlayAreaMachine from './PlayAreaMachine'
 import rng from 'src/functions/rng'
 import { Deck } from 'src/components/Deck'
 import { Banner } from 'src/components/Banner'
+import { Button } from 'src/components/Button'
 import { Card } from 'src/components/Card'
 import { Monster } from 'src/components/Monster'
 import { Player } from 'src/components/Player'
@@ -36,9 +37,25 @@ export default function PlayArea(props: PlayAreaProps) {
       <StateMachineViewer currentState={current} />
 
       {current.value === 'victory' && (
-        <Banner>
-          Victory! <button onClick={() => send('NEXT_BATTLE_CLICK')}>Next Battle</button>
-        </Banner>
+        <AnimatePresence>
+          <motion.div
+            style={{ position: 'fixed', left: '50%', top: '50%', zIndex: 1 }}
+            initial={{ y: '-70%', x: '-50%', scale: 0.75, opacity: 0 }}
+            animate={{ y: '-50%', x: '-50%', scale: 1, opacity: 1 }}
+            exit={{ y: '-30%', x: '-50%', scale: 1, opacity: 0 }}
+          >
+            <Banner>
+              Victory!{' '}
+              <Button
+                style={{ marginLeft: '1rem' }}
+                variant="primary"
+                onClick={() => send('NEXT_BATTLE_CLICK')}
+              >
+                Next Battle
+              </Button>
+            </Banner>
+          </motion.div>
+        </AnimatePresence>
       )}
 
       {current.value === 'defeat' && <Banner>Defeat!</Banner>}
@@ -116,8 +133,8 @@ export default function PlayArea(props: PlayAreaProps) {
             <motion.div
               initial={{ x: 50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              exit={{ x: 0, y: 50, opacity: 0 }}
-              transition={{ duration: 1, delay: 0.5 }}
+              exit={{ x: 0, y: 25, opacity: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
             >
               <Monster
                 id={monster.id}

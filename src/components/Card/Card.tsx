@@ -53,6 +53,8 @@ function Card(props: CardProps) {
     positionTransition = false,
   } = props
 
+  console.log('isDisabled', isDisabled)
+
   return (
     <CardWrapper
       cardIndex={cardIndex}
@@ -60,13 +62,13 @@ function Card(props: CardProps) {
       align={align}
       id={`card-${id}`}
       onClick={onClick}
-      style={{ pointerEvents: isDisabled ? 'none' : 'initial' }}
       artwork={artwork}
       initial={initial}
       animate={animate}
       exit={exit}
       transition={transition}
       positionTransition={positionTransition}
+      isDisabled={isDisabled}
     >
       <Content rarity={rarity} isVisible={isRevealed}>
         <Header>
@@ -86,16 +88,6 @@ function Card(props: CardProps) {
                 <StatNumber>{stats.attack}</StatNumber>
               </Stat>
             )}
-
-            {/* {stats.defense && (
-              <div>
-                <span role="img" aria-label="Defense:">
-                  🛡️
-                </span>
-
-                {stats.defense}
-              </div>
-            )} */}
           </Stats>
         </Footer>
       </Content>

@@ -6,15 +6,14 @@ interface BannerProps {
 }
 
 const Wrapper = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   letter-spacing: 0.125rem;
   background-color: ${props => props.theme.colors.gray};
-  padding: ${props => props.theme.space[3]};
+  z-index: 100;
+  padding: ${props => props.theme.space[3]} ${props => props.theme.space[6]};
   width: 100%;
-  max-width: 33vw;
   text-align: center;
   color: ${props => props.theme.colors.white};
   font-size: ${props => props.theme.fontSizes[4]};

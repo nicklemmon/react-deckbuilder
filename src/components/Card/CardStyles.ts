@@ -20,6 +20,7 @@ export const CardWrapper = styled(motion.div)<{
   cardIndex: number
   isStacked?: boolean
   align?: string
+  isDisabled?: boolean
 }>`
   display: inline-flex;
   border: 1px solid #ccc;
@@ -36,6 +37,8 @@ export const CardWrapper = styled(motion.div)<{
   transition-duration: ${props => props.theme.duration[1]};
   transition-timing-function: ease-in-out;
   transition-property: transform, box-shadow;
+  pointer-events: ${props => (props.isDisabled ? 'none' : 'initial')};
+  filter: ${props => (props.isDisabled ? 'grayscale(85%)' : 'initial')};
 
   :hover {
     transform: translateY(-0.33rem);

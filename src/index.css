@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Eczar:wght@600;800&family=Roboto&display=swap');
 @import '../node_modules/reset-css/reset.css';
 
-body {
+body,
+button {
   cursor: url('./images/dagger.png'), auto;
 }
