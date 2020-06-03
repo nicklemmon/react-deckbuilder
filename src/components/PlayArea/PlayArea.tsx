@@ -88,9 +88,9 @@ export default function PlayArea(props: PlayAreaProps) {
             <motion.div
               key="card-in-play"
               initial={{ y: 100, opacity: 0, x: 0, scale: 1 }}
-              animate={{ y: -50, opacity: 1, x: 0, scale: 1.125 }}
-              exit={{ y: 200, x: 500, opacity: 0, rotate: 15, scale: 1 }}
-              transition={{ type: 'spring', damping: 50, mass: 0.125 }}
+              animate={{ y: -50, opacity: 1, x: 0, scale: 1.2 }}
+              exit={{ y: 200, x: 400, opacity: 0, rotate: 15, scale: 1 }}
+              transition={{ type: 'spring', damping: 5, mass: 0.125, stiffness: 30 }}
             >
               <Card isDisabled={false} cardIndex={0} {...cardInPlay} />
             </motion.div>
