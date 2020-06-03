@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { motion } from 'framer-motion'
 import { cardWidth, cardOffset, cardHeight } from '../../styles/constants'
 
 const contentLayer = 1
@@ -15,7 +14,7 @@ export const Content = styled.div<{ isVisible: boolean; rarity: number }>`
   opacity: ${props => (props.isVisible ? 1 : 0)};
 `
 
-export const CardWrapper = styled(motion.div)<{
+export const CardWrapper = styled('div')<{
   artwork?: string
   cardIndex: number
   isStacked?: boolean

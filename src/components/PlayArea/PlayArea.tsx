@@ -2,7 +2,6 @@ import React from 'react'
 import { useMachine } from '@xstate/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import PlayAreaMachine from './PlayAreaMachine'
-import rng from 'src/functions/rng'
 import { Deck } from 'src/components/Deck'
 import { Banner } from 'src/components/Banner'
 import { Button } from 'src/components/Button'
@@ -37,28 +36,19 @@ export default function PlayArea(props: PlayAreaProps) {
       <StateMachineViewer currentState={current} />
 
       {current.value === 'victory' && (
-        <AnimatePresence>
-          <motion.div
-            style={{ position: 'fixed', left: '50%', top: '50%', zIndex: 1 }}
-            initial={{ y: '-70%', x: '-50%', scale: 0.75, opacity: 0 }}
-            animate={{ y: '-50%', x: '-50%', scale: 1, opacity: 1 }}
-            exit={{ y: '-30%', x: '-50%', scale: 1, opacity: 0 }}
+        <AnimatedBanner>
+          Victory!{' '}
+          <Button
+            style={{ marginLeft: '1rem' }}
+            variant="primary"
+            onClick={() => send('NEXT_BATTLE_CLICK')}
           >
-            <Banner>
-              Victory!{' '}
-              <Button
-                style={{ marginLeft: '1rem' }}
-                variant="primary"
-                onClick={() => send('NEXT_BATTLE_CLICK')}
-              >
-                Next Battle
-              </Button>
-            </Banner>
-          </motion.div>
-        </AnimatePresence>
+            Next Battle
+          </Button>
+        </AnimatedBanner>
       )}
 
-      {current.value === 'defeat' && <Banner>Defeat!</Banner>}
+      {current.value === 'defeat' && <AnimatedBanner>Defeat!</AnimatedBanner>}
 
       <PlayerDeckWrapper numberOfCards={context.playerDeck.length}>
         <Deck isStacked={true}>
@@ -85,7 +75,6 @@ export default function PlayArea(props: PlayAreaProps) {
                 key={`current-hand-card-${index}`}
                 onClick={() => send({ type: 'CHOOSE', data: { card } })}
                 isDisabled={current.value !== 'choosing'}
-                positionTransition={true}
                 {...card}
               />
             ))}
@@ -96,20 +85,15 @@ export default function PlayArea(props: PlayAreaProps) {
       <CardInPlayWrapper>
         <AnimatePresence>
           {cardInPlay && (
-            <Card
+            <motion.div
               key="card-in-play"
-              initial={{ y: 100, opacity: 0 }}
-              animate={{ y: -20, rotate: -rng(25) + rng(25), opacity: 1 }}
-              exit={{ y: -20, x: 200, opacity: 0 }}
-              transition={{
-                duration: 0.2,
-                type: 'tween',
-                ease: 'easeIn',
-              }}
-              isDisabled={false}
-              cardIndex={0}
-              {...cardInPlay}
-            />
+              initial={{ y: 100, opacity: 0, x: 0, scale: 1 }}
+              animate={{ y: -50, opacity: 1, x: 0, scale: 1.125 }}
+              exit={{ y: 200, x: 600, opacity: 0, scale: 1 }}
+              transition={{ type: 'spring', damping: 50, mass: 0.25 }}
+            >
+              <Card isDisabled={false} cardIndex={0} {...cardInPlay} />
+            </motion.div>
           )}
         </AnimatePresence>
       </CardInPlayWrapper>
@@ -162,5 +146,24 @@ export default function PlayArea(props: PlayAreaProps) {
         </Deck>
       </DiscardPileWrapper>
     </PlayAreaWrapper>
+  )
+}
+
+interface AnimatedBannerProps {
+  children: any
+}
+
+function AnimatedBanner(props: AnimatedBannerProps) {
+  return (
+    <AnimatePresence>
+      <motion.div
+        style={{ position: 'fixed', left: '50%', top: '50%', zIndex: 1 }}
+        initial={{ y: '-70%', x: '-50%', scale: 0.75, opacity: 0 }}
+        animate={{ y: '-50%', x: '-50%', scale: 1, opacity: 1 }}
+        exit={{ y: '-30%', x: '-50%', scale: 1, opacity: 0 }}
+      >
+        <Banner>{props.children}</Banner>
+      </motion.div>
+    </AnimatePresence>
   )
 }

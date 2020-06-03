@@ -4,7 +4,7 @@ import styled from 'styled-components'
 interface ButtonProps {
   variant: string
   children: any
-  onClick: any // :shrug-emoji:
+  onClick?: () => void
   style?: object
 }
 

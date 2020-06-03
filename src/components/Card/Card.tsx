@@ -1,6 +1,5 @@
 import React from 'react'
 import { default as CardInterface } from '../../interfaces/Card'
-import { TargetAndTransition, Transition } from 'framer-motion'
 import swordImg from '../../images/sword.png'
 import {
   CardWrapper,
@@ -25,11 +24,6 @@ interface CardProps extends CardInterface {
   isRevealed?: boolean
   onClick?: () => void
   align?: string
-  animate?: TargetAndTransition
-  exit?: TargetAndTransition
-  transition?: Transition
-  positionTransition?: boolean
-  initial?: any // :(
 }
 
 function Card(props: CardProps) {
@@ -46,11 +40,6 @@ function Card(props: CardProps) {
     align = 'left',
     stats,
     artwork,
-    animate,
-    transition,
-    initial,
-    exit,
-    positionTransition = false,
   } = props
 
   console.log('isDisabled', isDisabled)
@@ -63,11 +52,6 @@ function Card(props: CardProps) {
       id={`card-${id}`}
       onClick={onClick}
       artwork={artwork}
-      initial={initial}
-      animate={animate}
-      exit={exit}
-      transition={transition}
-      positionTransition={positionTransition}
       isDisabled={isDisabled}
     >
       <Content rarity={rarity} isVisible={isRevealed}>
