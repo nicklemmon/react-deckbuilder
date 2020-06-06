@@ -3,6 +3,8 @@ export default interface Monster {
   name: string
   level: number
   artwork?: string
+  damageTaken?: number
+
   stats: {
     hitPoints: number
     attack: number

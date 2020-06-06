@@ -1,9 +1,11 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import rng from 'src/functions/rng'
-import styled from 'styled-components'
+import { PortraitImg, Stats, Stat, Name, Flash, FeedbackText } from './AvatarStyles'
 
-const DAMAGE_DURATION = 0.33
+const DAMAGE_FLASH_DURATION = 0.33
+const DAMAGE_FEEDBACK_DURATION = 1
+
 interface AvatarProps {
   children: any
 }
@@ -18,47 +20,9 @@ interface PortraitWrapperProps {
   children: any
 }
 
-const PortraitImg = styled.div<{ artwork?: string }>`
-  position: relative;
-  overflow: hidden;
-  height: 10rem;
-  width: 10rem;
-  padding: 1rem;
-  background-image: ${props => `url(${props.artwork})`};
-  background-size: cover;
-  border-radius: 50%;
-  border: ${props => props.theme.space[1]} solid ${props => props.theme.colors.white};
-  box-shadow: ${props => props.theme.shadows[0]};
-  margin-bottom: ${props => props.theme.space[3]};
-`
-
-const Stats = styled.div`
-  color: ${props => props.theme.colors.darkGray};
-  text-align: center;
-`
-
-const Stat = styled.div`
-  color: ${props => props.theme.colors.gray};
-  font-family: ${props => props.theme.fonts.body};
-  font-size: ${props => props.theme.fontSizes[1]};
-  margin-top: ${props => props.theme.space[1]};
-`
-
-const Name = styled.div`
-  font-family: ${props => props.theme.fonts.heading};
-  letter-spacing: 0.0125rem;
-  font-size: ${props => props.theme.fontSizes[2]};
-  font-weight: 700;
-`
-
-const Flash = styled(motion.div)`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: ${props => props.theme.colors.white};
-`
+interface FeedbackProps {
+  children: any
+}
 
 function Portrait(props: PortraitProps) {
   const { isTakingDamage, artwork } = props
@@ -73,7 +37,7 @@ function Portrait(props: PortraitProps) {
 function Avatar(props: AvatarProps) {
   const { children } = props
 
-  return <div>{children}</div>
+  return <div style={{ position: 'relative' }}>{children}</div>
 }
 
 function PortraitWrapper(props: PortraitWrapperProps) {
@@ -84,7 +48,7 @@ function PortraitWrapper(props: PortraitWrapperProps) {
       {isTakingDamage ? (
         <motion.div
           animate={{ x: [0, -rng(25), rng(10), rng(-10), 0], y: [0, -rng(5), rng(5), rng(5), 0] }}
-          transition={{ duration: DAMAGE_DURATION }}
+          transition={{ duration: DAMAGE_FLASH_DURATION }}
         >
           {children}
         </motion.div>
@@ -111,8 +75,30 @@ function DamageFlash() {
         opacity: [0, 0.85, 0],
         scale: [0.25, 1.25, 1.25],
       }}
-      transition={{ duration: DAMAGE_DURATION }}
+      transition={{ duration: DAMAGE_FLASH_DURATION }}
     />
+  )
+}
+
+function Feedback(props: FeedbackProps) {
+  const { children } = props
+
+  return (
+    <motion.div
+      style={{
+        position: 'absolute',
+        top: '25%',
+        right: '25%',
+      }}
+      animate={{
+        y: [0, -50, -100],
+        scale: [1, 1.25, 1.5],
+        opacity: [0, 1, 0],
+      }}
+      transition={{ duration: DAMAGE_FEEDBACK_DURATION }}
+    >
+      <FeedbackText>{children}</FeedbackText>
+    </motion.div>
   )
 }
 
@@ -126,5 +112,7 @@ Name.displayName = 'Avatar.Name'
 Avatar.Name = Name
 Flash.displayName = 'Avatar.Flash'
 Avatar.Flash = Flash
+Feedback.displayName = 'Avatar.Feedback'
+Avatar.Feedback = Feedback
 
 export default Avatar

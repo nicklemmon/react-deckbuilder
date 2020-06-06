@@ -1,0 +1,53 @@
+import { motion } from 'framer-motion'
+import styled from 'styled-components'
+
+export const PortraitImg = styled.div<{ artwork?: string }>`
+  position: relative;
+  overflow: hidden;
+  height: 10rem;
+  width: 10rem;
+  padding: 1rem;
+  background-image: ${props => `url(${props.artwork})`};
+  background-size: cover;
+  border-radius: 50%;
+  border: ${props => props.theme.space[1]} solid ${props => props.theme.colors.white};
+  box-shadow: ${props => props.theme.shadows[0]};
+  margin-bottom: ${props => props.theme.space[3]};
+`
+
+export const Stats = styled.div`
+  color: ${props => props.theme.colors.darkGray};
+  text-align: center;
+`
+
+export const Stat = styled.div`
+  color: ${props => props.theme.colors.gray};
+  font-family: ${props => props.theme.fonts.body};
+  font-size: ${props => props.theme.fontSizes[1]};
+  margin-top: ${props => props.theme.space[1]};
+`
+
+export const Name = styled.div`
+  font-family: ${props => props.theme.fonts.heading};
+  letter-spacing: 0.0125rem;
+  font-size: ${props => props.theme.fontSizes[2]};
+  font-weight: 700;
+`
+
+export const Flash = styled(motion.div)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: ${props => props.theme.colors.white};
+`
+
+export const FeedbackText = styled.div`
+  font-family: ${props => props.theme.fonts.heading};
+  font-weight: 700;
+  font-size: ${props => props.theme.fontSizes[3]};
+  color: ${props => props.theme.colors.offWhite};
+  text-shadow: ${props => props.theme.colors.pink} 1px 0 10px,
+    0 1px 0 ${props => props.theme.colors.gray};
+`

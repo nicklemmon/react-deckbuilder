@@ -7,17 +7,13 @@ const machineConfig = {
   id: 'play-area-machine',
   initial: 'idle',
   context: {
-    player: {
-      ...config.player,
-      isDefeated: false,
-    },
+    player: config.player,
     playerDeck: config.cards,
     drawPile: [],
     currentHand: [],
     cardInPlay: undefined,
     discardPile: [],
     monster: undefined,
-    feedback: undefined,
   },
   states: {
     idle: {
@@ -62,14 +58,14 @@ const machineConfig = {
       entry: '@playerAttack',
       after: [
         { delay: 800, target: 'defending', cond: '#monsterIsAlive' },
-        { delay: 300, target: 'victory', cond: '#monsterIsDead' },
+        { delay: 800, target: 'victory', cond: '#monsterIsDead' },
       ],
     },
     defending: {
       entry: '@monsterAttack',
       after: [
-        { delay: 300, target: 'assessing', cond: '#playerIsAlive' },
-        { delay: 300, target: 'defeat', cond: '#playerIsDead' },
+        { delay: 800, target: 'assessing', cond: '#playerIsAlive' },
+        { delay: 800, target: 'defeat', cond: '#playerIsDead' },
       ],
     },
     victory: {
@@ -103,28 +99,29 @@ const PlayAreaMachine = Machine(machineConfig, {
       return {
         player: {
           ...player,
+          damageTaken: damage,
           stats: {
             ...player.stats,
             hitPoints: player.stats.hitPoints - damage,
           },
         },
-        feedback: `${damage} damage dealt to ${player.name}`,
       }
     }),
     '@playerAttack': assign(ctx => {
       const { monster, cardInPlay } = ctx
+      const damage = cardInPlay.stats.attack
 
       return {
         monster: {
           ...monster,
+          damageTaken: damage,
           stats: {
             ...monster.stats,
-            hitPoints: monster.stats.hitPoints - cardInPlay.stats.attack,
+            hitPoints: monster.stats.hitPoints - damage,
           },
         },
         cardInPlay: null,
         discardPile: [...ctx.discardPile, { ...cardInPlay, isRevealed: false }],
-        feedback: `${cardInPlay.stats.attack} damage dealt to ${monster.name}`,
       }
     }),
     '@createDrawPile': assign(ctx => {

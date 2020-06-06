@@ -15,7 +15,6 @@ import {
   CurrentHandWrapper,
   DiscardPileWrapper,
   DrawPileWrapper,
-  Feedback,
   BattleWrapper,
   PlayAreaWrapper,
   PlayerDeckWrapper,
@@ -106,6 +105,7 @@ export default function PlayArea(props: PlayAreaProps) {
         >
           <Player
             isTakingDamage={current.value === 'defending'}
+            damageTaken={current.value === 'defending' ? context.player.damageTaken : null}
             name={context.player.name}
             level={context.player.level}
             stats={context.player.stats}
@@ -123,6 +123,7 @@ export default function PlayArea(props: PlayAreaProps) {
             >
               <Monster
                 isTakingDamage={current.value === 'attacking'}
+                damageTaken={current.value === 'attacking' ? monster.damageTaken : null}
                 id={monster.id}
                 name={monster.name}
                 level={monster.level}
@@ -133,12 +134,6 @@ export default function PlayArea(props: PlayAreaProps) {
           )}
         </AnimatePresence>
       </BattleWrapper>
-
-      {context.feedback && (
-        <Feedback>
-          <p>{context.feedback}</p>
-        </Feedback>
-      )}
 
       <DiscardPileWrapper>
         <Deck isStacked={true} align="right">

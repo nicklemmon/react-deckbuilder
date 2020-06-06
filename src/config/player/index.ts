@@ -1,6 +1,7 @@
 import mageImg from 'src/images/hooded-mage.png'
+import Player from 'src/interfaces/Player'
 
-export default {
+const player: Player = {
   name: 'Billie Jean',
   level: 3,
   artwork: mageImg,
@@ -10,3 +11,5 @@ export default {
     defense: 1,
   },
 }
+
+export default player

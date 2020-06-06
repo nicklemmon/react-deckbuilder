@@ -42,8 +42,6 @@ function Card(props: CardProps) {
     artwork,
   } = props
 
-  console.log('isDisabled', isDisabled)
-
   return (
     <CardWrapper
       cardIndex={cardIndex}

@@ -1,21 +1,14 @@
 import React from 'react'
 import { Avatar } from 'src/components/Avatar'
+import { default as PlayerInterface } from 'src/interfaces/Player'
 
-interface PlayerAvatarProps {
-  name: string
-  level: number
-  artwork?: string
+interface PlayerAvatarProps extends PlayerInterface {
   isTakingDamage: boolean
-
-  stats: {
-    hitPoints: number
-    attack: number
-    defense: number
-  }
+  damageTaken?: any // :(
 }
 
 function PlayerAvatar(props: PlayerAvatarProps) {
-  const { name, level, stats, artwork, isTakingDamage } = props
+  const { name, level, stats, artwork, isTakingDamage, damageTaken } = props
   const hitPoints = stats.hitPoints < 0 ? 0 : stats.hitPoints
 
   return (
@@ -29,6 +22,8 @@ function PlayerAvatar(props: PlayerAvatarProps) {
 
         <Avatar.Stat>{hitPoints} HP</Avatar.Stat>
       </Avatar.Stats>
+
+      {damageTaken && <Avatar.Feedback>{damageTaken}</Avatar.Feedback>}
     </Avatar>
   )
 }

@@ -1,7 +1,12 @@
 export default interface Player {
   name: string
   level: number
-  hitPoints: number
-  actionPoints: number
   artwork?: string
+  damageTaken?: number
+
+  stats: {
+    hitPoints: number
+    attack: number
+    defense: number
+  }
 }

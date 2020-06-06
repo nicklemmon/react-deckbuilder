@@ -7,7 +7,7 @@ interface MonsterProps extends MonsterInterface {
 }
 
 function Monster(props: MonsterProps) {
-  const { name, level, stats, artwork, isTakingDamage } = props
+  const { name, level, stats, artwork, isTakingDamage, damageTaken } = props
   const hitPoints = stats.hitPoints < 0 ? 0 : stats.hitPoints
 
   return (
@@ -21,6 +21,8 @@ function Monster(props: MonsterProps) {
 
         <Avatar.Stat>{hitPoints} HP</Avatar.Stat>
       </Avatar.Stats>
+
+      {damageTaken && <Avatar.Feedback>{damageTaken}</Avatar.Feedback>}
     </Avatar>
   )
 }
