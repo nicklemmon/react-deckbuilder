@@ -5,6 +5,7 @@ interface PlayerAvatarProps {
   name: string
   level: number
   artwork?: string
+  isTakingDamage: boolean
 
   stats: {
     hitPoints: number
@@ -14,12 +15,12 @@ interface PlayerAvatarProps {
 }
 
 function PlayerAvatar(props: PlayerAvatarProps) {
-  const { name, level, stats, artwork } = props
+  const { name, level, stats, artwork, isTakingDamage } = props
   const hitPoints = stats.hitPoints < 0 ? 0 : stats.hitPoints
 
   return (
     <Avatar>
-      <Avatar.Portrait artwork={artwork} />
+      <Avatar.Portrait artwork={artwork} isTakingDamage={isTakingDamage} />
 
       <Avatar.Stats>
         <Avatar.Name>{name}</Avatar.Name>

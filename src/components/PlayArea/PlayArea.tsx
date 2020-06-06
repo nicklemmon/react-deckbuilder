@@ -88,7 +88,7 @@ export default function PlayArea(props: PlayAreaProps) {
             <motion.div
               key="card-in-play"
               initial={{ y: 100, opacity: 0, x: 0, scale: 1 }}
-              animate={{ y: -50, opacity: 1, x: 0, scale: 1.2 }}
+              animate={{ y: -50, opacity: 1, x: 0, scale: 1.15 }}
               exit={{ y: 200, x: 400, opacity: 0, rotate: 15, scale: 1 }}
               transition={{ type: 'spring', damping: 5, mass: 0.125, stiffness: 30 }}
             >
@@ -105,6 +105,7 @@ export default function PlayArea(props: PlayAreaProps) {
           transition={{ duration: 1, delay: 0 }}
         >
           <Player
+            isTakingDamage={current.value === 'defending'}
             name={context.player.name}
             level={context.player.level}
             stats={context.player.stats}
@@ -121,6 +122,7 @@ export default function PlayArea(props: PlayAreaProps) {
               transition={{ duration: 0.5, delay: 0.5 }}
             >
               <Monster
+                isTakingDamage={current.value === 'attacking'}
                 id={monster.id}
                 name={monster.name}
                 level={monster.level}

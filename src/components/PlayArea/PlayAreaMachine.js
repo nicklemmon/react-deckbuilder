@@ -61,7 +61,7 @@ const machineConfig = {
     attacking: {
       entry: '@playerAttack',
       after: [
-        { delay: 300, target: 'defending', cond: '#monsterIsAlive' },
+        { delay: 800, target: 'defending', cond: '#monsterIsAlive' },
         { delay: 300, target: 'victory', cond: '#monsterIsDead' },
       ],
     },
