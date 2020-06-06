@@ -10,7 +10,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   letter-spacing: 0.125rem;
-  background-color: ${props => props.theme.colors.gray};
+  background-color: ${props => props.theme.colors.darkGray};
   z-index: 100;
   padding: ${props => props.theme.space[3]} ${props => props.theme.space[6]};
   width: 100%;

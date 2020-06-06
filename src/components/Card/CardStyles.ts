@@ -22,7 +22,7 @@ export const CardWrapper = styled('div')<{
   isDisabled?: boolean
 }>`
   display: inline-flex;
-  border: 1px solid #ccc;
+  border: 1px solid ${props => props.theme.colors.lightGray};
   border-radius: ${props => props.theme.radii[1]};
   overflow: hidden;
   height: ${cardHeight};

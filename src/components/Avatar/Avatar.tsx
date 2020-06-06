@@ -4,7 +4,7 @@ import rng from 'src/functions/rng'
 import { PortraitImg, Stats, Stat, Name, Flash, FeedbackText } from './AvatarStyles'
 
 const DAMAGE_FLASH_DURATION = 0.33
-const DAMAGE_FEEDBACK_DURATION = 1
+const DAMAGE_FEEDBACK_DURATION = 0.8
 
 interface AvatarProps {
   children: any
