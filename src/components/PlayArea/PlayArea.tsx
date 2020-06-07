@@ -1,7 +1,7 @@
 import React from 'react'
 import { useMachine } from '@xstate/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import PlayAreaMachine from './PlayAreaMachine'
+import GameMachine from 'src/GameMachine'
 import { Deck } from 'src/components/Deck'
 import { Banner } from 'src/components/Banner'
 import { Button } from 'src/components/Button'
@@ -25,7 +25,7 @@ interface PlayAreaProps {
 }
 
 export default function PlayArea(props: PlayAreaProps) {
-  const [current, send] = useMachine(PlayAreaMachine)
+  const [current, send] = useMachine(GameMachine)
   const { context } = current
   const cardInPlay: any = context.cardInPlay
   const monster: any = context.monster

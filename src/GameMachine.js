@@ -1,7 +1,7 @@
 import { Machine, assign } from 'xstate'
-import shuffle from '../../functions/shuffle'
-import rng from '../../functions/rng'
-import config from '../../config'
+import shuffle from './functions/shuffle'
+import rng from './functions/rng'
+import config from './config'
 
 const machineConfig = {
   id: 'play-area-machine',
@@ -81,7 +81,7 @@ const machineConfig = {
   },
 }
 
-const PlayAreaMachine = Machine(machineConfig, {
+const GameMachine = Machine(machineConfig, {
   actions: {
     '@getMonster': assign(ctx => {
       return {
@@ -197,4 +197,4 @@ const PlayAreaMachine = Machine(machineConfig, {
   },
 })
 
-export default PlayAreaMachine
+export default GameMachine
