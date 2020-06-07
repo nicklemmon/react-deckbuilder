@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import rng from 'src/functions/rng'
-import { PortraitImg, Stats, Stat, Name, Flash, FeedbackText } from './AvatarStyles'
+import { PortraitImg, Name, Flash, FeedbackText } from './AvatarStyles'
 
 const DAMAGE_FLASH_DURATION = 0.33
 const DAMAGE_FEEDBACK_DURATION = 0.8
@@ -104,10 +104,6 @@ function Feedback(props: FeedbackProps) {
 
 Portrait.displayName = 'Avatar.Portrait'
 Avatar.Portrait = Portrait
-Stats.displayName = 'Avatar.Stats'
-Avatar.Stats = Stats
-Stat.displayName = 'Avatar.Stat'
-Avatar.Stat = Stat
 Name.displayName = 'Avatar.Name'
 Avatar.Name = Name
 Flash.displayName = 'Avatar.Flash'

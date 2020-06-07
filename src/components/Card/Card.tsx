@@ -1,6 +1,6 @@
 import React from 'react'
-import { default as CardInterface } from '../../interfaces/Card'
-import swordImg from '../../images/sword.png'
+import { default as CardInterface } from 'src/interfaces/Card'
+import swordImg from 'src/images/sword.png'
 import {
   CardWrapper,
   CardIcon,

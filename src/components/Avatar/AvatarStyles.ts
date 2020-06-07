@@ -15,23 +15,12 @@ export const PortraitImg = styled.div<{ artwork?: string }>`
   margin-bottom: ${props => props.theme.space[3]};
 `
 
-export const Stats = styled.div`
-  color: ${props => props.theme.colors.darkGray};
-  text-align: center;
-`
-
-export const Stat = styled.div`
-  color: ${props => props.theme.colors.gray};
-  font-family: ${props => props.theme.fonts.body};
-  font-size: ${props => props.theme.fontSizes[1]};
-  margin-top: ${props => props.theme.space[1]};
-`
-
 export const Name = styled.div`
   font-family: ${props => props.theme.fonts.heading};
   letter-spacing: 0.0125rem;
   font-size: ${props => props.theme.fontSizes[2]};
   font-weight: 700;
+  text-align: center;
 `
 
 export const Flash = styled(motion.div)`

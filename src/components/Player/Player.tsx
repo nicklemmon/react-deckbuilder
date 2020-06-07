@@ -1,5 +1,6 @@
 import React from 'react'
 import { Avatar } from 'src/components/Avatar'
+import { Stats } from 'src/components/Stats'
 import { default as PlayerInterface } from 'src/interfaces/Player'
 
 interface PlayerAvatarProps extends PlayerInterface {
@@ -15,13 +16,13 @@ function PlayerAvatar(props: PlayerAvatarProps) {
     <Avatar>
       <Avatar.Portrait artwork={artwork} isTakingDamage={isTakingDamage} />
 
-      <Avatar.Stats>
+      <Stats>
         <Avatar.Name>{name}</Avatar.Name>
 
-        <Avatar.Stat>Level {level}</Avatar.Stat>
+        <Stats.Stat>Level {level}</Stats.Stat>
 
-        <Avatar.Stat>{hitPoints} HP</Avatar.Stat>
-      </Avatar.Stats>
+        <Stats.Stat>{hitPoints} HP</Stats.Stat>
+      </Stats>
 
       {damageTaken && <Avatar.Feedback>{damageTaken}</Avatar.Feedback>}
     </Avatar>
