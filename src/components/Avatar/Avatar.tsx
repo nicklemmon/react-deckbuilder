@@ -97,7 +97,7 @@ function Feedback(props: FeedbackProps) {
       }}
       transition={{ duration: DAMAGE_FEEDBACK_DURATION }}
     >
-      <FeedbackText>{children}</FeedbackText>
+      <FeedbackText>-{children}</FeedbackText>
     </motion.div>
   )
 }
