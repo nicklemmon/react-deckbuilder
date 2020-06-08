@@ -29,6 +29,7 @@ const Value = styled.span`
   font-family: ${props => props.theme.fonts.heading};
   font-size: ${props => props.theme.fontSizes[1]};
   margin-left: ${props => props.theme.space[2]};
+  color: ${props => props.theme.colors.darkGray};
 `
 
 interface StatsProps {

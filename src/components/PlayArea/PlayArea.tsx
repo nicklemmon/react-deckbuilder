@@ -160,7 +160,7 @@ function AnimatedBanner(props: AnimatedBannerProps) {
       style={{ position: 'fixed', left: '50%', top: '50%', zIndex: 1 }}
       initial={{ y: '-75%', x: '-50%', scale: 0.5, opacity: 0 }}
       animate={{ y: '-50%', x: '-50%', scale: 1, opacity: 1 }}
-      exit={{ y: '-50%', x: '-50%', scale: 0.75, opacity: 0 }}
+      exit={{ y: '-50%', x: '-50%', scale: 0.85, opacity: 0 }}
     >
       <Banner>{props.children}</Banner>
     </motion.div>

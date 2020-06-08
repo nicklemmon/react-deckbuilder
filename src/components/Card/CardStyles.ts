@@ -133,24 +133,3 @@ export const Footer = styled('div')`
   justify-content: space-between;
   padding-top: ${props => props.theme.space[1]};
 `
-
-export const Stats = styled('div')``
-
-export const Stat = styled('div')`
-  display: flex;
-  align-items: center;
-`
-
-export const StatNumber = styled('span')`
-  margin-left: 0.5rem;
-  font-family: ${props => props.theme.fonts.heading};
-  font-size: ${props => props.theme.fontSizes[1]};
-  color: ${props => props.theme.colors.darkGray};
-`
-
-export const CardIcon = styled('img')`
-  width: 1.85rem;
-  height: 1.85rem;
-  border-radius: 0.25rem;
-  overflow: hidden;
-`

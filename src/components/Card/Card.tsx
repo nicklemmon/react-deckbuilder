@@ -1,18 +1,14 @@
 import React from 'react'
 import { default as CardInterface } from 'src/interfaces/Card'
-import swordImg from 'src/images/sword.png'
+import { Stats, AttackStat } from 'src/components/Stats'
 import {
   CardWrapper,
-  CardIcon,
   Header,
   Heading,
   Content,
   Description,
   Main,
   Footer,
-  Stats,
-  Stat,
-  StatNumber,
   Back,
 } from './CardStyles'
 
@@ -62,15 +58,7 @@ function Card(props: CardProps) {
         </Main>
 
         <Footer>
-          <Stats>
-            {stats.attack && (
-              <Stat>
-                <CardIcon src={swordImg} alt="Attack:" />
-
-                <StatNumber>{stats.attack}</StatNumber>
-              </Stat>
-            )}
-          </Stats>
+          <Stats>{stats.attack && <AttackStat>{stats.attack}</AttackStat>}</Stats>
         </Footer>
       </Content>
 
