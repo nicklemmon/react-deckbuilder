@@ -18,9 +18,13 @@ function Monster(props: MonsterProps) {
       <Stats>
         <Avatar.Name>{name}</Avatar.Name>
 
-        <Stats.Stat>Level {level}</Stats.Stat>
+        <Stats.Row>
+          <Stats.Stat>Level {level}</Stats.Stat>
+        </Stats.Row>
 
-        <Stats.Stat>{hitPoints} HP</Stats.Stat>
+        <Stats.Row>
+          <Stats.Stat>{hitPoints} HP</Stats.Stat>
+        </Stats.Row>
 
         <Stats.Row>
           <AttackStat>{stats.defense}</AttackStat>

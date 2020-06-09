@@ -69,7 +69,7 @@ const machineConfig = {
       ],
     },
     victory: {
-      entry: '@killMonster',
+      entry: ['@killMonster', '@awardGold'],
       on: {
         NEXT_BATTLE_CLICK: {
           actions: ['@getMonster', '@discardHand', '@discardDrawPile', '@discardDiscardPile'],
@@ -83,6 +83,20 @@ const machineConfig = {
 
 const GameMachine = Machine(machineConfig, {
   actions: {
+    '@awardGold': assign(ctx => {
+      const { player } = ctx
+      const { inventory } = player
+      const nextGold = (inventory.gold += 3)
+
+      return {
+        player: {
+          ...player,
+          inventory: {
+            gold: nextGold,
+          },
+        },
+      }
+    }),
     '@getMonster': assign(ctx => {
       return {
         monster: {

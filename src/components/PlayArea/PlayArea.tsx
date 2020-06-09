@@ -5,6 +5,8 @@ import GameMachine from 'src/GameMachine'
 import { Deck } from 'src/components/Deck'
 import { Banner } from 'src/components/Banner'
 import { Button } from 'src/components/Button'
+import { GoldStat, Stats } from 'src/components/Stats'
+import { StatusBar } from 'src/components/StatusBar'
 import { Card } from 'src/components/Card'
 import { Monster } from 'src/components/Monster'
 import { Player } from 'src/components/Player'
@@ -27,11 +29,18 @@ interface PlayAreaProps {
 export default function PlayArea(props: PlayAreaProps) {
   const [current, send] = useMachine(GameMachine)
   const { context } = current
+  const inventory: any = context.player.inventory
   const cardInPlay: any = context.cardInPlay
   const monster: any = context.monster
 
   return (
     <PlayAreaWrapper>
+      <StatusBar>
+        <Stats>
+          <GoldStat>{inventory.gold}</GoldStat>
+        </Stats>
+      </StatusBar>
+
       <StateMachineViewer currentState={current} />
 
       <AnimatePresence>
@@ -114,6 +123,7 @@ export default function PlayArea(props: PlayAreaProps) {
             level={context.player.level}
             stats={context.player.stats}
             artwork={context.player.artwork}
+            inventory={inventory}
           />
         </motion.div>
 

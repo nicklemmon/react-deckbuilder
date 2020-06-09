@@ -10,6 +10,9 @@ const player: Player = {
     attack: 3,
     defense: 1,
   },
+  inventory: {
+    gold: 0,
+  },
 }
 
 export default player

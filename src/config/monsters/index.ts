@@ -12,7 +12,7 @@ const imp: Monster = {
   level: 2,
   artwork: impImg,
   stats: {
-    hitPoints: 40,
+    hitPoints: 12,
     attack: 4,
     defense: 2,
   },
@@ -72,7 +72,7 @@ const troll: Monster = {
   level: 8,
   artwork: trollImg,
   stats: {
-    hitPoints: 20,
+    hitPoints: 9,
     attack: 7,
     defense: 7,
   },

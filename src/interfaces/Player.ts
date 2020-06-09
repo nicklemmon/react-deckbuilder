@@ -9,4 +9,8 @@ export default interface Player {
     attack: number
     defense: number
   }
+
+  inventory: {
+    gold: number
+  }
 }

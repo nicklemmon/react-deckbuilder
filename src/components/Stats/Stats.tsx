@@ -5,6 +5,7 @@ const Row = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: ${props => props.theme.space[2]};
 
   > * + * {
     margin-left: ${props => props.theme.space[3]};
@@ -15,7 +16,6 @@ const Stat = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: ${props => props.theme.space[2]};
 `
 
 const Icon = styled.img`
@@ -29,7 +29,7 @@ const Value = styled.span`
   font-family: ${props => props.theme.fonts.heading};
   font-size: ${props => props.theme.fontSizes[1]};
   margin-left: ${props => props.theme.space[2]};
-  color: ${props => props.theme.colors.darkGray};
+  color: currentColor;
 `
 
 interface StatsProps {
