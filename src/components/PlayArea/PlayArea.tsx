@@ -5,7 +5,7 @@ import GameMachine from 'src/GameMachine'
 import { Deck } from 'src/components/Deck'
 import { Banner } from 'src/components/Banner'
 import { Button } from 'src/components/Button'
-import { GoldStat, Stats } from 'src/components/Stats'
+import { AttackStat, DefenseStat, GoldStat, Stats } from 'src/components/Stats'
 import { StatusBar } from 'src/components/StatusBar'
 import { Card } from 'src/components/Card'
 import { Monster } from 'src/components/Monster'
@@ -21,6 +21,7 @@ import {
   PlayAreaWrapper,
   PlayerDeckWrapper,
 } from './PlayAreaStyles'
+import player from 'src/config/player'
 
 interface PlayAreaProps {
   children?: any
@@ -37,7 +38,13 @@ export default function PlayArea(props: PlayAreaProps) {
     <PlayAreaWrapper>
       <StatusBar>
         <Stats>
-          <GoldStat>{inventory.gold}</GoldStat>
+          <Stats.Row>
+            <GoldStat>{inventory.gold}</GoldStat>
+
+            <AttackStat>{player.stats.attack}</AttackStat>
+
+            <DefenseStat>{player.stats.defense}</DefenseStat>
+          </Stats.Row>
         </Stats>
       </StatusBar>
 

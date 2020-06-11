@@ -26,12 +26,6 @@ function PlayerAvatar(props: PlayerAvatarProps) {
         <Stats.Row>
           <Stats.Stat>{hitPoints} HP</Stats.Stat>
         </Stats.Row>
-
-        <Stats.Row>
-          <AttackStat>{stats.defense}</AttackStat>
-
-          <DefenseStat>{stats.defense}</DefenseStat>
-        </Stats.Row>
       </Stats>
 
       {damageTaken && <Avatar.Feedback>{damageTaken}</Avatar.Feedback>}
