@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import GameMachine from 'src/GameMachine'
 import { Deck } from 'src/components/Deck'
 import { Banner } from 'src/components/Banner'
+import { Modal } from 'src/components/Modal'
 import { Button } from 'src/components/Button'
 import { AttackStat, DefenseStat, GoldStat, Stats } from 'src/components/Stats'
 import { StatusBar } from 'src/components/StatusBar'
@@ -36,6 +37,18 @@ export default function PlayArea(props: PlayAreaProps) {
 
   return (
     <PlayAreaWrapper>
+      {/* <Modal>
+        <Modal.Content>
+          <h1>Boo!</h1>
+        </Modal.Content>
+
+        <Modal.ButtonRow>
+          <Button variant="primary" onClick={() => send('CANCEL_STORE_MODAL')}>
+            Nevermind
+          </Button>
+        </Modal.ButtonRow>
+      </Modal> */}
+
       <StatusBar>
         <Stats>
           <Stats.Row>

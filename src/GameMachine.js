@@ -3,12 +3,20 @@ import shuffle from './functions/shuffle'
 import rng from './functions/rng'
 import config from './config'
 
+const startingDeck = config.startingDeck.map((card, index) => {
+  return {
+    ...card,
+    id: `${card.id}-${index}`,
+  }
+})
+
 const machineConfig = {
   id: 'play-area-machine',
   initial: 'idle',
   context: {
     player: config.player,
-    playerDeck: config.cards,
+    playerDeck: startingDeck, // TODO: Need to de-dupe IDs
+    classDeck: config.cards, // TODO: Need to de-dupe IDs
     drawPile: [],
     currentHand: [],
     cardInPlay: undefined,
