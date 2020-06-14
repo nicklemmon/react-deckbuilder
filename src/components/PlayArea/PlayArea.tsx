@@ -114,14 +114,6 @@ export default function PlayArea(props: PlayAreaProps) {
         {current.value === 'defeat' && <AnimatedBanner>Defeat!</AnimatedBanner>}
       </AnimatePresence>
 
-      <PlayerDeckWrapper numberOfCards={context.playerDeck.length}>
-        <Deck isStacked={true}>
-          {context.playerDeck.map((card: CardInterface, index: number) => (
-            <Card cardIndex={index} key={`player-deck-card-${index}`} {...card} />
-          ))}
-        </Deck>
-      </PlayerDeckWrapper>
-
       <DrawPileWrapper>
         <Deck isStacked={true} align="right">
           {context.drawPile.map((card: CardInterface, index: number) => (
