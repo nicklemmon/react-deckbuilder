@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { lighten } from 'polished'
 
 interface BannerProps {
   children: React.ReactNode
@@ -13,7 +14,10 @@ const BannerWrapper = styled.div`
 
 const BannerShape = styled.div`
   background: ${props =>
-    `linear-gradient(0deg, ${props.theme.colors.darkGray}, rgba(0, 0, 0, 0.7))`};
+    `linear-gradient(0deg, ${props.theme.colors.darkGray}, ${lighten(
+      0.125,
+      props.theme.colors.darkGray,
+    )})`};
   padding: ${props => props.theme.space[3]} ${props => props.theme.space[6]};
   clip-path: polygon(100% 0, 97.5% 50%, 100% 100%, 0% 100%, 2.5% 50%, 0% 0%);
 `

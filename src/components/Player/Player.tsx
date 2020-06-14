@@ -1,6 +1,6 @@
 import React from 'react'
 import { Avatar } from 'src/components/Avatar'
-import { Stats, AttackStat, DefenseStat } from 'src/components/Stats'
+import { Stats } from 'src/components/Stats'
 import { default as PlayerInterface } from 'src/interfaces/Player'
 
 interface PlayerAvatarProps extends PlayerInterface {

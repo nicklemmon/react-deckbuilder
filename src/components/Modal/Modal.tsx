@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { transparentize, lighten, darken } from 'polished'
+import { transparentize, lighten } from 'polished'
 import styled from 'styled-components'
 
 const Overlay = styled(motion.div)`
@@ -27,11 +27,14 @@ const ModalWrapper = styled(motion.div)`
       0.05,
       props.theme.colors.darkGray,
     )})`};
-  filter: ${props =>
-    `drop-shadow(0 0 ${props.theme.space[4]} ${transparentize(0.7, props.theme.colors.pink)})`};
+  box-shadow: 0 0 ${props => props.theme.space[4]}
+    ${props => transparentize(0.5, props.theme.colors.pink)};
 `
 
 const Content = styled.div`
+  height: 100%;
+  display: flex;
+  align-items: center;
   padding: ${props => props.theme.space[5]};
 `
 
@@ -56,7 +59,7 @@ function Modal(props: ModalProps) {
   return (
     <>
       <ModalWrapper
-        transition={{ type: 'spring', mass: 1.25, damping: 250 }}
+        transition={{ type: 'spring', damping: 150 }}
         initial={{ scale: 1, y: '100%', x: '-50%' }}
         animate={{ scale: 1.1, y: '-50%', x: '-50%' }}
         exit={{ scale: 1, y: '100%', x: '-50%' }}

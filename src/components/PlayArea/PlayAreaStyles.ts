@@ -35,9 +35,9 @@ export const DiscardPileWrapper = styled.div`
 export const CurrentHandWrapper = styled.div`
   display: flex;
   justify-content: center;
+  width: 100%;
   position: absolute;
   bottom: ${() => padding};
-  width: 100%;
   z-index: ${() => playLayer};
 `
 

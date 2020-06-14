@@ -17,6 +17,10 @@ const machineConfig = {
     player: config.player,
     playerDeck: startingDeck, // TODO: Need to de-dupe IDs
     classDeck: config.cards, // TODO: Need to de-dupe IDs
+    itemShop: {
+      cards: [],
+      items: [],
+    },
     drawPile: [],
     currentHand: [],
     cardInPlay: undefined,
@@ -51,7 +55,7 @@ const machineConfig = {
     },
     choosing: {
       on: {
-        CHOOSE: {
+        CHOOSE_CARD: {
           actions: '@playCard',
           target: 'playing',
         },
@@ -79,6 +83,24 @@ const machineConfig = {
     victory: {
       entry: ['@killMonster', '@awardGold'],
       on: {
+        NEXT_BATTLE_CLICK: {
+          actions: ['@getMonster', '@discardHand', '@discardDrawPile', '@discardDiscardPile'],
+          target: 'idle',
+        },
+        ITEM_SHOP_CLICK: {
+          target: 'shopping',
+        },
+      },
+    },
+    shopping: {
+      entry: '@stockShop',
+      on: {
+        NEVERMIND_CLICK: {
+          target: 'victory',
+        },
+        NEW_CARD_CLICK: {
+          actions: '@buyCard',
+        },
         NEXT_BATTLE_CLICK: {
           actions: ['@getMonster', '@discardHand', '@discardDrawPile', '@discardDiscardPile'],
           target: 'idle',
@@ -201,6 +223,34 @@ const GameMachine = Machine(machineConfig, {
     '@killMonster': assign(ctx => {
       return {
         monster: undefined,
+      }
+    }),
+    '@stockShop': assign(ctx => {
+      const rngMax = ctx.classDeck.length - 1
+      const cardsOnOffer = [
+        ctx.classDeck[rng(rngMax)],
+        ctx.classDeck[rng(rngMax)],
+        ctx.classDeck[rng(rngMax)],
+      ].map((card, index) => ({ ...card, id: `${card.id}-from-shop-${index}` }))
+
+      return {
+        itemShop: {
+          cards: cardsOnOffer,
+          items: [],
+        },
+      }
+    }),
+    '@buyCard': assign((ctx, event) => {
+      const { playerDeck, itemShop } = ctx
+      const chosenCard = event.data.card
+      const remainingCardsOnOffer = itemShop.cards.filter(card => card.id !== chosenCard.id)
+
+      return {
+        playerDeck: [...playerDeck, chosenCard],
+        itemShop: {
+          ...itemShop,
+          cards: remainingCardsOnOffer,
+        },
       }
     }),
   },

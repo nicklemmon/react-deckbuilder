@@ -14,11 +14,11 @@ import { Player } from 'src/components/Player'
 import { StateMachineViewer } from 'src/components/StateMachineViewer'
 import CardInterface from 'src/interfaces/Card'
 import {
+  BattleWrapper,
   CardInPlayWrapper,
   CurrentHandWrapper,
   DiscardPileWrapper,
   DrawPileWrapper,
-  BattleWrapper,
   PlayAreaWrapper,
   PlayerDeckWrapper,
 } from './PlayAreaStyles'
@@ -34,21 +34,10 @@ export default function PlayArea(props: PlayAreaProps) {
   const inventory: any = context.player.inventory
   const cardInPlay: any = context.cardInPlay
   const monster: any = context.monster
+  const itemShop: any = context.itemShop
 
   return (
     <PlayAreaWrapper>
-      {/* <Modal>
-        <Modal.Content>
-          <h1>Boo!</h1>
-        </Modal.Content>
-
-        <Modal.ButtonRow>
-          <Button variant="primary" onClick={() => send('CANCEL_STORE_MODAL')}>
-            Nevermind
-          </Button>
-        </Modal.ButtonRow>
-      </Modal> */}
-
       <StatusBar>
         <Stats>
           <Stats.Row>
@@ -63,10 +52,53 @@ export default function PlayArea(props: PlayAreaProps) {
 
       <StateMachineViewer currentState={current} />
 
+      {current.value === 'shopping' && (
+        <Modal>
+          <Modal.Content>
+            <Deck isStacked={false}>
+              {itemShop &&
+                itemShop.cards.map((card: CardInterface, index: number) => {
+                  return (
+                    <Card
+                      {...card}
+                      key={`item-shop-card-${card.id}-${index}`}
+                      cardIndex={index}
+                      isDisabled={false}
+                      isRevealed={true}
+                      onClick={() => send({ type: 'NEW_CARD_CLICK', data: { card } })}
+                    />
+                  )
+                })}
+            </Deck>
+          </Modal.Content>
+
+          <Modal.ButtonRow>
+            <Button variant="primary" onClick={() => send('NEXT_BATTLE_CLICK')}>
+              Next Battle
+            </Button>
+
+            <Button
+              style={{ marginLeft: '1rem' }}
+              variant="secondary"
+              onClick={() => send('NEVERMIND_CLICK')}
+            >
+              Nevermind
+            </Button>
+          </Modal.ButtonRow>
+        </Modal>
+      )}
+
       <AnimatePresence>
         {current.value === 'victory' && (
           <AnimatedBanner>
             Victory!
+            <Button
+              style={{ marginLeft: '1rem' }}
+              variant="secondary"
+              onClick={() => send('ITEM_SHOP_CLICK')}
+            >
+              Item Shop
+            </Button>
             <Button
               style={{ marginLeft: '1rem' }}
               variant="primary"
@@ -105,7 +137,7 @@ export default function PlayArea(props: PlayAreaProps) {
               <Card
                 cardIndex={index}
                 key={`current-hand-card-${index}`}
-                onClick={() => send({ type: 'CHOOSE', data: { card } })}
+                onClick={() => send({ type: 'CHOOSE_CARD', data: { card } })}
                 isDisabled={current.value !== 'choosing'}
                 {...card}
               />
