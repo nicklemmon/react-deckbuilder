@@ -37,7 +37,7 @@ export const CardWrapper = styled('div')<{
   transition-timing-function: ease-in-out;
   transition-property: transform, box-shadow;
   pointer-events: ${props => (props.isDisabled ? 'none' : 'initial')};
-  filter: ${props => (props.isDisabled ? 'grayscale(50%)' : 'initial')};
+  filter: ${props => (props.isDisabled ? 'grayscale(85%)' : 'initial')};
 
   :hover {
     transform: translateY(-0.33rem);

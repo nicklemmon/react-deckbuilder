@@ -9,7 +9,7 @@ interface BannerProps {
 const BannerWrapper = styled.div`
   z-index: 100;
   width: 100%;
-  filter: ${props => `drop-shadow(0 0 ${props.theme.space[5]} ${props.theme.colors.coral})`};
+  box-shadow: 0 0 ${props => props.theme.space[5]} ${props => props.theme.colors.coral};
 `
 
 const BannerShape = styled.div`

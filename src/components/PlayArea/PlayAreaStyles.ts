@@ -11,13 +11,6 @@ export const PlayAreaWrapper = styled.div`
   width: 100vw;
 `
 
-export const PlayerDeckWrapper = styled.div<{ numberOfCards: number }>`
-  position: absolute;
-  top: ${() => padding};
-  left: ${() => padding};
-  z-index: ${() => cardsLayer};
-`
-
 export const DrawPileWrapper = styled.div`
   position: absolute;
   top: ${() => padding};

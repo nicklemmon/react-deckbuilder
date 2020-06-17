@@ -13,6 +13,7 @@ const strike: Card = {
   artwork: handAxeImg,
   description: 'Smack your opponent!',
   rarity: 0,
+  price: 14,
   stats: {
     attack: 3,
   },
@@ -24,6 +25,7 @@ const shieldSlam: Card = {
   artwork: shieldImg,
   description: 'Slam your shield, creating a shockwave',
   rarity: 3,
+  price: 18,
   stats: {
     defense: 1,
     attack: 5,
@@ -36,6 +38,7 @@ const assassinate: Card = {
   artwork: stilletoImg,
   description: 'Back stab for huge damage!',
   rarity: 1,
+  price: 14,
   stats: {
     attack: 8,
   },
@@ -47,6 +50,7 @@ const punch: Card = {
   artwork: knucklesImg,
   description: 'Right in the ribs',
   rarity: 0,
+  price: 8,
   stats: {
     attack: 1,
   },
@@ -58,6 +62,7 @@ const firebolt: Card = {
   artwork: fireboltImg,
   description: 'A burst of directed flames',
   rarity: 2,
+  price: 15,
   stats: {
     attack: 9,
   },
@@ -69,6 +74,7 @@ const earthquake: Card = {
   artwork: earthquakeImg,
   description: 'The earth split in two',
   rarity: 3,
+  price: 25,
   stats: {
     attack: 12,
   },
@@ -80,6 +86,7 @@ const lightning: Card = {
   artwork: lightningImg,
   description: 'A flash in the pan',
   rarity: 2,
+  price: 12,
   stats: {
     attack: 7,
   },
@@ -87,4 +94,4 @@ const lightning: Card = {
 
 export const cards = [strike, shieldSlam, assassinate, punch, firebolt, earthquake, lightning]
 
-export const startingDeck = [earthquake]
+export const startingDeck = [earthquake, strike, punch, punch, punch]

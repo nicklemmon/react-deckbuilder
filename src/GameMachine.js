@@ -15,8 +15,8 @@ const machineConfig = {
   initial: 'idle',
   context: {
     player: config.player,
-    playerDeck: startingDeck, // TODO: Need to de-dupe IDs
-    classDeck: config.cards, // TODO: Need to de-dupe IDs
+    playerDeck: startingDeck,
+    classDeck: config.cards,
     itemShop: {
       cards: [],
       items: [],
@@ -231,7 +231,7 @@ const GameMachine = Machine(machineConfig, {
         ctx.classDeck[rng(rngMax)],
         ctx.classDeck[rng(rngMax)],
         ctx.classDeck[rng(rngMax)],
-      ].map((card, index) => ({ ...card, id: `${card.id}-from-shop-${index}` }))
+      ].map((card, index) => ({ ...card, id: `${card.id}-from-shop-${index}`, isDisabled: false }))
 
       return {
         itemShop: {
@@ -243,7 +243,16 @@ const GameMachine = Machine(machineConfig, {
     '@buyCard': assign((ctx, event) => {
       const { playerDeck, itemShop } = ctx
       const chosenCard = event.data.card
-      const remainingCardsOnOffer = itemShop.cards.filter(card => card.id !== chosenCard.id)
+      const remainingCardsOnOffer = itemShop.cards.map(card => {
+        if (card.id === chosenCard.id) {
+          return {
+            ...chosenCard,
+            isDisabled: true,
+          }
+        }
+
+        return card
+      })
 
       return {
         playerDeck: [...playerDeck, chosenCard],

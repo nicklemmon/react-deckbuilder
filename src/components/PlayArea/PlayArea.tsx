@@ -20,7 +20,6 @@ import {
   DiscardPileWrapper,
   DrawPileWrapper,
   PlayAreaWrapper,
-  PlayerDeckWrapper,
 } from './PlayAreaStyles'
 import player from 'src/config/player'
 
@@ -63,7 +62,7 @@ export default function PlayArea(props: PlayAreaProps) {
                       {...card}
                       key={`item-shop-card-${card.id}-${index}`}
                       cardIndex={index}
-                      isDisabled={false}
+                      isDisabled={card.isDisabled}
                       isRevealed={true}
                       onClick={() => send({ type: 'NEW_CARD_CLICK', data: { card } })}
                     />
