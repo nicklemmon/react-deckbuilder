@@ -1,10 +1,7 @@
 import React from 'react'
-import { useMachine } from '@xstate/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import GameMachine from 'src/GameMachine'
 import { Deck } from 'src/components/Deck'
 import { Banner } from 'src/components/Banner'
-import { Modal } from 'src/components/Modal'
 import { Button } from 'src/components/Button'
 import { AttackStat, DefenseStat, GoldStat, Stats } from 'src/components/Stats'
 import { StatusBar } from 'src/components/StatusBar'
@@ -22,18 +19,19 @@ import {
   PlayAreaWrapper,
 } from './PlayAreaStyles'
 import player from 'src/config/player'
+import ShoppingModal from './components/ShoppingModal'
+import { useGameMachine } from 'src/GameMachineContext'
 
 interface PlayAreaProps {
   children?: any
 }
 
 export default function PlayArea(props: PlayAreaProps) {
-  const [current, send] = useMachine(GameMachine)
-  const { context } = current
+  const [state, send] = useGameMachine()
+  const { context } = state
   const inventory: any = context.player.inventory
   const cardInPlay: any = context.cardInPlay
   const monster: any = context.monster
-  const itemShop: any = context.itemShop
 
   return (
     <PlayAreaWrapper>
@@ -51,44 +49,10 @@ export default function PlayArea(props: PlayAreaProps) {
 
       <StateMachineViewer />
 
-      {current.value === 'shopping' && (
-        <Modal>
-          <Modal.Content>
-            <Deck isStacked={false}>
-              {itemShop &&
-                itemShop.cards.map((card: CardInterface, index: number) => {
-                  return (
-                    <Card
-                      {...card}
-                      key={`item-shop-card-${card.id}-${index}`}
-                      cardIndex={index}
-                      isDisabled={card.isDisabled}
-                      isRevealed={true}
-                      onClick={() => send({ type: 'NEW_CARD_CLICK', data: { card } })}
-                    />
-                  )
-                })}
-            </Deck>
-          </Modal.Content>
-
-          <Modal.ButtonRow>
-            <Button variant="primary" onClick={() => send('NEXT_BATTLE_CLICK')}>
-              Next Battle
-            </Button>
-
-            <Button
-              style={{ marginLeft: '1rem' }}
-              variant="secondary"
-              onClick={() => send('NEVERMIND_CLICK')}
-            >
-              Nevermind
-            </Button>
-          </Modal.ButtonRow>
-        </Modal>
-      )}
+      {state.value === 'shopping' && <ShoppingModal />}
 
       <AnimatePresence>
-        {current.value === 'victory' && (
+        {state.value === 'victory' && (
           <AnimatedBanner>
             Victory!
             <Button
@@ -110,7 +74,7 @@ export default function PlayArea(props: PlayAreaProps) {
       </AnimatePresence>
 
       <AnimatePresence>
-        {current.value === 'defeat' && <AnimatedBanner>Defeat!</AnimatedBanner>}
+        {state.value === 'defeat' && <AnimatedBanner>Defeat!</AnimatedBanner>}
       </AnimatePresence>
 
       <DrawPileWrapper>
@@ -129,7 +93,7 @@ export default function PlayArea(props: PlayAreaProps) {
                 cardIndex={index}
                 key={`current-hand-card-${index}`}
                 onClick={() => send({ type: 'CHOOSE_CARD', data: { card } })}
-                isDisabled={current.value !== 'choosing'}
+                isDisabled={state.value !== 'choosing'}
                 {...card}
               />
             ))}
@@ -160,8 +124,8 @@ export default function PlayArea(props: PlayAreaProps) {
           transition={{ duration: 1, delay: 0 }}
         >
           <Player
-            isTakingDamage={current.value === 'defending'}
-            damageTaken={current.value === 'defending' ? context.player.damageTaken : null}
+            isTakingDamage={state.value === 'defending'}
+            damageTaken={state.value === 'defending' ? context.player.damageTaken : null}
             name={context.player.name}
             level={context.player.level}
             stats={context.player.stats}
@@ -179,8 +143,8 @@ export default function PlayArea(props: PlayAreaProps) {
               transition={{ duration: 0.5, delay: 0.5 }}
             >
               <Monster
-                isTakingDamage={current.value === 'attacking'}
-                damageTaken={current.value === 'attacking' ? monster.damageTaken : null}
+                isTakingDamage={state.value === 'attacking'}
+                damageTaken={state.value === 'attacking' ? monster.damageTaken : null}
                 id={monster.id}
                 name={monster.name}
                 level={monster.level}
