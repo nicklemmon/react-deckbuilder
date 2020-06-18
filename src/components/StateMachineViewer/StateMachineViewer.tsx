@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useGameMachine } from 'src/GameMachineContext'
 
 const StyledStateMachineViewer = styled('div')`
   position: fixed;
@@ -14,8 +15,8 @@ const StyledStateMachineViewer = styled('div')`
   border-radius: ${props => props.theme.radii[1]};
 `
 
-export default function StateMachineViewer(props) {
-  const { currentState } = props
+export default function StateMachineViewer() {
+  const [state] = useGameMachine()
 
   return (
     <StyledStateMachineViewer>
@@ -23,7 +24,7 @@ export default function StateMachineViewer(props) {
         <strong>State:</strong>
       </p>
 
-      <pre>{currentState.value}</pre>
+      <pre>{state.value}</pre>
     </StyledStateMachineViewer>
   )
 }
