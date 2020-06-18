@@ -1,8 +1,6 @@
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Deck } from 'src/components/Deck'
-import { Banner } from 'src/components/Banner'
-import { Button } from 'src/components/Button'
 import { AttackStat, DefenseStat, GoldStat, Stats } from 'src/components/Stats'
 import { StatusBar } from 'src/components/StatusBar'
 import { Card } from 'src/components/Card'
@@ -19,8 +17,12 @@ import {
   PlayAreaWrapper,
 } from './PlayAreaStyles'
 import player from 'src/config/player'
-import ShoppingModal from './components/ShoppingModal'
 import { useGameMachine } from 'src/GameMachineContext'
+import ShoppingModal from './components/ShoppingModal'
+import { VictoryBanner, DefeatBanner } from './components/Banners'
+import DrawPile from './components/DrawPile'
+import DiscardPile from './components/DiscardPile'
+import CardInPlay from './components/CardInPlay'
 
 interface PlayAreaProps {
   children?: any
@@ -35,6 +37,8 @@ export default function PlayArea(props: PlayAreaProps) {
 
   return (
     <PlayAreaWrapper>
+      <StateMachineViewer />
+
       <StatusBar>
         <Stats>
           <Stats.Row>
@@ -47,42 +51,14 @@ export default function PlayArea(props: PlayAreaProps) {
         </Stats>
       </StatusBar>
 
-      <StateMachineViewer />
-
       {state.value === 'shopping' && <ShoppingModal />}
 
-      <AnimatePresence>
-        {state.value === 'victory' && (
-          <AnimatedBanner>
-            Victory!
-            <Button
-              style={{ marginLeft: '1rem' }}
-              variant="secondary"
-              onClick={() => send('ITEM_SHOP_CLICK')}
-            >
-              Item Shop
-            </Button>
-            <Button
-              style={{ marginLeft: '1rem' }}
-              variant="primary"
-              onClick={() => send('NEXT_BATTLE_CLICK')}
-            >
-              Next Battle
-            </Button>
-          </AnimatedBanner>
-        )}
-      </AnimatePresence>
+      <AnimatePresence>{state.value === 'victory' && <VictoryBanner />}</AnimatePresence>
 
-      <AnimatePresence>
-        {state.value === 'defeat' && <AnimatedBanner>Defeat!</AnimatedBanner>}
-      </AnimatePresence>
+      <AnimatePresence>{state.value === 'defeat' && <DefeatBanner />}</AnimatePresence>
 
       <DrawPileWrapper>
-        <Deck isStacked={true} align="right">
-          {context.drawPile.map((card: CardInterface, index: number) => (
-            <Card cardIndex={index} key={`draw-pile-card-${index}`} {...card} />
-          ))}
-        </Deck>
+        <DrawPile />
       </DrawPileWrapper>
 
       <CurrentHandWrapper>
@@ -102,19 +78,7 @@ export default function PlayArea(props: PlayAreaProps) {
       </CurrentHandWrapper>
 
       <CardInPlayWrapper>
-        <AnimatePresence>
-          {cardInPlay && (
-            <motion.div
-              key="card-in-play"
-              initial={{ y: 100, opacity: 0, x: 0, scale: 1 }}
-              animate={{ y: -50, opacity: 1, x: 0, scale: 1.05 }}
-              exit={{ y: 175, x: 425, opacity: 0, rotate: 15, scale: 1 }}
-              transition={{ type: 'spring', damping: 5, mass: 0.125, stiffness: 30 }}
-            >
-              <Card isDisabled={false} cardIndex={0} {...cardInPlay} />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <AnimatePresence>{cardInPlay && <CardInPlay />}</AnimatePresence>
       </CardInPlayWrapper>
 
       <BattleWrapper>
@@ -157,29 +121,8 @@ export default function PlayArea(props: PlayAreaProps) {
       </BattleWrapper>
 
       <DiscardPileWrapper>
-        <Deck isStacked={true} align="right">
-          {context.discardPile.map((card: CardInterface, index: number) => (
-            <Card cardIndex={index} key={`discard-pile-card-${index}`} {...card} />
-          ))}
-        </Deck>
+        <DiscardPile />
       </DiscardPileWrapper>
     </PlayAreaWrapper>
-  )
-}
-
-interface AnimatedBannerProps {
-  children: any
-}
-
-function AnimatedBanner(props: AnimatedBannerProps) {
-  return (
-    <motion.div
-      style={{ position: 'fixed', left: '50%', top: '50%', zIndex: 1 }}
-      initial={{ y: '-75%', x: '-50%', scale: 0.5, opacity: 0 }}
-      animate={{ y: '-50%', x: '-50%', scale: 1, opacity: 1 }}
-      exit={{ y: '-50%', x: '-50%', scale: 0.85, opacity: 0 }}
-    >
-      <Banner>{props.children}</Banner>
-    </motion.div>
   )
 }
