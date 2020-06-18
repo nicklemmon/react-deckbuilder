@@ -8,8 +8,8 @@ interface GameMachineProviderProps {
   children: any
 }
 
-const GameStateContext = React.createContext({})
-const GameSendContext = React.createContext({})
+const GameStateContext = React.createContext<any>(undefined)
+const GameSendContext = React.createContext<any>(undefined)
 
 export default function GameMachineProvider(props: GameMachineProviderProps) {
   const [state, send] = useMachine(GameMachine)

@@ -49,7 +49,7 @@ export default function PlayArea(props: PlayAreaProps) {
         </Stats>
       </StatusBar>
 
-      <StateMachineViewer currentState={current} />
+      <StateMachineViewer />
 
       {current.value === 'shopping' && (
         <Modal>
