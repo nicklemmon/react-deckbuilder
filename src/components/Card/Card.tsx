@@ -37,6 +37,7 @@ function Card(props: CardProps) {
     stats,
     artwork,
   } = props
+  console.log('stats', stats)
 
   return (
     <CardWrapper
@@ -58,7 +59,7 @@ function Card(props: CardProps) {
         </Main>
 
         <Footer>
-          <Stats>{stats.attack && <AttackStat>{stats.attack}</AttackStat>}</Stats>
+          <Stats>{stats?.attack && <AttackStat>{stats.attack}</AttackStat>}</Stats>
         </Footer>
       </Content>
 
