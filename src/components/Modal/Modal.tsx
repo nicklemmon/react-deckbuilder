@@ -18,7 +18,8 @@ const ModalWrapper = styled(motion.div)`
   z-index: 50;
   top: 50%;
   left: 50%;
-  width: 80vh;
+  width: 100%;
+  max-width: 900px;
   height: 80vh;
   border-radius: ${props => props.theme.radii[2]};
   color: ${props => props.theme.colors.white};
