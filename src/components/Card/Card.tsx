@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 import { default as CardInterface } from 'src/interfaces/Card'
 import { Stats, AttackStat } from 'src/components/Stats'
 import {
@@ -10,7 +11,11 @@ import {
   Main,
   Footer,
   Back,
+  Overlay,
+  OverlayImg,
+  OverlayText,
 } from './CardStyles'
+import bagImg from 'src/images/bag.png'
 
 interface CardProps extends CardInterface {
   key: string
@@ -31,13 +36,13 @@ function Card(props: CardProps) {
     id,
     onClick,
     isDisabled = true,
+    isPurchased = false,
     isRevealed = false,
     isStacked = true,
     align = 'left',
     stats,
     artwork,
   } = props
-  console.log('stats', stats)
 
   return (
     <CardWrapper
@@ -48,7 +53,10 @@ function Card(props: CardProps) {
       onClick={onClick}
       artwork={artwork}
       isDisabled={isDisabled}
+      isPurchased={isPurchased}
     >
+      {isPurchased && <CardOverlay variant="purchased" />}
+
       <Content rarity={rarity} isVisible={isRevealed}>
         <Header>
           <Heading>{name}</Heading>
@@ -66,6 +74,41 @@ function Card(props: CardProps) {
       <Back role="presentation" isVisible={!isRevealed} />
     </CardWrapper>
   )
+}
+
+interface OverlayProps {
+  variant?: any
+}
+
+function CardOverlay(props: OverlayProps) {
+  const { variant } = props
+
+  switch (variant) {
+    case 'purchased':
+      return (
+        <Overlay initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }}>
+          <motion.div
+            style={{ scale: 0.75 }}
+            initial={{ y: -200 }}
+            animate={{ y: 0 }}
+            transition={{ type: 'spring', delay: 0.125, damping: 50, mass: 0.125 }}
+          >
+            <OverlayImg src={bagImg} role="presentation" alt="" />
+          </motion.div>
+
+          <OverlayText
+            initial={{ y: 500 }}
+            animate={{ y: 0 }}
+            transition={{ type: 'spring', delay: 0.125, damping: 50, mass: 0.125 }}
+          >
+            Purchased!
+          </OverlayText>
+        </Overlay>
+      )
+
+    default:
+      return <></>
+  }
 }
 
 export default Card

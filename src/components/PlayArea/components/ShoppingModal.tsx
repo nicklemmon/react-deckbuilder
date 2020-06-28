@@ -24,13 +24,16 @@ export default function ShoppingModal() {
           <Deck isStacked={false}>
             {itemShop &&
               itemShop.cards.map((card: CardInterface, index: number) => {
+                const key = `item-shop-card-${card.id}-${index}`
+
                 return (
                   <Card
+                    key={key}
                     {...card}
-                    key={`item-shop-card-${card.id}-${index}`}
                     cardIndex={index}
                     isDisabled={card.isDisabled}
                     isRevealed={true}
+                    overlayVariant={card.overlayVariant}
                     onClick={() => send({ type: 'NEW_CARD_CLICK', data: { card } })}
                   />
                 )

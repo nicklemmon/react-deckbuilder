@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { transparentize } from 'polished'
 
 interface ButtonProps {
   variant: string
@@ -14,15 +15,17 @@ const ButtonEl = styled.button<{ variant: string }>`
   font-size: ${props => props.theme.fontSizes[2]};
   border: 0;
   border-radius: ${props => props.theme.radii[0]};
-  box-shadow: 0 ${props => props.theme.space[1]} 0 ${props => props.theme.colors.darkPink};
   transition: filter ${props => props.theme.duration[0]} ease-in-out;
 
   &:hover {
-    filter: brightness(1.125) drop-shadow(0 5px 15px #000);
+    filter: brightness(1.125);
   }
 
   ${props => {
-    const getBoxShadow = (color: string) => `0 ${props.theme.space[1]} 0 ${color}`
+    const getBoxShadow = (color: string) =>
+      `0 ${props.theme.space[1]} 0 ${color}, 0 ${props.theme.space[1]} ${
+        props.theme.space[2]
+      } ${transparentize(0.75, props.theme.colors.darkGray)}`
 
     switch (props.variant) {
       case 'primary':

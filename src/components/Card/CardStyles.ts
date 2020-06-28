@@ -1,9 +1,12 @@
 import styled from 'styled-components'
+import { motion } from 'framer-motion'
+import { transparentize } from 'polished'
 import { cardWidth, cardOffset, cardHeight } from '../../styles/constants'
 
 const contentLayer = 1
 
 export const Content = styled.div<{ isVisible: boolean; rarity: number }>`
+  position: relative; /* allows absolute positioning within */
   display: grid;
   grid-template-rows: 1fr 4fr 1fr;
   text-align: center;
@@ -20,6 +23,7 @@ export const CardWrapper = styled('div')<{
   isStacked?: boolean
   align?: string
   isDisabled?: boolean
+  isPurchased?: boolean
 }>`
   display: inline-flex;
   border: 1px solid ${props => props.theme.colors.lightGray};
@@ -36,13 +40,19 @@ export const CardWrapper = styled('div')<{
   transition-duration: ${props => props.theme.duration[1]};
   transition-timing-function: ease-in-out;
   transition-property: transform, box-shadow;
-  pointer-events: ${props => (props.isDisabled ? 'none' : 'initial')};
+  pointer-events: ${props => (props.isDisabled || props.isPurchased ? 'none' : 'initial')};
   filter: ${props => (props.isDisabled ? 'grayscale(85%)' : 'initial')};
 
-  :hover {
-    transform: translateY(-0.33rem);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
-  }
+  ${props => {
+    if (!props.isDisabled || !props.isPurchased) {
+      return `
+        :hover {
+          transform: translateY(-0.33rem);
+          box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+        }
+      `
+    }
+  }}
 
   ${props => {
     if (!props.isStacked) {
@@ -132,4 +142,29 @@ export const Footer = styled('div')`
   align-items: center;
   justify-content: space-between;
   padding-top: ${props => props.theme.space[1]};
+`
+
+export const Overlay = styled(motion.div)`
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: ${props => transparentize(0.125, props.theme.colors.darkGray)};
+`
+
+export const OverlayImg = styled('img')`
+  filter: ${props =>
+    `drop-shadow(0 ${props.theme.space[1]} ${props.theme.space[2]} rgba(0, 0, 0, 0.75))`};
+`
+
+export const OverlayText = styled(motion.div)`
+  position: absolute;
+  bottom: ${props => props.theme.space[3]};
+  font-family: ${props => props.theme.fonts.heading};
+  color: ${props => props.theme.colors.white};
+  font-size: ${props => props.theme.fontSizes[2]};
+  text-align: center;
+  width: 100%;
 `

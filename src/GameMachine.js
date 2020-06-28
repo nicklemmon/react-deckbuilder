@@ -7,6 +7,7 @@ const startingDeck = config.startingDeck.map((card, index) => {
   return {
     ...card,
     id: `${card.id}-${index}`,
+    overlayVariant: 'none',
   }
 })
 
@@ -247,7 +248,7 @@ const GameMachine = Machine(machineConfig, {
         if (card.id === chosenCard.id) {
           return {
             ...chosenCard,
-            isDisabled: true,
+            isPurchased: true,
           }
         }
 

@@ -24,12 +24,12 @@ const ModalWrapper = styled(motion.div)`
   border-radius: ${props => props.theme.radii[2]};
   color: ${props => props.theme.colors.white};
   background: ${props =>
-    `linear-gradient(0deg, ${props.theme.colors.darkGray}, ${lighten(
+    `linear-gradient(0deg, ${props.theme.colors.white}, ${lighten(
       0.05,
-      props.theme.colors.darkGray,
+      props.theme.colors.offWhite,
     )})`};
   box-shadow: 0 0 ${props => props.theme.space[4]}
-    ${props => transparentize(0.5, props.theme.colors.pink)};
+    ${props => transparentize(0.5, props.theme.colors.darkGray)};
 `
 
 const Content = styled.div`

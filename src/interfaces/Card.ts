@@ -5,7 +5,9 @@ export default interface Card {
   rarity: 0 | 1 | 2 | 3
   description: string
   price?: number
+  isPurchased?: boolean
   isDisabled?: boolean
+  overlayVariant?: 'none' | 'purchased' | 'destroyed'
   stats: {
     attack?: number
     defense?: number
