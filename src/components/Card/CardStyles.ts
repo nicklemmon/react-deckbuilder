@@ -161,10 +161,17 @@ export const OverlayImg = styled('img')`
 
 export const OverlayText = styled(motion.div)`
   position: absolute;
-  bottom: ${props => props.theme.space[3]};
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: ${props => props.theme.space[2]} 0;
   font-family: ${props => props.theme.fonts.heading};
-  color: ${props => props.theme.colors.white};
   font-size: ${props => props.theme.fontSizes[2]};
+  color: ${props => props.theme.colors.white};
+  text-shadow: 0 1px ${props => props.theme.colors.darkGreen};
+  background-color: ${props => props.theme.colors.green};
+  border-top: 1px solid ${props => props.theme.colors.offWhite};
   text-align: center;
   width: 100%;
 `

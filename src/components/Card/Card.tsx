@@ -97,9 +97,9 @@ function CardOverlay(props: OverlayProps) {
           </motion.div>
 
           <OverlayText
-            initial={{ y: 500 }}
-            animate={{ y: 0 }}
-            transition={{ type: 'spring', delay: 0.125, damping: 50, mass: 0.125 }}
+            initial={{ opacity: 0, y: 500 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ type: 'spring', delay: 0.25, damping: 50, mass: 0.125 }}
           >
             Purchased!
           </OverlayText>
