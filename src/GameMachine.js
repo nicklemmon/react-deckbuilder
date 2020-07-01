@@ -227,12 +227,17 @@ const GameMachine = Machine(machineConfig, {
       }
     }),
     '@stockShop': assign(ctx => {
+      const { player } = ctx
       const rngMax = ctx.classDeck.length - 1
       const cardsOnOffer = [
         ctx.classDeck[rng(rngMax)],
         ctx.classDeck[rng(rngMax)],
         ctx.classDeck[rng(rngMax)],
-      ].map((card, index) => ({ ...card, id: `${card.id}-from-shop-${index}`, isDisabled: false }))
+      ].map((card, index) => ({
+        ...card,
+        id: `${card.id}-from-shop-${index}`,
+        isDisabled: player.inventory.gold < card.price,
+      }))
 
       return {
         itemShop: {
@@ -242,8 +247,11 @@ const GameMachine = Machine(machineConfig, {
       }
     }),
     '@buyCard': assign((ctx, event) => {
-      const { playerDeck, itemShop } = ctx
+      const { player, playerDeck, itemShop } = ctx
+      const { inventory } = player
+      const { gold } = inventory
       const chosenCard = event.data.card
+
       const remainingCardsOnOffer = itemShop.cards.map(card => {
         if (card.id === chosenCard.id) {
           return {
@@ -257,6 +265,12 @@ const GameMachine = Machine(machineConfig, {
 
       return {
         playerDeck: [...playerDeck, chosenCard],
+        player: {
+          ...player,
+          inventory: {
+            gold: gold - chosenCard.price,
+          },
+        },
         itemShop: {
           ...itemShop,
           cards: remainingCardsOnOffer,

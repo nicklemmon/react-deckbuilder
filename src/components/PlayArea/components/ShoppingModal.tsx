@@ -35,6 +35,7 @@ export default function ShoppingModal() {
                     isRevealed={true}
                     overlayVariant={card.overlayVariant}
                     onClick={() => send({ type: 'NEW_CARD_CLICK', data: { card } })}
+                    showPrice={true}
                   />
                 )
               })}

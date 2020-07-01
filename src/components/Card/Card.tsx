@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { default as CardInterface } from 'src/interfaces/Card'
-import { Stats, AttackStat } from 'src/components/Stats'
+import { Stats, AttackStat, GoldStat } from 'src/components/Stats'
 import {
   CardWrapper,
   Header,
@@ -25,6 +25,7 @@ interface CardProps extends CardInterface {
   isRevealed?: boolean
   onClick?: () => void
   align?: string
+  showPrice?: boolean
 }
 
 function Card(props: CardProps) {
@@ -42,6 +43,8 @@ function Card(props: CardProps) {
     align = 'left',
     stats,
     artwork,
+    price,
+    showPrice,
   } = props
 
   return (
@@ -67,7 +70,13 @@ function Card(props: CardProps) {
         </Main>
 
         <Footer>
-          <Stats>{stats?.attack && <AttackStat>{stats.attack}</AttackStat>}</Stats>
+          <Stats>
+            <Stats.Row>
+              {stats?.attack && <AttackStat>{stats.attack}</AttackStat>}
+
+              {showPrice && price && <GoldStat>{price}</GoldStat>}
+            </Stats.Row>
+          </Stats>
         </Footer>
       </Content>
 

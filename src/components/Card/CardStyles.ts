@@ -41,7 +41,7 @@ export const CardWrapper = styled('div')<{
   transition-timing-function: ease-in-out;
   transition-property: transform, box-shadow;
   pointer-events: ${props => (props.isDisabled || props.isPurchased ? 'none' : 'initial')};
-  filter: ${props => (props.isDisabled ? 'grayscale(85%)' : 'initial')};
+  filter: ${props => (props.isDisabled ? 'grayscale(95%)' : 'initial')};
 
   ${props => {
     if (!props.isDisabled || !props.isPurchased) {
@@ -166,12 +166,10 @@ export const OverlayText = styled(motion.div)`
   align-items: center;
   justify-content: center;
   padding: ${props => props.theme.space[2]} 0;
-  font-family: ${props => props.theme.fonts.heading};
-  font-size: ${props => props.theme.fontSizes[2]};
+  font-family: ${props => props.theme.fonts.body};
+  font-size: ${props => props.theme.fontSizes[1]};
   color: ${props => props.theme.colors.white};
-  text-shadow: 0 1px ${props => props.theme.colors.darkGreen};
-  background-color: ${props => props.theme.colors.green};
-  border-top: 1px solid ${props => props.theme.colors.offWhite};
+  background-color: ${props => props.theme.colors.darkGray};
   text-align: center;
   width: 100%;
 `
