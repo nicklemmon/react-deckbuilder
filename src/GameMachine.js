@@ -252,17 +252,6 @@ const GameMachine = Machine(machineConfig, {
       const { gold } = inventory
       const chosenCard = event.data.card
 
-      const remainingCardsOnOffer = itemShop.cards.map(card => {
-        if (card.id === chosenCard.id) {
-          return {
-            ...chosenCard,
-            isPurchased: true,
-          }
-        }
-
-        return card
-      })
-
       return {
         playerDeck: [...playerDeck, chosenCard],
         player: {
@@ -273,7 +262,19 @@ const GameMachine = Machine(machineConfig, {
         },
         itemShop: {
           ...itemShop,
-          cards: remainingCardsOnOffer,
+          cards: itemShop.cards.map(card => {
+            if (card.id === chosenCard.id) {
+              return {
+                ...chosenCard,
+                isPurchased: true,
+              }
+            }
+
+            return {
+              ...card,
+              isDisabled: player.inventory.gold - chosenCard.price < card.price,
+            }
+          }),
         },
       }
     }),
