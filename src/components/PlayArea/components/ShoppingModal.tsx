@@ -51,9 +51,9 @@ export default function ShoppingModal() {
         <Button
           style={{ marginLeft: '1rem' }}
           variant="secondary"
-          onClick={() => send('NEVERMIND_CLICK')}
+          onClick={() => send('LEAVE_SHOP_CLICK')}
         >
-          Nevermind
+          Leave Shop
         </Button>
       </Modal.ButtonRow>
     </Modal>
