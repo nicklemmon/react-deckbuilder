@@ -7,6 +7,10 @@ import lightningImg from 'src/images/lightning.png'
 import stilletoImg from 'src/images/stilleto.png'
 import shieldImg from 'src/images/shield.png'
 
+// Sound effects
+const magicFireBoltSound = require('src/sounds/magic.firebolt.wav')
+const magicLightningSound = require('src/sounds/magic.lightning.wav')
+
 const strike: Card = {
   id: 'strike',
   name: 'Strike',
@@ -60,6 +64,7 @@ const firebolt: Card = {
   id: 'firebolt',
   name: 'Firebolt',
   artwork: fireboltImg,
+  sound: magicFireBoltSound,
   description: 'A burst of directed flames',
   rarity: 2,
   price: 15,
@@ -84,6 +89,7 @@ const lightning: Card = {
   id: 'lightning',
   name: 'Lightning',
   artwork: lightningImg,
+  sound: magicLightningSound,
   description: 'A flash in the pan',
   rarity: 2,
   price: 12,
@@ -94,4 +100,4 @@ const lightning: Card = {
 
 export const cards = [strike, shieldSlam, assassinate, punch, firebolt, earthquake, lightning]
 
-export const startingDeck = [earthquake, earthquake, earthquake]
+export const startingDeck = [firebolt, lightning]
