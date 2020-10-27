@@ -16,6 +16,7 @@ import {
   DrawPileWrapper,
   PlayAreaWrapper,
 } from './PlayAreaStyles'
+import ProcessEnvInterface from 'src/interfaces/ProcessEnv'
 import player from 'src/config/player'
 import { useGameMachine } from 'src/GameMachineContext'
 import ShoppingModal from './components/ShoppingModal'
@@ -28,6 +29,8 @@ interface PlayAreaProps {
   children?: any
 }
 
+interface ProcessEnv extends ProcessEnvInterface {}
+
 export default function PlayArea(props: PlayAreaProps) {
   const [state, send] = useGameMachine()
   const { context } = state
@@ -35,9 +38,11 @@ export default function PlayArea(props: PlayAreaProps) {
   const cardInPlay: any = context.cardInPlay
   const monster: any = context.monster
 
+  console.log(process.env['NODE_ENV'])
+
   return (
     <PlayAreaWrapper>
-      <StateMachineViewer />
+      {process.env['NODE_ENV'] !== 'production' ? <StateMachineViewer /> : null}
 
       <StatusBar>
         <Stats>
@@ -103,8 +108,8 @@ export default function PlayArea(props: PlayAreaProps) {
             <motion.div
               initial={{ x: 50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              exit={{ x: 0, y: 25, opacity: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
+              exit={{ x: 0, y: 50, opacity: 0 }}
+              transition={{ duration: 0.5, delay: 0 }}
             >
               <Monster
                 isTakingDamage={state.value === 'attacking'}
