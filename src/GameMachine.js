@@ -96,7 +96,7 @@ const machineConfig = {
     shopping: {
       entry: '@stockShop',
       on: {
-        NEVERMIND_CLICK: {
+        LEAVE_SHOP_CLICK: {
           target: 'victory',
         },
         NEW_CARD_CLICK: {
