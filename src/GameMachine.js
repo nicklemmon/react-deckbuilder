@@ -12,7 +12,7 @@ const startingDeck = config.startingDeck.map((card, index) => {
 })
 
 const machineConfig = {
-  id: 'play-area-machine',
+  id: 'game-machine',
   initial: 'idle',
   context: {
     player: config.player,
