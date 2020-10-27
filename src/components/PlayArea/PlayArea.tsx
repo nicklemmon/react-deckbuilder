@@ -38,8 +38,6 @@ export default function PlayArea(props: PlayAreaProps) {
   const cardInPlay: any = context.cardInPlay
   const monster: any = context.monster
 
-  console.log(process.env['NODE_ENV'])
-
   return (
     <PlayAreaWrapper>
       {process.env['NODE_ENV'] !== 'production' ? <StateMachineViewer /> : null}

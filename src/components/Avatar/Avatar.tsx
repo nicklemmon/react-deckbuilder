@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { motion } from 'framer-motion'
+import useSound from 'use-sound'
 import rng from 'src/functions/rng'
 import { PortraitImg, Name, Flash, FeedbackText } from './AvatarStyles'
+const impactSlice = require('src/sounds/impact.slice.wav')
 
 const DAMAGE_FLASH_DURATION = 0.33
 const DAMAGE_FEEDBACK_DURATION = 0.8
@@ -26,10 +28,17 @@ interface FeedbackProps {
 
 function Portrait(props: PortraitProps) {
   const { isTakingDamage, artwork } = props
+  const [play] = useSound(impactSlice, { volume: rng(100) / 100 })
+
+  useEffect(() => {
+    if (isTakingDamage) {
+      play()
+    }
+  }, [play, isTakingDamage])
 
   return (
     <PortraitWrapper isTakingDamage={isTakingDamage}>
-      <PortraitImg artwork={artwork}>{isTakingDamage && <DamageFlash />}</PortraitImg>
+      <PortraitImg artwork={artwork}>{isTakingDamage ? <DamageFlash /> : null}</PortraitImg>
     </PortraitWrapper>
   )
 }
