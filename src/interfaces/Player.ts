@@ -5,7 +5,8 @@ export default interface Player {
   damageTaken?: number
 
   stats: {
-    hitPoints: number
+    maxHealth: number
+    health: number
     attack: number
     defense: number
   }

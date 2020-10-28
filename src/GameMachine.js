@@ -147,7 +147,7 @@ const GameMachine = Machine(machineConfig, {
           damageTaken: damage,
           stats: {
             ...player.stats,
-            hitPoints: player.stats.hitPoints - damage,
+            health: player.stats.health - damage,
           },
         },
       }
@@ -162,7 +162,7 @@ const GameMachine = Machine(machineConfig, {
           damageTaken: damage,
           stats: {
             ...monster.stats,
-            hitPoints: monster.stats.hitPoints - damage,
+            health: monster.stats.health - damage,
           },
         },
         cardInPlay: null,
@@ -280,10 +280,10 @@ const GameMachine = Machine(machineConfig, {
     }),
   },
   guards: {
-    '#playerIsAlive': ctx => ctx.player.stats.hitPoints > 0,
-    '#playerIsDead': ctx => ctx.player.stats.hitPoints <= 0,
-    '#monsterIsAlive': ctx => ctx.monster.stats.hitPoints > 0,
-    '#monsterIsDead': ctx => ctx.monster.stats.hitPoints <= 0,
+    '#playerIsAlive': ctx => ctx.player.stats.health > 0,
+    '#playerIsDead': ctx => ctx.player.stats.health <= 0,
+    '#monsterIsAlive': ctx => ctx.monster.stats.health > 0,
+    '#monsterIsDead': ctx => ctx.monster.stats.health <= 0,
     '#drawPileIsEmpty': ctx => ctx.drawPile.length === 0,
     '#drawPileIsNotEmpty': ctx => ctx.drawPile.length > 0,
     '#currentHandIsEmpty': ctx => ctx.currentHand.length === 0,

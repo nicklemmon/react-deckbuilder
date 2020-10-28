@@ -110,4 +110,4 @@ const lightning: Card = {
 
 export const cards = [strike, shieldSlam, assassinate, punch, firebolt, earthquake, lightning]
 
-export const startingDeck = [earthquake, earthquake, earthquake]
+export const startingDeck = [strike, strike, strike, punch, firebolt]

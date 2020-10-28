@@ -9,7 +9,7 @@ interface MonsterProps extends MonsterInterface {
 
 function Monster(props: MonsterProps) {
   const { name, level, stats, artwork, isTakingDamage, damageTaken } = props
-  const hitPoints = stats.hitPoints < 0 ? 0 : stats.hitPoints
+  const health = stats.health < 0 ? 0 : stats.health
 
   return (
     <Avatar>
@@ -23,7 +23,7 @@ function Monster(props: MonsterProps) {
         </Stats.Row>
 
         <Stats.Row>
-          <Stats.Stat>{hitPoints} HP</Stats.Stat>
+          <Stats.Stat>{health} HP</Stats.Stat>
         </Stats.Row>
 
         <Stats.Row>
