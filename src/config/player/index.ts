@@ -6,7 +6,8 @@ const player: Player = {
   level: 3,
   artwork: mageImg,
   stats: {
-    hitPoints: 45,
+    maxHealth: 45,
+    health: 45,
     attack: 3,
     defense: 1,
   },

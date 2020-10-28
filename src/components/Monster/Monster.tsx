@@ -1,6 +1,6 @@
 import React from 'react'
 import { Avatar } from 'src/components/Avatar'
-import { Stats, AttackStat, DefenseStat } from 'src/components/Stats'
+import { Stats, AttackStat, DefenseStat, Bar } from 'src/components/Stats'
 import { default as MonsterInterface } from 'src/interfaces/Monster'
 
 interface MonsterProps extends MonsterInterface {
@@ -9,7 +9,7 @@ interface MonsterProps extends MonsterInterface {
 
 function Monster(props: MonsterProps) {
   const { name, level, stats, artwork, isTakingDamage, damageTaken } = props
-  const hitPoints = stats.hitPoints < 0 ? 0 : stats.hitPoints
+  const health = stats.health < 0 ? 0 : stats.health
 
   return (
     <Avatar>
@@ -23,13 +23,17 @@ function Monster(props: MonsterProps) {
         </Stats.Row>
 
         <Stats.Row>
-          <Stats.Stat>{hitPoints} HP</Stats.Stat>
+          <Stats.Stat>{health} HP</Stats.Stat>
         </Stats.Row>
 
         <Stats.Row>
           <AttackStat>{stats.defense}</AttackStat>
 
           <DefenseStat>{stats.defense}</DefenseStat>
+        </Stats.Row>
+
+        <Stats.Row>
+          <Bar max={stats.maxHealth} current={stats.health} />
         </Stats.Row>
       </Stats>
 

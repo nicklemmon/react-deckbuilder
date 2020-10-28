@@ -6,7 +6,8 @@ export default interface Monster {
   damageTaken?: number
 
   stats: {
-    hitPoints: number
+    maxHealth: number
+    health: number
     attack: number
     defense: number
   }
