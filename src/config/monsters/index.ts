@@ -12,6 +12,7 @@ const imp: Monster = {
   level: 2,
   artwork: impImg,
   stats: {
+    maxHealth: 12,
     health: 12,
     attack: 4,
     defense: 2,
@@ -24,6 +25,7 @@ const stagSpirit: Monster = {
   level: 4,
   artwork: stagImg,
   stats: {
+    maxHealth: 10,
     health: 10,
     attack: 2,
     defense: 0,
@@ -36,6 +38,7 @@ const bat: Monster = {
   level: 1,
   artwork: batImg,
   stats: {
+    maxHealth: 5,
     health: 5,
     attack: 2,
     defense: 0,
@@ -48,6 +51,7 @@ const theCouncil: Monster = {
   level: 8,
   artwork: theCouncilImg,
   stats: {
+    maxHealth: 15,
     health: 15,
     attack: 10,
     defense: 3,
@@ -60,6 +64,7 @@ const arachnid: Monster = {
   level: 4,
   artwork: arachnidImg,
   stats: {
+    maxHealth: 6,
     health: 6,
     attack: 4,
     defense: 2,
@@ -72,6 +77,7 @@ const troll: Monster = {
   level: 8,
   artwork: trollImg,
   stats: {
+    maxHealth: 10,
     health: 9,
     attack: 7,
     defense: 7,

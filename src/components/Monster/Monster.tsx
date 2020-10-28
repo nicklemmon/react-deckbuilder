@@ -1,6 +1,6 @@
 import React from 'react'
 import { Avatar } from 'src/components/Avatar'
-import { Stats, AttackStat, DefenseStat } from 'src/components/Stats'
+import { Stats, AttackStat, DefenseStat, Bar } from 'src/components/Stats'
 import { default as MonsterInterface } from 'src/interfaces/Monster'
 
 interface MonsterProps extends MonsterInterface {
@@ -30,6 +30,10 @@ function Monster(props: MonsterProps) {
           <AttackStat>{stats.defense}</AttackStat>
 
           <DefenseStat>{stats.defense}</DefenseStat>
+        </Stats.Row>
+
+        <Stats.Row>
+          <Bar max={stats.maxHealth} current={stats.health} />
         </Stats.Row>
       </Stats>
 
