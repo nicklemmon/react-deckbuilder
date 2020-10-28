@@ -1,7 +1,6 @@
 import React from 'react'
 import { Avatar } from 'src/components/Avatar'
-import { Stats } from 'src/components/Stats'
-import { StatsBar } from 'src/components/StatsBar'
+import { Stats, Bar } from 'src/components/Stats'
 import { default as PlayerInterface } from 'src/interfaces/Player'
 
 interface PlayerAvatarProps extends PlayerInterface {
@@ -29,7 +28,7 @@ function PlayerAvatar(props: PlayerAvatarProps) {
         </Stats.Row>
 
         <Stats.Row>
-          <StatsBar max={stats.maxHealth} current={stats.health} />
+          <Bar max={stats.maxHealth} current={stats.health} />
         </Stats.Row>
       </Stats>
 
