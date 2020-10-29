@@ -52,7 +52,7 @@ const BarWrapper = styled.div<{ status: string }>`
   overflow: hidden;
   height: ${props => props.theme.space[3]};
   width: 100%;
-  border: 1px solid ${props => props.theme.colors.red}
+  border: 1px solid ${props => props.theme.colors.red};
   background: ${props =>
     `linear-gradient(180deg, ${props.theme.colors.darkGray} 10%, ${props.theme.colors.gray} 100%)`};
   box-shadow: ${props => props.theme.shadows[0]},
