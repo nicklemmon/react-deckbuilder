@@ -28,7 +28,7 @@ interface FeedbackProps {
 
 function Portrait(props: PortraitProps) {
   const { isTakingDamage, artwork } = props
-  const [play] = useSound(impactSound, { volume: rng(100) / 100 }) // TODO: Make volume calculated from damage value
+  const [play] = useSound(impactSound)
 
   useEffect(() => {
     if (isTakingDamage) {
