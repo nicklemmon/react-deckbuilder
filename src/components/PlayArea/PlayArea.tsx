@@ -57,7 +57,9 @@ export default function PlayArea(props: PlayAreaProps) {
 
       {state.value === 'shopping' && <ShoppingModal />}
 
-      <AnimatePresence>{state.value === 'victory' && <VictoryBanner />}</AnimatePresence>
+      <AnimatePresence>
+        {state.value === 'victory' || state.value === 'doneShopping' ? <VictoryBanner /> : null}
+      </AnimatePresence>
 
       <AnimatePresence>{state.value === 'defeat' && <DefeatBanner />}</AnimatePresence>
 

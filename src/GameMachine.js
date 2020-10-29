@@ -82,7 +82,7 @@ const machineConfig = {
       ],
     },
     victory: {
-      entry: ['@killMonster', '@awardGold'],
+      entry: ['@killMonster', '@awardGold', '@stockShop'],
       on: {
         NEXT_BATTLE_CLICK: {
           actions: ['@getMonster', '@discardHand', '@discardDrawPile', '@discardDiscardPile'],
@@ -94,10 +94,9 @@ const machineConfig = {
       },
     },
     shopping: {
-      entry: '@stockShop',
       on: {
         LEAVE_SHOP_CLICK: {
-          target: 'victory',
+          target: 'doneShopping',
         },
         NEW_CARD_CLICK: {
           actions: '@buyCard',
@@ -105,6 +104,17 @@ const machineConfig = {
         NEXT_BATTLE_CLICK: {
           actions: ['@getMonster', '@discardHand', '@discardDrawPile', '@discardDiscardPile'],
           target: 'idle',
+        },
+      },
+    },
+    doneShopping: {
+      on: {
+        NEXT_BATTLE_CLICK: {
+          actions: ['@getMonster', '@discardHand', '@discardDrawPile', '@discardDiscardPile'],
+          target: 'idle',
+        },
+        ITEM_SHOP_CLICK: {
+          target: 'shopping',
         },
       },
     },
@@ -291,6 +301,7 @@ const GameMachine = Machine(machineConfig, {
     '#playerCanDraw': ctx => ctx.drawPile.length > 0,
     '#drawingIsNotNeeded': ctx => ctx.drawPile.length === 0 && ctx.currentHand.length > 0,
     '#playerCannotDraw': ctx => ctx.drawPile.length === 0 && ctx.currentHand.length === 0,
+    '#firstTimeShoppingThisTurn': ctx => ctx,
   },
 })
 
