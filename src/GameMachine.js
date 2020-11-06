@@ -1,6 +1,5 @@
 import { Machine, assign } from 'xstate'
-import shuffle from './functions/shuffle'
-import rng from './functions/rng'
+import { shuffle, rng } from 'src/functions'
 import config from './config'
 
 const startingDeck = config.startingDeck.map((card, index) => {
@@ -13,8 +12,12 @@ const startingDeck = config.startingDeck.map((card, index) => {
 
 const machineConfig = {
   id: 'game-machine',
-  initial: 'idle',
+  initial: 'playerCreation',
   context: {
+    characterForm: {
+      name: '',
+      characterClass: 'berzerker',
+    },
     player: config.player,
     playerDeck: startingDeck,
     classDeck: config.cards,
@@ -29,13 +32,24 @@ const machineConfig = {
     monster: undefined,
   },
   states: {
-    idle: {
-      entry: ['@createDrawPile', '@getMonster'],
-      after: {
-        300: 'assessing',
+    playerCreation: {
+      on: {
+        FORM_VALUE_CHANGE: {
+          actions: '@updateCharacterFormValue',
+        },
+        SUBMIT_FORM: {
+          target: 'newRound',
+          actions: '@updatePlayer',
+        },
       },
     },
-    assessing: {
+    newRound: {
+      entry: ['@createDrawPile', '@getMonster'],
+      after: {
+        300: 'surveying',
+      },
+    },
+    surveying: {
       after: [
         { delay: 300, target: 'reshuffling', cond: '#playerCannotDraw' },
         { delay: 300, target: 'drawing', cond: '#playerCanDraw' },
@@ -77,7 +91,7 @@ const machineConfig = {
     defending: {
       entry: '@monsterAttack',
       after: [
-        { delay: 800, target: 'assessing', cond: '#playerIsAlive' },
+        { delay: 800, target: 'surveying', cond: '#playerIsAlive' },
         { delay: 800, target: 'defeat', cond: '#playerIsDead' },
       ],
     },
@@ -86,7 +100,7 @@ const machineConfig = {
       on: {
         NEXT_BATTLE_CLICK: {
           actions: ['@getMonster', '@discardHand', '@discardDrawPile', '@discardDiscardPile'],
-          target: 'idle',
+          target: 'newRound',
         },
         ITEM_SHOP_CLICK: {
           target: 'shopping',
@@ -103,7 +117,7 @@ const machineConfig = {
         },
         NEXT_BATTLE_CLICK: {
           actions: ['@getMonster', '@discardHand', '@discardDrawPile', '@discardDiscardPile'],
-          target: 'idle',
+          target: 'newRound',
         },
       },
     },
@@ -111,7 +125,7 @@ const machineConfig = {
       on: {
         NEXT_BATTLE_CLICK: {
           actions: ['@getMonster', '@discardHand', '@discardDrawPile', '@discardDiscardPile'],
-          target: 'idle',
+          target: 'newRound',
         },
         ITEM_SHOP_CLICK: {
           target: 'shopping',
@@ -124,6 +138,27 @@ const machineConfig = {
 
 const GameMachine = Machine(machineConfig, {
   actions: {
+    '@updateCharacterFormValue': assign((ctx, event) => {
+      const { characterForm } = ctx
+      const { data } = event
+
+      return {
+        characterForm: {
+          ...characterForm,
+          [data.name]: data.value,
+        },
+      }
+    }),
+    '@updatePlayer': assign((ctx, event) => {
+      const { player } = ctx
+
+      return {
+        player: {
+          ...player,
+          ...event.data,
+        },
+      }
+    }),
     '@awardGold': assign(ctx => {
       const { player } = ctx
       const { inventory } = player

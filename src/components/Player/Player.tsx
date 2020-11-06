@@ -1,4 +1,5 @@
 import React from 'react'
+import { toTitleCase } from 'src/functions'
 import { Avatar } from 'src/components/Avatar'
 import { Stats, Bar } from 'src/components/Stats'
 import { default as PlayerInterface } from 'src/interfaces/Player'
@@ -9,7 +10,7 @@ interface PlayerAvatarProps extends PlayerInterface {
 }
 
 function PlayerAvatar(props: PlayerAvatarProps) {
-  const { name, level, stats, artwork, isTakingDamage, damageTaken } = props
+  const { characterClass = '', name, level, stats, artwork, isTakingDamage, damageTaken } = props
   const health = stats.health < 0 ? 0 : stats.health
 
   return (
@@ -18,6 +19,10 @@ function PlayerAvatar(props: PlayerAvatarProps) {
 
       <Stats>
         <Avatar.Name>{name}</Avatar.Name>
+
+        <Stats.Row>
+          <Stats.Stat>{toTitleCase(characterClass)}</Stats.Stat>
+        </Stats.Row>
 
         <Stats.Row>
           <Stats.Stat>Level {level}</Stats.Stat>

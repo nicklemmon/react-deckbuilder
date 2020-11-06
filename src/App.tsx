@@ -1,6 +1,7 @@
 import React from 'react'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
-import { PlayArea } from 'src/components/PlayArea'
+import { Game } from 'src/components/Game'
+
 import GameMachineProvider from 'src/GameMachineContext'
 import theme from './styles/theme'
 
@@ -24,7 +25,7 @@ export default function App() {
       <GlobalStyles />
 
       <GameMachineProvider>
-        <PlayArea />
+        <Game />
       </GameMachineProvider>
     </ThemeProvider>
   )

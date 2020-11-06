@@ -1,1 +1,1 @@
-export default function discard(hand: Array<object>) {}
+export function discard(hand: Array<object>) {}

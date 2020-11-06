@@ -1,5 +1,12 @@
+enum CharacterClass {
+  Berzerker = 'berzerker',
+  Cleric = 'cleric',
+  Archer = 'archer',
+}
+
 export default interface Player {
-  name: string
+  name?: string
+  characterClass?: CharacterClass
   level: number
   artwork?: string
   damageTaken?: number

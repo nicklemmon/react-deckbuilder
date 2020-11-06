@@ -1,3 +1,3 @@
-export default function rng(max: number) {
+export function rng(max: number) {
   return Math.floor(Math.random() * Math.floor(max))
 }

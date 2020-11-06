@@ -1,6 +1,14 @@
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
 
+export const Wrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 10rem;
+`
+
 export const PortraitImg = styled.div<{ artwork?: string }>`
   position: relative;
   overflow: hidden;
@@ -17,6 +25,7 @@ export const PortraitImg = styled.div<{ artwork?: string }>`
 
 export const Name = styled.div`
   font-family: ${props => props.theme.fonts.heading};
+  margin-bottom: ${props => props.theme.space[1]};
   letter-spacing: 0.0125rem;
   font-size: ${props => props.theme.fontSizes[2]};
   font-weight: 700;

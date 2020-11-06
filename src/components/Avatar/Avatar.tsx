@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import useSound from 'use-sound'
-import rng from 'src/functions/rng'
-import { PortraitImg, Name, Flash, FeedbackText } from './AvatarStyles'
+import { rng } from 'src/functions'
+import { Wrapper, PortraitImg, Name, Flash, FeedbackText } from './AvatarStyles'
 const impactSound = require('src/sounds/impact.slice.wav')
 
 const DAMAGE_FLASH_DURATION = 0.33
@@ -46,7 +46,7 @@ function Portrait(props: PortraitProps) {
 function Avatar(props: AvatarProps) {
   const { children } = props
 
-  return <div style={{ position: 'relative' }}>{children}</div>
+  return <Wrapper>{children}</Wrapper>
 }
 
 function PortraitWrapper(props: PortraitWrapperProps) {

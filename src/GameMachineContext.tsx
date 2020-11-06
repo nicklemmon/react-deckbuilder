@@ -29,14 +29,14 @@ export function useGameMachine() {
 function useGameState() {
   const context = React.useContext(GameStateContext)
   if (context === undefined) {
-    throw new Error('useGameState must be used within a CountProvider')
+    throw new Error('useGameState must be used within a GameMachineProvider')
   }
   return context
 }
 function useGameSend() {
   const context = React.useContext(GameSendContext)
   if (context === undefined) {
-    throw new Error('useGameDispatch must be used within a CountProvider')
+    throw new Error('useGameDispatch must be used within a GameMachineProvider')
   }
   return context
 }
