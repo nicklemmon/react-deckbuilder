@@ -5,6 +5,7 @@ import stagImg from 'src/images/stag.png'
 import theCouncilImg from 'src/images/the-council.png'
 import arachnidImg from 'src/images/arachnid.png'
 import trollImg from 'src/images/troll.png'
+import zombieImg from 'src/images/zombie.png'
 
 const imp: Monster = {
   id: 'imp',
@@ -78,10 +79,23 @@ const troll: Monster = {
   artwork: trollImg,
   stats: {
     maxHealth: 10,
-    health: 9,
+    health: 10,
     attack: 7,
     defense: 7,
   },
 }
 
-export default [bat, imp, stagSpirit, theCouncil, arachnid, troll]
+const zombie: Monster = {
+  id: 'zombie',
+  name: 'Zombie',
+  level: 3,
+  artwork: zombieImg,
+  stats: {
+    maxHealth: 15,
+    health: 15,
+    attack: 3,
+    defense: 9,
+  },
+}
+
+export default [imp, stagSpirit, bat, theCouncil, arachnid, troll, zombie]
