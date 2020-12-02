@@ -29,27 +29,3 @@ export const FormControl = styled.div`
     margin-top: ${props => props.theme.space[3]};
   }
 `
-
-export const Label = styled.label`
-  font-size: ${props => props.theme.fontSizes[1]};
-  font-family: ${props => props.theme.fonts.heading};
-  color: currentColor;
-  font-size: ${props => props.theme.fontSizes[2]};
-  font-weight: 700;
-  margin-bottom: ${props => props.theme.space[2]};
-`
-
-export const Field = styled.input`
-  appearance: none;
-  padding: ${props => props.theme.space[2]};
-  border: 1px solid ${props => props.theme.colors.darkGray};
-  font-size: ${props => props.theme.fontSizes[2]};
-  background: transparent;
-  color: currentColor;
-  box-shadow: ${props => props.theme.shadows[0]};
-
-  &:focus,
-  &:hover {
-    border-color: ${props => props.theme.colors.gray};
-  }
-`
