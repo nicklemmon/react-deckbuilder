@@ -1,6 +1,6 @@
 import React, { ChangeEvent, SyntheticEvent } from 'react'
 import { useGameMachine } from 'src/GameMachineContext'
-import { Button, ButtonVariant, Label, TextInput, Select } from 'src/components'
+import { Button, ButtonVariant, Label, TextInput, Select, Stack } from 'src/components'
 import { Form, Wrapper } from './CharacterCreationStyles'
 
 export default function CharacterCreation() {
@@ -24,36 +24,38 @@ export default function CharacterCreation() {
       <p>Create your character.</p>
 
       <Form onSubmit={handleSubmit}>
-        <div>
-          <Label htmlFor="character-name">Name</Label>
-          <TextInput
-            type="text"
-            id="character-name"
-            name="name"
-            autoComplete="off"
-            onChange={handleChange}
-            value={characterForm.name}
-            required
-          />
-        </div>
+        <Stack>
+          <div>
+            <Label htmlFor="character-name">Name</Label>
+            <TextInput
+              type="text"
+              id="character-name"
+              name="name"
+              autoComplete="off"
+              onChange={handleChange}
+              value={characterForm.name}
+              required
+            />
+          </div>
 
-        <div>
-          <Label htmlFor="character-class">Character Class</Label>
-          <Select
-            id="character-class"
-            name="characterClass"
-            value={characterForm.characterClass}
-            onChange={handleChange}
-          >
-            <option value="berzerker">Berzerker</option>
-            <option value="cleric">Cleric</option>
-            <option value="archer">Archer</option>
-          </Select>
-        </div>
+          <div>
+            <Label htmlFor="character-class">Character Class</Label>
+            <Select
+              id="character-class"
+              name="characterClass"
+              value={characterForm.characterClass}
+              onChange={handleChange}
+            >
+              <option value="berzerker">Berzerker</option>
+              <option value="cleric">Cleric</option>
+              <option value="archer">Archer</option>
+            </Select>
+          </div>
 
-        <Button variant={ButtonVariant['primary']} type="submit">
-          Create Character
-        </Button>
+          <Button variant={ButtonVariant['primary']} type="submit">
+            Create Character
+          </Button>
+        </Stack>
       </Form>
     </Wrapper>
   )
