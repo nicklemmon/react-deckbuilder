@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useGameMachine } from 'src/GameMachineContext'
-import { Button } from 'src/components/Button'
+import { Button, ButtonVariant } from 'src/components/Button'
 import { Banner } from 'src/components/Banner'
 
 export function VictoryBanner() {
@@ -13,14 +13,14 @@ export function VictoryBanner() {
       Victory!
       <Button
         style={{ marginLeft: '1rem' }}
-        variant="secondary"
+        variant={ButtonVariant['primary']}
         onClick={() => send('ITEM_SHOP_CLICK')}
       >
         Item Shop
       </Button>
       <Button
         style={{ marginLeft: '1rem' }}
-        variant="primary"
+        variant={ButtonVariant['secondary']}
         onClick={() => send('NEXT_BATTLE_CLICK')}
       >
         Next Battle

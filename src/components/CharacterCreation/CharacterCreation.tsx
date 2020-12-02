@@ -1,5 +1,7 @@
 import React, { ChangeEvent, SyntheticEvent } from 'react'
 import { useGameMachine } from 'src/GameMachineContext'
+import { Button, ButtonVariant } from 'src/components'
+import { Label, Field, Form, FormControl, Wrapper } from './CharacterCreationStyles'
 
 export default function CharacterCreation() {
   const [state, send] = useGameMachine()
@@ -18,25 +20,27 @@ export default function CharacterCreation() {
   }
 
   return (
-    <div>
+    <Wrapper>
       <p>Create your character.</p>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="character-name">Name</label>
-          <input
+      <Form onSubmit={handleSubmit}>
+        <FormControl>
+          <Label htmlFor="character-name">Name</Label>
+          <Field
             id="character-name"
             type="text"
             name="name"
+            autoComplete="off"
             onChange={handleChange}
             value={characterForm.name}
             required
           />
-        </div>
+        </FormControl>
 
-        <div>
-          <label htmlFor="character-class">Character Class</label>
-          <select
+        <FormControl>
+          <Label htmlFor="character-class">Character Class</Label>
+          <Field
+            as="select"
             id="character-class"
             name="characterClass"
             value={characterForm.characterClass}
@@ -45,11 +49,13 @@ export default function CharacterCreation() {
             <option value="berzerker">Berzerker</option>
             <option value="cleric">Cleric</option>
             <option value="archer">Archer</option>
-          </select>
-        </div>
+          </Field>
+        </FormControl>
 
-        <button type="submit">Save Character</button>
-      </form>
-    </div>
+        <Button variant={ButtonVariant['primary']} type="submit">
+          Create Character
+        </Button>
+      </Form>
+    </Wrapper>
   )
 }
