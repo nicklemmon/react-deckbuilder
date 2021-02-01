@@ -1,25 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
 import { transparentize } from 'polished'
+import { ButtonProps, ButtonVariant } from './types'
 
-interface ButtonProps {
-  variant: string
-  children: any
-  onClick?: () => void
-  style?: object
-}
-
-const ButtonEl = styled.button<{ variant: string }>`
+const ButtonEl = styled.button<{ variant: ButtonVariant }>`
   padding: ${props => props.theme.space[2]} ${props => props.theme.space[3]};
   font-family: ${props => props.theme.fonts.heading};
   font-size: ${props => props.theme.fontSizes[2]};
   border: 0;
   border-radius: ${props => props.theme.radii[0]};
-  transition: filter ${props => props.theme.duration[0]} ease-in-out;
-
-  &:hover {
-    filter: brightness(1.125);
-  }
+  transition: ${props => `box-shadow ${props.theme.duration[0]} ease-in-out`};
 
   ${props => {
     const getBoxShadow = (color: string) =>
@@ -28,13 +18,13 @@ const ButtonEl = styled.button<{ variant: string }>`
       } ${transparentize(0.75, props.theme.colors.darkGray)}`
 
     switch (props.variant) {
-      case 'primary':
+      case ButtonVariant['primary']:
         return {
           'background-color': props.theme.colors.pink,
           color: props.theme.colors.white,
           'box-shadow': getBoxShadow(props.theme.colors.darkPink),
         }
-      case 'secondary':
+      case ButtonVariant['secondary']:
         return {
           'background-color': props.theme.colors.white,
           color: props.theme.colors.pink,
@@ -44,14 +34,15 @@ const ButtonEl = styled.button<{ variant: string }>`
         return
     }
   }}
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px currentColor;
+  }
 `
 
 export default function Button(props: ButtonProps) {
-  const { variant, children, onClick, style } = props
+  const { variant, type = 'button', ...rest } = props
 
-  return (
-    <ButtonEl style={style} variant={variant} onClick={onClick}>
-      {children}
-    </ButtonEl>
-  )
+  return <ButtonEl variant={variant} type={type} {...rest} />
 }

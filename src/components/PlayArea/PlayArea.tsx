@@ -6,8 +6,6 @@ import { StatusBar } from 'src/components/StatusBar'
 import { Card } from 'src/components/Card'
 import { Monster } from 'src/components/Monster'
 import { Player } from 'src/components/Player'
-
-import { StateMachineViewer } from 'src/components/StateMachineViewer'
 import CardInterface from 'src/interfaces/Card'
 import {
   BattleWrapper,
@@ -17,7 +15,6 @@ import {
   DrawPileWrapper,
   PlayAreaWrapper,
 } from './PlayAreaStyles'
-import ProcessEnvInterface from 'src/interfaces/ProcessEnv'
 import player from 'src/config/player'
 import { useGameMachine } from 'src/GameMachineContext'
 import ShoppingModal from './components/ShoppingModal'
@@ -30,8 +27,6 @@ interface PlayAreaProps {
   children?: any
 }
 
-interface ProcessEnv extends ProcessEnvInterface {}
-
 export default function PlayArea(props: PlayAreaProps) {
   const [state, send] = useGameMachine()
   const { context } = state
@@ -41,8 +36,6 @@ export default function PlayArea(props: PlayAreaProps) {
 
   return (
     <PlayAreaWrapper>
-      {process.env['NODE_ENV'] !== 'production' ? <StateMachineViewer /> : null}
-
       <StatusBar>
         <Stats>
           <Stats.Row>
@@ -99,6 +92,7 @@ export default function PlayArea(props: PlayAreaProps) {
             name={context.player.name}
             level={context.player.level}
             stats={context.player.stats}
+            characterClass={context.player.characterClass}
             artwork={context.player.artwork}
             inventory={inventory}
           />

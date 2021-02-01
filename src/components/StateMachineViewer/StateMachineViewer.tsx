@@ -24,7 +24,7 @@ export default function StateMachineViewer() {
         <strong>State:</strong>
       </p>
 
-      <pre>{state.value}</pre>
+      <pre>{JSON.stringify(state.value)}</pre>
     </StyledStateMachineViewer>
   )
 }

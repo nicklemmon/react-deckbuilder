@@ -5,7 +5,7 @@ import { Modal } from 'src/components/Modal'
 import { Card } from 'src/components/Card'
 import CardInterface from 'src/interfaces/Card'
 import { Deck } from 'src/components/Deck'
-import { Button } from 'src/components/Button'
+import { Button, ButtonVariant } from 'src/components/Button'
 
 const DeckWrapper = styled.div`
   width: 100%;
@@ -44,13 +44,13 @@ export default function ShoppingModal() {
       </Modal.Content>
 
       <Modal.ButtonRow>
-        <Button variant="primary" onClick={() => send('NEXT_BATTLE_CLICK')}>
+        <Button variant={ButtonVariant['primary']} onClick={() => send('NEXT_BATTLE_CLICK')}>
           Next Battle
         </Button>
 
         <Button
           style={{ marginLeft: '1rem' }}
-          variant="secondary"
+          variant={ButtonVariant['secondary']}
           onClick={() => send('LEAVE_SHOP_CLICK')}
         >
           Leave Shop

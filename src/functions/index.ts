@@ -1,0 +1,5 @@
+export * from './deal'
+export * from './discard'
+export * from './rng'
+export * from './shuffle'
+export * from './toTitleCase'
