@@ -9,6 +9,7 @@ const ButtonEl = styled.button<{ variant: ButtonVariant }>`
   font-size: ${props => props.theme.fontSizes[2]};
   border: 0;
   border-radius: ${props => props.theme.radii[0]};
+  transition: ${props => `box-shadow ${props.theme.duration[0]} ease-in-out`};
 
   ${props => {
     const getBoxShadow = (color: string) =>
@@ -33,6 +34,11 @@ const ButtonEl = styled.button<{ variant: ButtonVariant }>`
         return
     }
   }}
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px currentColor;
+  }
 `
 
 export default function Button(props: ButtonProps) {

@@ -17,6 +17,7 @@ const machineConfig = {
     characterForm: {
       name: '',
       characterClass: 'berzerker',
+      characterPortrait: config.playerPortraits[0],
     },
     player: config.player,
     playerDeck: startingDeck,

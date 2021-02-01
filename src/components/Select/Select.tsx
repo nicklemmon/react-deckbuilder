@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import { formFieldStyles } from 'src/styles/helpers'
 import { SelectProps, SelectVariant } from './types'
 
+const SelectElWrapper = styled.div``
+
 export const SelectEl = styled.select<{ variant: SelectVariant }>`
   ${formFieldStyles}
 `
@@ -10,5 +12,9 @@ export const SelectEl = styled.select<{ variant: SelectVariant }>`
 export default function Select(props: SelectProps) {
   const { variant = SelectVariant['light'], ...rest } = props
 
-  return <SelectEl variant={variant} {...rest} />
+  return (
+    <SelectElWrapper>
+      <SelectEl variant={variant} {...rest} />
+    </SelectElWrapper>
+  )
 }

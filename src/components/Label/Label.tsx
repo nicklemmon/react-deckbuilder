@@ -13,7 +13,11 @@ const LabelEl = styled.label<{ variant: LabelVariant }>`
 `
 
 export default function Label(props: LabelProps) {
-  const { variant = LabelVariant['light'], ...rest } = props
+  const { as = 'label', variant = LabelVariant['light'], className, children } = props
 
-  return <LabelEl variant={variant} {...rest} />
+  return (
+    <LabelEl as={as} variant={variant} className={className}>
+      {children}
+    </LabelEl>
+  )
 }

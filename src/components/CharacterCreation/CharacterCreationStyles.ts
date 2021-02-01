@@ -1,5 +1,12 @@
 import styled from 'styled-components'
 
+export const Directions = styled.h1`
+  color: ${props => props.theme.colors.white};
+  font-size: ${props => props.theme.fontSizes[2]};
+  font-family: ${props => props.theme.fonts.body};
+  margin-bottom: ${props => props.theme.space[2]};
+`
+
 export const Wrapper = styled.div`
   display: flex;
   align-items: center;
@@ -28,4 +35,16 @@ export const FormControl = styled.div`
   + * {
     margin-top: ${props => props.theme.space[3]};
   }
+`
+
+export const CardRadioButtons = styled.div`
+  display: grid;
+  grid-gap: ${props => props.theme.space[3]};
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+`
+
+export const PortraitImg = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `
