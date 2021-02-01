@@ -1,8 +1,13 @@
 import React from 'react'
+import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { useGameMachine } from 'src/GameMachineContext'
 import { Button, ButtonVariant } from 'src/components/Button'
 import { Banner } from 'src/components/Banner'
+
+const DefeatText = styled.p`
+  width: 100%;
+`
 
 export function VictoryBanner() {
   // eslint-disable-next-line
@@ -30,7 +35,11 @@ export function VictoryBanner() {
 }
 
 export function DefeatBanner() {
-  return <AnimatedBanner>Defeat!</AnimatedBanner>
+  return (
+    <AnimatedBanner>
+      <DefeatText>Defeat!</DefeatText>
+    </AnimatedBanner>
+  )
 }
 
 interface AnimatedBannerProps {
