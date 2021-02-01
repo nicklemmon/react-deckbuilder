@@ -1,22 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
 import { LabelProps, LabelVariant } from './types'
+import { labelStyles } from 'src/styles/helpers'
 
 const LabelEl = styled.label<{ variant: LabelVariant }>`
-  display: block;
-  font-size: ${props => props.theme.fontSizes[1]};
-  font-family: ${props => props.theme.fonts.heading};
-  color: currentColor;
-  font-size: ${props => props.theme.fontSizes[2]};
-  font-weight: 700;
-  margin-bottom: ${props => props.theme.space[2]};
+  ${labelStyles}
 `
 
 export default function Label(props: LabelProps) {
-  const { as = 'label', variant = LabelVariant['light'], className, children } = props
+  const { variant = LabelVariant['light'], className, children, htmlFor } = props
 
   return (
-    <LabelEl as={as} variant={variant} className={className}>
+    <LabelEl variant={variant} className={className} htmlFor={htmlFor}>
       {children}
     </LabelEl>
   )

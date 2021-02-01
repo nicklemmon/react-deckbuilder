@@ -5,8 +5,7 @@ export enum LabelVariant {
 
 export interface LabelProps extends React.ComponentPropsWithoutRef<'label'> {
   children: React.ReactNode
-  htmlFor?: string
+  htmlFor: string
   variant?: LabelVariant
-  as?: 'label' | 'legend'
   className?: string
 }

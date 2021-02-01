@@ -5,6 +5,7 @@ import {
   ButtonVariant,
   CardRadioButton,
   Label,
+  Legend,
   TextInput,
   Select,
   Stack,
@@ -65,7 +66,7 @@ export default function CharacterCreation() {
           </div>
 
           <fieldset>
-            <Label as="legend">Character Portrait</Label>
+            <Legend>Character Portrait</Legend>
 
             <CardRadioButtons>
               {config.playerPortraits.map((portrait: string, index: number) => {

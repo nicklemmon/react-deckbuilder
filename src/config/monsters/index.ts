@@ -1,17 +1,19 @@
 import Monster from 'src/interfaces/Monster'
-import batImg from 'src/images/bat.png'
-import impImg from 'src/images/imp.png'
-import stagImg from 'src/images/stag.png'
-import theCouncilImg from 'src/images/the-council.png'
-import arachnidImg from 'src/images/arachnid.png'
-import trollImg from 'src/images/troll.png'
-import zombieImg from 'src/images/zombie.png'
+import BatImg from 'src/images/bat.png'
+import ImpImg from 'src/images/imp.png'
+import StagImg from 'src/images/stag.png'
+import TheCouncilImg from 'src/images/the-council.png'
+import ArachnidImg from 'src/images/arachnid.png'
+import TrollImg from 'src/images/troll.png'
+import ZombieImg from 'src/images/zombie.png'
+import BoneDragonImg from 'src/images/bone-dragon.png'
+import GargoyleImg from 'src/images/gargoyle.png'
 
 const imp: Monster = {
   id: 'imp',
   name: 'Imp',
   level: 2,
-  artwork: impImg,
+  artwork: ImpImg,
   stats: {
     maxHealth: 12,
     health: 12,
@@ -24,7 +26,7 @@ const stagSpirit: Monster = {
   id: 'stag-spirit',
   name: 'Stag Spirit',
   level: 4,
-  artwork: stagImg,
+  artwork: StagImg,
   stats: {
     maxHealth: 10,
     health: 10,
@@ -37,7 +39,7 @@ const bat: Monster = {
   id: 'bat',
   name: 'Bat',
   level: 1,
-  artwork: batImg,
+  artwork: BatImg,
   stats: {
     maxHealth: 5,
     health: 5,
@@ -50,7 +52,7 @@ const theCouncil: Monster = {
   id: 'the-council',
   name: 'The Council',
   level: 8,
-  artwork: theCouncilImg,
+  artwork: TheCouncilImg,
   stats: {
     maxHealth: 15,
     health: 15,
@@ -63,7 +65,7 @@ const arachnid: Monster = {
   id: 'arachnid',
   name: 'Arachnid',
   level: 4,
-  artwork: arachnidImg,
+  artwork: ArachnidImg,
   stats: {
     maxHealth: 6,
     health: 6,
@@ -76,7 +78,7 @@ const troll: Monster = {
   id: 'troll',
   name: 'Troll',
   level: 8,
-  artwork: trollImg,
+  artwork: TrollImg,
   stats: {
     maxHealth: 10,
     health: 10,
@@ -89,7 +91,7 @@ const zombie: Monster = {
   id: 'zombie',
   name: 'Zombie',
   level: 3,
-  artwork: zombieImg,
+  artwork: ZombieImg,
   stats: {
     maxHealth: 15,
     health: 15,
@@ -98,4 +100,30 @@ const zombie: Monster = {
   },
 }
 
-export default [imp, stagSpirit, bat, theCouncil, arachnid, troll, zombie]
+const boneDragon: Monster = {
+  id: 'bone-dragon',
+  name: 'Bone Dragon',
+  level: 8,
+  artwork: BoneDragonImg,
+  stats: {
+    maxHealth: 20,
+    health: 20,
+    attack: 8,
+    defense: 8,
+  },
+}
+
+const gargoyle: Monster = {
+  id: 'gargoyle',
+  name: 'Gargoyle',
+  level: 3,
+  artwork: GargoyleImg,
+  stats: {
+    maxHealth: 4,
+    health: 4,
+    attack: 2,
+    defense: 3,
+  },
+}
+
+export default [imp, stagSpirit, bat, theCouncil, arachnid, troll, zombie, boneDragon, gargoyle]

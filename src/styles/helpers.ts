@@ -33,3 +33,13 @@ export const screenReaderOnly = css`
   width: 1px !important;
   word-wrap: normal !important;
 `
+
+export const labelStyles = css`
+  display: block;
+  font-size: ${props => props.theme.fontSizes[1]};
+  font-family: ${props => props.theme.fonts.heading};
+  color: currentColor;
+  font-size: ${props => props.theme.fontSizes[2]};
+  font-weight: 700;
+  margin-bottom: ${props => props.theme.space[2]};
+`
