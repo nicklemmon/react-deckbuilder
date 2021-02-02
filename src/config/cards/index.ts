@@ -6,15 +6,13 @@ import earthquakeImg from 'src/images/earthquake.png'
 import lightningImg from 'src/images/lightning.png'
 import stilletoImg from 'src/images/stilleto.png'
 import shieldImg from 'src/images/shield.png'
-
-// Sound effects
-const magicFireBoltSound = require('src/sounds/magic.firebolt.wav')
-const magicLightningSound = require('src/sounds/magic.lightning.wav')
-const magicEarthSound = require('src/sounds/magic.earth.wav')
-const meleeHeavySound = require('src/sounds/melee.heavy.wav')
-const meleeWooshSound = require('src/sounds/melee.woosh.flac')
-const meleeSheatheSound = require('src/sounds/melee.sheathe.wav')
-const meleeShieldSound = require('src/sounds/melee.shield.wav')
+import meleeHeavySound from 'src/sounds/melee.heavy.wav'
+import magicFireBoltSound from 'src/sounds/magic.firebolt.wav'
+import magicLightningSound from 'src/sounds/magic.lightning.wav'
+import magicEarthSound from 'src/sounds/magic.earth.wav'
+import meleeWooshSound from 'src/sounds/melee.woosh.flac'
+import meleeSheatheSound from 'src/sounds/melee.sheathe.wav'
+import meleeShieldSound from 'src/sounds/melee.shield.wav'
 
 const strike: Card = {
   id: 'strike',

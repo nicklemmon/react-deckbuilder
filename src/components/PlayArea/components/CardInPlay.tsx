@@ -1,20 +1,21 @@
-import React, { useEffect } from 'react'
+import React from 'react'
+import { Howl } from 'howler'
 import { motion } from 'framer-motion'
-import useSound from 'use-sound'
 import { Card } from 'src/components/Card'
 import { useGameMachine } from 'src/GameMachineContext'
 
 export default function CardInPlay() {
   const [state] = useGameMachine()
   const { cardInPlay } = state.context
-  const sound = cardInPlay ? cardInPlay.sound : undefined
-  const [play] = useSound(sound)
 
-  useEffect(() => {
+  React.useEffect(() => {
+    const sound = cardInPlay ? new Howl({ src: [cardInPlay.sound] }) : undefined
+
     if (sound) {
-      play()
+      sound.play()
     }
-  }, [play, sound])
+    // eslint-disable-next-line
+  }, [])
 
   return (
     <motion.div

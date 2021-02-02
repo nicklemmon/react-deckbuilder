@@ -17,7 +17,6 @@ export default function CharacterCreation() {
   const [state, send] = useGameMachine()
   const { context } = state
   const { characterForm } = context
-  console.log('characterForm', characterForm)
 
   function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     return send({

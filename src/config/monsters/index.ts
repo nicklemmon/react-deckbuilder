@@ -126,4 +126,5 @@ const gargoyle: Monster = {
   },
 }
 
+// eslint-disable-next-line
 export default [imp, stagSpirit, bat, theCouncil, arachnid, troll, zombie, boneDragon, gargoyle]
