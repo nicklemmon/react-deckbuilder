@@ -1,7 +1,6 @@
 import React from 'react'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
-import { Game } from 'src/components/Game'
-
+import { Game, AssetPreloader } from 'src/components'
 import GameMachineProvider from 'src/GameMachineContext'
 import theme from './styles/theme'
 
@@ -23,6 +22,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
+      <AssetPreloader />
 
       <GameMachineProvider>
         <Game />
