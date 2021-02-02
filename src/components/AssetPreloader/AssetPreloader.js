@@ -1,13 +1,14 @@
 /* ts-ignore */
 import React from 'react'
 
+// See: https://stackoverflow.com/questions/42118296/dynamically-import-images-from-a-directory-using-webpack
 function importAll(assets) {
-  let images = {}
+  let importedAssets = {}
   assets.keys().map((item, index) => {
-    return (images[item.replace('./', '')] = assets(item))
+    return (importedAssets[item.replace('./', '')] = assets(item))
   })
 
-  return images
+  return importedAssets
 }
 
 export function AssetPreloader() {
