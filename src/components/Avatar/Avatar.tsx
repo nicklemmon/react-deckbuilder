@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
+import { Howl } from 'howler'
 import { motion } from 'framer-motion'
-import useSound from 'use-sound'
 import { rng } from 'src/functions'
 import { Wrapper, PortraitImg, Name, Flash, FeedbackText } from './AvatarStyles'
-const impactSound = require('src/sounds/impact.slice.wav')
+import impactSound from 'src/sounds/impact.slice.wav'
 
 const DAMAGE_FLASH_DURATION = 0.33
 const DAMAGE_FEEDBACK_DURATION = 0.8
@@ -28,13 +28,14 @@ interface FeedbackProps {
 
 function Portrait(props: PortraitProps) {
   const { isTakingDamage, artwork } = props
-  const [play] = useSound(impactSound)
 
-  useEffect(() => {
+  React.useEffect(() => {
+    const sound = new Howl({ src: [impactSound] })
+
     if (isTakingDamage) {
-      play()
+      sound.play()
     }
-  }, [play, isTakingDamage])
+  }, [isTakingDamage])
 
   return (
     <PortraitWrapper isTakingDamage={isTakingDamage}>
