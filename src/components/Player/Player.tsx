@@ -1,6 +1,7 @@
 import React from 'react'
 import { toTitleCase } from 'src/functions'
 import { Avatar } from 'src/components/Avatar'
+import { Feedback } from 'src/components'
 import { Stats, Bar } from 'src/components/Stats'
 import { default as PlayerInterface } from 'src/interfaces/Player'
 
@@ -37,7 +38,7 @@ function PlayerAvatar(props: PlayerAvatarProps) {
         </Stats.Row>
       </Stats>
 
-      {damageTaken && <Avatar.Feedback>{damageTaken}</Avatar.Feedback>}
+      {damageTaken && <Feedback>{damageTaken}</Feedback>}
     </Avatar>
   )
 }

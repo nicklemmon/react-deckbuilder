@@ -1,5 +1,6 @@
 import React from 'react'
 import { Avatar } from 'src/components/Avatar'
+import { Feedback } from 'src/components'
 import { Stats, AttackStat, DefenseStat, Bar } from 'src/components/Stats'
 import { default as MonsterInterface } from 'src/interfaces/Monster'
 
@@ -37,7 +38,7 @@ function Monster(props: MonsterProps) {
         </Stats.Row>
       </Stats>
 
-      {damageTaken && <Avatar.Feedback>{damageTaken}</Avatar.Feedback>}
+      {damageTaken && <Feedback>{damageTaken}</Feedback>}
     </Avatar>
   )
 }
