@@ -14,6 +14,7 @@ const imp: Monster = {
   name: 'Imp',
   level: 2,
   artwork: ImpImg,
+  goldBounty: 1,
   stats: {
     maxHealth: 12,
     health: 12,
@@ -27,6 +28,7 @@ const stagSpirit: Monster = {
   name: 'Stag Spirit',
   level: 4,
   artwork: StagImg,
+  goldBounty: 5,
   stats: {
     maxHealth: 10,
     health: 10,
@@ -40,6 +42,7 @@ const bat: Monster = {
   name: 'Bat',
   level: 1,
   artwork: BatImg,
+  goldBounty: 1,
   stats: {
     maxHealth: 5,
     health: 5,
@@ -53,6 +56,7 @@ const theCouncil: Monster = {
   name: 'The Council',
   level: 8,
   artwork: TheCouncilImg,
+  goldBounty: 7,
   stats: {
     maxHealth: 15,
     health: 15,
@@ -66,6 +70,7 @@ const arachnid: Monster = {
   name: 'Arachnid',
   level: 4,
   artwork: ArachnidImg,
+  goldBounty: 5,
   stats: {
     maxHealth: 6,
     health: 6,
@@ -79,6 +84,7 @@ const troll: Monster = {
   name: 'Troll',
   level: 8,
   artwork: TrollImg,
+  goldBounty: 9,
   stats: {
     maxHealth: 10,
     health: 10,
@@ -92,6 +98,7 @@ const zombie: Monster = {
   name: 'Zombie',
   level: 3,
   artwork: ZombieImg,
+  goldBounty: 2,
   stats: {
     maxHealth: 15,
     health: 15,
@@ -105,6 +112,7 @@ const boneDragon: Monster = {
   name: 'Bone Dragon',
   level: 8,
   artwork: BoneDragonImg,
+  goldBounty: 10,
   stats: {
     maxHealth: 20,
     health: 20,
@@ -118,6 +126,7 @@ const gargoyle: Monster = {
   name: 'Gargoyle',
   level: 3,
   artwork: GargoyleImg,
+  goldBounty: 2,
   stats: {
     maxHealth: 4,
     health: 4,

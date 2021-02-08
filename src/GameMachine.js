@@ -31,6 +31,9 @@ const machineConfig = {
     cardInPlay: undefined,
     discardPile: [],
     monster: undefined,
+    spoils: {
+      gold: 0,
+    },
   },
   states: {
     playerCreation: {
@@ -97,7 +100,7 @@ const machineConfig = {
       ],
     },
     victory: {
-      entry: ['@killMonster', '@awardGold', '@stockShop'],
+      entry: ['@awardSpoils', '@killMonster', '@stockShop'],
       on: {
         NEXT_BATTLE_CLICK: {
           actions: ['@getMonster', '@discardHand', '@discardDrawPile', '@discardDiscardPile'],
@@ -160,12 +163,17 @@ const GameMachine = Machine(machineConfig, {
         },
       }
     }),
-    '@awardGold': assign(ctx => {
-      const { player } = ctx
+    '@awardSpoils': assign(ctx => {
+      const { player, monster, spoils } = ctx
       const { inventory } = player
-      const nextGold = (inventory.gold += 3)
+      const { goldBounty } = monster
+      const nextGold = (inventory.gold += goldBounty)
 
       return {
+        spoils: {
+          ...spoils,
+          gold: goldBounty,
+        },
         player: {
           ...player,
           inventory: {

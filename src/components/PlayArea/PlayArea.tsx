@@ -1,12 +1,18 @@
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Deck } from 'src/components/Deck'
-import { AttackStat, DefenseStat, GoldStat, Stats } from 'src/components/Stats'
-import { StatusBar } from 'src/components/StatusBar'
-import { Card } from 'src/components/Card'
-import { Monster } from 'src/components/Monster'
-import { Player } from 'src/components/Player'
+import {
+  AttackStat,
+  Card,
+  Deck,
+  DefenseStat,
+  GoldStat,
+  Monster,
+  Player,
+  Stats,
+  StatusBar,
+} from 'src/components'
 import CardInterface from 'src/interfaces/Card'
+import player from 'src/config/player'
 import {
   BattleWrapper,
   CardInPlayWrapper,
@@ -15,7 +21,6 @@ import {
   DrawPileWrapper,
   PlayAreaWrapper,
 } from './PlayAreaStyles'
-import player from 'src/config/player'
 import { useGameMachine } from 'src/GameMachineContext'
 import ShoppingModal from './components/ShoppingModal'
 import { VictoryBanner, DefeatBanner } from './components/Banners'
@@ -89,6 +94,7 @@ export default function PlayArea(props: PlayAreaProps) {
           <Player
             isTakingDamage={state.value === 'defending'}
             damageTaken={state.value === 'defending' ? context.player.damageTaken : null}
+            goldAwarded={state.value === 'victory' ? context.spoils.gold : null}
             name={context.player.name}
             level={context.player.level}
             stats={context.player.stats}
@@ -112,6 +118,7 @@ export default function PlayArea(props: PlayAreaProps) {
                 id={monster.id}
                 name={monster.name}
                 level={monster.level}
+                goldBounty={monster.goldBounty}
                 stats={monster.stats}
                 artwork={monster.artwork}
               />

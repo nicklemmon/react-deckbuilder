@@ -1,17 +1,33 @@
 import React from 'react'
 import { toTitleCase } from 'src/functions'
-import { Avatar } from 'src/components/Avatar'
-import { Stats, Bar } from 'src/components/Stats'
+import { Avatar, Bar, Feedback, Stats } from 'src/components'
+import { useSound } from 'src/hooks'
+import coinsSound from 'src/sounds/items.coin.wav'
 import { default as PlayerInterface } from 'src/interfaces/Player'
 
 interface PlayerAvatarProps extends PlayerInterface {
   isTakingDamage: boolean
   damageTaken?: any // :(
+  goldAwarded?: any // :(
 }
 
 function PlayerAvatar(props: PlayerAvatarProps) {
-  const { characterClass = '', name, level, stats, artwork, isTakingDamage, damageTaken } = props
+  const {
+    characterClass = '',
+    name,
+    level,
+    stats,
+    artwork,
+    isTakingDamage,
+    damageTaken,
+    goldAwarded,
+  } = props
   const health = stats.health < 0 ? 0 : stats.health
+  const rewardSound = useSound({ src: coinsSound })
+
+  React.useEffect(() => {
+    if (goldAwarded) rewardSound.play()
+  }, [goldAwarded, rewardSound])
 
   return (
     <Avatar>
@@ -37,7 +53,13 @@ function PlayerAvatar(props: PlayerAvatarProps) {
         </Stats.Row>
       </Stats>
 
-      {damageTaken && <Avatar.Feedback>{damageTaken}</Avatar.Feedback>}
+      {damageTaken ? <Feedback variant="negative">{damageTaken}</Feedback> : null}
+
+      {goldAwarded ? (
+        <Feedback variant="neutral" duration={1}>
+          + {goldAwarded} gold
+        </Feedback>
+      ) : null}
     </Avatar>
   )
 }

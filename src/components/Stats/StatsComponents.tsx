@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Stats } from 'src/components/Stats'
 import swordImg from 'src/images/sword.png'
 import shieldImg from 'src/images/wooden-shield.png'
-import goldImg from 'src/images/gold-coin.png'
+import goldCoinsImg from 'src/images/gold-coins.png'
 
 interface StatProps {
   children: any
@@ -38,7 +38,7 @@ export function GoldStat(props: StatProps) {
 
   return (
     <Stats.Stat>
-      <Stats.Icon src={goldImg} alt="Gold:" />
+      <Stats.Icon src={goldCoinsImg} alt="Gold:" />
 
       <Stats.Value>{children}</Stats.Value>
     </Stats.Stat>
