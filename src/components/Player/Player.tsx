@@ -8,10 +8,20 @@ import { default as PlayerInterface } from 'src/interfaces/Player'
 interface PlayerAvatarProps extends PlayerInterface {
   isTakingDamage: boolean
   damageTaken?: any // :(
+  goldAwarded?: any // :(
 }
 
 function PlayerAvatar(props: PlayerAvatarProps) {
-  const { characterClass = '', name, level, stats, artwork, isTakingDamage, damageTaken } = props
+  const {
+    characterClass = '',
+    name,
+    level,
+    stats,
+    artwork,
+    isTakingDamage,
+    damageTaken,
+    goldAwarded,
+  } = props
   const health = stats.health < 0 ? 0 : stats.health
 
   return (
@@ -38,7 +48,13 @@ function PlayerAvatar(props: PlayerAvatarProps) {
         </Stats.Row>
       </Stats>
 
-      {damageTaken && <Feedback>{damageTaken}</Feedback>}
+      {damageTaken ? <Feedback variant="negative">{damageTaken}</Feedback> : null}
+
+      {goldAwarded ? (
+        <Feedback variant="neutral" duration={1}>
+          + {goldAwarded} gold
+        </Feedback>
+      ) : null}
     </Avatar>
   )
 }

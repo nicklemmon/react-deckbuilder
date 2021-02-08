@@ -38,7 +38,7 @@ function Monster(props: MonsterProps) {
         </Stats.Row>
       </Stats>
 
-      {damageTaken && <Feedback>{damageTaken}</Feedback>}
+      {damageTaken && <Feedback variant="negative">{damageTaken}</Feedback>}
     </Avatar>
   )
 }
