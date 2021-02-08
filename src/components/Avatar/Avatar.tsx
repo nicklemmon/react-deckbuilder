@@ -1,7 +1,7 @@
 import React from 'react'
-import { Howl } from 'howler'
 import { motion } from 'framer-motion'
 import { rng } from 'src/functions'
+import { useSound } from 'src/hooks'
 import { Wrapper, PortraitImg, Name, Flash } from './AvatarStyles'
 import impactSound from 'src/sounds/impact.slice.wav'
 
@@ -23,14 +23,13 @@ interface PortraitWrapperProps {
 
 function Portrait(props: PortraitProps) {
   const { isTakingDamage, artwork } = props
+  const damageSound = useSound({ src: impactSound })
 
   React.useEffect(() => {
-    const sound = new Howl({ src: [impactSound] })
-
     if (isTakingDamage) {
-      sound.play()
+      damageSound.play()
     }
-  }, [isTakingDamage])
+  }, [isTakingDamage, damageSound])
 
   return (
     <PortraitWrapper isTakingDamage={isTakingDamage}>

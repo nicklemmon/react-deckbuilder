@@ -1,8 +1,8 @@
 import React from 'react'
 import { toTitleCase } from 'src/functions'
-import { Avatar } from 'src/components/Avatar'
-import { Feedback } from 'src/components'
-import { Stats, Bar } from 'src/components/Stats'
+import { Avatar, Bar, Feedback, Stats } from 'src/components'
+import { useSound } from 'src/hooks'
+import coinsSound from 'src/sounds/items.coin.wav'
 import { default as PlayerInterface } from 'src/interfaces/Player'
 
 interface PlayerAvatarProps extends PlayerInterface {
@@ -23,6 +23,11 @@ function PlayerAvatar(props: PlayerAvatarProps) {
     goldAwarded,
   } = props
   const health = stats.health < 0 ? 0 : stats.health
+  const rewardSound = useSound({ src: coinsSound })
+
+  React.useEffect(() => {
+    if (goldAwarded) rewardSound.play()
+  }, [goldAwarded, rewardSound])
 
   return (
     <Avatar>
