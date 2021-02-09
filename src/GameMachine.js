@@ -1,6 +1,9 @@
 import { Machine, assign } from 'xstate'
-import { shuffle, rng } from 'src/functions'
+import { shuffle, rng, getSound } from 'src/functions'
+import ImpactSfx from 'src/sounds/impact.slice.wav'
 import config from './config'
+
+const IMPACT_SFX_VOLUME = 0.5
 
 const startingDeck = config.startingDeck.map((card, index) => {
   return {
@@ -48,7 +51,7 @@ const machineConfig = {
       },
     },
     newRound: {
-      entry: ['@createDrawPile', '@getMonster'],
+      entry: ['@createDrawPile', '@getNewMonster'],
       after: {
         300: 'surveying',
       },
@@ -103,7 +106,7 @@ const machineConfig = {
       entry: ['@awardSpoils', '@killMonster', '@stockShop'],
       on: {
         NEXT_BATTLE_CLICK: {
-          actions: ['@getMonster', '@discardHand', '@discardDrawPile', '@discardDiscardPile'],
+          actions: ['@discardHand', '@discardDrawPile', '@discardDiscardPile'],
           target: 'newRound',
         },
         ITEM_SHOP_CLICK: {
@@ -120,7 +123,7 @@ const machineConfig = {
           actions: '@buyCard',
         },
         NEXT_BATTLE_CLICK: {
-          actions: ['@getMonster', '@discardHand', '@discardDrawPile', '@discardDiscardPile'],
+          actions: ['@discardHand', '@discardDrawPile', '@discardDiscardPile'],
           target: 'newRound',
         },
       },
@@ -128,7 +131,7 @@ const machineConfig = {
     doneShopping: {
       on: {
         NEXT_BATTLE_CLICK: {
-          actions: ['@getMonster', '@discardHand', '@discardDrawPile', '@discardDiscardPile'],
+          actions: ['@discardHand', '@discardDrawPile', '@discardDiscardPile'],
           target: 'newRound',
         },
         ITEM_SHOP_CLICK: {
@@ -182,10 +185,13 @@ const GameMachine = Machine(machineConfig, {
         },
       }
     }),
-    '@getMonster': assign(ctx => {
+    '@getNewMonster': assign(ctx => {
+      const newMonster = config.monsters[rng(config.monsters.length)]
+      getSound({ src: newMonster.sfx.intro }).play()
+
       return {
         monster: {
-          ...config.monsters[rng(config.monsters.length)],
+          ...newMonster,
           isDefeated: false,
         },
       }
@@ -194,6 +200,7 @@ const GameMachine = Machine(machineConfig, {
       const { monster, player } = ctx
       const rawDamage = monster.stats.attack - player.stats.defense
       const damage = rawDamage > 0 ? rawDamage : 0
+      getSound({ src: ImpactSfx, volume: IMPACT_SFX_VOLUME }).play()
 
       return {
         player: {
@@ -209,6 +216,8 @@ const GameMachine = Machine(machineConfig, {
     '@playerAttack': assign(ctx => {
       const { monster, cardInPlay } = ctx
       const damage = cardInPlay.stats.attack
+      getSound({ src: monster.sfx.damage }).play()
+      getSound({ src: ImpactSfx, volume: IMPACT_SFX_VOLUME }).play()
 
       return {
         monster: {
@@ -276,6 +285,10 @@ const GameMachine = Machine(machineConfig, {
       }
     }),
     '@killMonster': assign(ctx => {
+      const sound = getSound({ src: ctx.monster.sfx.death })
+
+      sound.play()
+
       return {
         monster: undefined,
       }
