@@ -6,10 +6,10 @@ export default interface Monster {
   artwork?: string
   damageTaken?: number
 
-  sfx?: {
-    intro?: string
-    damage?: string
-    death?: string
+  sfx: {
+    intro: string
+    damage: string
+    death: string
   }
 
   stats: {

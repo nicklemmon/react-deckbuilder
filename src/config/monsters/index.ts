@@ -1,3 +1,4 @@
+import { getSound } from 'src/functions'
 import Monster from 'src/interfaces/Monster'
 import ImpImg from 'src/images/imp.png'
 import StagImg from 'src/images/stag.png'
@@ -35,6 +36,8 @@ import ArachnidDeathSfx from 'src/sounds/arachnid.death.wav'
 import BambooGiantIntroSfx from 'src/sounds/bamboo-giant.intro.wav'
 import BambooGiantDamageSfx from 'src/sounds/bamboo-giant.damage.wav'
 import BambooGiantDeathSfx from 'src/sounds/bamboo-giant.death.wav'
+
+const MONSTER_SFX_VOLUME = 0.75
 
 const imp: Monster = {
   id: 'imp',
@@ -218,4 +221,13 @@ export default [
   boneDragon,
   gargoyle,
   bambooGiant,
-]
+].map((monster: Monster) => {
+  return {
+    ...monster,
+    sfx: {
+      intro: getSound({ src: monster.sfx.intro, volume: MONSTER_SFX_VOLUME }),
+      damage: getSound({ src: monster.sfx.damage, volume: MONSTER_SFX_VOLUME }),
+      death: getSound({ src: monster.sfx.death, volume: MONSTER_SFX_VOLUME }),
+    },
+  }
+})

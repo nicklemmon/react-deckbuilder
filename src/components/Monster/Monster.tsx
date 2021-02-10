@@ -2,10 +2,21 @@ import React from 'react'
 import { Avatar } from 'src/components/Avatar'
 import { Feedback } from 'src/components'
 import { Stats, AttackStat, DefenseStat, Bar } from 'src/components/Stats'
-import { default as MonsterInterface } from 'src/interfaces/Monster'
 
-interface MonsterProps extends MonsterInterface {
+interface MonsterProps {
+  id: string
+  name: string
+  level: number
+  goldBounty: number
+  artwork?: string
+  damageTaken?: number
   isTakingDamage: boolean
+  stats: {
+    maxHealth: number
+    health: number
+    attack: number
+    defense: number
+  }
 }
 
 function Monster(props: MonsterProps) {

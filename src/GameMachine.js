@@ -4,6 +4,7 @@ import ImpactSfx from 'src/sounds/impact.slice.wav'
 import config from './config'
 
 const IMPACT_SFX_VOLUME = 0.5
+const impactSound = getSound({ src: ImpactSfx, volume: IMPACT_SFX_VOLUME })
 
 const startingDeck = config.startingDeck.map((card, index) => {
   return {
@@ -187,7 +188,7 @@ const GameMachine = Machine(machineConfig, {
     }),
     '@getNewMonster': assign(ctx => {
       const newMonster = config.monsters[rng(config.monsters.length)]
-      getSound({ src: newMonster.sfx.intro }).play()
+      newMonster.sfx.intro.play()
 
       return {
         monster: {
@@ -200,7 +201,7 @@ const GameMachine = Machine(machineConfig, {
       const { monster, player } = ctx
       const rawDamage = monster.stats.attack - player.stats.defense
       const damage = rawDamage > 0 ? rawDamage : 0
-      getSound({ src: ImpactSfx, volume: IMPACT_SFX_VOLUME }).play()
+      impactSound.play()
 
       return {
         player: {
@@ -216,8 +217,8 @@ const GameMachine = Machine(machineConfig, {
     '@playerAttack': assign(ctx => {
       const { monster, cardInPlay } = ctx
       const damage = cardInPlay.stats.attack
-      getSound({ src: monster.sfx.damage }).play()
-      getSound({ src: ImpactSfx, volume: IMPACT_SFX_VOLUME }).play()
+      monster.sfx.damage.play()
+      impactSound.play()
 
       return {
         monster: {
@@ -285,9 +286,7 @@ const GameMachine = Machine(machineConfig, {
       }
     }),
     '@killMonster': assign(ctx => {
-      const sound = getSound({ src: ctx.monster.sfx.death })
-
-      sound.play()
+      ctx.monster.sfx.death.play()
 
       return {
         monster: undefined,
