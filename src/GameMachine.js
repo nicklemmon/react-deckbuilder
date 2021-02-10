@@ -1,10 +1,12 @@
 import { Machine, assign } from 'xstate'
 import { shuffle, rng, getSound } from 'src/functions'
 import ImpactSfx from 'src/sounds/impact.slice.wav'
+import CoinsSfx from 'src/sounds/items.coin.wav'
 import config from './config'
 
 const IMPACT_SFX_VOLUME = 0.5
 const impactSound = getSound({ src: ImpactSfx, volume: IMPACT_SFX_VOLUME })
+const coinsSound = getSound({ src: CoinsSfx })
 
 const startingDeck = config.startingDeck.map((card, index) => {
   return {
@@ -172,6 +174,7 @@ const GameMachine = Machine(machineConfig, {
       const { inventory } = player
       const { goldBounty } = monster
       const nextGold = (inventory.gold += goldBounty)
+      coinsSound.play()
 
       return {
         spoils: {
@@ -279,6 +282,7 @@ const GameMachine = Machine(machineConfig, {
     '@playCard': assign((ctx, event) => {
       const chosenCard = event.data.card
       const remainingCards = [...ctx.currentHand.filter(card => card.id !== chosenCard.id)]
+      chosenCard.sfx.play()
 
       return {
         currentHand: remainingCards,

@@ -1,19 +1,11 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Card } from 'src/components'
-import { useSound } from 'src/hooks'
 import { useGameMachine } from 'src/GameMachineContext'
 
 export default function CardInPlay() {
   const [state] = useGameMachine()
   const { cardInPlay } = state.context
-  const cardSound = useSound({ src: cardInPlay?.sound })
-
-  React.useEffect(() => {
-    if (cardSound) {
-      cardSound.play()
-    }
-  }, [cardSound])
 
   return (
     <motion.div
