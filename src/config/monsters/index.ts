@@ -37,7 +37,7 @@ import BambooGiantIntroSfx from 'src/sounds/bamboo-giant.intro.wav'
 import BambooGiantDamageSfx from 'src/sounds/bamboo-giant.damage.wav'
 import BambooGiantDeathSfx from 'src/sounds/bamboo-giant.death.wav'
 
-const MONSTER_SFX_VOLUME = 0.75
+const MONSTER_SFX_VOLUME = 0.66
 
 const imp: Monster = {
   id: 'imp',

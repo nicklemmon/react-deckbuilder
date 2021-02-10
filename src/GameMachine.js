@@ -4,7 +4,7 @@ import ImpactSfx from 'src/sounds/impact.slice.wav'
 import CoinsSfx from 'src/sounds/items.coin.wav'
 import config from './config'
 
-const IMPACT_SFX_VOLUME = 0.5
+const IMPACT_SFX_VOLUME = 0.33
 const impactSound = getSound({ src: ImpactSfx, volume: IMPACT_SFX_VOLUME })
 const coinsSound = getSound({ src: CoinsSfx })
 
