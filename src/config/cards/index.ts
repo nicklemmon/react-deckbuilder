@@ -1,3 +1,4 @@
+import { getSound } from 'src/functions'
 import Card from 'src/interfaces/Card'
 import fireboltImg from 'src/images/firebolt.png'
 import knucklesImg from 'src/images/knuckles.png'
@@ -18,7 +19,7 @@ const strike: Card = {
   id: 'strike',
   name: 'Strike',
   artwork: handAxeImg,
-  sound: meleeHeavySound,
+  sfx: meleeHeavySound,
   description: 'Smack your opponent!',
   rarity: 0,
   price: 14,
@@ -31,7 +32,7 @@ const shieldSlam: Card = {
   id: 'shield-slam',
   name: 'Shield Slam',
   artwork: shieldImg,
-  sound: meleeShieldSound,
+  sfx: meleeShieldSound,
   description: 'Slam your shield, creating a shockwave',
   rarity: 3,
   price: 18,
@@ -45,7 +46,7 @@ const assassinate: Card = {
   id: 'assassinate',
   name: 'Assassinate',
   artwork: stilletoImg,
-  sound: meleeSheatheSound,
+  sfx: meleeSheatheSound,
   description: 'Back stab for huge damage!',
   rarity: 1,
   price: 14,
@@ -58,7 +59,7 @@ const punch: Card = {
   id: 'punch',
   name: 'Punch',
   artwork: knucklesImg,
-  sound: meleeWooshSound,
+  sfx: meleeWooshSound,
   description: 'Right in the ribs',
   rarity: 0,
   price: 8,
@@ -71,7 +72,7 @@ const firebolt: Card = {
   id: 'firebolt',
   name: 'Firebolt',
   artwork: fireboltImg,
-  sound: magicFireBoltSound,
+  sfx: magicFireBoltSound,
   description: 'A burst of directed flames',
   rarity: 2,
   price: 15,
@@ -84,7 +85,7 @@ const earthquake: Card = {
   id: 'earthquake',
   name: 'Earthquake',
   artwork: earthquakeImg,
-  sound: magicEarthSound,
+  sfx: magicEarthSound,
   description: 'The earth split in two',
   rarity: 3,
   price: 25,
@@ -97,7 +98,7 @@ const lightning: Card = {
   id: 'lightning',
   name: 'Lightning',
   artwork: lightningImg,
-  sound: magicLightningSound,
+  sfx: magicLightningSound,
   description: 'A flash in the pan',
   rarity: 2,
   price: 12,
@@ -106,6 +107,15 @@ const lightning: Card = {
   },
 }
 
-export const cards = [strike, shieldSlam, assassinate, punch, firebolt, earthquake, lightning]
+function transformCard(card: Card) {
+  return {
+    ...card,
+    sfx: getSound({ src: card.sfx }),
+  }
+}
 
-export const startingDeck = [firebolt, firebolt, lightning, earthquake]
+export const cards = [strike, shieldSlam, assassinate, punch, firebolt, earthquake, lightning].map(
+  transformCard,
+)
+
+export const startingDeck = [firebolt, firebolt, lightning, earthquake].map(transformCard)

@@ -1,5 +1,5 @@
+import { getSound } from 'src/functions'
 import Monster from 'src/interfaces/Monster'
-import BatImg from 'src/images/bat.png'
 import ImpImg from 'src/images/imp.png'
 import StagImg from 'src/images/stag.png'
 import TheCouncilImg from 'src/images/the-council.png'
@@ -8,6 +8,36 @@ import TrollImg from 'src/images/troll.png'
 import ZombieImg from 'src/images/zombie.png'
 import BoneDragonImg from 'src/images/bone-dragon.png'
 import GargoyleImg from 'src/images/gargoyle.png'
+import BambooGiantImg from 'src/images/bamboo-giant.png'
+import TrollIntroSfx from 'src/sounds/troll.intro.wav'
+import TrollDamageSfx from 'src/sounds/troll.damage.wav'
+import TrollDeathSfx from 'src/sounds/troll.death.wav'
+import ImpIntroSfx from 'src/sounds/imp.intro.wav'
+import ImpDamageSfx from 'src/sounds/imp.damage.wav'
+import ImpDeathSfx from 'src/sounds/imp.death.wav'
+import ZombieIntroSfx from 'src/sounds/zombie.intro.wav'
+import ZombieDamageSfx from 'src/sounds/zombie.damage.wav'
+import ZombieDeathSfx from 'src/sounds/zombie.death.wav'
+import TheCouncilIntroSfx from 'src/sounds/the-council.intro.wav'
+import TheCouncilDamageSfx from 'src/sounds/the-council.damage.wav'
+import TheCouncilDeathSfx from 'src/sounds/the-council.death.wav'
+import StagSpiritIntroSfx from 'src/sounds/stag-spirit.intro.wav'
+import StagSpiritDamageSfx from 'src/sounds/stag-spirit.damage.wav'
+import StagSpiritDeathSfx from 'src/sounds/stag-spirit.death.wav'
+import BoneDragonIntroSfx from 'src/sounds/bone-dragon.intro.wav'
+import BoneDragonDamageSfx from 'src/sounds/bone-dragon.damage.wav'
+import BoneDragonDeathSfx from 'src/sounds/bone-dragon.death.wav'
+import GargoyleIntroSfx from 'src/sounds/gargoyle.intro.wav'
+import GargoyleDamageSfx from 'src/sounds/gargoyle.damage.wav'
+import GargoyleDeathSfx from 'src/sounds/gargoyle.death.wav'
+import ArachnidIntroSfx from 'src/sounds/arachnid.intro.wav'
+import ArachnidDamageSfx from 'src/sounds/arachnid.damage.wav'
+import ArachnidDeathSfx from 'src/sounds/arachnid.death.wav'
+import BambooGiantIntroSfx from 'src/sounds/bamboo-giant.intro.wav'
+import BambooGiantDamageSfx from 'src/sounds/bamboo-giant.damage.wav'
+import BambooGiantDeathSfx from 'src/sounds/bamboo-giant.death.wav'
+
+const MONSTER_SFX_VOLUME = 0.66
 
 const imp: Monster = {
   id: 'imp',
@@ -15,6 +45,11 @@ const imp: Monster = {
   level: 2,
   artwork: ImpImg,
   goldBounty: 1,
+  sfx: {
+    intro: ImpIntroSfx,
+    damage: ImpDamageSfx,
+    death: ImpDeathSfx,
+  },
   stats: {
     maxHealth: 12,
     health: 12,
@@ -29,23 +64,14 @@ const stagSpirit: Monster = {
   level: 4,
   artwork: StagImg,
   goldBounty: 5,
+  sfx: {
+    intro: StagSpiritIntroSfx,
+    damage: StagSpiritDamageSfx,
+    death: StagSpiritDeathSfx,
+  },
   stats: {
     maxHealth: 10,
     health: 10,
-    attack: 2,
-    defense: 0,
-  },
-}
-
-const bat: Monster = {
-  id: 'bat',
-  name: 'Bat',
-  level: 1,
-  artwork: BatImg,
-  goldBounty: 1,
-  stats: {
-    maxHealth: 5,
-    health: 5,
     attack: 2,
     defense: 0,
   },
@@ -57,6 +83,11 @@ const theCouncil: Monster = {
   level: 8,
   artwork: TheCouncilImg,
   goldBounty: 7,
+  sfx: {
+    intro: TheCouncilIntroSfx,
+    damage: TheCouncilDamageSfx,
+    death: TheCouncilDeathSfx,
+  },
   stats: {
     maxHealth: 15,
     health: 15,
@@ -71,6 +102,11 @@ const arachnid: Monster = {
   level: 4,
   artwork: ArachnidImg,
   goldBounty: 5,
+  sfx: {
+    intro: ArachnidIntroSfx,
+    damage: ArachnidDamageSfx,
+    death: ArachnidDeathSfx,
+  },
   stats: {
     maxHealth: 6,
     health: 6,
@@ -85,6 +121,11 @@ const troll: Monster = {
   level: 8,
   artwork: TrollImg,
   goldBounty: 9,
+  sfx: {
+    intro: TrollIntroSfx,
+    damage: TrollDamageSfx,
+    death: TrollDeathSfx,
+  },
   stats: {
     maxHealth: 10,
     health: 10,
@@ -99,6 +140,11 @@ const zombie: Monster = {
   level: 3,
   artwork: ZombieImg,
   goldBounty: 2,
+  sfx: {
+    intro: ZombieIntroSfx,
+    damage: ZombieDamageSfx,
+    death: ZombieDeathSfx,
+  },
   stats: {
     maxHealth: 15,
     health: 15,
@@ -113,6 +159,11 @@ const boneDragon: Monster = {
   level: 8,
   artwork: BoneDragonImg,
   goldBounty: 10,
+  sfx: {
+    intro: BoneDragonIntroSfx,
+    damage: BoneDragonDamageSfx,
+    death: BoneDragonDeathSfx,
+  },
   stats: {
     maxHealth: 20,
     health: 20,
@@ -127,6 +178,11 @@ const gargoyle: Monster = {
   level: 3,
   artwork: GargoyleImg,
   goldBounty: 2,
+  sfx: {
+    intro: GargoyleIntroSfx,
+    damage: GargoyleDamageSfx,
+    death: GargoyleDeathSfx,
+  },
   stats: {
     maxHealth: 4,
     health: 4,
@@ -135,5 +191,43 @@ const gargoyle: Monster = {
   },
 }
 
+const bambooGiant: Monster = {
+  id: 'bamboo-giant',
+  name: 'Bamboo Giant',
+  level: 7,
+  artwork: BambooGiantImg,
+  goldBounty: 10,
+  sfx: {
+    intro: BambooGiantIntroSfx,
+    damage: BambooGiantDamageSfx,
+    death: BambooGiantDeathSfx,
+  },
+  stats: {
+    maxHealth: 15,
+    health: 15,
+    attack: 4,
+    defense: 5,
+  },
+}
+
 // eslint-disable-next-line
-export default [imp, stagSpirit, bat, theCouncil, arachnid, troll, zombie, boneDragon, gargoyle]
+export default [
+  imp,
+  stagSpirit,
+  theCouncil,
+  arachnid,
+  troll,
+  zombie,
+  boneDragon,
+  gargoyle,
+  bambooGiant,
+].map((monster: Monster) => {
+  return {
+    ...monster,
+    sfx: {
+      intro: getSound({ src: monster.sfx.intro, volume: MONSTER_SFX_VOLUME }),
+      damage: getSound({ src: monster.sfx.damage, volume: MONSTER_SFX_VOLUME }),
+      death: getSound({ src: monster.sfx.death, volume: MONSTER_SFX_VOLUME }),
+    },
+  }
+})
