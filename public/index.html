@@ -20,25 +20,92 @@
     -->
     <title>React Deckbuilder</title>
     <style>
-      .js-loading-overlay {
-        background-color: pink;
+      @keyframes pulse {
+        50% {
+          transform: scale(1.033);
+        }
+      }
+
+      .loading-overlay {
+        background: radial-gradient(#2a2b2a, #000);
         width: 100vw;
         height: 100vh;
         position: absolute;
         top: 0;
         left: 0;
         z-index: 9999;
-        pointer-events: none;
         cursor: wait;
         display: flex;
         align-items: center;
         justify-content: center;
       }
 
+      .loading-overlay__content {
+        position: relative; /* allows absolute positionining within */
+      }
+
+      .loading-overlay__img-frame {
+        background-color: rgba(0, 0, 0, 0.25);
+        border: 1px solid #706c61;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        box-shadow: 0 1rem 1rem -0.5rem rgba(0, 0, 0, 0.4);
+        position: relative;
+        animation: pulse 1.25s ease-in-out infinite;
+      }
+
+      .loading-overlay__heading {
+        font-family: 'Eczar', serif;
+        color: #fff;
+        font-size: 1.75rem;
+        letter-spacing: 0.085rem;
+        text-align: center;
+        margin-top: 2rem;
+        position: relative;
+        animation: pulse 1.25s ease-in-out infinite;
+      }
+
+      .loading-overlay__img-frame,
+      .loading-overlay__heading {
+        z-index: 10;
+      }
+
+      @keyframes rotate {
+        100% {
+          transform: rotate(360deg) translate(-50%, -50%);
+        }
+      }
+
+      .loading-overlay__circle {
+        position: absolute;
+        z-index: 5;
+        top: 50%;
+        left: 50%;
+        transform: rotate(0deg) translate(-50%, -50%);
+        transform-origin: top left;
+        border-radius: 50%;
+        width: 500px;
+        height: 500px;
+        background-color: rgba(0, 0, 0, 0.1);
+        border: 3px dashed rgba(255, 255, 255, 0.25);
+        animation: rotate 3s linear infinite;
+        box-shadow: 0 0 75px rgba(0, 0, 0, 0.7);
+      }
+
+      /* conditional displaying controlled by JS */
+      .js-loading-overlay {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+      }
+
       .js-loading-overlay.bundle-loaded.images-loaded.sfx-loaded {
-        display: none;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
       }
     </style>
+
     <script>
       function getLoadingOverlay() {
         return document.querySelector('.js-loading-overlay')
@@ -58,8 +125,16 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <!-- loading overlay -->
-    <div class="js-loading-overlay">
-      <p>Loading...</p>
+    <div class="js-loading-overlay loading-overlay">
+      <div class="loading-overlay__content">
+        <div class="loading-overlay__img-frame">
+          <img src="%PUBLIC_URL%/spell-book.png" role="presentation" alt="" />
+        </div>
+
+        <h1 class="loading-overlay__heading">Loading...</h1>
+
+        <div class="loading-overlay__circle"></div>
+      </div>
     </div>
 
     <div id="root"></div>
