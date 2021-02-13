@@ -1,8 +1,9 @@
-import { Howl } from 'howler'
+import { Howl, HowlCallback } from 'howler'
 
 interface GetSoundOptions {
   src: string
   volume?: number
+  onload?: HowlCallback
 }
 
 export function getSound(options: GetSoundOptions) {
@@ -10,5 +11,6 @@ export function getSound(options: GetSoundOptions) {
     preload: true,
     src: [options.src],
     volume: options.volume,
+    onload: options.onload,
   })
 }
