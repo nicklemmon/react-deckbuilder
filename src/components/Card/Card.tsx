@@ -100,7 +100,7 @@ function CardOverlay(props: OverlayProps) {
             style={{ scale: 0.75 }}
             initial={{ y: -200 }}
             animate={{ y: 0 }}
-            transition={{ type: 'spring', delay: 0.125, damping: 50, mass: 0.125 }}
+            transition={{ type: 'spring', delay: 0.125, damping: 10, mass: 0.125 }}
           >
             <OverlayImg src={bagImg} role="presentation" alt="" />
           </motion.div>
@@ -108,7 +108,7 @@ function CardOverlay(props: OverlayProps) {
           <OverlayText
             initial={{ opacity: 0, y: 500 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ type: 'spring', delay: 0.25, damping: 50, mass: 0.125 }}
+            transition={{ type: 'spring', delay: 0.2, damping: 10, mass: 0.125 }}
           >
             Purchased!
           </OverlayText>
