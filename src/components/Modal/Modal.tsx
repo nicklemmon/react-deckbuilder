@@ -60,9 +60,9 @@ function Modal(props: ModalProps) {
   return (
     <>
       <ModalWrapper
-        transition={{ type: 'spring', damping: 150 }}
+        transition={{ type: 'spring', damping: 15 }}
         initial={{ scale: 1, y: '100%', x: '-50%' }}
-        animate={{ scale: 1.1, y: '-50%', x: '-50%' }}
+        animate={{ scale: 1, y: '-50%', x: '-50%' }}
         exit={{ scale: 1, y: '100%', x: '-50%' }}
       >
         {children}
