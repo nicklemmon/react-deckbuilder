@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@xstate/react": "^0.8.1",
-    "framer-motion": "^1.11.0",
+    "framer-motion": "^3.3.0",
     "howler": "^2.2.1",
     "polished": "^3.6.4",
     "random": "^2.1.1",
