@@ -2,9 +2,9 @@ import React from 'react'
 import { useGameMachine } from 'src/GameMachineContext'
 import { Deck } from 'src/components/Deck'
 import { Card } from 'src/components/Card'
-import CardInterface from 'src/interfaces/Card'
+import { Card as CardInterface } from 'src/interfaces/Card'
 
-export default function DrawPile() {
+export function DrawPile() {
   const [state] = useGameMachine()
 
   return (

@@ -1,5 +1,5 @@
 import { getSound } from 'src/functions'
-import Monster from 'src/interfaces/Monster'
+import { Monster } from 'src/interfaces/Monster'
 import ImpImg from 'src/images/imp.png'
 import StagImg from 'src/images/stag.png'
 import TheCouncilImg from 'src/images/the-council.png'
@@ -37,7 +37,9 @@ import BambooGiantIntroSfx from 'src/sounds/bamboo-giant.intro.wav'
 import BambooGiantDamageSfx from 'src/sounds/bamboo-giant.damage.wav'
 import BambooGiantDeathSfx from 'src/sounds/bamboo-giant.death.wav'
 
-const MONSTER_SFX_VOLUME = 0.66
+const MONSTER_SFX_VOLUME = 0.55
+
+const getMonsterSound = (sfx: string) => getSound({ src: sfx, volume: MONSTER_SFX_VOLUME })
 
 const imp: Monster = {
   id: 'imp',
@@ -46,9 +48,9 @@ const imp: Monster = {
   artwork: ImpImg,
   goldBounty: 1,
   sfx: {
-    intro: ImpIntroSfx,
-    damage: ImpDamageSfx,
-    death: ImpDeathSfx,
+    intro: getMonsterSound(ImpIntroSfx),
+    damage: getMonsterSound(ImpDamageSfx),
+    death: getMonsterSound(ImpDeathSfx),
   },
   stats: {
     maxHealth: 12,
@@ -65,9 +67,9 @@ const stagSpirit: Monster = {
   artwork: StagImg,
   goldBounty: 5,
   sfx: {
-    intro: StagSpiritIntroSfx,
-    damage: StagSpiritDamageSfx,
-    death: StagSpiritDeathSfx,
+    intro: getMonsterSound(StagSpiritIntroSfx),
+    damage: getMonsterSound(StagSpiritDamageSfx),
+    death: getMonsterSound(StagSpiritDeathSfx),
   },
   stats: {
     maxHealth: 10,
@@ -84,9 +86,9 @@ const theCouncil: Monster = {
   artwork: TheCouncilImg,
   goldBounty: 7,
   sfx: {
-    intro: TheCouncilIntroSfx,
-    damage: TheCouncilDamageSfx,
-    death: TheCouncilDeathSfx,
+    intro: getMonsterSound(TheCouncilIntroSfx),
+    damage: getMonsterSound(TheCouncilDamageSfx),
+    death: getMonsterSound(TheCouncilDeathSfx),
   },
   stats: {
     maxHealth: 15,
@@ -103,9 +105,9 @@ const arachnid: Monster = {
   artwork: ArachnidImg,
   goldBounty: 5,
   sfx: {
-    intro: ArachnidIntroSfx,
-    damage: ArachnidDamageSfx,
-    death: ArachnidDeathSfx,
+    intro: getMonsterSound(ArachnidIntroSfx),
+    damage: getMonsterSound(ArachnidDamageSfx),
+    death: getMonsterSound(ArachnidDeathSfx),
   },
   stats: {
     maxHealth: 6,
@@ -122,9 +124,9 @@ const troll: Monster = {
   artwork: TrollImg,
   goldBounty: 9,
   sfx: {
-    intro: TrollIntroSfx,
-    damage: TrollDamageSfx,
-    death: TrollDeathSfx,
+    intro: getMonsterSound(TrollIntroSfx),
+    damage: getMonsterSound(TrollDamageSfx),
+    death: getMonsterSound(TrollDeathSfx),
   },
   stats: {
     maxHealth: 10,
@@ -141,9 +143,9 @@ const zombie: Monster = {
   artwork: ZombieImg,
   goldBounty: 2,
   sfx: {
-    intro: ZombieIntroSfx,
-    damage: ZombieDamageSfx,
-    death: ZombieDeathSfx,
+    intro: getMonsterSound(ZombieIntroSfx),
+    damage: getMonsterSound(ZombieDamageSfx),
+    death: getMonsterSound(ZombieDeathSfx),
   },
   stats: {
     maxHealth: 15,
@@ -160,9 +162,9 @@ const boneDragon: Monster = {
   artwork: BoneDragonImg,
   goldBounty: 10,
   sfx: {
-    intro: BoneDragonIntroSfx,
-    damage: BoneDragonDamageSfx,
-    death: BoneDragonDeathSfx,
+    intro: getMonsterSound(BoneDragonIntroSfx),
+    damage: getMonsterSound(BoneDragonDamageSfx),
+    death: getMonsterSound(BoneDragonDeathSfx),
   },
   stats: {
     maxHealth: 20,
@@ -179,9 +181,9 @@ const gargoyle: Monster = {
   artwork: GargoyleImg,
   goldBounty: 2,
   sfx: {
-    intro: GargoyleIntroSfx,
-    damage: GargoyleDamageSfx,
-    death: GargoyleDeathSfx,
+    intro: getMonsterSound(GargoyleIntroSfx),
+    damage: getMonsterSound(GargoyleDamageSfx),
+    death: getMonsterSound(GargoyleDeathSfx),
   },
   stats: {
     maxHealth: 4,
@@ -198,9 +200,9 @@ const bambooGiant: Monster = {
   artwork: BambooGiantImg,
   goldBounty: 10,
   sfx: {
-    intro: BambooGiantIntroSfx,
-    damage: BambooGiantDamageSfx,
-    death: BambooGiantDeathSfx,
+    intro: getMonsterSound(BambooGiantIntroSfx),
+    damage: getMonsterSound(BambooGiantDamageSfx),
+    death: getMonsterSound(BambooGiantDeathSfx),
   },
   stats: {
     maxHealth: 15,
@@ -221,13 +223,4 @@ export default [
   boneDragon,
   gargoyle,
   bambooGiant,
-].map((monster: Monster) => {
-  return {
-    ...monster,
-    sfx: {
-      intro: getSound({ src: monster.sfx.intro, volume: MONSTER_SFX_VOLUME }),
-      damage: getSound({ src: monster.sfx.damage, volume: MONSTER_SFX_VOLUME }),
-      death: getSound({ src: monster.sfx.death, volume: MONSTER_SFX_VOLUME }),
-    },
-  }
-})
+]

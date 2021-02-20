@@ -1,5 +1,6 @@
-import React, { ChangeEvent, SyntheticEvent } from 'react'
-import { useGameMachine } from 'src/GameMachineContext'
+import React, { SyntheticEvent } from 'react'
+import { SpawnedActorRef } from 'xstate'
+import { useActor } from '@xstate/react'
 import {
   Button,
   ButtonVariant,
@@ -10,25 +11,25 @@ import {
   Select,
   Stack,
 } from 'src/components'
+import { CharacterCreationEvent } from 'src/machines'
 import config from 'src/config'
 import { CardRadioButtons, Directions, Form, PortraitImg, Wrapper } from './CharacterCreationStyles'
 
-export default function CharacterCreation() {
-  const [state, send] = useGameMachine()
-  const { context } = state
-  const { characterForm } = context
+interface CharacterCreationProps {
+  machine: SpawnedActorRef<CharacterCreationEvent>
+}
 
-  function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-    return send({
-      type: 'FORM_VALUE_CHANGE',
-      data: { value: e.target.value, name: e.target.name },
-    })
-  }
+export function CharacterCreation(props: CharacterCreationProps) {
+  const { machine } = props
+  const [state, send] = useActor(machine)
+  console.log('CharacterCreation state', state)
+  const { context } = state
+  const { name, characterClass, characterPortrait } = context
 
   function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
 
-    return send({ type: 'SUBMIT_FORM', data: { ...characterForm } })
+    return send({ type: 'SUBMIT_FORM' })
   }
 
   return (
@@ -44,8 +45,8 @@ export default function CharacterCreation() {
               id="character-name"
               name="name"
               autoComplete="off"
-              onChange={handleChange}
-              value={characterForm.name}
+              onChange={e => send({ type: 'NAME_CHANGE', name: e.target.value })}
+              value={name}
               required
             />
           </div>
@@ -55,8 +56,16 @@ export default function CharacterCreation() {
             <Select
               id="character-class"
               name="characterClass"
-              value={characterForm.characterClass}
-              onChange={handleChange}
+              value={characterClass}
+              onChange={e => {
+                const { value } = e.target
+
+                send({
+                  type: 'CHARACTER_CLASS_CHANGE',
+                  // TODO: To handle an enum here?
+                  characterClass: value,
+                })
+              }}
             >
               <option value="berzerker">Berzerker</option>
               <option value="cleric">Cleric</option>
@@ -75,8 +84,10 @@ export default function CharacterCreation() {
                     label="Character Portrait"
                     name="artwork"
                     id={`card-radio-button-${index}`}
-                    onChange={handleChange}
-                    checked={characterForm.artwork === portrait}
+                    onChange={e =>
+                      send({ type: 'CHARACTER_PORTRAIT_CHANGE', characterPortrait: e.target.value })
+                    }
+                    checked={characterPortrait === portrait}
                     value={portrait}
                   >
                     <PortraitImg src={portrait} alt="" role="presentation" />

@@ -1,5 +1,8 @@
 import React from 'react'
+import { SpawnedActorRef } from 'xstate'
+import { useActor } from '@xstate/react'
 import { motion, AnimatePresence } from 'framer-motion'
+import player from 'src/config/player'
 import {
   AttackStat,
   Card,
@@ -11,8 +14,16 @@ import {
   Stats,
   StatusBar,
 } from 'src/components'
-import CardInterface from 'src/interfaces/Card'
-import player from 'src/config/player'
+import { GameEvent } from 'src/machines'
+import { Card as CardInterface } from 'src/interfaces'
+import {
+  CardInPlay,
+  DefeatBanner,
+  DiscardPile,
+  DrawPile,
+  ShoppingModal,
+  VictoryBanner,
+} from './components'
 import {
   BattleWrapper,
   CardInPlayWrapper,
@@ -21,20 +32,17 @@ import {
   DrawPileWrapper,
   PlayAreaWrapper,
 } from './PlayAreaStyles'
-import { useGameMachine } from 'src/GameMachineContext'
-import ShoppingModal from './components/ShoppingModal'
-import { VictoryBanner, DefeatBanner } from './components/Banners'
-import DrawPile from './components/DrawPile'
-import DiscardPile from './components/DiscardPile'
-import CardInPlay from './components/CardInPlay'
 
 interface PlayAreaProps {
-  children?: any
+  machine: SpawnedActorRef<GameEvent>
 }
 
-export default function PlayArea(props: PlayAreaProps) {
-  const [state, send] = useGameMachine()
+export function PlayArea(props: PlayAreaProps) {
+  const { machine } = props
+  const [state, send] = useActor(machine)
+  console.log('PlayArea state', state)
   const { context } = state
+  console.log('PlayArea context', context)
   const inventory: any = context.player.inventory
   const cardInPlay: any = context.cardInPlay
   const monster: any = context.monster
@@ -72,7 +80,7 @@ export default function PlayArea(props: PlayAreaProps) {
               <Card
                 cardIndex={index}
                 key={`current-hand-card-${index}`}
-                onClick={() => send({ type: 'CHOOSE_CARD', data: { card } })}
+                onClick={() => send({ type: 'CHOOSE_CARD', card })}
                 isDisabled={state.value !== 'choosing'}
                 {...card}
               />
@@ -96,7 +104,6 @@ export default function PlayArea(props: PlayAreaProps) {
             damageTaken={state.value === 'defending' ? context.player.damageTaken : null}
             goldAwarded={state.value === 'victory' ? context.spoils.gold : null}
             name={context.player.name}
-            level={context.player.level}
             stats={context.player.stats}
             characterClass={context.player.characterClass}
             artwork={context.player.artwork}

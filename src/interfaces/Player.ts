@@ -1,13 +1,12 @@
-enum CharacterClass {
+export enum CharacterClass {
   Berzerker = 'berzerker',
   Cleric = 'cleric',
   Archer = 'archer',
 }
 
-export default interface Player {
+export interface Player {
   name?: string
   characterClass?: CharacterClass
-  level: number
   artwork?: string
   damageTaken?: number
 

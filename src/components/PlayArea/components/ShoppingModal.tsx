@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useGameMachine } from 'src/GameMachineContext'
 import { Modal } from 'src/components/Modal'
 import { Card } from 'src/components/Card'
-import CardInterface from 'src/interfaces/Card'
+import { Card as CardInterface } from 'src/interfaces/Card'
 import { Deck } from 'src/components/Deck'
 import { Button, ButtonVariant } from 'src/components/Button'
 
@@ -13,7 +13,7 @@ const DeckWrapper = styled.div`
   justify-content: center;
 `
 
-export default function ShoppingModal() {
+export function ShoppingModal() {
   const [state, send] = useGameMachine()
   const { itemShop } = state.context
 

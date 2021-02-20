@@ -1,7 +1,7 @@
 import React from 'react'
 import { toTitleCase } from 'src/functions'
 import { Avatar, Bar, Feedback, Stats } from 'src/components'
-import { default as PlayerInterface } from 'src/interfaces/Player'
+import { Player as PlayerInterface } from 'src/interfaces'
 
 interface PlayerAvatarProps extends PlayerInterface {
   isTakingDamage: boolean
@@ -13,7 +13,6 @@ function PlayerAvatar(props: PlayerAvatarProps) {
   const {
     characterClass = '',
     name,
-    level,
     stats,
     artwork,
     isTakingDamage,
@@ -31,10 +30,6 @@ function PlayerAvatar(props: PlayerAvatarProps) {
 
         <Stats.Row>
           <Stats.Stat>{toTitleCase(characterClass)}</Stats.Stat>
-        </Stats.Row>
-
-        <Stats.Row>
-          <Stats.Stat>Level {level}</Stats.Stat>
         </Stats.Row>
 
         <Stats.Row>

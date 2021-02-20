@@ -1,9 +1,9 @@
 import React from 'react'
 import { useGameMachine } from 'src/GameMachineContext'
 import { Card, Deck } from 'src/components'
-import CardInterface from 'src/interfaces/Card'
+import { Card as CardInterface } from 'src/interfaces/Card'
 
-export default function DiscardPile() {
+export function DiscardPile() {
   const [state] = useGameMachine()
 
   return (

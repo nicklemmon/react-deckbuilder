@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Card } from 'src/components'
 import { useGameMachine } from 'src/GameMachineContext'
 
-export default function CardInPlay() {
+export function CardInPlay() {
   const [state] = useGameMachine()
   const { cardInPlay } = state.context
 
