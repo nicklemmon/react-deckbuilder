@@ -2,7 +2,11 @@ import { Machine, assign } from 'xstate'
 import { Card, Player } from 'src/interfaces'
 import config from 'src/config'
 import { CharacterCreationMachine, CHARACTER_CREATION_MACHINE_ID } from './CharacterCreationMachine'
-import { GameMachine, GAME_MACHINE_ID, GAME_MACHINE_DEFAULT_CONTEXT } from './GameMachine'
+import {
+  PlayAreaMachine,
+  PLAY_AREA_MACHINE_ID,
+  PLAY_AREA_MACHINE_DEFAULT_CONTEXT,
+} from './PlayAreaMachine'
 
 export const APP_MACHINE_ID = 'app-machine'
 
@@ -44,10 +48,10 @@ export const AppMachine = Machine<AppContext, AppStateSchema>({
     },
     playing: {
       invoke: {
-        id: GAME_MACHINE_ID,
-        src: GameMachine,
+        id: PLAY_AREA_MACHINE_ID,
+        src: PlayAreaMachine,
         data: {
-          ...GAME_MACHINE_DEFAULT_CONTEXT,
+          ...PLAY_AREA_MACHINE_DEFAULT_CONTEXT,
           player: (context: AppContext) => {
             return context.player
           },

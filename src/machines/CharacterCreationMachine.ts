@@ -24,41 +24,38 @@ export interface CharacterCreationContext {
   characterPortrait: string
 }
 
-const setName: ActionObject<CharacterCreationContext, CharacterCreationEvent> = assign(
-  (_context, event) => {
-    if (event.type !== 'NAME_CHANGE') return {}
+const setName: ActionObject<
+  CharacterCreationContext,
+  { type: 'NAME_CHANGE'; name: string }
+> = assign((_context, event) => {
+  const newName = event.name
 
-    const newName = event.name
+  return {
+    name: newName,
+  }
+})
 
-    return {
-      name: newName,
-    }
-  },
-)
+const setCharacterClass: ActionObject<
+  CharacterCreationContext,
+  { type: 'CHARACTER_CLASS_CHANGE'; characterClass: string }
+> = assign((_context, event) => {
+  const newCharacterClass = event.characterClass
 
-const setCharacterClass: ActionObject<CharacterCreationContext, CharacterCreationEvent> = assign(
-  (_context, event) => {
-    if (event.type !== 'CHARACTER_CLASS_CHANGE') return {}
+  return {
+    characterClass: newCharacterClass,
+  }
+})
 
-    const newCharacterClass = event.characterClass
+const setCharacterPortrait: ActionObject<
+  CharacterCreationContext,
+  { type: 'CHARACTER_PORTRAIT_CHANGE'; characterPortrait: string }
+> = assign((_context, event) => {
+  const newCharacterPortrait = event.characterPortrait
 
-    return {
-      characterClass: newCharacterClass,
-    }
-  },
-)
-
-const setCharacterPortrait: ActionObject<CharacterCreationContext, CharacterCreationEvent> = assign(
-  (_context, event) => {
-    if (event.type !== 'CHARACTER_PORTRAIT_CHANGE') return {}
-
-    const newCharacterPortrait = event.characterPortrait
-
-    return {
-      characterPortrait: newCharacterPortrait,
-    }
-  },
-)
+  return {
+    characterPortrait: newCharacterPortrait,
+  }
+})
 
 export const CharacterCreationMachine = Machine<
   CharacterCreationContext,

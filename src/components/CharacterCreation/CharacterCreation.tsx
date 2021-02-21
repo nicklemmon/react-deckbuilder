@@ -22,7 +22,6 @@ interface CharacterCreationProps {
 export function CharacterCreation(props: CharacterCreationProps) {
   const { machine } = props
   const [state, send] = useActor(machine)
-  console.log('CharacterCreation state', state)
   const { context } = state
   const { name, characterClass, characterPortrait } = context
 

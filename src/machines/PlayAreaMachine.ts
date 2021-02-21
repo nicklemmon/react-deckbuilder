@@ -5,8 +5,8 @@ import ImpactSfx from 'src/sounds/impact.slice.wav'
 import CoinsSfx from 'src/sounds/items.coin.wav'
 import config from 'src/config'
 
-export const GAME_MACHINE_ID = 'game-machine'
-export const GAME_MACHINE_DEFAULT_CONTEXT: GameContext = {
+export const PLAY_AREA_MACHINE_ID = 'game-machine'
+export const PLAY_AREA_MACHINE_DEFAULT_CONTEXT: PlayAreaContext = {
   player: config.player,
   playerDeck: (config.startingDeck as Array<Card>).map((card, index) => {
     return {
@@ -32,7 +32,7 @@ const IMPACT_SFX_VOLUME = 0.33
 const impactSound = getSound({ src: ImpactSfx, volume: IMPACT_SFX_VOLUME })
 const coinsSound = getSound({ src: CoinsSfx })
 
-export interface GameStateSchema {
+export interface PlayAreaStateSchema {
   states: {
     newRound: {}
     surveying: {}
@@ -49,14 +49,14 @@ export interface GameStateSchema {
   }
 }
 
-export type GameEvent =
+export type PlayAreaEvent =
   | { type: 'CHOOSE_CARD'; card: Card }
   | { type: 'ITEM_SHOP_CLICK' }
   | { type: 'LEAVE_SHOP_CLICK' }
   | { type: 'NEW_CARD_CLICK'; card: Card }
   | { type: 'NEXT_BATTLE_CLICK' }
 
-export interface GameContext {
+export interface PlayAreaContext {
   player: Player
   playerDeck: Deck
   classDeck: Deck
@@ -74,7 +74,7 @@ export interface GameContext {
 }
 
 /* ⚔️ Actions ⚔️ */
-const awardSpoils: ActionObject<GameContext, GameEvent> = assign(ctx => {
+const awardSpoils: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
   const { player, monster, spoils } = ctx
   const { inventory } = player
 
@@ -98,7 +98,7 @@ const awardSpoils: ActionObject<GameContext, GameEvent> = assign(ctx => {
   }
 })
 
-const getNewMonster: ActionObject<GameContext, GameEvent> = assign(ctx => {
+const getNewMonster: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
   const newMonster = config.monsters[rng(config.monsters.length)]
   newMonster.sfx.intro.play()
 
@@ -110,7 +110,7 @@ const getNewMonster: ActionObject<GameContext, GameEvent> = assign(ctx => {
   }
 })
 
-const monsterAttack: ActionObject<GameContext, GameEvent> = assign(ctx => {
+const monsterAttack: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
   const { monster, player } = ctx
 
   if (!monster) return {}
@@ -131,7 +131,7 @@ const monsterAttack: ActionObject<GameContext, GameEvent> = assign(ctx => {
   }
 })
 
-const playerAttack: ActionObject<GameContext, GameEvent> = assign(ctx => {
+const playerAttack: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
   const { monster, cardInPlay } = ctx
 
   if (!cardInPlay || !monster) return {}
@@ -154,8 +154,7 @@ const playerAttack: ActionObject<GameContext, GameEvent> = assign(ctx => {
   }
 })
 
-const createDrawPile: ActionObject<GameContext, GameEvent> = assign(ctx => {
-  console.log('ctx', ctx)
+const createDrawPile: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
   const newDrawPile = shuffle(ctx.playerDeck)
 
   return {
@@ -163,7 +162,7 @@ const createDrawPile: ActionObject<GameContext, GameEvent> = assign(ctx => {
   }
 })
 
-const reshuffle: ActionObject<GameContext, GameEvent> = assign(ctx => {
+const reshuffle: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
   const discardPile = ctx.discardPile
 
   return {
@@ -172,15 +171,17 @@ const reshuffle: ActionObject<GameContext, GameEvent> = assign(ctx => {
   }
 })
 
-const prepareNextBattle: ActionObject<GameContext, GameEvent> = assign(ctx => {
-  return {
-    drawPile: [],
-    discardPile: [],
-    currentHand: [],
-  }
-})
+const prepareNextBattle: ActionObject<PlayAreaContext, { type: 'NEXT_BATTLE_CLICK' }> = assign(
+  ctx => {
+    return {
+      drawPile: [],
+      discardPile: [],
+      currentHand: [],
+    }
+  },
+)
 
-const drawHand: ActionObject<GameContext, GameEvent> = assign(ctx => {
+const drawHand: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
   const drawnCards = ctx.drawPile.filter((_card, index) => index < 3) // First 3 cards
   const remainingCards = ctx.drawPile.filter((_card, index) => index >= 3)
   const currentHand = [...ctx.currentHand, ...drawnCards].map(card => {
@@ -196,21 +197,21 @@ const drawHand: ActionObject<GameContext, GameEvent> = assign(ctx => {
   }
 })
 
-const playCard: ActionObject<GameContext, GameEvent> = assign((ctx, event) => {
-  if (event.type !== 'CHOOSE_CARD') return {}
+const playCard: ActionObject<PlayAreaContext, { type: 'CHOOSE_CARD'; card: Card }> = assign(
+  (ctx, event) => {
+    const chosenCard = event.card
 
-  const chosenCard = event.card
+    const remainingCards = [...ctx.currentHand.filter(card => card.id !== chosenCard.id)]
+    chosenCard.sfx.play()
 
-  const remainingCards = [...ctx.currentHand.filter(card => card.id !== chosenCard.id)]
-  chosenCard.sfx.play()
+    return {
+      currentHand: remainingCards,
+      cardInPlay: chosenCard,
+    }
+  },
+)
 
-  return {
-    currentHand: remainingCards,
-    cardInPlay: chosenCard,
-  }
-})
-
-const killMonster: ActionObject<GameContext, GameEvent> = assign(ctx => {
+const killMonster: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
   if (!ctx.monster) return {}
 
   ctx.monster.sfx.death.play()
@@ -220,7 +221,7 @@ const killMonster: ActionObject<GameContext, GameEvent> = assign(ctx => {
   }
 })
 
-const stockShop: ActionObject<GameContext, GameEvent> = assign(ctx => {
+const stockShop: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
   const { player } = ctx
   const rngMax = ctx.classDeck.length - 1
   const cardsOnOffer = [
@@ -240,56 +241,58 @@ const stockShop: ActionObject<GameContext, GameEvent> = assign(ctx => {
   }
 })
 
-const buyCard: ActionObject<GameContext, GameEvent> = assign((ctx, event) => {
-  if (event.type !== 'NEW_CARD_CLICK') return {}
+const buyCard: ActionObject<PlayAreaContext, { type: 'NEW_CARD_CLICK'; card: Card }> = assign(
+  (ctx, event) => {
+    const { player, playerDeck, itemShop } = ctx
+    const { inventory } = player
+    const { gold } = inventory
+    const chosenCard = event.card
 
-  const { player, playerDeck, itemShop } = ctx
-  const { inventory } = player
-  const { gold } = inventory
-  const chosenCard = event.card
-
-  return {
-    playerDeck: [...playerDeck, chosenCard],
-    player: {
-      ...player,
-      inventory: {
-        gold: gold - chosenCard.price,
+    return {
+      playerDeck: [...playerDeck, chosenCard],
+      player: {
+        ...player,
+        inventory: {
+          gold: gold - chosenCard.price,
+        },
       },
-    },
-    itemShop: {
-      ...itemShop,
-      cards: (itemShop.cards as any[]).map((card: Card) => {
-        if (card.id === chosenCard.id) {
-          return {
-            ...chosenCard,
-            isPurchased: true,
+      itemShop: {
+        ...itemShop,
+        cards: (itemShop.cards as any[]).map((card: Card) => {
+          if (card.id === chosenCard.id) {
+            return {
+              ...chosenCard,
+              isPurchased: true,
+            }
           }
-        }
 
-        return {
-          ...card,
-          isDisabled: player.inventory.gold - chosenCard.price < card.price,
-        }
-      }),
-    },
-  }
-})
+          return {
+            ...card,
+            isDisabled: player.inventory.gold - chosenCard.price < card.price,
+          }
+        }),
+      },
+    }
+  },
+)
 
 /* 🛡️ Guards 🛡️ */
-const playerIsAlive = (ctx: GameContext) => ctx.player.stats.health > 0
-const playerIsDead = (ctx: GameContext) => ctx.player.stats.health <= 0
-const monsterIsAlive = (ctx: GameContext) => (ctx.monster ? ctx.monster.stats.health > 0 : false)
-const monsterIsDead = (ctx: GameContext) => (ctx.monster ? ctx.monster.stats.health <= 0 : false)
-const playerCanDraw = (ctx: GameContext) => ctx.drawPile.length > 0
-const drawingIsNotNeeded = (ctx: GameContext) =>
+const playerIsAlive = (ctx: PlayAreaContext) => ctx.player.stats.health > 0
+const playerIsDead = (ctx: PlayAreaContext) => ctx.player.stats.health <= 0
+const monsterIsAlive = (ctx: PlayAreaContext) =>
+  ctx.monster ? ctx.monster.stats.health > 0 : false
+const monsterIsDead = (ctx: PlayAreaContext) =>
+  ctx.monster ? ctx.monster.stats.health <= 0 : false
+const playerCanDraw = (ctx: PlayAreaContext) => ctx.drawPile.length > 0
+const drawingIsNotNeeded = (ctx: PlayAreaContext) =>
   ctx.drawPile.length === 0 && ctx.currentHand.length > 0
-const playerCannotDraw = (ctx: GameContext) =>
+const playerCannotDraw = (ctx: PlayAreaContext) =>
   ctx.drawPile.length === 0 && ctx.currentHand.length === 0
 
-export const GameMachine = Machine<GameContext, GameStateSchema, GameEvent>({
-  id: GAME_MACHINE_ID,
+export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, PlayAreaEvent>({
+  id: PLAY_AREA_MACHINE_ID,
   initial: 'newRound',
-  context: GAME_MACHINE_DEFAULT_CONTEXT,
+  context: PLAY_AREA_MACHINE_DEFAULT_CONTEXT,
   states: {
     newRound: {
       entry: [createDrawPile, getNewMonster],

@@ -14,7 +14,7 @@ import {
   Stats,
   StatusBar,
 } from 'src/components'
-import { GameEvent } from 'src/machines'
+import { PlayAreaEvent } from 'src/machines'
 import { Card as CardInterface } from 'src/interfaces'
 import {
   CardInPlay,
@@ -34,15 +34,13 @@ import {
 } from './PlayAreaStyles'
 
 interface PlayAreaProps {
-  machine: SpawnedActorRef<GameEvent>
+  machine: SpawnedActorRef<PlayAreaEvent>
 }
 
 export function PlayArea(props: PlayAreaProps) {
   const { machine } = props
   const [state, send] = useActor(machine)
-  console.log('PlayArea state', state)
   const { context } = state
-  console.log('PlayArea context', context)
   const inventory: any = context.player.inventory
   const cardInPlay: any = context.cardInPlay
   const monster: any = context.monster
