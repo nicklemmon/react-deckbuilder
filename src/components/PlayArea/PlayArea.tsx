@@ -61,16 +61,18 @@ export function PlayArea(props: PlayAreaProps) {
         </Stats>
       </StatusBar>
 
-      {state.value === 'shopping' && <ShoppingModal />}
+      {state.value === 'shopping' && <ShoppingModal state={state} send={send} />}
 
       <AnimatePresence>
-        {state.value === 'victory' || state.value === 'doneShopping' ? <VictoryBanner /> : null}
+        {state.value === 'victory' || state.value === 'doneShopping' ? (
+          <VictoryBanner send={send} />
+        ) : null}
       </AnimatePresence>
 
       <AnimatePresence>{state.value === 'defeat' && <DefeatBanner />}</AnimatePresence>
 
       <DrawPileWrapper>
-        <DrawPile />
+        <DrawPile state={state} />
       </DrawPileWrapper>
 
       <CurrentHandWrapper>
@@ -90,7 +92,7 @@ export function PlayArea(props: PlayAreaProps) {
       </CurrentHandWrapper>
 
       <CardInPlayWrapper>
-        <AnimatePresence>{cardInPlay && <CardInPlay />}</AnimatePresence>
+        <AnimatePresence>{cardInPlay && <CardInPlay state={state} />}</AnimatePresence>
       </CardInPlayWrapper>
 
       <BattleWrapper>
@@ -135,7 +137,7 @@ export function PlayArea(props: PlayAreaProps) {
       </BattleWrapper>
 
       <DiscardPileWrapper>
-        <DiscardPile />
+        <DiscardPile state={state} />
       </DiscardPileWrapper>
     </PlayAreaWrapper>
   )

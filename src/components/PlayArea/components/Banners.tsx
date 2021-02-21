@@ -1,17 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
-import { useGameMachine } from 'src/GameMachineContext'
 import { Button, ButtonVariant } from 'src/components/Button'
 import { Banner } from 'src/components/Banner'
+
+interface VictoryBannerProps {
+  send: any // TODO: Implement real type
+}
 
 const DefeatText = styled.p`
   width: 100%;
 `
 
-export function VictoryBanner() {
-  // eslint-disable-next-line
-  const [state, send] = useGameMachine()
+export function VictoryBanner(props: VictoryBannerProps) {
+  const { send } = props
 
   return (
     <AnimatedBanner>

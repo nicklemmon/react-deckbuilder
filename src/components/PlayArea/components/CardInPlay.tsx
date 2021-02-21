@@ -1,10 +1,13 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Card } from 'src/components'
-import { useGameMachine } from 'src/GameMachineContext'
 
-export function CardInPlay() {
-  const [state] = useGameMachine()
+interface CardInPlayProps {
+  state: any // TODO: Implement real type
+}
+
+export function CardInPlay(props: CardInPlayProps) {
+  const { state } = props
   const { cardInPlay } = state.context
 
   return (

@@ -1,10 +1,13 @@
 import React from 'react'
-import { useGameMachine } from 'src/GameMachineContext'
 import { Card, Deck } from 'src/components'
 import { Card as CardInterface } from 'src/interfaces/Card'
 
-export function DiscardPile() {
-  const [state] = useGameMachine()
+interface DiscardPileProps {
+  state: any // TODO: Implement real type
+}
+
+export function DiscardPile(props: DiscardPileProps) {
+  const { state } = props
 
   return (
     <Deck isStacked={true} align="right">

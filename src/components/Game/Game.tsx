@@ -30,7 +30,7 @@ export default function Game() {
 
       {gameMachine && state.matches('playing') && <PlayArea machine={gameMachine} />}
 
-      {!isProduction ? <StateMachineViewer /> : null}
+      {!isProduction && <StateMachineViewer state={state} />}
     </>
   )
 }
