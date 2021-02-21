@@ -78,11 +78,11 @@ export function PlayArea(props: PlayAreaProps) {
           <Deck isStacked={false}>
             {context.currentHand.map((card: CardInterface, index: number) => (
               <Card
+                {...card}
                 cardIndex={index}
                 key={`current-hand-card-${index}`}
                 onClick={() => send({ type: 'CHOOSE_CARD', card })}
                 isDisabled={state.value !== 'choosing'}
-                {...card}
               />
             ))}
           </Deck>
