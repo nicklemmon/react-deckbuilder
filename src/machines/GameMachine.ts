@@ -319,7 +319,7 @@ export const GameMachine = Machine<GameContext, GameStateSchema, GameEvent>({
     choosing: {
       on: {
         CHOOSE_CARD: {
-          actions: [playCard],
+          actions: playCard,
           target: 'playing',
         },
       },
