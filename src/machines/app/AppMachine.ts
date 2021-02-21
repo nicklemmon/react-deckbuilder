@@ -1,25 +1,16 @@
 import { Machine, assign } from 'xstate'
-import { Card, Player } from 'src/interfaces'
 import config from 'src/config'
-import { CharacterCreationMachine, CHARACTER_CREATION_MACHINE_ID } from './CharacterCreationMachine'
+import {
+  CharacterCreationMachine,
+  CHARACTER_CREATION_MACHINE_ID,
+} from 'src/machines/characterCreation'
 import {
   PlayAreaMachine,
   PLAY_AREA_MACHINE_ID,
   PLAY_AREA_MACHINE_DEFAULT_CONTEXT,
-} from './PlayAreaMachine'
-
-export const APP_MACHINE_ID = 'app-machine'
-
-interface AppStateSchema {
-  states: {
-    creatingCharacter: {}
-    playing: {}
-  }
-}
-
-interface AppContext {
-  player: Player
-}
+} from 'src/machines/playArea'
+import { APP_MACHINE_ID } from './constants'
+import { AppContext, AppStateSchema } from './types'
 
 export const AppMachine = Machine<AppContext, AppStateSchema>({
   id: APP_MACHINE_ID,

@@ -14,7 +14,7 @@ import {
   Stats,
   StatusBar,
 } from 'src/components'
-import { PlayAreaEvent } from 'src/machines'
+import { PlayAreaEvent } from 'src/machines/playArea'
 import { Card as CardInterface } from 'src/interfaces'
 import {
   CardInPlay,

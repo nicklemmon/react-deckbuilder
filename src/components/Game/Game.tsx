@@ -2,13 +2,12 @@ import React from 'react'
 import { useMachine } from '@xstate/react'
 import { ProcessEnv as ProcessEnvInterface } from 'src/interfaces'
 import { PlayArea, StateMachineViewer, CharacterCreation } from 'src/components'
+import { AppMachine } from 'src/machines/app'
 import {
-  AppMachine,
   CharacterCreationEvent,
   CHARACTER_CREATION_MACHINE_ID,
-  PlayAreaEvent,
-  PLAY_AREA_MACHINE_ID,
-} from 'src/machines'
+} from 'src/machines/characterCreation'
+import { PlayAreaEvent, PLAY_AREA_MACHINE_ID } from 'src/machines/playArea'
 import { SpawnedActorRef } from 'xstate'
 
 // eslint-disable-next-line

@@ -1,6 +1,7 @@
 import React, { SyntheticEvent } from 'react'
 import { SpawnedActorRef } from 'xstate'
 import { useActor } from '@xstate/react'
+import config from 'src/config'
 import {
   Button,
   ButtonVariant,
@@ -11,8 +12,7 @@ import {
   Select,
   Stack,
 } from 'src/components'
-import { CharacterCreationEvent } from 'src/machines'
-import config from 'src/config'
+import { CharacterCreationEvent } from 'src/machines/characterCreation'
 import { CardRadioButtons, Directions, Form, PortraitImg, Wrapper } from './CharacterCreationStyles'
 
 interface CharacterCreationProps {
