@@ -1,8 +1,7 @@
 import MageImg from 'src/images/hooded-mage.png'
-import Player from 'src/interfaces/Player'
+import { Player } from 'src/interfaces'
 
 const player: Player = {
-  level: 1,
   artwork: MageImg,
   stats: {
     maxHealth: 45,

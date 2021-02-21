@@ -1,1 +1,1 @@
-export { default as PlayArea } from './PlayArea'
+export * from './PlayArea'

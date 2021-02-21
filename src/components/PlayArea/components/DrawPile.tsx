@@ -1,11 +1,14 @@
 import React from 'react'
-import { useGameMachine } from 'src/GameMachineContext'
 import { Deck } from 'src/components/Deck'
 import { Card } from 'src/components/Card'
-import CardInterface from 'src/interfaces/Card'
+import { Card as CardInterface } from 'src/interfaces/Card'
 
-export default function DrawPile() {
-  const [state] = useGameMachine()
+interface DrawPileProps {
+  state: any // TODO: Implement real type
+}
+
+export function DrawPile(props: DrawPileProps) {
+  const { state } = props
 
   return (
     <Deck isStacked={true} align="right">

@@ -1,8 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { default as DeckInterface } from '../../interfaces/Deck'
 
-interface DeckProps extends DeckInterface {
+interface DeckProps {
   children?: any
   isStacked?: boolean
   align?: string

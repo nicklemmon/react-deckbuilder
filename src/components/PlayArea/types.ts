@@ -1,5 +1,4 @@
-import DeckInterface from '../../interfaces/Deck'
-import CardInterface from '../../interfaces/Card'
+import { Deck as DeckInterface, Card as CardInterface } from 'src/interfaces'
 
 export interface MachineContext {
   deck: DeckInterface

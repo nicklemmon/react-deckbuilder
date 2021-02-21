@@ -1,11 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useGameMachine } from 'src/GameMachineContext'
 import { Modal } from 'src/components/Modal'
 import { Card } from 'src/components/Card'
-import CardInterface from 'src/interfaces/Card'
+import { Card as CardInterface } from 'src/interfaces/Card'
 import { Deck } from 'src/components/Deck'
 import { Button, ButtonVariant } from 'src/components/Button'
+
+interface ShoppingModalProps {
+  state: any // TODO: Implement real type
+  send: any // TODO: Implement real type
+}
 
 const DeckWrapper = styled.div`
   width: 100%;
@@ -13,8 +17,8 @@ const DeckWrapper = styled.div`
   justify-content: center;
 `
 
-export default function ShoppingModal() {
-  const [state, send] = useGameMachine()
+export function ShoppingModal(props: ShoppingModalProps) {
+  const { state, send } = props
   const { itemShop } = state.context
 
   return (
@@ -34,7 +38,7 @@ export default function ShoppingModal() {
                     isDisabled={card.isDisabled}
                     isRevealed={true}
                     overlayVariant={card.overlayVariant}
-                    onClick={() => send({ type: 'NEW_CARD_CLICK', data: { card } })}
+                    onClick={() => send({ type: 'NEW_CARD_CLICK', card })}
                     showPrice={true}
                   />
                 )

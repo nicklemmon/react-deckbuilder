@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { default as CardInterface } from 'src/interfaces/Card'
+import { Card as CardInterface } from 'src/interfaces'
 import { Stats, AttackStat, GoldStat } from 'src/components/Stats'
 import {
   CardWrapper,

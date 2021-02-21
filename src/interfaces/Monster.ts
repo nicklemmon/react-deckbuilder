@@ -1,4 +1,6 @@
-export default interface Monster {
+import { Howl } from 'howler'
+
+export interface Monster {
   id: string
   name: string
   level: number
@@ -7,9 +9,9 @@ export default interface Monster {
   damageTaken?: number
 
   sfx: {
-    intro: string
-    damage: string
-    death: string
+    intro: Howl
+    damage: Howl
+    death: Howl
   }
 
   stats: {

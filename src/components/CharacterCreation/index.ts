@@ -1,1 +1,1 @@
-export { default as CharacterCreation } from './CharacterCreation'
+export { CharacterCreation } from './CharacterCreation'

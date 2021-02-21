@@ -1,5 +1,8 @@
 import React from 'react'
+import { SpawnedActorRef } from 'xstate'
+import { useActor } from '@xstate/react'
 import { motion, AnimatePresence } from 'framer-motion'
+import player from 'src/config/player'
 import {
   AttackStat,
   Card,
@@ -11,8 +14,16 @@ import {
   Stats,
   StatusBar,
 } from 'src/components'
-import CardInterface from 'src/interfaces/Card'
-import player from 'src/config/player'
+import { PlayAreaEvent } from 'src/machines/playArea'
+import { Card as CardInterface } from 'src/interfaces'
+import {
+  CardInPlay,
+  DefeatBanner,
+  DiscardPile,
+  DrawPile,
+  ShoppingModal,
+  VictoryBanner,
+} from './components'
 import {
   BattleWrapper,
   CardInPlayWrapper,
@@ -21,19 +32,14 @@ import {
   DrawPileWrapper,
   PlayAreaWrapper,
 } from './PlayAreaStyles'
-import { useGameMachine } from 'src/GameMachineContext'
-import ShoppingModal from './components/ShoppingModal'
-import { VictoryBanner, DefeatBanner } from './components/Banners'
-import DrawPile from './components/DrawPile'
-import DiscardPile from './components/DiscardPile'
-import CardInPlay from './components/CardInPlay'
 
 interface PlayAreaProps {
-  children?: any
+  machine: SpawnedActorRef<PlayAreaEvent>
 }
 
-export default function PlayArea(props: PlayAreaProps) {
-  const [state, send] = useGameMachine()
+export function PlayArea(props: PlayAreaProps) {
+  const { machine } = props
+  const [state, send] = useActor(machine)
   const { context } = state
   const inventory: any = context.player.inventory
   const cardInPlay: any = context.cardInPlay
@@ -53,16 +59,18 @@ export default function PlayArea(props: PlayAreaProps) {
         </Stats>
       </StatusBar>
 
-      {state.value === 'shopping' && <ShoppingModal />}
+      {state.value === 'shopping' && <ShoppingModal state={state} send={send} />}
 
       <AnimatePresence>
-        {state.value === 'victory' || state.value === 'doneShopping' ? <VictoryBanner /> : null}
+        {state.value === 'victory' || state.value === 'doneShopping' ? (
+          <VictoryBanner send={send} />
+        ) : null}
       </AnimatePresence>
 
       <AnimatePresence>{state.value === 'defeat' && <DefeatBanner />}</AnimatePresence>
 
       <DrawPileWrapper>
-        <DrawPile />
+        <DrawPile state={state} />
       </DrawPileWrapper>
 
       <CurrentHandWrapper>
@@ -72,7 +80,7 @@ export default function PlayArea(props: PlayAreaProps) {
               <Card
                 cardIndex={index}
                 key={`current-hand-card-${index}`}
-                onClick={() => send({ type: 'CHOOSE_CARD', data: { card } })}
+                onClick={() => send({ type: 'CHOOSE_CARD', card })}
                 isDisabled={state.value !== 'choosing'}
                 {...card}
               />
@@ -82,7 +90,7 @@ export default function PlayArea(props: PlayAreaProps) {
       </CurrentHandWrapper>
 
       <CardInPlayWrapper>
-        <AnimatePresence>{cardInPlay && <CardInPlay />}</AnimatePresence>
+        <AnimatePresence>{cardInPlay && <CardInPlay state={state} />}</AnimatePresence>
       </CardInPlayWrapper>
 
       <BattleWrapper>
@@ -96,7 +104,6 @@ export default function PlayArea(props: PlayAreaProps) {
             damageTaken={state.value === 'defending' ? context.player.damageTaken : null}
             goldAwarded={state.value === 'victory' ? context.spoils.gold : null}
             name={context.player.name}
-            level={context.player.level}
             stats={context.player.stats}
             characterClass={context.player.characterClass}
             artwork={context.player.artwork}
@@ -128,7 +135,7 @@ export default function PlayArea(props: PlayAreaProps) {
       </BattleWrapper>
 
       <DiscardPileWrapper>
-        <DiscardPile />
+        <DiscardPile state={state} />
       </DiscardPileWrapper>
     </PlayAreaWrapper>
   )
