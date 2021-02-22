@@ -21,7 +21,7 @@ export default function Game() {
   const gameMachine: SpawnedActorRef<PlayAreaEvent> | undefined = service.children.get(
     PLAY_AREA_MACHINE_ID,
   )
-  const isProduction: boolean = process.env['NODE_ENV'] !== 'production'
+  const isProduction: boolean = process.env['NODE_ENV'] === 'production'
 
   return (
     <>
