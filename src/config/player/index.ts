@@ -2,7 +2,7 @@ import MageImg from 'src/images/hooded-mage.png'
 import { Player } from 'src/interfaces'
 
 const player: Player = {
-  artwork: MageImg,
+  characterPortrait: MageImg,
   stats: {
     maxHealth: 45,
     health: 45,
@@ -10,7 +10,8 @@ const player: Player = {
     defense: 1,
   },
   inventory: {
-    gold: 0,
+    gold: 50,
+    items: [],
   },
 }
 

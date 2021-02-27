@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { transparentize, lighten } from 'polished'
+import { transparentize, darken } from 'polished'
 import styled from 'styled-components'
 
 const Overlay = styled(motion.div)`
@@ -18,24 +18,25 @@ const ModalWrapper = styled(motion.div)`
   z-index: 50;
   top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%); /* centering hack */
   width: 100%;
   max-width: 900px;
   height: 80vh;
+  display: flex;
   border-radius: ${props => props.theme.radii[2]};
   color: ${props => props.theme.colors.white};
   background: ${props =>
-    `linear-gradient(0deg, ${props.theme.colors.white}, ${lighten(
-      0.05,
-      props.theme.colors.offWhite,
-    )})`};
-  box-shadow: 0 0 ${props => props.theme.space[4]}
-    ${props => transparentize(0.5, props.theme.colors.darkGray)};
+    `linear-gradient(0deg, ${darken(0.075, props.theme.colors.darkGray)}, ${
+      props.theme.colors.darkGray
+    })`};
+  border: 1px solid ${props => props.theme.colors.gray};
+  box-shadow: ${props =>
+    `0 ${props.theme.space[3]} ${props.theme.space[5]} -${props.theme.space[3]} ${props.theme.colors.coral}`};
 `
 
 const Content = styled.div`
   height: 100%;
-  display: flex;
-  align-items: center;
+  width: 100%;
   padding: ${props => props.theme.space[5]};
 `
 
@@ -48,6 +49,7 @@ const ButtonRow = styled.div`
   left: 0;
   width: 100%;
   padding: ${props => props.theme.space[4]} ${props => props.theme.space[5]};
+  border-top: ${props => `1px solid ${props.theme.colors.darkGray}`};
 `
 
 interface ModalProps {
@@ -59,19 +61,10 @@ function Modal(props: ModalProps) {
 
   return (
     <>
-      <ModalWrapper
-        transition={{ type: 'spring', damping: 15 }}
-        initial={{ scale: 1, y: '100%', x: '-50%' }}
-        animate={{ scale: 1, y: '-50%', x: '-50%' }}
-        exit={{ scale: 1, y: '100%', x: '-50%' }}
-      >
+      <ModalWrapper initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
         {children}
       </ModalWrapper>
-      <Overlay
-        transition={{ type: 'spring', delay: 0.25 }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-      />
+      <Overlay initial={{ opacity: 0 }} animate={{ opacity: 1 }} />
     </>
   )
 }

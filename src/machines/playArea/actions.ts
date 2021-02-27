@@ -1,11 +1,12 @@
 import { assign, ActionObject } from 'xstate'
 import config from 'src/config'
 import { shuffle, rng, getSound } from 'src/functions'
-import { Card } from 'src/interfaces'
+import { Card, Item } from 'src/interfaces'
 import ImpactSfx from 'src/sounds/impact.slice.wav'
 import CoinsSfx from 'src/sounds/items.coin.wav'
 import { IMPACT_SFX_VOLUME } from './constants'
 import { PlayAreaEvent, PlayAreaContext } from './types'
+import player from 'src/config/player'
 
 const impactSound = getSound({ src: ImpactSfx, volume: IMPACT_SFX_VOLUME })
 const coinsSound = getSound({ src: CoinsSfx })
@@ -28,6 +29,7 @@ export const awardSpoils: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(
     player: {
       ...player,
       inventory: {
+        ...player.inventory,
         gold: nextGold,
       },
     },
@@ -160,20 +162,26 @@ export const killMonster: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(
 
 export const stockShop: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
   const { player } = ctx
-  const rngMax = ctx.classDeck.length - 1
+  const cardsRngMax = ctx.classDeck.length - 1
   const cardsOnOffer = [
-    ctx.classDeck[rng(rngMax)],
-    ctx.classDeck[rng(rngMax)],
-    ctx.classDeck[rng(rngMax)],
+    ctx.classDeck[rng(cardsRngMax)],
+    ctx.classDeck[rng(cardsRngMax)],
+    ctx.classDeck[rng(cardsRngMax)],
   ].map((card, index) => ({
     ...card,
     id: `${card.id}-from-shop-${index}`,
     isDisabled: player.inventory.gold < card.price,
   }))
+  const itemsOnOffer = config.items.map((item, index) => ({
+    ...item,
+    id: `${item.id}-from-shop-${index}`,
+    isDisabled: player.inventory.gold < item.price,
+  }))
 
   return {
     itemShop: {
       cards: cardsOnOffer,
+      items: itemsOnOffer,
     },
   }
 })
@@ -192,6 +200,7 @@ export const buyCard: ActionObject<
     player: {
       ...player,
       inventory: {
+        ...player.inventory,
         gold: gold - chosenCard.price,
       },
     },
@@ -210,6 +219,31 @@ export const buyCard: ActionObject<
           isDisabled: player.inventory.gold - chosenCard.price < card.price,
         }
       }),
+    },
+  }
+})
+
+export const buyItem: ActionObject<
+  PlayAreaContext,
+  { type: 'NEW_ITEM_CLICK'; item: Item }
+> = assign((ctx, event) => {
+  const { player, itemShop } = ctx
+  const currentGold = player.inventory.gold
+  const currentItems = player.inventory.items
+  const chosenItem = event.item
+
+  return {
+    player: {
+      ...player,
+      inventory: {
+        ...player.inventory,
+        gold: currentGold - chosenItem.price,
+        items: [...currentItems, chosenItem],
+      },
+    },
+    // TODO: Card and Item disabling based on price
+    itemShop: {
+      ...itemShop,
     },
   }
 })

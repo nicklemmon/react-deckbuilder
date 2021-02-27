@@ -4,6 +4,7 @@ import { Stats } from 'src/components/Stats'
 import swordImg from 'src/images/sword.png'
 import shieldImg from 'src/images/wooden-shield.png'
 import goldCoinsImg from 'src/images/gold-coins.png'
+import heartImg from 'src/images/heart.png'
 
 interface StatProps {
   children: any
@@ -39,6 +40,18 @@ export function GoldStat(props: StatProps) {
   return (
     <Stats.Stat>
       <Stats.Icon src={goldCoinsImg} alt="Gold:" />
+
+      <Stats.Value>{children}</Stats.Value>
+    </Stats.Stat>
+  )
+}
+
+export function HealthStat(props: StatProps) {
+  const { children } = props
+
+  return (
+    <Stats.Stat>
+      <Stats.Icon src={heartImg} alt="Health:" />
 
       <Stats.Value>{children}</Stats.Value>
     </Stats.Stat>

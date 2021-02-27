@@ -16,6 +16,7 @@ export const PLAY_AREA_MACHINE_DEFAULT_CONTEXT: PlayAreaContext = {
   classDeck: config.cards,
   itemShop: {
     cards: [],
+    items: [],
   },
   drawPile: [],
   currentHand: [],

@@ -12,9 +12,9 @@ interface PlayerAvatarProps extends PlayerInterface {
 function PlayerAvatar(props: PlayerAvatarProps) {
   const {
     characterClass = '',
+    characterPortrait,
     name,
     stats,
-    artwork,
     isTakingDamage,
     damageTaken,
     goldAwarded,
@@ -23,7 +23,7 @@ function PlayerAvatar(props: PlayerAvatarProps) {
 
   return (
     <Avatar>
-      <Avatar.Portrait artwork={artwork} isTakingDamage={isTakingDamage} />
+      <Avatar.Portrait artwork={characterPortrait} isTakingDamage={isTakingDamage} />
 
       <Stats>
         <Avatar.Name>{name}</Avatar.Name>

@@ -2,20 +2,9 @@ import React from 'react'
 import { SpawnedActorRef } from 'xstate'
 import { useActor } from '@xstate/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import player from 'src/config/player'
-import {
-  AttackStat,
-  Card,
-  Deck,
-  DefenseStat,
-  GoldStat,
-  Monster,
-  Player,
-  Stats,
-  StatusBar,
-} from 'src/components'
+import { Card, Deck, GoldStat, Monster, Player, Stats, StatusBar } from 'src/components'
 import { PlayAreaEvent } from 'src/machines/playArea'
-import { Card as CardInterface } from 'src/interfaces'
+import { Card as CardInterface, Item as ItemInterface } from 'src/interfaces'
 import {
   CardInPlay,
   DefeatBanner,
@@ -45,6 +34,8 @@ export function PlayArea(props: PlayAreaProps) {
   const cardInPlay: any = context.cardInPlay
   const monster: any = context.monster
 
+  console.log('inventory', inventory)
+
   return (
     <PlayAreaWrapper>
       <StatusBar>
@@ -52,9 +43,9 @@ export function PlayArea(props: PlayAreaProps) {
           <Stats.Row>
             <GoldStat>{inventory.gold}</GoldStat>
 
-            <AttackStat>{player.stats.attack}</AttackStat>
-
-            <DefenseStat>{player.stats.defense}</DefenseStat>
+            {inventory.items.map((item: ItemInterface, index: number) => (
+              <div key={`item-${item.id}-${index}`}>{item.name}</div>
+            ))}
           </Stats.Row>
         </Stats>
       </StatusBar>
@@ -106,7 +97,7 @@ export function PlayArea(props: PlayAreaProps) {
             name={context.player.name}
             stats={context.player.stats}
             characterClass={context.player.characterClass}
-            artwork={context.player.artwork}
+            characterPortrait={context.player.characterPortrait}
             inventory={inventory}
           />
         </motion.div>

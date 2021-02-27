@@ -1,6 +1,6 @@
-# React Deckbuilder
+# [React Deckbuilder](https://deckbuilder.nicklemmon.com)
 
-A simple [deck-building game](https://en.wikipedia.org/wiki/Deck-building_game) Built with React and
+A simple [deck-building game](https://en.wikipedia.org/wiki/Deck-building_game) built with React and
 [XState](https://xstate.js.org/). Current deployed via [Vercel](https://vercel.com/).
 
 ## Development

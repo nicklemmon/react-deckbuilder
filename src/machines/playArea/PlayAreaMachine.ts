@@ -3,17 +3,18 @@ import { PLAY_AREA_MACHINE_ID, PLAY_AREA_MACHINE_DEFAULT_CONTEXT } from './const
 import { PlayAreaStateSchema, PlayAreaEvent, PlayAreaContext } from './types'
 import {
   awardSpoils,
+  buyCard,
+  buyItem,
+  createDrawPile,
+  drawHand,
   getNewMonster,
+  killMonster,
   monsterAttack,
   playerAttack,
-  createDrawPile,
-  reshuffle,
-  prepareNextBattle,
-  drawHand,
   playCard,
-  killMonster,
+  prepareNextBattle,
+  reshuffle,
   stockShop,
-  buyCard,
 } from './actions'
 import {
   playerIsAlive,
@@ -24,8 +25,6 @@ import {
   drawingIsNotNeeded,
   playerCannotDraw,
 } from './guards'
-
-/* 🛡️ Guards 🛡️ */
 
 export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, PlayAreaEvent>({
   id: PLAY_AREA_MACHINE_ID,
@@ -103,6 +102,9 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
         },
         NEW_CARD_CLICK: {
           actions: buyCard,
+        },
+        NEW_ITEM_CLICK: {
+          actions: buyItem,
         },
         NEXT_BATTLE_CLICK: {
           actions: prepareNextBattle,

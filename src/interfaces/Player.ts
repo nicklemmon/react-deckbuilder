@@ -1,3 +1,5 @@
+import { Item } from 'src/interfaces'
+
 export enum CharacterClass {
   Berzerker = 'berzerker',
   Cleric = 'cleric',
@@ -7,7 +9,7 @@ export enum CharacterClass {
 export interface Player {
   name?: string
   characterClass?: CharacterClass
-  artwork?: string
+  characterPortrait?: string
   damageTaken?: number
 
   stats: {
@@ -19,5 +21,6 @@ export interface Player {
 
   inventory: {
     gold: number
+    items: Array<Item> | []
   }
 }

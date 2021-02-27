@@ -2,6 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import { StackProps } from './types'
 
+const Wrapper = styled.div`
+  width: 100%;
+`
+
 const ChildEl = styled.div<{ hasGutter: boolean }>`
   padding-bottom: ${props => (props.hasGutter ? props.theme.space[4] : 0)};
 `
@@ -13,7 +17,7 @@ export default function Stack(props: StackProps) {
   if (items.length === 0) return <>{items}</>
 
   return (
-    <div>
+    <Wrapper>
       {items.map((child, index) => {
         const hasGutter = index < items.length - 1
 
@@ -23,6 +27,6 @@ export default function Stack(props: StackProps) {
           </ChildEl>
         )
       })}
-    </div>
+    </Wrapper>
   )
 }
