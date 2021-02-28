@@ -14,15 +14,9 @@ const Overlay = styled(motion.div)`
 `
 
 const ModalWrapper = styled(motion.div)`
-  position: fixed;
   z-index: 50;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); /* centering hack */
   width: 100%;
   max-width: 900px;
-  height: 80vh;
-  display: flex;
   border-radius: ${props => props.theme.radii[2]};
   color: ${props => props.theme.colors.white};
   background: ${props =>
@@ -35,7 +29,6 @@ const ModalWrapper = styled(motion.div)`
 `
 
 const Content = styled.div`
-  height: 100%;
   width: 100%;
   padding: ${props => props.theme.space[5]};
 `
@@ -44,12 +37,11 @@ const ButtonRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: ${props => props.theme.space[4]} ${props => props.theme.space[5]};
-  border-top: ${props => `1px solid ${props.theme.colors.darkGray}`};
+  padding: ${props => props.theme.space[5]};
+  padding-top: 0;
 `
 
 interface ModalProps {
@@ -61,9 +53,15 @@ function Modal(props: ModalProps) {
 
   return (
     <>
-      <ModalWrapper initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      <ModalWrapper
+        style={{ position: 'fixed', left: '50%', top: '50%' }}
+        initial={{ opacity: 0, scale: 0.5, x: '-50%', y: '-50%' }}
+        animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+        exit={{ opacity: 0, scale: 0.5, x: '-50%', y: '-50%' }}
+      >
         {children}
       </ModalWrapper>
+
       <Overlay initial={{ opacity: 0 }} animate={{ opacity: 1 }} />
     </>
   )
