@@ -20,7 +20,7 @@ export const ItemWrapper = styled('div')<{
   transition-timing-function: ease-in-out;
   transition-property: transform, box-shadow;
   pointer-events: ${props => (props.isDisabled || props.isPurchased ? 'none' : 'initial')};
-  filter: ${props => (props.isDisabled ? 'grayscale(95%)' : 'initial')};
+  filter: ${props => (props.isDisabled && !props.isPurchased ? 'grayscale(95%)' : 'initial')};
 
   ${props => {
     if (!props.isDisabled || !props.isPurchased) {

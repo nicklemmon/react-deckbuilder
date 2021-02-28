@@ -6,6 +6,7 @@ import {
   buyCard,
   buyItem,
   createDrawPile,
+  disableUnaffordableItems,
   drawHand,
   getNewMonster,
   killMonster,
@@ -17,10 +18,10 @@ import {
   stockShop,
 } from './actions'
 import {
-  playerIsAlive,
-  playerIsDead,
   monsterIsAlive,
   monsterIsDead,
+  playerIsDead,
+  playerIsAlive,
   playerCanDraw,
   drawingIsNotNeeded,
   playerCannotDraw,
@@ -102,15 +103,21 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
         },
         NEW_CARD_CLICK: {
           actions: buyCard,
+          target: 'disablingUnaffordableItems',
         },
         NEW_ITEM_CLICK: {
           actions: buyItem,
+          target: 'disablingUnaffordableItems',
         },
         NEXT_BATTLE_CLICK: {
           actions: prepareNextBattle,
           target: 'newRound',
         },
       },
+    },
+    disablingUnaffordableItems: {
+      entry: disableUnaffordableItems,
+      always: 'shopping',
     },
     doneShopping: {
       on: {

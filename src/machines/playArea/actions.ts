@@ -6,7 +6,6 @@ import ImpactSfx from 'src/sounds/impact.slice.wav'
 import CoinsSfx from 'src/sounds/items.coin.wav'
 import { IMPACT_SFX_VOLUME } from './constants'
 import { PlayAreaEvent, PlayAreaContext } from './types'
-import player from 'src/config/player'
 
 const impactSound = getSound({ src: ImpactSfx, volume: IMPACT_SFX_VOLUME })
 const coinsSound = getSound({ src: CoinsSfx })
@@ -214,10 +213,7 @@ export const buyCard: ActionObject<
           }
         }
 
-        return {
-          ...card,
-          isDisabled: player.inventory.gold - chosenCard.price < card.price,
-        }
+        return card
       }),
     },
   }
@@ -241,9 +237,42 @@ export const buyItem: ActionObject<
         items: [...currentItems, chosenItem],
       },
     },
-    // TODO: Card and Item disabling based on price
     itemShop: {
       ...itemShop,
+      items: (itemShop.items as any[]).map((item: Item) => {
+        if (item.id === chosenItem.id) {
+          return {
+            ...chosenItem,
+            isPurchased: true,
+          }
+        }
+
+        return item
+      }),
     },
   }
 })
+
+export const disableUnaffordableItems: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(
+  (ctx: PlayAreaContext) => {
+    const { itemShop, player } = ctx
+
+    return {
+      itemShop: {
+        ...itemShop,
+        items: (itemShop.items as any[]).map((item: Item) => {
+          return {
+            ...item,
+            isDisabled: item.price > player.inventory.gold,
+          }
+        }),
+        cards: (itemShop.cards as any[]).map((card: Card) => {
+          return {
+            ...card,
+            isDisabled: card.price > player.inventory.gold,
+          }
+        }),
+      },
+    }
+  },
+)
