@@ -54,10 +54,18 @@ function Modal(props: ModalProps) {
   return (
     <>
       <ModalWrapper
-        style={{ position: 'fixed', left: '50%', top: '50%' }}
-        initial={{ opacity: 0, scale: 0.5, x: '-50%', y: '-50%' }}
-        animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
-        exit={{ opacity: 0, scale: 0.5, x: '-50%', y: '-50%' }}
+        key="modal"
+        style={{
+          position: 'fixed',
+          left: '50%',
+          top: '50%',
+          x: '-50%',
+          y: '-50%',
+        }}
+        transition={{ type: 'spring', bounce: 0.6 }}
+        initial={{ opacity: 0.66, scaleX: 0.85, scaleY: 0.9 }}
+        animate={{ opacity: 1, scaleX: 1, scaleY: 1 }}
+        exit={{ opacity: 0, scaleX: 0, scaleY: 0 }}
       >
         {children}
       </ModalWrapper>
