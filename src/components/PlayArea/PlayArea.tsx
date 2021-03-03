@@ -3,6 +3,7 @@ import { SpawnedActorRef } from 'xstate'
 import { useActor } from '@xstate/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Card, Deck, GoldStat, Monster, Player, Stats, StatusBar } from 'src/components'
+import { AvatarStatus } from 'src/components/Avatar/types'
 import { PlayAreaEvent } from 'src/machines/playArea'
 import { Card as CardInterface, Item as ItemInterface } from 'src/interfaces'
 import {
@@ -34,20 +35,24 @@ export function PlayArea(props: PlayAreaProps) {
   const cardInPlay: any = context.cardInPlay
   const monster: any = context.monster
 
-  console.log('inventory', inventory)
-
   return (
     <PlayAreaWrapper>
       <StatusBar>
         <Stats>
           <Stats.Row>
             <GoldStat>{inventory.gold}</GoldStat>
-
-            {inventory.items.map((item: ItemInterface, index: number) => (
-              <div key={`item-${item.id}-${index}`}>{item.name}</div>
-            ))}
           </Stats.Row>
         </Stats>
+
+        {inventory.items.map((item: ItemInterface, index: number) => (
+          <StatusBar.Button
+            key={`item-${item.id}-${index}`}
+            onClick={() => send({ type: 'CHOOSE_ITEM', item })}
+            status={state.value !== 'choosing' ? 'disabled' : 'idle'}
+          >
+            <StatusBar.ButtonImg alt={item.name} src={item.artwork} />
+          </StatusBar.Button>
+        ))}
       </StatusBar>
 
       {state.value === 'shopping' && <ShoppingModal state={state} send={send} />}
@@ -91,7 +96,9 @@ export function PlayArea(props: PlayAreaProps) {
           transition={{ duration: 1, delay: 0 }}
         >
           <Player
-            isTakingDamage={state.value === 'defending'}
+            status={
+              state.value === 'defending' ? AvatarStatus['takingDamage'] : AvatarStatus['idle']
+            }
             damageTaken={state.value === 'defending' ? context.player.damageTaken : null}
             goldAwarded={state.value === 'victory' ? context.spoils.gold : null}
             name={context.player.name}
@@ -111,7 +118,9 @@ export function PlayArea(props: PlayAreaProps) {
               transition={{ duration: 0.5, delay: 0 }}
             >
               <Monster
-                isTakingDamage={state.value === 'attacking'}
+                status={
+                  state.value === 'attacking' ? AvatarStatus['takingDamage'] : AvatarStatus['idle']
+                }
                 damageTaken={state.value === 'attacking' ? monster.damageTaken : null}
                 id={monster.id}
                 name={monster.name}

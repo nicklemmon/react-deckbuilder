@@ -16,6 +16,7 @@ import {
   prepareNextBattle,
   reshuffle,
   stockShop,
+  useItem,
 } from './actions'
 import {
   monsterIsAlive,
@@ -59,6 +60,10 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
     },
     choosing: {
       on: {
+        CHOOSE_ITEM: {
+          actions: useItem,
+          target: 'choosing',
+        },
         CHOOSE_CARD: {
           actions: playCard,
           target: 'playing',

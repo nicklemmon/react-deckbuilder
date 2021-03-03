@@ -20,6 +20,7 @@ export interface PlayAreaStateSchema {
 
 export type PlayAreaEvent =
   | { type: 'CHOOSE_CARD'; card: Card }
+  | { type: 'CHOOSE_ITEM'; item: Item }
   | { type: 'ITEM_SHOP_CLICK' }
   | { type: 'LEAVE_SHOP_CLICK' }
   | { type: 'NEW_CARD_CLICK'; card: Card }

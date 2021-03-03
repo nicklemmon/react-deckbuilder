@@ -2,11 +2,13 @@ import React from 'react'
 import { toTitleCase } from 'src/functions'
 import { Avatar, Bar, Feedback, Stats } from 'src/components'
 import { Player as PlayerInterface } from 'src/interfaces'
+import { AvatarStatus } from 'src/components/Avatar/types'
 
 interface PlayerAvatarProps extends PlayerInterface {
-  isTakingDamage: boolean
-  damageTaken?: any // :(
-  goldAwarded?: any // :(
+  status: AvatarStatus
+  damageTaken?: number | undefined
+  goldAwarded?: number | undefined
+  healingAmount?: number | undefined
 }
 
 function PlayerAvatar(props: PlayerAvatarProps) {
@@ -15,7 +17,7 @@ function PlayerAvatar(props: PlayerAvatarProps) {
     characterPortrait,
     name,
     stats,
-    isTakingDamage,
+    status = AvatarStatus['idle'],
     damageTaken,
     goldAwarded,
   } = props
@@ -23,7 +25,7 @@ function PlayerAvatar(props: PlayerAvatarProps) {
 
   return (
     <Avatar>
-      <Avatar.Portrait artwork={characterPortrait} isTakingDamage={isTakingDamage} />
+      <Avatar.Portrait artwork={characterPortrait} status={status} />
 
       <Stats>
         <Avatar.Name>{name}</Avatar.Name>

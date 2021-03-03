@@ -276,3 +276,39 @@ export const disableUnaffordableItems: ActionObject<PlayAreaContext, PlayAreaEve
     }
   },
 )
+
+export const useItem: ActionObject<PlayAreaContext, { type: 'CHOOSE_ITEM'; item: Item }> = assign(
+  (ctx, event) => {
+    const { player } = ctx
+    const chosenItem = event.item
+    const healingAmount = chosenItem.stats.health
+    const nextPlayerHealth = getPlayerHealth(
+      player.stats.health,
+      healingAmount ? healingAmount : 0,
+      player.stats.maxHealth,
+    )
+
+    return {
+      player: {
+        ...player,
+        stats: {
+          ...player.stats,
+          health: nextPlayerHealth,
+        },
+        inventory: {
+          ...player.inventory,
+          // Remove the item from the player's inventory
+          items: [...player.inventory.items].filter((item: Item) => item.id !== chosenItem.id),
+        },
+      },
+    }
+  },
+)
+
+function getPlayerHealth(currentHealth: number, healingAmount: number, maxHealth: number): number {
+  if (currentHealth + healingAmount > maxHealth) {
+    return maxHealth
+  }
+
+  return currentHealth + healingAmount
+}

@@ -1,6 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { rng } from 'src/functions'
+import { AvatarStatus } from './types'
 import { Wrapper, PortraitImg, Name, Flash } from './AvatarStyles'
 
 const DAMAGE_FLASH_DURATION = 0.33
@@ -11,20 +12,22 @@ interface AvatarProps {
 
 interface PortraitProps {
   artwork?: string
-  isTakingDamage: boolean
+  status: AvatarStatus
 }
 
 interface PortraitWrapperProps {
-  isTakingDamage: boolean
+  status: AvatarStatus
   children: any
 }
 
 function Portrait(props: PortraitProps) {
-  const { isTakingDamage, artwork } = props
+  const { status, artwork } = props
 
   return (
-    <PortraitWrapper isTakingDamage={isTakingDamage}>
-      <PortraitImg artwork={artwork}>{isTakingDamage ? <DamageFlash /> : null}</PortraitImg>
+    <PortraitWrapper status={status}>
+      <PortraitImg artwork={artwork}>
+        {status === AvatarStatus['takingDamage'] ? <DamageFlash /> : null}
+      </PortraitImg>
     </PortraitWrapper>
   )
 }
@@ -36,11 +39,11 @@ function Avatar(props: AvatarProps) {
 }
 
 function PortraitWrapper(props: PortraitWrapperProps) {
-  const { children, isTakingDamage = false } = props
+  const { children, status = 'idle' } = props
 
   return (
     <>
-      {isTakingDamage ? (
+      {status === AvatarStatus['takingDamage'] ? (
         <motion.div
           animate={{ x: [0, -rng(25), rng(10), rng(-10), 0], y: [0, -rng(5), rng(5), rng(5), 0] }}
           transition={{ duration: DAMAGE_FLASH_DURATION }}
