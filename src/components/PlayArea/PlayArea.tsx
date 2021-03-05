@@ -144,7 +144,6 @@ export function PlayArea(props: PlayAreaProps) {
  * @description determines the player avatar status according to the current status of the state machine
  */
 function getPlayerAvatarStatus(stateMachineValue: string): AvatarStatus {
-  console.log('stateMachineValue', stateMachineValue)
   switch (stateMachineValue) {
     case 'defending': {
       return AvatarStatus['takingDamage']
