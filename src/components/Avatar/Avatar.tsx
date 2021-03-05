@@ -91,11 +91,11 @@ function HealingFlash() {
         width: '100%',
         height: '100%',
         backgroundColor: theme.colors.green,
-        borderRadius: '50%',
       }}
       animate={{
         opacity: [0, 0.85, 0],
         scale: [0.25, 1.25, 1.25],
+        y: [100, 0, 0],
       }}
       transition={{ duration: HEALING_FLASH_DURATION }}
     />

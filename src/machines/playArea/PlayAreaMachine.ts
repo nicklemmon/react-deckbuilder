@@ -17,6 +17,7 @@ import {
   reshuffle,
   stockShop,
   useItem,
+  healPlayer,
 } from './actions'
 import {
   monsterIsAlive,
@@ -62,7 +63,7 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
       on: {
         CHOOSE_ITEM: {
           actions: useItem,
-          target: 'healing',
+          target: 'usingItem',
         },
         CHOOSE_CARD: {
           actions: playCard,
@@ -70,7 +71,13 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
         },
       },
     },
+    usingItem: {
+      after: {
+        300: 'healing',
+      },
+    },
     healing: {
+      entry: healPlayer,
       after: {
         800: 'choosing',
       },
@@ -107,6 +114,7 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
       },
     },
     shopping: {
+      entry: disableUnaffordableItems,
       on: {
         LEAVE_SHOP_CLICK: {
           target: 'doneShopping',

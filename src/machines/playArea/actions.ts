@@ -174,7 +174,7 @@ export const stockShop: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ct
   const itemsOnOffer = config.items.map((item, index) => ({
     ...item,
     id: `${item.id}-from-shop-${index}`,
-    isDisabled: player.inventory.gold < item.price,
+    status: player.inventory.gold < item.price ? ItemStatus['disabled'] : ItemStatus['idle'],
   }))
 
   return {
@@ -264,7 +264,8 @@ export const disableUnaffordableItems: ActionObject<PlayAreaContext, PlayAreaEve
         items: (itemShop.items as any[]).map((item: Item) => {
           return {
             ...item,
-            status: ItemStatus['disabled'],
+            status:
+              item.price > player.inventory.gold ? ItemStatus['disabled'] : ItemStatus['idle'],
           }
         }),
         cards: (itemShop.cards as any[]).map((card: Card) => {
@@ -282,22 +283,12 @@ export const useItem: ActionObject<PlayAreaContext, { type: 'CHOOSE_ITEM'; item:
   (ctx, event) => {
     const { player } = ctx
     const chosenItem = event.item
-    const healingAmount = chosenItem.stats.health
-    const nextPlayerHealth = getPlayerHealth(
-      player.stats.health,
-      healingAmount ? healingAmount : 0,
-      player.stats.maxHealth,
-    )
     chosenItem.sfx.use.play()
 
     return {
+      chosenItem,
       player: {
         ...player,
-        healingAmount,
-        stats: {
-          ...player.stats,
-          health: nextPlayerHealth,
-        },
         inventory: {
           ...player.inventory,
           // Remove the item from the player's inventory
@@ -307,6 +298,32 @@ export const useItem: ActionObject<PlayAreaContext, { type: 'CHOOSE_ITEM'; item:
     }
   },
 )
+
+export const healPlayer: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
+  const { player, chosenItem } = ctx
+
+  if (!chosenItem) return {}
+
+  const healingAmount = chosenItem.stats.health
+  const nextPlayerHealth = getPlayerHealth(
+    player.stats.health,
+    healingAmount ? healingAmount : 0,
+    player.stats.maxHealth,
+  )
+  chosenItem.sfx.effect.play()
+
+  return {
+    chosenItem: undefined,
+    player: {
+      ...player,
+      healingAmount,
+      status: {
+        ...player.stats,
+        health: nextPlayerHealth,
+      },
+    },
+  }
+})
 
 function getPlayerHealth(currentHealth: number, healingAmount: number, maxHealth: number): number {
   if (currentHealth + healingAmount > maxHealth) {

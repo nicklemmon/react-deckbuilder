@@ -20,6 +20,7 @@ export const PLAY_AREA_MACHINE_DEFAULT_CONTEXT: PlayAreaContext = {
   },
   drawPile: [],
   currentHand: [],
+  chosenItem: undefined,
   cardInPlay: undefined,
   discardPile: [],
   monster: undefined,

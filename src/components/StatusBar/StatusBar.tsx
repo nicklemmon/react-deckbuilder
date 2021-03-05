@@ -58,13 +58,13 @@ const StatusBarBtn = styled.button<{ status: string }>`
   padding: 0.15rem;
   width: 1.85rem;
   height: 1.85rem;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
   background-color: ${props => props.theme.colors.white};
   box-shadow: 0 4px 4px -1px rgba(0, 0, 0, 0.25);
   transition-timing-function: ease-in-out;
-  transition-duration: ${props => props.theme.duration[0]};
+  transition-duration: ${props => props.theme.duration[1]};
   transition-property: background, box-shadow, transform;
   pointer-events: ${props => (props.status === 'disabled' ? 'none' : 'initial')};
   filter: ${props => (props.status === 'disabled' ? 'grayscale(95%)' : 'initial')};
@@ -79,7 +79,8 @@ const StatusBarBtn = styled.button<{ status: string }>`
 
   &:hover {
     background-color: ${props => transparentize(0.5, props.theme.colors.offWhite)};
-    transform: scale(1.25);
+    transform: scale(1.125);
+    box-shadow: 0 5px 3px -1px rgba(0, 0, 0, 0.125);
   }
 
   &:active {

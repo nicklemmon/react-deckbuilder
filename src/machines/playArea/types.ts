@@ -8,6 +8,7 @@ export interface PlayAreaStateSchema {
     drawing: {}
     choosing: {}
     playing: {}
+    usingItem: {}
     healing: {}
     attacking: {}
     defending: {}
@@ -31,6 +32,7 @@ export type PlayAreaEvent =
 export interface PlayAreaContext {
   player: Player
   playerDeck: Deck
+  chosenItem: Item | undefined
   classDeck: Deck
   itemShop: {
     cards: Deck

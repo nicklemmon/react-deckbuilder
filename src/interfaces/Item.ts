@@ -14,6 +14,7 @@ export interface Item {
   sfx: {
     obtain: Howl
     use: Howl
+    effect: Howl
   }
   price: number
   stats: {

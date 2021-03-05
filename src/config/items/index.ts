@@ -4,6 +4,7 @@ import SmallPotionImg from 'src/images/small-potion.png'
 import LargePotionImg from 'src/images/large-potion.png'
 import PotionObtainSfx from 'src/sounds/potion.obtain.wav'
 import PotionUseSfx from 'src/sounds/potion.use.wav'
+import PotionEffectSfx from 'src/sounds/potion.effect.wav'
 
 const getItemSound = (src: string) => getSound({ src })
 
@@ -15,6 +16,7 @@ const smallPotion: Item = {
   sfx: {
     obtain: getItemSound(PotionObtainSfx),
     use: getItemSound(PotionUseSfx),
+    effect: getItemSound(PotionEffectSfx),
   },
   price: 30,
   stats: {
@@ -30,6 +32,7 @@ const largePotion: Item = {
   sfx: {
     obtain: getItemSound(PotionObtainSfx),
     use: getItemSound(PotionUseSfx),
+    effect: getItemSound(PotionEffectSfx),
   },
   price: 50,
   stats: {
