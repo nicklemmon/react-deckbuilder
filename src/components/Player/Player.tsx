@@ -28,9 +28,9 @@ function PlayerAvatar(props: PlayerAvatarProps) {
     <Avatar>
       <Avatar.Portrait artwork={characterPortrait} status={status} />
 
-      <Stats>
-        <Avatar.Name>{name}</Avatar.Name>
+      <Avatar.Name>{name}</Avatar.Name>
 
+      <Stats>
         <Stats.Row>
           <Stats.Stat>{toTitleCase(characterClass)}</Stats.Stat>
         </Stats.Row>

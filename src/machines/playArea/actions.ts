@@ -1,7 +1,7 @@
 import { assign, ActionObject } from 'xstate'
 import config from 'src/config'
 import { shuffle, rng, getSound } from 'src/functions'
-import { Card, Item } from 'src/interfaces'
+import { Card, Item, ItemStatus } from 'src/interfaces'
 import ImpactSfx from 'src/sounds/impact.slice.wav'
 import CoinsSfx from 'src/sounds/items.coin.wav'
 import { IMPACT_SFX_VOLUME } from './constants'
@@ -243,8 +243,8 @@ export const buyItem: ActionObject<
       items: (itemShop.items as any[]).map((item: Item) => {
         if (item.id === chosenItem.id) {
           return {
-            ...chosenItem,
-            isPurchased: true,
+            ...item,
+            status: ItemStatus['purchased'],
           }
         }
 
@@ -264,7 +264,7 @@ export const disableUnaffordableItems: ActionObject<PlayAreaContext, PlayAreaEve
         items: (itemShop.items as any[]).map((item: Item) => {
           return {
             ...item,
-            isDisabled: item.price > player.inventory.gold,
+            status: ItemStatus['disabled'],
           }
         }),
         cards: (itemShop.cards as any[]).map((card: Card) => {

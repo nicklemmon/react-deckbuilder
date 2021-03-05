@@ -44,17 +44,20 @@ export function PlayArea(props: PlayAreaProps) {
           </Stats.Row>
         </Stats>
 
-        {inventory.items.map((item: ItemInterface, index: number) => (
-          <StatusBar.Button
-            key={`item-${item.id}-${index}`}
-            onClick={() => send({ type: 'CHOOSE_ITEM', item })}
-            status={state.value !== 'choosing' ? 'disabled' : 'idle'}
-          >
-            <StatusBar.ButtonImg alt={item.name} src={item.artwork} />
-          </StatusBar.Button>
-        ))}
+        <StatusBar.Items>
+          {inventory.items.map((item: ItemInterface, index: number) => (
+            <StatusBar.Button
+              key={`item-${item.id}-${index}`}
+              onClick={() => send({ type: 'CHOOSE_ITEM', item })}
+              status={state.value !== 'choosing' ? 'disabled' : 'idle'}
+            >
+              <StatusBar.ButtonImg alt={item.name} src={item.artwork} />
+            </StatusBar.Button>
+          ))}
+        </StatusBar.Items>
       </StatusBar>
 
+      {/* TODO: does all state need to be passed here? */}
       {state.value === 'shopping' && <ShoppingModal state={state} send={send} />}
 
       <AnimatePresence>
@@ -66,6 +69,7 @@ export function PlayArea(props: PlayAreaProps) {
       <AnimatePresence>{state.value === 'defeat' && <DefeatBanner />}</AnimatePresence>
 
       <DrawPileWrapper>
+        {/* TODO: Just pass the draw pile rather than the whole state object */}
         <DrawPile state={state} />
       </DrawPileWrapper>
 
@@ -134,6 +138,7 @@ export function PlayArea(props: PlayAreaProps) {
       </BattleWrapper>
 
       <DiscardPileWrapper>
+        {/* TODO: Just pass the discard pile rather than the whole state object */}
         <DiscardPile state={state} />
       </DiscardPileWrapper>
     </PlayAreaWrapper>

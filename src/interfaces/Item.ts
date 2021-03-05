@@ -1,5 +1,11 @@
 import { Howl } from 'howler'
 
+export enum ItemStatus {
+  'idle',
+  'purchased',
+  'disabled',
+}
+
 export interface Item {
   id: string
   name: string
@@ -9,11 +15,10 @@ export interface Item {
     obtain: Howl
     use: Howl
   }
-  isPurchased?: boolean
-  isDisabled?: boolean
   price: number
   stats: {
     health?: number
     // TODO: an Item should be able to do more than just heal
   }
+  status?: ItemStatus | undefined
 }

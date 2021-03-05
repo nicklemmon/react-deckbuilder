@@ -1,10 +1,8 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { darken } from 'polished'
+import { ItemStatus } from 'src/interfaces'
 
-export const ItemWrapper = styled('div')<{
-  isDisabled?: boolean
-  isPurchased?: boolean
-}>`
+export const ItemWrapper = styled.div<{ status: ItemStatus }>`
   position: relative; /* allows absolute positioning within */
   display: inline-flex;
   flex-direction: column;
@@ -19,12 +17,12 @@ export const ItemWrapper = styled('div')<{
   transition-duration: ${props => props.theme.duration[1]};
   transition-timing-function: ease-in-out;
   transition-property: transform, box-shadow;
-  pointer-events: ${props => (props.isDisabled || props.isPurchased ? 'none' : 'initial')};
-  filter: ${props => (props.isDisabled && !props.isPurchased ? 'grayscale(95%)' : 'initial')};
+  pointer-events: ${props => getPointerEventsStyles(props.status)};
+  filter: ${props => getFilterStyles(props.status)};
 
   ${props => {
-    if (!props.isDisabled || !props.isPurchased) {
-      return `
+    if (props.status === ItemStatus['idle']) {
+      return css`
         :hover {
           transform: translateY(-0.25rem);
           box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
@@ -33,6 +31,35 @@ export const ItemWrapper = styled('div')<{
     }
   }}
 `
+
+function getFilterStyles(status: ItemStatus) {
+  switch (status) {
+    case ItemStatus['disabled']: {
+      return 'grayscale(95%)'
+    }
+
+    case ItemStatus['purchased']: {
+      return 'unset'
+    }
+
+    default: {
+      return 'unset'
+    }
+  }
+}
+
+function getPointerEventsStyles(status: ItemStatus) {
+  switch (status) {
+    case ItemStatus['disabled']:
+    case ItemStatus['purchased']: {
+      return 'none'
+    }
+
+    default: {
+      return 'unset'
+    }
+  }
+}
 
 export const ArtworkWrapper = styled('div')`
   width: 100%;

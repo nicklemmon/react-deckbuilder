@@ -21,7 +21,7 @@ const StatusBarContent = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   z-index: 2;
   background-color: ${props => props.theme.colors.white};
   color: ${props => props.theme.colors.darkGray};
@@ -79,6 +79,7 @@ const StatusBarBtn = styled.button<{ status: string }>`
 
   &:hover {
     background-color: ${props => transparentize(0.5, props.theme.colors.offWhite)};
+    transform: scale(1.25);
   }
 
   &:active {
@@ -90,6 +91,15 @@ const StatusBarBtn = styled.button<{ status: string }>`
 const StatusBarBtnImg = styled.img`
   object-fit: cover;
   height: 100%;
+`
+
+const StatusBarItems = styled.div`
+  align-items: center;
+  justify-content: flex-end;
+
+  * + * {
+    margin-left: ${props => props.theme.space[3]};
+  }
 `
 
 function StatusBarButton(props: StatusBarButtonProps) {
@@ -114,6 +124,7 @@ function StatusBar(props: StatusBarProps) {
   )
 }
 
+StatusBar.Items = StatusBarItems
 StatusBar.Button = StatusBarButton
 StatusBar.ButtonImg = StatusBarBtnImg
 

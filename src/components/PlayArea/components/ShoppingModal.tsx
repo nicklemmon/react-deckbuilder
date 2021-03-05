@@ -64,8 +64,7 @@ export function ShoppingModal(props: ShoppingModalProps) {
                   key={key}
                   {...item}
                   itemIndex={index}
-                  isDisabled={item.isDisabled}
-                  isPurchased={item.isPurchased}
+                  status={item.status}
                   onClick={() => send({ type: 'NEW_ITEM_CLICK', item })}
                 />
               )

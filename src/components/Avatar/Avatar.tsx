@@ -6,7 +6,7 @@ import { AvatarStatus } from './types'
 import { Wrapper, PortraitImg, Name, Flash } from './AvatarStyles'
 
 const DAMAGE_FLASH_DURATION = 0.33
-const HEALING_FLASH_DURATION = 0.66
+const HEALING_FLASH_DURATION = 0.75
 
 interface AvatarProps {
   children: any

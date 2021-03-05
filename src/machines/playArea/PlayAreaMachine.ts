@@ -113,11 +113,11 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
         },
         NEW_CARD_CLICK: {
           actions: buyCard,
-          target: 'disablingUnaffordableItems',
+          target: 'takingInventory',
         },
         NEW_ITEM_CLICK: {
           actions: buyItem,
-          target: 'disablingUnaffordableItems',
+          target: 'takingInventory',
         },
         NEXT_BATTLE_CLICK: {
           actions: prepareNextBattle,
@@ -125,7 +125,7 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
         },
       },
     },
-    disablingUnaffordableItems: {
+    takingInventory: {
       entry: disableUnaffordableItems,
       always: 'shopping',
     },

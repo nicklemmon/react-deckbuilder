@@ -1,21 +1,14 @@
 import React from 'react'
-import { Item as ItemInterface } from 'src/interfaces'
 import { Stats, HealthStat, GoldStat } from 'src/components'
 import { ArtworkWrapper, Artwork, ItemWrapper, Footer } from './ItemStyles'
-
-interface ItemProps extends ItemInterface {
-  itemIndex: number
-  onClick?: () => void
-  badge?: React.ReactChild
-  isDisabled?: boolean
-  isPurchased?: boolean
-}
+import { ItemStatus } from 'src/interfaces'
+import { ItemProps } from './types'
 
 export function Item(props: ItemProps) {
-  const { artwork, onClick, isDisabled, isPurchased, stats, price } = props
+  const { artwork, onClick, status = ItemStatus['idle'], stats, price } = props
 
   return (
-    <ItemWrapper onClick={onClick} isDisabled={isDisabled} isPurchased={isPurchased}>
+    <ItemWrapper onClick={onClick} status={status}>
       <ArtworkWrapper>
         <Artwork artwork={artwork} />
       </ArtworkWrapper>

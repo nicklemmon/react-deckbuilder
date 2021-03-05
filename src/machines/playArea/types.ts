@@ -13,7 +13,7 @@ export interface PlayAreaStateSchema {
     defending: {}
     victory: {}
     shopping: {}
-    disablingUnaffordableItems: {}
+    takingInventory: {}
     doneShopping: {}
     defeat: {}
   }

@@ -1,6 +1,7 @@
 export type { Card } from './Card'
 export type { Deck } from './Deck'
 export type { Item } from './Item'
+export { ItemStatus } from './Item'
 export type { Monster } from './Monster'
 export type { CharacterClass, Player } from './Player'
 export type { ProcessEnv } from './ProcessEnv'
