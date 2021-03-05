@@ -19,6 +19,7 @@ function PlayerAvatar(props: PlayerAvatarProps) {
     stats,
     status = AvatarStatus['idle'],
     damageTaken,
+    healingAmount,
     goldAwarded,
   } = props
   const health = stats.health < 0 ? 0 : stats.health
@@ -44,6 +45,8 @@ function PlayerAvatar(props: PlayerAvatarProps) {
       </Stats>
 
       {damageTaken ? <Feedback variant="negative">{damageTaken}</Feedback> : null}
+
+      {healingAmount ? <Feedback variant="positive">{healingAmount}</Feedback> : null}
 
       {goldAwarded ? (
         <Feedback variant="neutral" duration={1}>

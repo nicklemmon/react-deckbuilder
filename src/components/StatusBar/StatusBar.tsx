@@ -55,9 +55,12 @@ const StatusBarBtn = styled.button<{ status: string }>`
   appearance: none;
   border: 0;
   border: 2px solid ${props => props.theme.colors.white};
+  padding: 0.15rem;
   width: 1.85rem;
   height: 1.85rem;
   display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: ${props => props.theme.colors.white};
   box-shadow: 0 4px 4px -1px rgba(0, 0, 0, 0.25);
   transition-timing-function: ease-in-out;
@@ -86,9 +89,7 @@ const StatusBarBtn = styled.button<{ status: string }>`
 
 const StatusBarBtnImg = styled.img`
   object-fit: cover;
-  width: 100%;
   height: 100%;
-  transform: rotate(15deg);
 `
 
 function StatusBarButton(props: StatusBarButtonProps) {

@@ -8,6 +8,7 @@ export interface PlayAreaStateSchema {
     drawing: {}
     choosing: {}
     playing: {}
+    healing: {}
     attacking: {}
     defending: {}
     victory: {}

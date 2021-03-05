@@ -96,10 +96,9 @@ export function PlayArea(props: PlayAreaProps) {
           transition={{ duration: 1, delay: 0 }}
         >
           <Player
-            status={
-              state.value === 'defending' ? AvatarStatus['takingDamage'] : AvatarStatus['idle']
-            }
+            status={getPlayerAvatarStatus(state.value)}
             damageTaken={state.value === 'defending' ? context.player.damageTaken : null}
+            healingAmount={state.value === 'healing' ? context.player.healingAmount : null}
             goldAwarded={state.value === 'victory' ? context.spoils.gold : null}
             name={context.player.name}
             stats={context.player.stats}
@@ -139,4 +138,24 @@ export function PlayArea(props: PlayAreaProps) {
       </DiscardPileWrapper>
     </PlayAreaWrapper>
   )
+}
+
+/**
+ * @description determines the player avatar status according to the current status of the state machine
+ */
+function getPlayerAvatarStatus(stateMachineValue: string): AvatarStatus {
+  console.log('stateMachineValue', stateMachineValue)
+  switch (stateMachineValue) {
+    case 'defending': {
+      return AvatarStatus['takingDamage']
+    }
+
+    case 'healing': {
+      return AvatarStatus['healing']
+    }
+
+    default: {
+      return AvatarStatus['idle']
+    }
+  }
 }

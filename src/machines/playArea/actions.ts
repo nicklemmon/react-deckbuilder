@@ -227,6 +227,7 @@ export const buyItem: ActionObject<
   const currentGold = player.inventory.gold
   const currentItems = player.inventory.items
   const chosenItem = event.item
+  chosenItem.sfx.obtain.play()
 
   return {
     player: {
@@ -287,10 +288,12 @@ export const useItem: ActionObject<PlayAreaContext, { type: 'CHOOSE_ITEM'; item:
       healingAmount ? healingAmount : 0,
       player.stats.maxHealth,
     )
+    chosenItem.sfx.use.play()
 
     return {
       player: {
         ...player,
+        healingAmount,
         stats: {
           ...player.stats,
           health: nextPlayerHealth,

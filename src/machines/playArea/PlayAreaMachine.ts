@@ -62,12 +62,17 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
       on: {
         CHOOSE_ITEM: {
           actions: useItem,
-          target: 'choosing',
+          target: 'healing',
         },
         CHOOSE_CARD: {
           actions: playCard,
           target: 'playing',
         },
+      },
+    },
+    healing: {
+      after: {
+        800: 'choosing',
       },
     },
     playing: {
