@@ -11,6 +11,7 @@ export interface Player {
   characterClass?: CharacterClass
   characterPortrait?: string
   damageTaken?: number
+  healingAmount?: number
 
   stats: {
     maxHealth: number

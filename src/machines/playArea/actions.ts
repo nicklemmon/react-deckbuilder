@@ -1,4 +1,5 @@
 import { assign, ActionObject } from 'xstate'
+import uniqueId from 'lodash/uniqueId'
 import config from 'src/config'
 import { shuffle, rng, getSound } from 'src/functions'
 import { Card, Item, ItemStatus } from 'src/interfaces'
@@ -166,16 +167,24 @@ export const stockShop: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ct
     ctx.classDeck[rng(cardsRngMax)],
     ctx.classDeck[rng(cardsRngMax)],
     ctx.classDeck[rng(cardsRngMax)],
-  ].map((card, index) => ({
-    ...card,
-    id: `${card.id}-from-shop-${index}`,
-    isDisabled: player.inventory.gold < card.price,
-  }))
-  const itemsOnOffer = config.items.map((item, index) => ({
-    ...item,
-    id: `${item.id}-from-shop-${index}`,
-    status: player.inventory.gold < item.price ? ItemStatus['disabled'] : ItemStatus['idle'],
-  }))
+  ].map((card: Card) => {
+    const id = uniqueId(`card-from-shop-${card.id}-`)
+
+    return {
+      ...card,
+      id,
+      isDisabled: player.inventory.gold < card.price,
+    }
+  })
+  const itemsOnOffer = config.items.map((item: Item) => {
+    const id = uniqueId(`item-from-shop-${item.id}-`)
+
+    return {
+      ...item,
+      id,
+      status: player.inventory.gold < item.price ? ItemStatus['disabled'] : ItemStatus['idle'],
+    }
+  })
 
   return {
     itemShop: {
@@ -282,6 +291,7 @@ export const disableUnaffordableItems: ActionObject<PlayAreaContext, PlayAreaEve
 export const useItem: ActionObject<PlayAreaContext, { type: 'CHOOSE_ITEM'; item: Item }> = assign(
   (ctx, event) => {
     const { player } = ctx
+    const { inventory } = player
     const chosenItem = event.item
     chosenItem.sfx.use.play()
 
@@ -290,9 +300,9 @@ export const useItem: ActionObject<PlayAreaContext, { type: 'CHOOSE_ITEM'; item:
       player: {
         ...player,
         inventory: {
-          ...player.inventory,
+          ...inventory,
           // Remove the item from the player's inventory
-          items: [...player.inventory.items].filter((item: Item) => item.id !== chosenItem.id),
+          items: inventory.items.filter((item: Item) => item.id !== chosenItem.id),
         },
       },
     }
@@ -317,7 +327,7 @@ export const healPlayer: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(c
     player: {
       ...player,
       healingAmount,
-      status: {
+      stats: {
         ...player.stats,
         health: nextPlayerHealth,
       },
