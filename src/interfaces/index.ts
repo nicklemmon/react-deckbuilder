@@ -1,4 +1,5 @@
 export type { Card } from './Card'
+export { CardStatus } from './Card'
 export type { Deck } from './Deck'
 export type { Item } from './Item'
 export { ItemStatus } from './Item'

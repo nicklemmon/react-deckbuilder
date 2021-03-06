@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Card, Deck, GoldStat, Monster, Player, Stats, StatusBar } from 'src/components'
 import { AvatarStatus } from 'src/components/Avatar/types'
 import { PlayAreaEvent } from 'src/machines/playArea'
-import { Card as CardInterface, Item as ItemInterface } from 'src/interfaces'
+import { Card as CardInterface, CardStatus, Item as ItemInterface } from 'src/interfaces'
 import {
   CardInPlay,
   DefeatBanner,
@@ -82,7 +82,7 @@ export function PlayArea(props: PlayAreaProps) {
                 cardIndex={index}
                 key={`current-hand-card-${index}`}
                 onClick={() => send({ type: 'CHOOSE_CARD', card })}
-                isDisabled={state.value !== 'choosing'}
+                status={state.value !== 'choosing' ? CardStatus['disabled'] : CardStatus['idle']}
               />
             ))}
           </Deck>

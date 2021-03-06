@@ -2,7 +2,7 @@ import { assign, ActionObject } from 'xstate'
 import uniqueId from 'lodash/uniqueId'
 import config from 'src/config'
 import { shuffle, rng, getSound } from 'src/functions'
-import { Card, Item, ItemStatus } from 'src/interfaces'
+import { Card, CardStatus, Item, ItemStatus } from 'src/interfaces'
 import ImpactSfx from 'src/sounds/impact.slice.wav'
 import CoinsSfx from 'src/sounds/items.coin.wav'
 import { IMPACT_SFX_VOLUME } from './constants'
@@ -173,7 +173,7 @@ export const stockShop: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ct
     return {
       ...card,
       id,
-      isDisabled: player.inventory.gold < card.price,
+      status: player.inventory.gold < card.price ? CardStatus['disabled'] : CardStatus['idle'],
     }
   })
   const itemsOnOffer = config.items.map((item: Item) => {
@@ -218,7 +218,7 @@ export const buyCard: ActionObject<
         if (card.id === chosenCard.id) {
           return {
             ...chosenCard,
-            isPurchased: true,
+            status: CardStatus['purchased'],
           }
         }
 

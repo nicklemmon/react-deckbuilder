@@ -56,7 +56,7 @@ function getPointerEventsStyles(status: ItemStatus) {
     }
 
     default: {
-      return 'unset'
+      return 'initial'
     }
   }
 }

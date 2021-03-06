@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { transparentize } from 'polished'
 import { cardWidth, cardOffset, cardHeight } from '../../styles/constants'
+import { CardStatus } from 'src/interfaces'
 
 const contentLayer = 1
 
@@ -22,8 +23,7 @@ export const CardWrapper = styled('div')<{
   cardIndex: number
   isStacked?: boolean
   align?: string
-  isDisabled?: boolean
-  isPurchased?: boolean
+  status: CardStatus
 }>`
   display: inline-flex;
   border: 1px solid ${props => props.theme.colors.lightGray};
@@ -40,11 +40,11 @@ export const CardWrapper = styled('div')<{
   transition-duration: ${props => props.theme.duration[1]};
   transition-timing-function: ease-in-out;
   transition-property: transform, box-shadow;
-  pointer-events: ${props => (props.isDisabled || props.isPurchased ? 'none' : 'initial')};
-  filter: ${props => (props.isDisabled && !props.isPurchased ? 'grayscale(95%)' : 'initial')};
+  pointer-events: ${props => getPointerEventsStyles(props.status)};
+  filter: ${props => getFilterStyles(props.status)};
 
   ${props => {
-    if (!props.isDisabled || !props.isPurchased) {
+    if (props.status === CardStatus['idle']) {
       return `
         :hover {
           transform: translateY(-0.33rem);
@@ -80,6 +80,35 @@ export const CardWrapper = styled('div')<{
     }
   }}
 `
+
+function getFilterStyles(status: CardStatus) {
+  switch (status) {
+    case CardStatus['disabled']: {
+      return 'grayscale(95%)'
+    }
+
+    case CardStatus['purchased']: {
+      return 'unset'
+    }
+
+    default: {
+      return 'unset'
+    }
+  }
+}
+
+function getPointerEventsStyles(status: CardStatus) {
+  switch (status) {
+    case CardStatus['disabled']:
+    case CardStatus['purchased']: {
+      return 'none'
+    }
+
+    default: {
+      return 'initial'
+    }
+  }
+}
 
 export const Description = styled.p`
   display: flex;

@@ -44,9 +44,8 @@ export function ShoppingModal(props: ShoppingModalProps) {
                     key={key}
                     {...card}
                     cardIndex={index}
-                    isDisabled={card.isDisabled}
+                    status={card.status}
                     isRevealed={true}
-                    overlayVariant={card.overlayVariant}
                     onClick={() => send({ type: 'NEW_CARD_CLICK', card })}
                     showPrice={true}
                   />
