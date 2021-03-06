@@ -31,9 +31,9 @@ export function PlayArea(props: PlayAreaProps) {
   const { machine } = props
   const [state, send] = useActor(machine)
   const { context } = state
-  const inventory: any = context.player.inventory
-  const cardInPlay: any = context.cardInPlay
-  const monster: any = context.monster
+  const inventory = context.player.inventory
+  const cardInPlay = context.cardInPlay
+  const monster = context.monster
 
   return (
     <PlayAreaWrapper>
