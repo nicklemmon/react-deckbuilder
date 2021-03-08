@@ -2,20 +2,10 @@ import React from 'react'
 import { SpawnedActorRef } from 'xstate'
 import { useActor } from '@xstate/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import player from 'src/config/player'
-import {
-  AttackStat,
-  Card,
-  Deck,
-  DefenseStat,
-  GoldStat,
-  Monster,
-  Player,
-  Stats,
-  StatusBar,
-} from 'src/components'
+import { Card, Deck, GoldStat, Monster, Player, Stats, StatusBar } from 'src/components'
+import { AvatarStatus } from 'src/components/Avatar/types'
 import { PlayAreaEvent } from 'src/machines/playArea'
-import { Card as CardInterface } from 'src/interfaces'
+import { Card as CardInterface, CardStatus, Item as ItemInterface } from 'src/interfaces'
 import {
   CardInPlay,
   DefeatBanner,
@@ -41,9 +31,9 @@ export function PlayArea(props: PlayAreaProps) {
   const { machine } = props
   const [state, send] = useActor(machine)
   const { context } = state
-  const inventory: any = context.player.inventory
-  const cardInPlay: any = context.cardInPlay
-  const monster: any = context.monster
+  const inventory = context.player.inventory
+  const cardInPlay = context.cardInPlay
+  const monster = context.monster
 
   return (
     <PlayAreaWrapper>
@@ -51,14 +41,23 @@ export function PlayArea(props: PlayAreaProps) {
         <Stats>
           <Stats.Row>
             <GoldStat>{inventory.gold}</GoldStat>
-
-            <AttackStat>{player.stats.attack}</AttackStat>
-
-            <DefenseStat>{player.stats.defense}</DefenseStat>
           </Stats.Row>
         </Stats>
+
+        <StatusBar.Items>
+          {inventory.items.map((item: ItemInterface, index: number) => (
+            <StatusBar.Button
+              key={`item-${item.id}-${index}`}
+              onClick={() => send({ type: 'CHOOSE_ITEM', item })}
+              status={state.value !== 'choosing' ? 'disabled' : 'idle'}
+            >
+              <StatusBar.ButtonImg alt={item.name} src={item.artwork} />
+            </StatusBar.Button>
+          ))}
+        </StatusBar.Items>
       </StatusBar>
 
+      {/* TODO: does all state need to be passed here? */}
       {state.value === 'shopping' && <ShoppingModal state={state} send={send} />}
 
       <AnimatePresence>
@@ -70,6 +69,7 @@ export function PlayArea(props: PlayAreaProps) {
       <AnimatePresence>{state.value === 'defeat' && <DefeatBanner />}</AnimatePresence>
 
       <DrawPileWrapper>
+        {/* TODO: Just pass the draw pile rather than the whole state object */}
         <DrawPile state={state} />
       </DrawPileWrapper>
 
@@ -82,7 +82,7 @@ export function PlayArea(props: PlayAreaProps) {
                 cardIndex={index}
                 key={`current-hand-card-${index}`}
                 onClick={() => send({ type: 'CHOOSE_CARD', card })}
-                isDisabled={state.value !== 'choosing'}
+                status={state.value !== 'choosing' ? CardStatus['disabled'] : CardStatus['face-up']}
               />
             ))}
           </Deck>
@@ -100,13 +100,14 @@ export function PlayArea(props: PlayAreaProps) {
           transition={{ duration: 1, delay: 0 }}
         >
           <Player
-            isTakingDamage={state.value === 'defending'}
+            status={getPlayerAvatarStatus(state.value)}
             damageTaken={state.value === 'defending' ? context.player.damageTaken : null}
+            healingAmount={state.value === 'healing' ? context.player.healingAmount : null}
             goldAwarded={state.value === 'victory' ? context.spoils.gold : null}
             name={context.player.name}
             stats={context.player.stats}
             characterClass={context.player.characterClass}
-            artwork={context.player.artwork}
+            characterPortrait={context.player.characterPortrait}
             inventory={inventory}
           />
         </motion.div>
@@ -120,7 +121,9 @@ export function PlayArea(props: PlayAreaProps) {
               transition={{ duration: 0.5, delay: 0 }}
             >
               <Monster
-                isTakingDamage={state.value === 'attacking'}
+                status={
+                  state.value === 'attacking' ? AvatarStatus['takingDamage'] : AvatarStatus['idle']
+                }
                 damageTaken={state.value === 'attacking' ? monster.damageTaken : null}
                 id={monster.id}
                 name={monster.name}
@@ -135,8 +138,28 @@ export function PlayArea(props: PlayAreaProps) {
       </BattleWrapper>
 
       <DiscardPileWrapper>
+        {/* TODO: Just pass the discard pile rather than the whole state object */}
         <DiscardPile state={state} />
       </DiscardPileWrapper>
     </PlayAreaWrapper>
   )
+}
+
+/**
+ * @description determines the player avatar status according to the current status of the state machine
+ */
+function getPlayerAvatarStatus(stateMachineValue: string): AvatarStatus {
+  switch (stateMachineValue) {
+    case 'defending': {
+      return AvatarStatus['takingDamage']
+    }
+
+    case 'healing': {
+      return AvatarStatus['healing']
+    }
+
+    default: {
+      return AvatarStatus['idle']
+    }
+  }
 }

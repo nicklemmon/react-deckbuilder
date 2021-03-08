@@ -2,6 +2,7 @@ import React from 'react'
 import { Avatar } from 'src/components/Avatar'
 import { Feedback } from 'src/components'
 import { Stats, AttackStat, DefenseStat, Bar } from 'src/components/Stats'
+import { AvatarStatus } from 'src/components/Avatar/types'
 
 interface MonsterProps {
   id: string
@@ -10,7 +11,7 @@ interface MonsterProps {
   goldBounty: number
   artwork?: string
   damageTaken?: number
-  isTakingDamage: boolean
+  status: AvatarStatus
   stats: {
     maxHealth: number
     health: number
@@ -20,12 +21,12 @@ interface MonsterProps {
 }
 
 function Monster(props: MonsterProps) {
-  const { name, level, stats, artwork, isTakingDamage, damageTaken } = props
+  const { name, level, stats, artwork, status = AvatarStatus['idle'], damageTaken } = props
   const health = stats.health < 0 ? 0 : stats.health
 
   return (
     <Avatar>
-      <Avatar.Portrait artwork={artwork} isTakingDamage={isTakingDamage} />
+      <Avatar.Portrait artwork={artwork} status={status} />
 
       <Stats>
         <Avatar.Name>{name}</Avatar.Name>

@@ -3,29 +3,31 @@ import { PLAY_AREA_MACHINE_ID, PLAY_AREA_MACHINE_DEFAULT_CONTEXT } from './const
 import { PlayAreaStateSchema, PlayAreaEvent, PlayAreaContext } from './types'
 import {
   awardSpoils,
+  buyCard,
+  buyItem,
+  createDrawPile,
+  disableUnaffordableItems,
+  drawHand,
   getNewMonster,
+  killMonster,
   monsterAttack,
   playerAttack,
-  createDrawPile,
-  reshuffle,
-  prepareNextBattle,
-  drawHand,
   playCard,
-  killMonster,
+  prepareNextBattle,
+  reshuffle,
   stockShop,
-  buyCard,
+  useItem,
+  healPlayer,
 } from './actions'
 import {
-  playerIsAlive,
-  playerIsDead,
   monsterIsAlive,
   monsterIsDead,
+  playerIsDead,
+  playerIsAlive,
   playerCanDraw,
   drawingIsNotNeeded,
   playerCannotDraw,
 } from './guards'
-
-/* 🛡️ Guards 🛡️ */
 
 export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, PlayAreaEvent>({
   id: PLAY_AREA_MACHINE_ID,
@@ -59,10 +61,25 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
     },
     choosing: {
       on: {
+        CHOOSE_ITEM: {
+          actions: useItem,
+          target: 'usingItem',
+        },
         CHOOSE_CARD: {
           actions: playCard,
           target: 'playing',
         },
+      },
+    },
+    usingItem: {
+      after: {
+        300: 'healing',
+      },
+    },
+    healing: {
+      entry: healPlayer,
+      after: {
+        800: 'choosing',
       },
     },
     playing: {
@@ -97,18 +114,28 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
       },
     },
     shopping: {
+      entry: disableUnaffordableItems,
       on: {
         LEAVE_SHOP_CLICK: {
           target: 'doneShopping',
         },
         NEW_CARD_CLICK: {
           actions: buyCard,
+          target: 'takingInventory',
+        },
+        NEW_ITEM_CLICK: {
+          actions: buyItem,
+          target: 'takingInventory',
         },
         NEXT_BATTLE_CLICK: {
           actions: prepareNextBattle,
           target: 'newRound',
         },
       },
+    },
+    takingInventory: {
+      entry: disableUnaffordableItems,
+      always: 'shopping',
     },
     doneShopping: {
       on: {

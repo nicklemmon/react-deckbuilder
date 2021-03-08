@@ -1,9 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Modal } from 'src/components/Modal'
-import { Card } from 'src/components/Card'
-import { Card as CardInterface } from 'src/interfaces/Card'
-import { Deck } from 'src/components/Deck'
+import { Card as CardInterface, Item as ItemInterface } from 'src/interfaces'
+import { Card, Deck, Item, Modal, Stack } from 'src/components'
 import { Button, ButtonVariant } from 'src/components/Button'
 
 interface ShoppingModalProps {
@@ -17,6 +15,17 @@ const DeckWrapper = styled.div`
   justify-content: center;
 `
 
+const ItemsWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  > * + * {
+    margin-left: 1rem;
+  }
+`
+
 export function ShoppingModal(props: ShoppingModalProps) {
   const { state, send } = props
   const { itemShop } = state.context
@@ -24,10 +33,10 @@ export function ShoppingModal(props: ShoppingModalProps) {
   return (
     <Modal>
       <Modal.Content>
-        <DeckWrapper>
-          <Deck isStacked={false}>
-            {itemShop &&
-              itemShop.cards.map((card: CardInterface, index: number) => {
+        <Stack>
+          <DeckWrapper>
+            <Deck isStacked={false}>
+              {itemShop.cards.map((card: CardInterface, index: number) => {
                 const key = `item-shop-card-${card.id}-${index}`
 
                 return (
@@ -35,16 +44,31 @@ export function ShoppingModal(props: ShoppingModalProps) {
                     key={key}
                     {...card}
                     cardIndex={index}
-                    isDisabled={card.isDisabled}
-                    isRevealed={true}
-                    overlayVariant={card.overlayVariant}
+                    status={card.status}
                     onClick={() => send({ type: 'NEW_CARD_CLICK', card })}
                     showPrice={true}
                   />
                 )
               })}
-          </Deck>
-        </DeckWrapper>
+            </Deck>
+          </DeckWrapper>
+
+          <ItemsWrapper>
+            {itemShop.items.map((item: ItemInterface, index: number) => {
+              const key = `item-shop-item-${item.id}-${index}`
+
+              return (
+                <Item
+                  key={key}
+                  {...item}
+                  itemIndex={index}
+                  status={item.status}
+                  onClick={() => send({ type: 'NEW_ITEM_CLICK', item })}
+                />
+              )
+            })}
+          </ItemsWrapper>
+        </Stack>
       </Modal.Content>
 
       <Modal.ButtonRow>

@@ -1,6 +1,5 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Card as CardInterface } from 'src/interfaces'
 import { Stats, AttackStat, GoldStat } from 'src/components/Stats'
 import {
   CardWrapper,
@@ -16,17 +15,8 @@ import {
   OverlayText,
 } from './CardStyles'
 import bagImg from 'src/images/bag.png'
-
-interface CardProps extends CardInterface {
-  key: string
-  cardIndex: number
-  isStacked?: boolean
-  isDisabled?: boolean
-  isRevealed?: boolean
-  onClick?: () => void
-  align?: string
-  showPrice?: boolean
-}
+import { CardStatus } from 'src/interfaces'
+import { CardProps } from './types'
 
 function Card(props: CardProps) {
   const {
@@ -36,9 +26,7 @@ function Card(props: CardProps) {
     description,
     id,
     onClick,
-    isDisabled = true,
-    isPurchased = false,
-    isRevealed = false,
+    status = CardStatus['face-down'],
     isStacked = true,
     align = 'left',
     stats,
@@ -55,12 +43,11 @@ function Card(props: CardProps) {
       id={`card-${id}`}
       onClick={onClick}
       artwork={artwork}
-      isDisabled={isDisabled}
-      isPurchased={isPurchased}
+      status={status}
     >
-      {isPurchased && <CardOverlay variant="purchased" />}
+      {status === CardStatus['purchased'] ? <PurchasedOverlay /> : null}
 
-      <Content rarity={rarity} isVisible={isRevealed}>
+      <Content rarity={rarity} status={status}>
         <Header>
           <Heading>{name}</Heading>
         </Header>
@@ -80,44 +67,32 @@ function Card(props: CardProps) {
         </Footer>
       </Content>
 
-      <Back role="presentation" isVisible={!isRevealed} />
+      <Back role="presentation" status={status} />
     </CardWrapper>
   )
 }
 
-interface OverlayProps {
-  variant?: any
-}
+function PurchasedOverlay() {
+  return (
+    <Overlay initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }}>
+      <motion.div
+        style={{ scale: 0.75 }}
+        initial={{ y: -200 }}
+        animate={{ y: 0 }}
+        transition={{ type: 'spring', delay: 0.125, damping: 10, mass: 0.125 }}
+      >
+        <OverlayImg src={bagImg} role="presentation" alt="" />
+      </motion.div>
 
-function CardOverlay(props: OverlayProps) {
-  const { variant } = props
-
-  switch (variant) {
-    case 'purchased':
-      return (
-        <Overlay initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }}>
-          <motion.div
-            style={{ scale: 0.75 }}
-            initial={{ y: -200 }}
-            animate={{ y: 0 }}
-            transition={{ type: 'spring', delay: 0.125, damping: 10, mass: 0.125 }}
-          >
-            <OverlayImg src={bagImg} role="presentation" alt="" />
-          </motion.div>
-
-          <OverlayText
-            initial={{ opacity: 0, y: 500 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: 'spring', delay: 0.2, damping: 10, mass: 0.125 }}
-          >
-            Purchased!
-          </OverlayText>
-        </Overlay>
-      )
-
-    default:
-      return <></>
-  }
+      <OverlayText
+        initial={{ opacity: 0, y: 500 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: 'spring', delay: 0.2, damping: 10, mass: 0.125 }}
+      >
+        Purchased!
+      </OverlayText>
+    </Overlay>
+  )
 }
 
 export default Card

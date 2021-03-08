@@ -14,6 +14,7 @@ import {
 } from 'src/components'
 import { CharacterCreationEvent } from 'src/machines/characterCreation'
 import { CardRadioButtons, Directions, Form, PortraitImg, Wrapper } from './CharacterCreationStyles'
+import { Item } from '../Item'
 
 interface CharacterCreationProps {
   machine: SpawnedActorRef<CharacterCreationEvent>

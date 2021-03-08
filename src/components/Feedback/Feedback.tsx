@@ -22,9 +22,9 @@ export function Feedback(props: FeedbackProps) {
         right: orientation === 'top' ? '25%' : '75%',
       }}
       animate={{
-        y: [0, -100],
+        y: [0, -115],
         scale: [1, 1.5],
-        opacity: [0, 1, 0],
+        opacity: [1, 1, 0],
       }}
       transition={{ duration }}
     >

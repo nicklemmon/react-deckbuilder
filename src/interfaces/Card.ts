@@ -1,6 +1,11 @@
 import { Howl } from 'howler'
 
-export type CardOverlayVariant = 'none' | 'purchased' | 'destroyed'
+export enum CardStatus {
+  'face-down',
+  'face-up',
+  'purchased',
+  'disabled',
+}
 
 export interface Card {
   id: string
@@ -10,9 +15,7 @@ export interface Card {
   rarity: 0 | 1 | 2 | 3
   description: string
   price: number
-  isPurchased?: boolean
-  isDisabled?: boolean
-  overlayVariant?: CardOverlayVariant | undefined
+  status?: CardStatus | undefined
   stats: {
     attack: number
   }

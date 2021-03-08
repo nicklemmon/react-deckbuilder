@@ -5,7 +5,10 @@ const Row = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: ${props => props.theme.space[2]};
+
+  + * {
+    margin-top: ${props => props.theme.space[2]};
+  }
 
   > * + * {
     margin-left: ${props => props.theme.space[3]};

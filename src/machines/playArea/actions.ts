@@ -1,7 +1,8 @@
 import { assign, ActionObject } from 'xstate'
+import uniqueId from 'lodash/uniqueId'
 import config from 'src/config'
 import { shuffle, rng, getSound } from 'src/functions'
-import { Card } from 'src/interfaces'
+import { Card, CardStatus, Item, ItemStatus } from 'src/interfaces'
 import ImpactSfx from 'src/sounds/impact.slice.wav'
 import CoinsSfx from 'src/sounds/items.coin.wav'
 import { IMPACT_SFX_VOLUME } from './constants'
@@ -28,6 +29,7 @@ export const awardSpoils: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(
     player: {
       ...player,
       inventory: {
+        ...player.inventory,
         gold: nextGold,
       },
     },
@@ -86,12 +88,15 @@ export const playerAttack: ActionObject<PlayAreaContext, PlayAreaEvent> = assign
       },
     },
     cardInPlay: undefined,
-    discardPile: [...ctx.discardPile, { ...cardInPlay, isRevealed: false }],
+    discardPile: [...ctx.discardPile, { ...cardInPlay, status: CardStatus['face-down'] }],
   }
 })
 
 export const createDrawPile: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
-  const newDrawPile = shuffle(ctx.playerDeck)
+  const newDrawPile = (shuffle(ctx.playerDeck) as any[]).map((card: Card) => ({
+    ...card,
+    status: CardStatus['face-down'],
+  }))
 
   return {
     drawPile: newDrawPile, // Required to not mutate initial state...probably a better way to handle this
@@ -124,7 +129,7 @@ export const drawHand: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx
   const currentHand = [...ctx.currentHand, ...drawnCards].map(card => {
     return {
       ...card,
-      isRevealed: true,
+      status: CardStatus['face-up'],
     }
   })
 
@@ -160,20 +165,34 @@ export const killMonster: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(
 
 export const stockShop: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
   const { player } = ctx
-  const rngMax = ctx.classDeck.length - 1
+  const cardsRngMax = ctx.classDeck.length - 1
   const cardsOnOffer = [
-    ctx.classDeck[rng(rngMax)],
-    ctx.classDeck[rng(rngMax)],
-    ctx.classDeck[rng(rngMax)],
-  ].map((card, index) => ({
-    ...card,
-    id: `${card.id}-from-shop-${index}`,
-    isDisabled: player.inventory.gold < card.price,
-  }))
+    ctx.classDeck[rng(cardsRngMax)],
+    ctx.classDeck[rng(cardsRngMax)],
+    ctx.classDeck[rng(cardsRngMax)],
+  ].map((card: Card) => {
+    const id = uniqueId(`card-from-shop-${card.id}-`)
+
+    return {
+      ...card,
+      id,
+      status: player.inventory.gold < card.price ? CardStatus['disabled'] : CardStatus['face-up'],
+    }
+  })
+  const itemsOnOffer = config.items.map((item: Item) => {
+    const id = uniqueId(`item-from-shop-${item.id}-`)
+
+    return {
+      ...item,
+      id,
+      status: player.inventory.gold < item.price ? ItemStatus['disabled'] : ItemStatus['idle'],
+    }
+  })
 
   return {
     itemShop: {
       cards: cardsOnOffer,
+      items: itemsOnOffer,
     },
   }
 })
@@ -192,6 +211,7 @@ export const buyCard: ActionObject<
     player: {
       ...player,
       inventory: {
+        ...player.inventory,
         gold: gold - chosenCard.price,
       },
     },
@@ -201,15 +221,139 @@ export const buyCard: ActionObject<
         if (card.id === chosenCard.id) {
           return {
             ...chosenCard,
-            isPurchased: true,
+            status: CardStatus['purchased'],
           }
         }
 
-        return {
-          ...card,
-          isDisabled: player.inventory.gold - chosenCard.price < card.price,
-        }
+        return card
       }),
     },
   }
 })
+
+export const buyItem: ActionObject<
+  PlayAreaContext,
+  { type: 'NEW_ITEM_CLICK'; item: Item }
+> = assign((ctx, event) => {
+  const { player, itemShop } = ctx
+  const currentGold = player.inventory.gold
+  const currentItems = player.inventory.items
+  const chosenItem = event.item
+  chosenItem.sfx.obtain.play()
+
+  return {
+    player: {
+      ...player,
+      inventory: {
+        ...player.inventory,
+        gold: currentGold - chosenItem.price,
+        items: [...currentItems, chosenItem],
+      },
+    },
+    itemShop: {
+      ...itemShop,
+      items: (itemShop.items as any[]).map((item: Item) => {
+        if (item.id === chosenItem.id) {
+          return {
+            ...item,
+            status: ItemStatus['purchased'],
+          }
+        }
+
+        return item
+      }),
+    },
+  }
+})
+
+export const disableUnaffordableItems: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(
+  (ctx: PlayAreaContext) => {
+    const { itemShop, player } = ctx
+
+    const getCardStatus = (card: Card, ctx: PlayAreaContext) => {
+      if (card.status === CardStatus['purchased']) {
+        return CardStatus['purchased']
+      }
+
+      if (card.price > ctx.player.inventory.gold) {
+        return CardStatus['disabled']
+      }
+
+      return CardStatus['face-up']
+    }
+
+    return {
+      itemShop: {
+        ...itemShop,
+        items: (itemShop.items as any[]).map((item: Item) => {
+          return {
+            ...item,
+            status:
+              item.price > player.inventory.gold ? ItemStatus['disabled'] : ItemStatus['idle'],
+          }
+        }),
+        cards: (itemShop.cards as any[]).map((card: Card) => {
+          return {
+            ...card,
+            status: getCardStatus(card, ctx),
+          }
+        }),
+      },
+    }
+  },
+)
+
+export const useItem: ActionObject<PlayAreaContext, { type: 'CHOOSE_ITEM'; item: Item }> = assign(
+  (ctx, event) => {
+    const { player } = ctx
+    const { inventory } = player
+    const chosenItem = event.item
+    chosenItem.sfx.use.play()
+
+    return {
+      chosenItem,
+      player: {
+        ...player,
+        inventory: {
+          ...inventory,
+          // Remove the item from the player's inventory
+          items: inventory.items.filter((item: Item) => item.id !== chosenItem.id),
+        },
+      },
+    }
+  },
+)
+
+export const healPlayer: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
+  const { player, chosenItem } = ctx
+
+  if (!chosenItem) return {}
+
+  const healingAmount = chosenItem.stats.health
+  const nextPlayerHealth = getPlayerHealth(
+    player.stats.health,
+    healingAmount ? healingAmount : 0,
+    player.stats.maxHealth,
+  )
+  chosenItem.sfx.effect.play()
+
+  return {
+    chosenItem: undefined,
+    player: {
+      ...player,
+      healingAmount,
+      stats: {
+        ...player.stats,
+        health: nextPlayerHealth,
+      },
+    },
+  }
+})
+
+function getPlayerHealth(currentHealth: number, healingAmount: number, maxHealth: number): number {
+  if (currentHealth + healingAmount > maxHealth) {
+    return maxHealth
+  }
+
+  return currentHealth + healingAmount
+}
