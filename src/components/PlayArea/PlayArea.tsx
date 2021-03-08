@@ -82,7 +82,7 @@ export function PlayArea(props: PlayAreaProps) {
                 cardIndex={index}
                 key={`current-hand-card-${index}`}
                 onClick={() => send({ type: 'CHOOSE_CARD', card })}
-                status={state.value !== 'choosing' ? CardStatus['disabled'] : CardStatus['idle']}
+                status={state.value !== 'choosing' ? CardStatus['disabled'] : CardStatus['face-up']}
               />
             ))}
           </Deck>

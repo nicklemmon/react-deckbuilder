@@ -1,7 +1,8 @@
 import { Howl } from 'howler'
 
 export enum CardStatus {
-  'idle',
+  'face-down',
+  'face-up',
   'purchased',
   'disabled',
 }

@@ -6,7 +6,7 @@ import { CardStatus } from 'src/interfaces'
 
 const contentLayer = 1
 
-export const Content = styled.div<{ isVisible: boolean; rarity: number }>`
+export const Content = styled.div<{ status: CardStatus; rarity: number }>`
   position: relative; /* allows absolute positioning within */
   display: grid;
   grid-template-rows: 1fr 4fr 1fr;
@@ -15,7 +15,7 @@ export const Content = styled.div<{ isVisible: boolean; rarity: number }>`
   height: 100%;
   font-family: ${props => props.theme.fonts.body};
   border: ${props => props.theme.space[2]} solid ${props => props.theme.colors.white};
-  opacity: ${props => (props.isVisible ? 1 : 0)};
+  opacity: ${props => (props.status !== CardStatus['face-down'] ? 1 : 0)};
 `
 
 export const CardWrapper = styled('div')<{
@@ -44,7 +44,7 @@ export const CardWrapper = styled('div')<{
   filter: ${props => getFilterStyles(props.status)};
 
   ${props => {
-    if (props.status === CardStatus['idle']) {
+    if (props.status === CardStatus['face-up']) {
       return `
         :hover {
           transform: translateY(-0.33rem);
@@ -132,14 +132,14 @@ export const Description = styled.p`
   clip-path: polygon(50% 10%, 100% 0, 100% 90%, 50% 100%, 0% 90%, 0 0);
 `
 
-export const Back = styled.div<{ isVisible: boolean }>`
+export const Back = styled.div<{ status: CardStatus }>`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: ${props => props.theme.colors.darkGray};
-  opacity: ${props => (props.isVisible ? 1 : 0)};
+  opacity: ${props => (props.status === CardStatus['face-down'] ? 1 : 0)};
 `
 
 export const Header = styled('div')`

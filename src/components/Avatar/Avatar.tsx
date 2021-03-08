@@ -43,7 +43,7 @@ function Avatar(props: AvatarProps) {
 }
 
 function PortraitWrapper(props: PortraitWrapperProps) {
-  const { children, status = 'idle' } = props
+  const { children, status = AvatarStatus['idle'] } = props
 
   // Visually shaking the portrait wrapper
   if (status === AvatarStatus['takingDamage']) {

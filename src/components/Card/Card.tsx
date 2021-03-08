@@ -26,8 +26,7 @@ function Card(props: CardProps) {
     description,
     id,
     onClick,
-    status = CardStatus['idle'],
-    isRevealed = false,
+    status = CardStatus['face-down'],
     isStacked = true,
     align = 'left',
     stats,
@@ -48,7 +47,7 @@ function Card(props: CardProps) {
     >
       {status === CardStatus['purchased'] ? <PurchasedOverlay /> : null}
 
-      <Content rarity={rarity} isVisible={isRevealed}>
+      <Content rarity={rarity} status={status}>
         <Header>
           <Heading>{name}</Heading>
         </Header>
@@ -68,7 +67,7 @@ function Card(props: CardProps) {
         </Footer>
       </Content>
 
-      <Back role="presentation" isVisible={!isRevealed} />
+      <Back role="presentation" status={status} />
     </CardWrapper>
   )
 }

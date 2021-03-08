@@ -13,7 +13,7 @@ export const PLAY_AREA_MACHINE_DEFAULT_CONTEXT: PlayAreaContext = {
     return {
       ...card,
       id,
-      status: CardStatus['idle'],
+      status: CardStatus['face-up'],
     }
   }),
   classDeck: config.cards,
