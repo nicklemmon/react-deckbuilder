@@ -5,11 +5,13 @@ import { shuffle, rng, getSound } from 'src/functions'
 import { Card, CardStatus, Item, ItemStatus } from 'src/interfaces'
 import ImpactSfx from 'src/sounds/impact.slice.wav'
 import CoinsSfx from 'src/sounds/items.coin.wav'
+import CashRegisterSfx from 'src/sounds/items.cash-register.wav'
 import { IMPACT_SFX_VOLUME } from './constants'
 import { PlayAreaEvent, PlayAreaContext } from './types'
 
 const impactSound = getSound({ src: ImpactSfx, volume: IMPACT_SFX_VOLUME })
 const coinsSound = getSound({ src: CoinsSfx })
+const cashRegisterSound = getSound({ src: CashRegisterSfx })
 
 export const awardSpoils: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
   const { player, monster, spoils } = ctx
@@ -206,6 +208,8 @@ export const buyCard: ActionObject<
   const { gold } = inventory
   const chosenCard = event.card
 
+  cashRegisterSound.play()
+
   return {
     playerDeck: [...playerDeck, chosenCard],
     player: {
@@ -240,6 +244,8 @@ export const buyItem: ActionObject<
   const currentItems = player.inventory.items
   const id = uniqueId(event.item.id) // A new unique ID is generated for the item to ensure de-duplication
   const chosenItem = { ...event.item, id }
+
+  cashRegisterSound.play()
   chosenItem.sfx.obtain.play()
 
   return {
