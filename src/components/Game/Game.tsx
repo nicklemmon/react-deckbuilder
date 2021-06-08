@@ -14,6 +14,7 @@ import { SpawnedActorRef } from 'xstate'
 interface ProcessEnv extends ProcessEnvInterface {}
 
 export default function Game() {
+  // eslint-disable-next-line
   const [state, _send, service] = useMachine(AppMachine)
   const characterCreationMachine:
     | SpawnedActorRef<CharacterCreationEvent>
