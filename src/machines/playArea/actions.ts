@@ -238,7 +238,7 @@ export const buyItem: ActionObject<
   const { player, itemShop } = ctx
   const currentGold = player.inventory.gold
   const currentItems = player.inventory.items
-  const id = uniqueId(event.item.id) // A new unique ID is generated for the item
+  const id = uniqueId(event.item.id) // A new unique ID is generated for the item to ensure de-duplication
   const chosenItem = { ...event.item, id }
   chosenItem.sfx.obtain.play()
 
