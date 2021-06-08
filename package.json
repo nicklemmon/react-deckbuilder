@@ -16,7 +16,7 @@
     "xstate": "4.20.0"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "5.11.9",
+    "@testing-library/jest-dom": "5.13.0",
     "@testing-library/react": "11.2.7",
     "@testing-library/user-event": "13.1.9",
     "@types/howler": "2.2.1",
