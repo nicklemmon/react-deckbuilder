@@ -13,7 +13,7 @@
     "react-dom": "16.14.0",
     "reset-css": "5.0.1",
     "styled-components": "5.0.1",
-    "xstate": "4.16.2"
+    "xstate": "4.20.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "5.11.9",
