@@ -238,7 +238,8 @@ export const buyItem: ActionObject<
   const { player, itemShop } = ctx
   const currentGold = player.inventory.gold
   const currentItems = player.inventory.items
-  const chosenItem = event.item
+  const id = uniqueId(event.item.id) // A new unique ID is generated for the item to ensure de-duplication
+  const chosenItem = { ...event.item, id }
   chosenItem.sfx.obtain.play()
 
   return {
@@ -309,6 +310,8 @@ export const useItem: ActionObject<PlayAreaContext, { type: 'CHOOSE_ITEM'; item:
     const { inventory } = player
     const chosenItem = event.item
     chosenItem.sfx.use.play()
+    // Remove the item from the player's inventory according to its `id`
+    const nextItems = inventory.items.filter((item: Item) => item.id !== chosenItem.id)
 
     return {
       chosenItem,
@@ -316,8 +319,7 @@ export const useItem: ActionObject<PlayAreaContext, { type: 'CHOOSE_ITEM'; item:
         ...player,
         inventory: {
           ...inventory,
-          // Remove the item from the player's inventory
-          items: inventory.items.filter((item: Item) => item.id !== chosenItem.id),
+          items: nextItems,
         },
       },
     }
