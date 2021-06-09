@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { transparentize } from 'polished'
 import { getSound } from 'src/functions'
@@ -7,7 +7,7 @@ import { ButtonProps, ButtonVariant } from './types'
 
 const clickSound = getSound({ src: ButtonClickSfx, volume: 0.5 })
 
-const ButtonEl = styled.button<{ variant: ButtonVariant }>`
+const StyledButton = styled.button<{ variant: ButtonVariant }>`
   padding: ${props => props.theme.space[2]} ${props => props.theme.space[3]};
   font-family: ${props => props.theme.fonts.heading};
   font-size: ${props => props.theme.fontSizes[2]};
@@ -54,5 +54,5 @@ export default function Button(props: ButtonProps) {
     if (onClick) return onClick(event)
   }
 
-  return <ButtonEl variant={variant} type={type} onClick={handleClick} {...rest} />
+  return <StyledButton variant={variant} type={type} onClick={handleClick} {...rest} />
 }
