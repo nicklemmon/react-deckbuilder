@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { SyntheticEvent } from 'react'
 import styled from 'styled-components'
 import { transparentize } from 'polished'
+import { getSound } from 'src/functions'
+import ButtonClickSfx from 'src/sounds/ui.button-click.wav'
 import { ButtonProps, ButtonVariant } from './types'
+
+const clickSound = getSound({ src: ButtonClickSfx, volume: 0.5 })
 
 const ButtonEl = styled.button<{ variant: ButtonVariant }>`
   padding: ${props => props.theme.space[2]} ${props => props.theme.space[3]};
@@ -42,7 +46,13 @@ const ButtonEl = styled.button<{ variant: ButtonVariant }>`
 `
 
 export default function Button(props: ButtonProps) {
-  const { variant, type = 'button', ...rest } = props
+  const { variant, type = 'button', onClick, ...rest } = props
 
-  return <ButtonEl variant={variant} type={type} {...rest} />
+  function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
+    clickSound.play()
+
+    if (onClick) return onClick(event)
+  }
+
+  return <ButtonEl variant={variant} type={type} onClick={handleClick} {...rest} />
 }
