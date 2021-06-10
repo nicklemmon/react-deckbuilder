@@ -6,12 +6,14 @@ import { Card, CardStatus, Item, ItemStatus } from 'src/interfaces'
 import ImpactSfx from 'src/sounds/impact.slice.wav'
 import CoinsSfx from 'src/sounds/items.coin.wav'
 import CashRegisterSfx from 'src/sounds/items.cash-register.wav'
+import DoorOpenSfx from 'src/sounds/door.open.wav'
 import { IMPACT_SFX_VOLUME } from './constants'
 import { PlayAreaEvent, PlayAreaContext } from './types'
 
 const impactSound = getSound({ src: ImpactSfx, volume: IMPACT_SFX_VOLUME })
 const coinsSound = getSound({ src: CoinsSfx })
 const cashRegisterSound = getSound({ src: CashRegisterSfx })
+const doorOpenSound = getSound({ src: DoorOpenSfx, volume: 0.33 })
 
 export const awardSpoils: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
   const { player, monster, spoils } = ctx
@@ -331,6 +333,10 @@ export const useItem: ActionObject<PlayAreaContext, { type: 'CHOOSE_ITEM'; item:
     }
   },
 )
+
+export const playShopEntrySfx = () => {
+  doorOpenSound.play()
+}
 
 export const healPlayer: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
   const { player, chosenItem } = ctx
