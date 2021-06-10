@@ -13,6 +13,7 @@ export interface PlayAreaStateSchema {
     attacking: {}
     defending: {}
     victory: {}
+    enteringShop: {}
     shopping: {}
     takingInventory: {}
     doneShopping: {}

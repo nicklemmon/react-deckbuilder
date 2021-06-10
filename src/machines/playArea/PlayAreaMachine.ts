@@ -13,6 +13,7 @@ import {
   monsterAttack,
   playerAttack,
   playCard,
+  playShopEntrySfx,
   prepareNextBattle,
   reshuffle,
   stockShop,
@@ -109,9 +110,13 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
           target: 'newRound',
         },
         ITEM_SHOP_CLICK: {
-          target: 'shopping',
+          target: 'enteringShop',
         },
       },
+    },
+    enteringShop: {
+      entry: playShopEntrySfx,
+      always: 'shopping',
     },
     shopping: {
       entry: disableUnaffordableItems,
@@ -144,7 +149,7 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
           target: 'newRound',
         },
         ITEM_SHOP_CLICK: {
-          target: 'shopping',
+          target: 'enteringShop',
         },
       },
     },
