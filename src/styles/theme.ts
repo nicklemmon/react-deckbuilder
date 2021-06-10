@@ -26,4 +26,5 @@ export default {
   radii: ['0.25rem', '0.5rem', '1rem'],
   duration: ['0.125s', '0.25s', '0.5s'],
   shadows: ['0 5px 10px rgba(0, 0, 0, 0.125)'],
+  zIndices: ['0', '8', '16', '32', '64', '128', '256', '9999'],
 }
