@@ -1,4 +1,3 @@
-import React from 'react'
 import { SpawnedActorRef } from 'xstate'
 import { useActor } from '@xstate/react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -7,6 +6,7 @@ import { AvatarStatus } from 'src/components/Avatar/types'
 import { PlayAreaEvent } from 'src/machines/playArea'
 import { Card as CardInterface, CardStatus, Item as ItemInterface } from 'src/interfaces'
 import {
+  CardDestructionModal,
   CardInPlay,
   DefeatBanner,
   DiscardPile,
@@ -58,7 +58,17 @@ export function PlayArea(props: PlayAreaProps) {
       </StatusBar>
 
       {/* TODO: does all state need to be passed here? */}
-      {state.value === 'shopping' && <ShoppingModal state={state} send={send} />}
+      {state.value === 'shopping' ? (
+        <ShoppingModal
+          itemShop={state.context.itemShop}
+          onNewCardClick={(card: CardInterface) => send({ type: 'NEW_CARD_CLICK', card })}
+          onNewItemClick={(item: ItemInterface) => send({ type: 'NEW_ITEM_CLICK', item })}
+          onNextBattleClick={() => send({ type: 'NEXT_BATTLE_CLICK' })}
+          onLeaveShopClick={() => send({ type: 'LEAVE_SHOP_CLICK' })}
+        />
+      ) : null}
+
+      {state.value === 'destroyingCards' ? <CardDestructionModal /> : null}
 
       <AnimatePresence>
         {state.value === 'victory' || state.value === 'doneShopping' ? (

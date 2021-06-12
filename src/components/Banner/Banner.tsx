@@ -29,7 +29,7 @@ const BannerContent = styled.div`
   justify-content: space-between;
   letter-spacing: 0.125rem;
   text-align: center;
-  width: 475px;
+  width: 650px;
   color: ${props => props.theme.colors.white};
   font-size: ${props => props.theme.fontSizes[4]};
   font-family: ${props => props.theme.fonts.heading};

@@ -1,12 +1,15 @@
-import React from 'react'
 import styled from 'styled-components'
-import { Card as CardInterface, Item as ItemInterface } from 'src/interfaces'
+import type { Card as CardInterface, Item as ItemInterface } from 'src/interfaces'
+import type { ItemShop } from 'src/machines/playArea/types'
 import { Card, Deck, Item, Modal, Stack } from 'src/components'
 import { Button, ButtonVariant } from 'src/components/Button'
 
 interface ShoppingModalProps {
-  state: any // TODO: Implement real type
-  send: any // TODO: Implement real type
+  itemShop: ItemShop
+  onNewCardClick: (card: CardInterface) => void
+  onNewItemClick: (item: ItemInterface) => void
+  onLeaveShopClick: () => void
+  onNextBattleClick: () => void
 }
 
 const DeckWrapper = styled.div`
@@ -27,8 +30,7 @@ const ItemsWrapper = styled.div`
 `
 
 export function ShoppingModal(props: ShoppingModalProps) {
-  const { state, send } = props
-  const { itemShop } = state.context
+  const { itemShop, onNewCardClick, onNewItemClick, onNextBattleClick, onLeaveShopClick } = props
 
   return (
     <Modal>
@@ -41,11 +43,11 @@ export function ShoppingModal(props: ShoppingModalProps) {
 
                 return (
                   <Card
-                    key={key}
                     {...card}
+                    key={key}
                     cardIndex={index}
                     status={card.status}
-                    onClick={() => send({ type: 'NEW_CARD_CLICK', card })}
+                    onClick={() => onNewCardClick(card)}
                     showPrice={true}
                   />
                 )
@@ -59,11 +61,11 @@ export function ShoppingModal(props: ShoppingModalProps) {
 
               return (
                 <Item
-                  key={key}
                   {...item}
+                  key={key}
                   itemIndex={index}
                   status={item.status}
-                  onClick={() => send({ type: 'NEW_ITEM_CLICK', item })}
+                  onClick={() => onNewItemClick(item)}
                 />
               )
             })}
@@ -72,14 +74,14 @@ export function ShoppingModal(props: ShoppingModalProps) {
       </Modal.Content>
 
       <Modal.ButtonRow>
-        <Button variant={ButtonVariant['primary']} onClick={() => send('NEXT_BATTLE_CLICK')}>
+        <Button variant={ButtonVariant['primary']} onClick={onNextBattleClick}>
           Next Battle
         </Button>
 
         <Button
           style={{ marginLeft: '1rem' }}
           variant={ButtonVariant['secondary']}
-          onClick={() => send('LEAVE_SHOP_CLICK')}
+          onClick={onLeaveShopClick}
         >
           Leave Shop
         </Button>

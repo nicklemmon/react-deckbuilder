@@ -30,15 +30,17 @@ export type PlayAreaEvent =
   | { type: 'NEW_ITEM_CLICK'; item: Item }
   | { type: 'NEXT_BATTLE_CLICK' }
 
+export type ItemShop = {
+  cards: Deck
+  items: Array<Item> | []
+}
+
 export interface PlayAreaContext {
   player: Player
   playerDeck: Deck
   chosenItem: Item | undefined
   classDeck: Deck
-  itemShop: {
-    cards: Deck
-    items: Array<Item> | []
-  }
+  itemShop: ItemShop
   drawPile: Deck
   currentHand: Deck
   cardInPlay: Card | undefined

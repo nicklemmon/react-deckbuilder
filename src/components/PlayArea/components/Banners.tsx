@@ -20,7 +20,7 @@ export function VictoryBanner(props: VictoryBannerProps) {
       Victory!
       <Button
         style={{ marginLeft: '1rem' }}
-        variant={ButtonVariant['primary']}
+        variant={ButtonVariant['secondary']}
         onClick={() => send('ITEM_SHOP_CLICK')}
       >
         Item Shop
@@ -28,6 +28,13 @@ export function VictoryBanner(props: VictoryBannerProps) {
       <Button
         style={{ marginLeft: '1rem' }}
         variant={ButtonVariant['secondary']}
+        onClick={() => send('DESTROY_CARDS_CLICK')}
+      >
+        Destroy Cards
+      </Button>
+      <Button
+        style={{ marginLeft: '1rem' }}
+        variant={ButtonVariant['primary']}
         onClick={() => send('NEXT_BATTLE_CLICK')}
       >
         Next Battle
