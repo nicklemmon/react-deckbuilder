@@ -1,10 +1,13 @@
-import { Card } from 'src/interfaces'
+import { Card, CardStatus } from 'src/interfaces'
+
+export type CardOnClick = () => void | ((card: Card) => void)
 
 export interface CardProps extends Card {
-  key: string
   cardIndex: number
+  status?: CardStatus
   isStacked?: boolean
-  onClick?: () => void
+  className?: string
+  onClick?: () => void | ((card: Card) => void)
   align?: string
   showPrice?: boolean
 }

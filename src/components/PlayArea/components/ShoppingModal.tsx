@@ -39,14 +39,11 @@ export function ShoppingModal(props: ShoppingModalProps) {
           <DeckWrapper>
             <Deck isStacked={false}>
               {itemShop.cards.map((card: CardInterface, index: number) => {
-                const key = `item-shop-card-${card.id}-${index}`
-
                 return (
                   <Card
                     {...card}
-                    key={key}
+                    key={card.id}
                     cardIndex={index}
-                    status={card.status}
                     onClick={() => onNewCardClick(card)}
                     showPrice={true}
                   />

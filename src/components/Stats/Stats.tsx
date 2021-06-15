@@ -15,10 +15,12 @@ const Row = styled.div`
   }
 `
 
-const Stat = styled.div`
+const Stat = styled.div<{ appearance?: 'normal' | 'inverted' }>`
   display: flex;
   align-items: center;
   justify-content: center;
+  color: ${props =>
+    props.appearance === 'inverted' ? props.theme.colors.white : props.theme.colors.darkGray};
 `
 
 const Icon = styled.img`
@@ -32,7 +34,7 @@ const Value = styled.span`
   font-family: ${props => props.theme.fonts.heading};
   font-size: ${props => props.theme.fontSizes[1]};
   margin-left: ${props => props.theme.space[2]};
-  color: ${props => props.theme.colors.darkGray};
+  color: currentColor;
 `
 
 interface StatsProps {

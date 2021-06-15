@@ -6,6 +6,8 @@ import {
   buyCard,
   buyItem,
   createDrawPile,
+  destroyCard,
+  disableUnaffordableCards,
   disableUnaffordableItems,
   drawHand,
   getNewMonster,
@@ -15,6 +17,7 @@ import {
   playCard,
   playShopEntrySfx,
   prepareNextBattle,
+  resetPlayerDeckStatuses,
   reshuffle,
   stockShop,
   useItem,
@@ -104,15 +107,7 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
     },
     victory: {
       entry: [awardSpoils, killMonster, stockShop],
-      on: {
-        NEXT_BATTLE_CLICK: {
-          actions: prepareNextBattle,
-          target: 'newRound',
-        },
-        ITEM_SHOP_CLICK: {
-          target: 'enteringShop',
-        },
-      },
+      always: 'betweenRounds',
     },
     enteringShop: {
       entry: playShopEntrySfx,
@@ -122,15 +117,15 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
       entry: disableUnaffordableItems,
       on: {
         LEAVE_SHOP_CLICK: {
-          target: 'doneShopping',
+          target: 'betweenRounds',
         },
         NEW_CARD_CLICK: {
           actions: buyCard,
-          target: 'takingInventory',
+          target: 'takingShopInventory',
         },
         NEW_ITEM_CLICK: {
           actions: buyItem,
-          target: 'takingInventory',
+          target: 'takingShopInventory',
         },
         NEXT_BATTLE_CLICK: {
           actions: prepareNextBattle,
@@ -138,21 +133,42 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
         },
       },
     },
-    takingInventory: {
+    takingShopInventory: {
       entry: disableUnaffordableItems,
       always: 'shopping',
     },
-    doneShopping: {
+    betweenRounds: {
+      entry: resetPlayerDeckStatuses,
       on: {
         NEXT_BATTLE_CLICK: {
           actions: prepareNextBattle,
           target: 'newRound',
+        },
+        DESTROY_CARDS_CLICK: {
+          target: 'destroyingCards',
         },
         ITEM_SHOP_CLICK: {
           target: 'enteringShop',
         },
       },
     },
+    destroyingCards: {
+      entry: disableUnaffordableCards,
+      on: {
+        CARD_TO_DESTROY_CLICK: {
+          actions: destroyCard,
+          target: 'takingCardInventory',
+        },
+        CANCEL_CARD_DESTRUCTION_CLICK: {
+          target: 'betweenRounds',
+        },
+      },
+    },
+    takingCardInventory: {
+      entry: disableUnaffordableCards,
+      always: 'destroyingCards',
+    },
+    // TODO: Some way to restart the game
     defeat: {},
   },
 })

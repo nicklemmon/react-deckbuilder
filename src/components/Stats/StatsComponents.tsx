@@ -8,13 +8,14 @@ import heartImg from 'src/images/heart.png'
 
 interface StatProps {
   children: any
+  appearance?: 'normal' | 'inverted'
 }
 
 export function AttackStat(props: StatProps) {
-  const { children } = props
+  const { children, appearance = 'normal' } = props
 
   return (
-    <Stats.Stat>
+    <Stats.Stat appearance={appearance}>
       <Stats.Icon src={swordImg} alt="Attack:" />
 
       <Stats.Value>{children}</Stats.Value>
@@ -23,10 +24,10 @@ export function AttackStat(props: StatProps) {
 }
 
 export function DefenseStat(props: StatProps) {
-  const { children } = props
+  const { children, appearance = 'normal' } = props
 
   return (
-    <Stats.Stat>
+    <Stats.Stat appearance={appearance}>
       <Stats.Icon src={shieldImg} alt="Defense:" />
 
       <Stats.Value>{children}</Stats.Value>
@@ -35,10 +36,10 @@ export function DefenseStat(props: StatProps) {
 }
 
 export function GoldStat(props: StatProps) {
-  const { children } = props
+  const { children, appearance = 'normal' } = props
 
   return (
-    <Stats.Stat>
+    <Stats.Stat appearance={appearance}>
       <Stats.Icon src={goldCoinsImg} alt="Gold:" />
 
       <Stats.Value>{children}</Stats.Value>
@@ -47,10 +48,10 @@ export function GoldStat(props: StatProps) {
 }
 
 export function HealthStat(props: StatProps) {
-  const { children } = props
+  const { children, appearance = 'normal' } = props
 
   return (
-    <Stats.Stat>
+    <Stats.Stat appearance={appearance}>
       <Stats.Icon src={heartImg} alt="Health:" />
 
       <Stats.Value>{children}</Stats.Value>

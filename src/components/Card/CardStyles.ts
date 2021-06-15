@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { transparentize } from 'polished'
 import { cardWidth, cardOffset, cardHeight } from '../../styles/constants'
 import { CardStatus } from 'src/interfaces'
+import { CardOnClick } from './types'
 
 const contentLayer = 1
 
@@ -19,11 +20,12 @@ export const Content = styled.div<{ status: CardStatus; rarity: number }>`
 `
 
 export const CardWrapper = styled('div')<{
-  artwork?: string
+  status: CardStatus
   cardIndex: number
+  artwork?: string
   isStacked?: boolean
   align?: string
-  status: CardStatus
+  onClick?: CardOnClick
 }>`
   display: inline-flex;
   border: 1px solid ${props => props.theme.colors.lightGray};
@@ -44,7 +46,7 @@ export const CardWrapper = styled('div')<{
   filter: ${props => getFilterStyles(props.status)};
 
   ${props => {
-    if (props.status === CardStatus['face-up']) {
+    if (props.onClick && props.status === CardStatus['face-up']) {
       return `
         :hover {
           transform: translateY(-0.33rem);

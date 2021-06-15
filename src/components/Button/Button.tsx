@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { transparentize } from 'polished'
 import { getSound } from 'src/functions'
 import ButtonClickSfx from 'src/sounds/ui.button-click.wav'
@@ -14,7 +14,7 @@ const StyledButtonOverlay = styled('div')<{ variant: ButtonVariant }>`
   z-index: ${props => props.theme.zIndices[1]};
   width: 100%;
   height: 125%;
-  transform: translateX(-100%);
+  transform: translateY(40%);
   transform-origin: bottom;
   transition-property: transform;
   transition-delay: ${props => props.theme.duration[0]};
@@ -37,8 +37,18 @@ const StyledButtonOverlay = styled('div')<{ variant: ButtonVariant }>`
   }}
 `
 
-const StyledButton = styled('button')<{ variant: ButtonVariant }>`
+const hoverActiveStyles = css`
+  transform: translateY(-1px);
+  filter: ${props => `drop-shadow(0 0 0.75rem ${props.theme.colors.darkGray})`};
+
+  ${StyledButtonOverlay} {
+    transform: translateY(0);
+  }
+`
+
+const StyledButton = styled('button')<{ variant: ButtonVariant; fullWidth: boolean }>`
   position: relative; /* allows absolute positioning within */
+  width: ${props => (props.fullWidth ? '100%' : 'auto')};
   padding: ${props => props.theme.space[2]} ${props => props.theme.space[3]};
   font-family: ${props => props.theme.fonts.heading};
   font-size: ${props => props.theme.fontSizes[2]};
@@ -48,6 +58,8 @@ const StyledButton = styled('button')<{ variant: ButtonVariant }>`
   transition-property: box-shadow, transform, filter;
   transition-duration: ${props => props.theme.duration[0]};
   transition-timing-function: ease-in-out;
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'unset')};
+  filter: ${props => (props.disabled ? 'grayscale(100%)' : 'unset')};
 
   ${props => {
     const getBoxShadow = (color: string) =>
@@ -80,22 +92,26 @@ const StyledButton = styled('button')<{ variant: ButtonVariant }>`
 
   &:active,
   &:hover {
-    transform: translateY(-1px);
-    filter: ${props => `drop-shadow(0 0 0.75rem ${props.theme.colors.darkGray})`};
-
-    ${StyledButtonOverlay} {
-      transform: translateX(0);
-    }
+    ${props => (props.disabled ? undefined : hoverActiveStyles)}
   }
 `
 
-const StyledButtonContent = styled('span')`
+const StyledButtonContent = styled('div')`
   position: relative;
   z-index: ${props => props.theme.zIndices[2]};
 `
 
 export default function Button(props: ButtonProps) {
-  const { variant, style, type = 'button', onClick, children, ...rest } = props
+  const {
+    variant,
+    style,
+    onClick,
+    children,
+    disabled,
+    type = 'button',
+    fullWidth = false,
+    ...rest
+  } = props
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     clickSound.play()
@@ -104,7 +120,15 @@ export default function Button(props: ButtonProps) {
   }
 
   return (
-    <StyledButton style={style} variant={variant} type={type} onClick={handleClick} {...rest}>
+    <StyledButton
+      fullWidth={fullWidth}
+      style={style}
+      variant={variant}
+      type={type}
+      onClick={handleClick}
+      disabled={disabled}
+      {...rest}
+    >
       <StyledButtonContent>{children}</StyledButtonContent>
 
       <StyledButtonOverlay variant={variant} />

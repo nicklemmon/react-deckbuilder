@@ -13,10 +13,12 @@ export interface PlayAreaStateSchema {
     attacking: {}
     defending: {}
     victory: {}
+    betweenRounds: {}
     enteringShop: {}
     shopping: {}
-    takingInventory: {}
-    doneShopping: {}
+    takingCardInventory: {}
+    takingShopInventory: {}
+    destroyingCards: {}
     defeat: {}
   }
 }
@@ -29,6 +31,9 @@ export type PlayAreaEvent =
   | { type: 'NEW_CARD_CLICK'; card: Card }
   | { type: 'NEW_ITEM_CLICK'; item: Item }
   | { type: 'NEXT_BATTLE_CLICK' }
+  | { type: 'CARD_TO_DESTROY_CLICK'; card: Card }
+  | { type: 'CANCEL_CARD_DESTRUCTION_CLICK' }
+  | { type: 'DESTROY_CARDS_CLICK' }
 
 export type ItemShop = {
   cards: Deck

@@ -1,4 +1,3 @@
-import React from 'react'
 import { Avatar } from 'src/components/Avatar'
 import { Feedback } from 'src/components'
 import { Stats, AttackStat, DefenseStat, Bar } from 'src/components/Stats'
@@ -21,6 +20,7 @@ interface MonsterProps {
 }
 
 function Monster(props: MonsterProps) {
+  console.log('props', props)
   const { name, level, stats, artwork, status = AvatarStatus['idle'], damageTaken } = props
   const health = stats.health < 0 ? 0 : stats.health
 

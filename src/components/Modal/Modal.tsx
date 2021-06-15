@@ -28,20 +28,23 @@ const ModalWrapper = styled(motion.div)`
     `0 ${props.theme.space[3]} ${props.theme.space[5]} -${props.theme.space[3]} ${props.theme.colors.coral}`};
 `
 
-const Content = styled.div`
+const Header = styled.div`
   width: 100%;
-  padding: ${props => props.theme.space[5]};
+  padding: ${props => props.theme.space[4]};
+`
+
+const Content = styled.div<{ scrollable?: boolean }>`
+  width: 100%;
+  padding: ${props => props.theme.space[4]};
+  overflow-x: ${props => (props.scrollable ? 'scroll' : 'unset')};
 `
 
 const ButtonRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  bottom: 0;
-  left: 0;
   width: 100%;
-  padding: ${props => props.theme.space[5]};
-  padding-top: 0;
+  padding: ${props => props.theme.space[4]};
 `
 
 interface ModalProps {
@@ -75,7 +78,8 @@ function Modal(props: ModalProps) {
   )
 }
 
-Modal.ButtonRow = ButtonRow
+Modal.Header = Header
 Modal.Content = Content
+Modal.ButtonRow = ButtonRow
 
 export default Modal

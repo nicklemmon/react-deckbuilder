@@ -57,7 +57,6 @@ export function PlayArea(props: PlayAreaProps) {
         </StatusBar.Items>
       </StatusBar>
 
-      {/* TODO: does all state need to be passed here? */}
       {state.value === 'shopping' ? (
         <ShoppingModal
           itemShop={state.context.itemShop}
@@ -68,12 +67,16 @@ export function PlayArea(props: PlayAreaProps) {
         />
       ) : null}
 
-      {state.value === 'destroyingCards' ? <CardDestructionModal /> : null}
+      {state.value === 'destroyingCards' ? (
+        <CardDestructionModal
+          playerDeck={state.context.playerDeck}
+          onDestroyClick={(card: CardInterface) => send({ type: 'CARD_TO_DESTROY_CLICK', card })}
+          onCancelClick={() => send({ type: 'CANCEL_CARD_DESTRUCTION_CLICK' })}
+        />
+      ) : null}
 
       <AnimatePresence>
-        {state.value === 'victory' || state.value === 'doneShopping' ? (
-          <VictoryBanner send={send} />
-        ) : null}
+        {state.value === 'betweenRounds' ? <VictoryBanner send={send} /> : null}
       </AnimatePresence>
 
       <AnimatePresence>{state.value === 'defeat' && <DefeatBanner />}</AnimatePresence>
