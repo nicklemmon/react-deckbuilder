@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@xstate/react": "1.3.4",
+    "@xstate/react": "1.4.0",
     "framer-motion": "4.1.17",
     "howler": "2.2.1",
     "lodash": "4.17.21",
