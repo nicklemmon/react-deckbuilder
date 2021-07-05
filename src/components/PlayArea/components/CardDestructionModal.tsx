@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Card as CardInterface, CardStatus, Deck as DeckInterface } from 'src/interfaces'
 import { Button, ButtonVariant, Card, GoldStat, Modal } from 'src/components'
 
@@ -12,10 +11,23 @@ const CardGrid = styled.div<{ numberOfCards: number }>`
   overflow-x: scroll;
 `
 
-const CardGridCell = styled(motion.div)`
+const CardGridCell = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: center;
+`
+
+const Empty = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+`
+
+const EmptyText = styled('p')`
+  font-family: ${props => props.theme.fonts.heading};
+  font-size: ${props => props.theme.fontSizes[2]};
 `
 
 const DestroyableCard = styled(Card)`
@@ -39,11 +51,17 @@ export function CardDestructionModal({
 }: CardDestructionModalProps) {
   return (
     <Modal>
-      <Modal.Header></Modal.Header>
+      <Modal.Header />
 
-      <Modal.Content scrollable>
-        <CardGrid numberOfCards={playerDeck.length}>
-          <AnimatePresence>
+      {playerDeck.length === 1 ? (
+        <Modal.Content>
+          <Empty>
+            <EmptyText>Only one card left - no additional cards can be destroyed.</EmptyText>
+          </Empty>
+        </Modal.Content>
+      ) : (
+        <Modal.Content scrollable>
+          <CardGrid numberOfCards={playerDeck.length}>
             {playerDeck.map((card: CardInterface, index) => {
               return (
                 <CardGridCell key={card.id}>
@@ -60,9 +78,9 @@ export function CardDestructionModal({
                 </CardGridCell>
               )
             })}
-          </AnimatePresence>
-        </CardGrid>
-      </Modal.Content>
+          </CardGrid>
+        </Modal.Content>
+      )}
 
       <Modal.ButtonRow>
         <Button variant={ButtonVariant['secondary']} onClick={onCancelClick}>

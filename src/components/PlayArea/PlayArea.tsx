@@ -69,7 +69,7 @@ export function PlayArea(props: PlayAreaProps) {
         />
       ) : null}
 
-      {state.value === 'destroyingCards' || state.value === 'destroyingCard' ? (
+      {state.matches('destroyingCards') || state.matches('destroyingCard') ? (
         <CardDestructionModal
           playerDeck={state.context.playerDeck}
           onDestroyClick={(card: CardInterface) => send({ type: 'CARD_TO_DESTROY_CLICK', card })}
