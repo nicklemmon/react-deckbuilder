@@ -7,6 +7,7 @@ import ImpactSfx from 'src/sounds/impact.slice.wav'
 import CoinsSfx from 'src/sounds/items.coin.wav'
 import CashRegisterSfx from 'src/sounds/items.cash-register.wav'
 import DoorOpenSfx from 'src/sounds/door.open.wav'
+import CardDestroySfx from 'src/sounds/card.destroy.wav'
 import { IMPACT_SFX_VOLUME } from './constants'
 import type { PlayAreaEvent, PlayAreaContext } from './types'
 
@@ -14,6 +15,7 @@ const impactSound = getSound({ src: ImpactSfx, volume: IMPACT_SFX_VOLUME })
 const coinsSound = getSound({ src: CoinsSfx })
 const cashRegisterSound = getSound({ src: CashRegisterSfx })
 const doorOpenSound = getSound({ src: DoorOpenSfx, volume: 0.33 })
+const cardDestroySound = getSound({ src: CardDestroySfx });
 
 export const awardSpoils: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
   const { player, monster, spoils } = ctx
@@ -414,6 +416,7 @@ export const destroyCard: ActionObject<PlayAreaContext, { type: 'CARD_TO_DESTROY
   const { inventory } = player;
   const nextGold = inventory.gold - 100
   const nextPlayerDeck = playerDeck.filter(card => card.id !== event.card.id)
+  cardDestroySound.play()
 
   return {
     player: {
@@ -423,6 +426,13 @@ export const destroyCard: ActionObject<PlayAreaContext, { type: 'CARD_TO_DESTROY
         gold: nextGold
       },
     },
+    cardToDestroy: event.card,
     playerDeck: nextPlayerDeck,
+  }
+})
+
+export const unsetCardToDestroy: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
+  return {
+    cardToDestroy: undefined
   }
 })

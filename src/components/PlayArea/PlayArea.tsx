@@ -8,6 +8,7 @@ import { Card as CardInterface, CardStatus, Item as ItemInterface } from 'src/in
 import {
   CardDestructionModal,
   CardInPlay,
+  CardToDestroy,
   DefeatBanner,
   DiscardPile,
   DrawPile,
@@ -16,7 +17,7 @@ import {
 } from './components'
 import {
   BattleWrapper,
-  CardInPlayWrapper,
+  CenteredCard,
   CurrentHandWrapper,
   DiscardPileWrapper,
   DrawPileWrapper,
@@ -33,6 +34,7 @@ export function PlayArea(props: PlayAreaProps) {
   const { context } = state
   const inventory = context.player.inventory
   const cardInPlay = context.cardInPlay
+  const cardToDestroy = context.cardToDestroy
   const monster = context.monster
 
   return (
@@ -67,13 +69,20 @@ export function PlayArea(props: PlayAreaProps) {
         />
       ) : null}
 
-      {state.value === 'destroyingCards' ? (
+      {state.value === 'destroyingCards' || state.value === 'destroyingCard' ? (
         <CardDestructionModal
           playerDeck={state.context.playerDeck}
           onDestroyClick={(card: CardInterface) => send({ type: 'CARD_TO_DESTROY_CLICK', card })}
-          onCancelClick={() => send({ type: 'CANCEL_CARD_DESTRUCTION_CLICK' })}
+          onCancelClick={() => send({ type: 'DONE_CLICK' })}
+          disabled={state.value === 'destroyingCard'}
         />
       ) : null}
+
+      <CenteredCard>
+        <AnimatePresence>
+          {cardToDestroy && <CardToDestroy cardToDestroy={cardToDestroy} />}
+        </AnimatePresence>
+      </CenteredCard>
 
       <AnimatePresence>
         {state.value === 'betweenRounds' ? <VictoryBanner send={send} /> : null}
@@ -102,9 +111,9 @@ export function PlayArea(props: PlayAreaProps) {
         )}
       </CurrentHandWrapper>
 
-      <CardInPlayWrapper>
+      <CenteredCard>
         <AnimatePresence>{cardInPlay && <CardInPlay state={state} />}</AnimatePresence>
-      </CardInPlayWrapper>
+      </CenteredCard>
 
       <BattleWrapper>
         <motion.div

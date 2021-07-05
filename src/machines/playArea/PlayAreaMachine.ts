@@ -22,6 +22,7 @@ import {
   stockShop,
   useItem,
   healPlayer,
+  unsetCardToDestroy,
 } from './actions'
 import {
   monsterIsAlive,
@@ -157,15 +158,20 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
       on: {
         CARD_TO_DESTROY_CLICK: {
           actions: destroyCard,
-          target: 'takingCardInventory',
+          target: 'destroyingCard',
         },
-        CANCEL_CARD_DESTRUCTION_CLICK: {
+        DONE_CLICK: {
           target: 'betweenRounds',
         },
       },
     },
+    destroyingCard: {
+      after: {
+        800: 'takingCardInventory',
+      },
+    },
     takingCardInventory: {
-      entry: disableUnaffordableCards,
+      entry: [unsetCardToDestroy, disableUnaffordableCards],
       always: 'destroyingCards',
     },
     // TODO: Some way to restart the game

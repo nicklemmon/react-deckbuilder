@@ -19,6 +19,7 @@ export interface PlayAreaStateSchema {
     takingCardInventory: {}
     takingShopInventory: {}
     destroyingCards: {}
+    destroyingCard: {}
     defeat: {}
   }
 }
@@ -32,7 +33,7 @@ export type PlayAreaEvent =
   | { type: 'NEW_ITEM_CLICK'; item: Item }
   | { type: 'NEXT_BATTLE_CLICK' }
   | { type: 'CARD_TO_DESTROY_CLICK'; card: Card }
-  | { type: 'CANCEL_CARD_DESTRUCTION_CLICK' }
+  | { type: 'DONE_CLICK' }
   | { type: 'DESTROY_CARDS_CLICK' }
 
 export type ItemShop = {
@@ -49,6 +50,7 @@ export interface PlayAreaContext {
   drawPile: Deck
   currentHand: Deck
   cardInPlay: Card | undefined
+  cardToDestroy: Card | undefined
   discardPile: Deck
   monster: Monster | undefined
   spoils: {

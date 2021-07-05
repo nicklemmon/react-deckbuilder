@@ -48,7 +48,7 @@ export const BattleWrapper = styled.div`
   transform: translateX(-50%) translateY(-12.5%);
 `
 
-export const CardInPlayWrapper = styled.div`
+export const CenteredCard = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -60,7 +60,7 @@ export const CardInPlayWrapper = styled.div`
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  z-index: ${() => playLayer};
+  z-index: ${props => props.theme.zIndices[6]};
 `
 
 export const Feedback = styled.div`

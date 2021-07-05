@@ -25,6 +25,7 @@ export const PLAY_AREA_MACHINE_DEFAULT_CONTEXT: PlayAreaContext = {
   currentHand: [],
   chosenItem: undefined,
   cardInPlay: undefined,
+  cardToDestroy: undefined,
   discardPile: [],
   monster: undefined,
   spoils: {

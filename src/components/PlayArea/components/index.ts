@@ -1,6 +1,7 @@
 export * from './Banners'
 export * from './CardDestructionModal'
 export * from './CardInPlay'
+export * from './CardToDestroy'
 export * from './DiscardPile'
 export * from './DrawPile'
 export * from './ShoppingModal'
