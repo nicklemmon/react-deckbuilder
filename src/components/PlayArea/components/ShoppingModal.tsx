@@ -76,7 +76,6 @@ export function ShoppingModal(props: ShoppingModalProps) {
         </Button>
 
         <Button
-          style={{ marginLeft: '1rem' }}
           variant={ButtonVariant['secondary']}
           onClick={onLeaveShopClick}
         >

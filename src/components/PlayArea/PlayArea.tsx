@@ -73,7 +73,8 @@ export function PlayArea(props: PlayAreaProps) {
         <CardDestructionModal
           playerDeck={state.context.playerDeck}
           onDestroyClick={(card: CardInterface) => send({ type: 'CARD_TO_DESTROY_CLICK', card })}
-          onCancelClick={() => send({ type: 'DONE_CLICK' })}
+          onNextBattleClick={() => send({ type: 'NEXT_BATTLE_CLICK' })}
+          onCancelClick={() => send({ type: 'STOP_DESTROYING_CLICK' })}
           disabled={state.value === 'destroyingCard'}
         />
       ) : null}

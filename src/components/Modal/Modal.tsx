@@ -81,6 +81,10 @@ const ButtonRow = styled.div`
   padding: ${props => props.theme.space[4]};
   margin-bottom: ${props => props.theme.space[2]};
   padding-top: 0;
+
+  > * + * {
+    margin-left: ${props => props.theme.space[3]};
+  }
 `
 
 function Modal(props: ModalProps) {

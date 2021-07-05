@@ -33,7 +33,7 @@ export type PlayAreaEvent =
   | { type: 'NEW_ITEM_CLICK'; item: Item }
   | { type: 'NEXT_BATTLE_CLICK' }
   | { type: 'CARD_TO_DESTROY_CLICK'; card: Card }
-  | { type: 'DONE_CLICK' }
+  | { type: 'STOP_DESTROYING_CLICK' }
   | { type: 'DESTROY_CARDS_CLICK' }
 
 export type ItemShop = {

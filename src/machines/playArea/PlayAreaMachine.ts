@@ -160,8 +160,12 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
           actions: destroyCard,
           target: 'destroyingCard',
         },
-        DONE_CLICK: {
+        STOP_DESTROYING_CLICK: {
           target: 'betweenRounds',
+        },
+        NEXT_BATTLE_CLICK: {
+          actions: prepareNextBattle,
+          target: 'newRound',
         },
       },
     },

@@ -39,6 +39,7 @@ const DestroyableCard = styled(Card)`
 interface CardDestructionModalProps {
   playerDeck: DeckInterface
   onDestroyClick: (card: CardInterface) => void
+  onNextBattleClick: () => void
   onCancelClick: () => void
   disabled?: boolean
 }
@@ -46,6 +47,7 @@ interface CardDestructionModalProps {
 export function CardDestructionModal({
   playerDeck,
   onDestroyClick,
+  onNextBattleClick,
   onCancelClick,
   disabled,
 }: CardDestructionModalProps) {
@@ -83,8 +85,12 @@ export function CardDestructionModal({
       )}
 
       <Modal.ButtonRow>
+        <Button variant={ButtonVariant['primary']} onClick={onNextBattleClick}>
+          Next Battle
+        </Button>
+
         <Button variant={ButtonVariant['secondary']} onClick={onCancelClick}>
-          Done
+          Stop Destroying
         </Button>
       </Modal.ButtonRow>
     </Modal>
