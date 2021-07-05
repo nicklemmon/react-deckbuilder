@@ -10,7 +10,7 @@ const player: Player = {
     defense: 1,
   },
   inventory: {
-    gold: 200,
+    gold: 50,
     items: [],
   },
 }
