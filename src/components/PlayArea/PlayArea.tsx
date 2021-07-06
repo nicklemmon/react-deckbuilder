@@ -1,4 +1,3 @@
-import React from 'react'
 import { SpawnedActorRef } from 'xstate'
 import { useActor } from '@xstate/react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -7,7 +6,9 @@ import { AvatarStatus } from 'src/components/Avatar/types'
 import { PlayAreaEvent } from 'src/machines/playArea'
 import { Card as CardInterface, CardStatus, Item as ItemInterface } from 'src/interfaces'
 import {
+  CardDestructionModal,
   CardInPlay,
+  CardToDestroy,
   DefeatBanner,
   DiscardPile,
   DrawPile,
@@ -16,7 +17,7 @@ import {
 } from './components'
 import {
   BattleWrapper,
-  CardInPlayWrapper,
+  CenteredCard,
   CurrentHandWrapper,
   DiscardPileWrapper,
   DrawPileWrapper,
@@ -33,6 +34,7 @@ export function PlayArea(props: PlayAreaProps) {
   const { context } = state
   const inventory = context.player.inventory
   const cardInPlay = context.cardInPlay
+  const cardToDestroy = context.cardToDestroy
   const monster = context.monster
 
   return (
@@ -57,13 +59,34 @@ export function PlayArea(props: PlayAreaProps) {
         </StatusBar.Items>
       </StatusBar>
 
-      {/* TODO: does all state need to be passed here? */}
-      {state.value === 'shopping' && <ShoppingModal state={state} send={send} />}
+      {state.value === 'shopping' ? (
+        <ShoppingModal
+          itemShop={state.context.itemShop}
+          onNewCardClick={(card: CardInterface) => send({ type: 'NEW_CARD_CLICK', card })}
+          onNewItemClick={(item: ItemInterface) => send({ type: 'NEW_ITEM_CLICK', item })}
+          onNextBattleClick={() => send({ type: 'NEXT_BATTLE_CLICK' })}
+          onLeaveShopClick={() => send({ type: 'LEAVE_SHOP_CLICK' })}
+        />
+      ) : null}
+
+      {state.matches('destroyingCards') || state.matches('destroyingCard') ? (
+        <CardDestructionModal
+          playerDeck={state.context.playerDeck}
+          onDestroyClick={(card: CardInterface) => send({ type: 'CARD_TO_DESTROY_CLICK', card })}
+          onNextBattleClick={() => send({ type: 'NEXT_BATTLE_CLICK' })}
+          onCancelClick={() => send({ type: 'STOP_DESTROYING_CLICK' })}
+          disabled={state.value === 'destroyingCard'}
+        />
+      ) : null}
+
+      <CenteredCard>
+        <AnimatePresence>
+          {cardToDestroy && <CardToDestroy cardToDestroy={cardToDestroy} />}
+        </AnimatePresence>
+      </CenteredCard>
 
       <AnimatePresence>
-        {state.value === 'victory' || state.value === 'doneShopping' ? (
-          <VictoryBanner send={send} />
-        ) : null}
+        {state.value === 'betweenRounds' ? <VictoryBanner send={send} /> : null}
       </AnimatePresence>
 
       <AnimatePresence>{state.value === 'defeat' && <DefeatBanner />}</AnimatePresence>
@@ -89,9 +112,9 @@ export function PlayArea(props: PlayAreaProps) {
         )}
       </CurrentHandWrapper>
 
-      <CardInPlayWrapper>
+      <CenteredCard>
         <AnimatePresence>{cardInPlay && <CardInPlay state={state} />}</AnimatePresence>
-      </CardInPlayWrapper>
+      </CenteredCard>
 
       <BattleWrapper>
         <motion.div

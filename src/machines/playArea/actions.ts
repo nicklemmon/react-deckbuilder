@@ -7,13 +7,15 @@ import ImpactSfx from 'src/sounds/impact.slice.wav'
 import CoinsSfx from 'src/sounds/items.coin.wav'
 import CashRegisterSfx from 'src/sounds/items.cash-register.wav'
 import DoorOpenSfx from 'src/sounds/door.open.wav'
+import CardDestroySfx from 'src/sounds/card.destroy.wav'
 import { IMPACT_SFX_VOLUME } from './constants'
-import { PlayAreaEvent, PlayAreaContext } from './types'
+import type { PlayAreaEvent, PlayAreaContext } from './types'
 
 const impactSound = getSound({ src: ImpactSfx, volume: IMPACT_SFX_VOLUME })
 const coinsSound = getSound({ src: CoinsSfx })
 const cashRegisterSound = getSound({ src: CashRegisterSfx })
 const doorOpenSound = getSound({ src: DoorOpenSfx, volume: 0.33 })
+const cardDestroySound = getSound({ src: CardDestroySfx });
 
 export const awardSpoils: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
   const { player, monster, spoils } = ctx
@@ -312,6 +314,43 @@ export const disableUnaffordableItems: ActionObject<PlayAreaContext, PlayAreaEve
   },
 )
 
+export const disableUnaffordableCards: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(
+  (ctx: PlayAreaContext) => {
+    const { playerDeck } = ctx
+
+    const getCardStatus = (ctx: PlayAreaContext) => {
+      if (ctx.player.inventory.gold < 100) {
+        return CardStatus['disabled']
+      }
+
+      return CardStatus['face-up']
+    }
+
+    return {
+      playerDeck: (playerDeck as any[]).map((card: Card) => {
+        return {
+          ...card,
+          status: getCardStatus(ctx)
+        }
+      })
+    }
+  }
+)
+
+export const resetPlayerDeckStatuses: ActionObject<PlayAreaContext, PlayAreaEvent> = assign((ctx: PlayAreaContext) => {
+  const { playerDeck } = ctx
+
+  return {
+    playerDeck: (playerDeck as any[]).map((card: Card) => {
+      return {
+        ...card,
+        status: CardStatus['face-down']
+      }
+    })
+  }
+})
+
+
 export const useItem: ActionObject<PlayAreaContext, { type: 'CHOOSE_ITEM'; item: Item }> = assign(
   (ctx, event) => {
     const { player } = ctx
@@ -371,3 +410,29 @@ function getPlayerHealth(currentHealth: number, healingAmount: number, maxHealth
 
   return currentHealth + healingAmount
 }
+
+export const destroyCard: ActionObject<PlayAreaContext, { type: 'CARD_TO_DESTROY_CLICK'; card: Card }> = assign((ctx, event) => {
+  const { playerDeck, player } = ctx;
+  const { inventory } = player;
+  const nextGold = inventory.gold - 100
+  const nextPlayerDeck = playerDeck.filter(card => card.id !== event.card.id)
+  cardDestroySound.play()
+
+  return {
+    player: {
+      ...player,
+      inventory: {
+        ...inventory,
+        gold: nextGold
+      },
+    },
+    cardToDestroy: event.card,
+    playerDeck: nextPlayerDeck,
+  }
+})
+
+export const unsetCardToDestroy: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
+  return {
+    cardToDestroy: undefined
+  }
+})

@@ -1,4 +1,3 @@
-import React from 'react'
 import { motion } from 'framer-motion'
 import { Stats, AttackStat, GoldStat } from 'src/components/Stats'
 import {
@@ -33,10 +32,12 @@ function Card(props: CardProps) {
     artwork,
     price,
     showPrice,
+    className,
   } = props
 
   return (
     <CardWrapper
+      className={className}
       cardIndex={cardIndex}
       isStacked={isStacked}
       align={align}

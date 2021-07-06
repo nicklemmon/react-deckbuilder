@@ -13,10 +13,13 @@ export interface PlayAreaStateSchema {
     attacking: {}
     defending: {}
     victory: {}
+    betweenRounds: {}
     enteringShop: {}
     shopping: {}
-    takingInventory: {}
-    doneShopping: {}
+    takingCardInventory: {}
+    takingShopInventory: {}
+    destroyingCards: {}
+    destroyingCard: {}
     defeat: {}
   }
 }
@@ -29,19 +32,25 @@ export type PlayAreaEvent =
   | { type: 'NEW_CARD_CLICK'; card: Card }
   | { type: 'NEW_ITEM_CLICK'; item: Item }
   | { type: 'NEXT_BATTLE_CLICK' }
+  | { type: 'CARD_TO_DESTROY_CLICK'; card: Card }
+  | { type: 'STOP_DESTROYING_CLICK' }
+  | { type: 'DESTROY_CARDS_CLICK' }
+
+export type ItemShop = {
+  cards: Deck
+  items: Array<Item> | []
+}
 
 export interface PlayAreaContext {
   player: Player
   playerDeck: Deck
   chosenItem: Item | undefined
   classDeck: Deck
-  itemShop: {
-    cards: Deck
-    items: Array<Item> | []
-  }
+  itemShop: ItemShop
   drawPile: Deck
   currentHand: Deck
   cardInPlay: Card | undefined
+  cardToDestroy: Card | undefined
   discardPile: Deck
   monster: Monster | undefined
   spoils: {

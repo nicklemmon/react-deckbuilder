@@ -5,4 +5,6 @@ export enum ButtonVariant {
 
 export interface ButtonProps extends React.ComponentPropsWithRef<'button'> {
   variant: ButtonVariant
+  fullWidth?: boolean
+  disabled?: boolean
 }
