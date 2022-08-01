@@ -14,3 +14,7 @@ npm start
 ```bash
 npm run build
 ```
+
+## Imagery
+
+The majority of the images used in the game were generated using OpenAI's [DALL-E 2](https://openai.com/dall-e-2/).
