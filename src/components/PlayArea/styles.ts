@@ -10,6 +10,7 @@ export const PlayAreaWrapper = styled.div`
   position: relative;
   height: 100vh;
   width: 100vw;
+  background-color: ${props => props.theme.colors.darkGray};
   background-image: url(${DarkLibraryImg});
   background-repeat: no-repeat;
   background-size: 100vw;
