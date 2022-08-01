@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import DarkLibraryImg from 'src/images/backgrounds/dark-library.png'
 
 const padding = '2rem'
 const monsterLayer = 0
@@ -9,6 +10,17 @@ export const PlayAreaWrapper = styled.div`
   position: relative;
   height: 100vh;
   width: 100vw;
+  background-image: url(${DarkLibraryImg});
+  background-repeat: no-repeat;
+  background-size: 100vw;
+  background-position: right;
+`
+
+export const PlayAreaContent = styled.div`
+  position: relative;
+  height: 100%;
+  width: 100%;
+  backdrop-filter: blur(7px) grayscale(0.33) saturate(2);
 `
 
 export const DrawPileWrapper = styled.div`

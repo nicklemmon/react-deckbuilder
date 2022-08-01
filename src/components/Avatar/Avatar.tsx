@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { rng } from 'src/functions'
 import theme from 'src/styles/theme'
 import { AvatarStatus } from './types'
-import { Wrapper, PortraitImg, Name, Flash } from './AvatarStyles'
+import { Wrapper, PortraitImg, Name, Flash } from './styles'
 
 const DAMAGE_FLASH_DURATION = 0.33
 const HEALING_FLASH_DURATION = 0.75

@@ -1,8 +1,8 @@
-import MageImg from 'src/images/hooded-mage.png'
+import Wizard1Img from 'src/images/player-portraits/wizard-1.png'
 import { Player } from 'src/interfaces'
 
 const player: Player = {
-  characterPortrait: MageImg,
+  characterPortrait: Wizard1Img,
   stats: {
     maxHealth: 45,
     health: 45,

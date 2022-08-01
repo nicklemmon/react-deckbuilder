@@ -28,15 +28,15 @@ function PlayerAvatar(props: PlayerAvatarProps) {
     <Avatar>
       <Avatar.Portrait artwork={characterPortrait} status={status} />
 
-      <Avatar.Name>{name}</Avatar.Name>
+      <Avatar.Name appearance="inverted">{name}</Avatar.Name>
 
       <Stats>
         <Stats.Row>
-          <Stats.Stat>{toTitleCase(characterClass)}</Stats.Stat>
+          <Stats.Stat appearance="inverted">{toTitleCase(characterClass)}</Stats.Stat>
         </Stats.Row>
 
         <Stats.Row>
-          <Stats.Stat>{health} HP</Stats.Stat>
+          <Stats.Stat appearance="inverted">{health} HP</Stats.Stat>
         </Stats.Row>
 
         <Stats.Row>

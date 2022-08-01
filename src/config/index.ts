@@ -2,7 +2,7 @@ import { cards, startingDeck } from './cards'
 import items from './items'
 import monsters from './monsters'
 import player from './player'
-import playerPortraits from './playerPortraits'
+import { PLAYER_PORTRAITS } from './playerPortraits'
 
 // eslint-disable-next-line
 export default {
@@ -11,5 +11,5 @@ export default {
   items,
   monsters,
   player,
-  playerPortraits,
+  playerPortraits: PLAYER_PORTRAITS,
 }

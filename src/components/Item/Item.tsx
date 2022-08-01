@@ -1,6 +1,6 @@
 import React from 'react'
 import { Stats, HealthStat, GoldStat } from 'src/components'
-import { ArtworkWrapper, Artwork, ItemWrapper, Footer } from './ItemStyles'
+import { ArtworkWrapper, Artwork, ItemWrapper, Footer } from './styles'
 import { ItemStatus } from 'src/interfaces'
 import { ItemProps } from './types'
 

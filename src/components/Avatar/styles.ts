@@ -23,7 +23,9 @@ export const PortraitImg = styled.div<{ artwork?: string }>`
   margin-bottom: ${props => props.theme.space[3]};
 `
 
-export const Name = styled.div`
+export const Name = styled.div<{ appearance?: 'normal' | 'inverted' }>`
+  color: ${props =>
+    props.appearance === 'inverted' ? props.theme.colors.white : props.theme.colors.darkGray};
   font-family: ${props => props.theme.fonts.heading};
   margin-bottom: ${props => props.theme.space[1]};
   letter-spacing: 0.0125rem;

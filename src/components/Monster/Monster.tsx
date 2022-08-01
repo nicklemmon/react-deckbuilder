@@ -29,20 +29,20 @@ function Monster(props: MonsterProps) {
       <Avatar.Portrait artwork={artwork} status={status} />
 
       <Stats>
-        <Avatar.Name>{name}</Avatar.Name>
+        <Avatar.Name appearance="inverted">{name}</Avatar.Name>
 
         <Stats.Row>
-          <Stats.Stat>Level {level}</Stats.Stat>
+          <Stats.Stat appearance="inverted">Level {level}</Stats.Stat>
         </Stats.Row>
 
         <Stats.Row>
-          <Stats.Stat>{health} HP</Stats.Stat>
+          <Stats.Stat appearance="inverted">{health} HP</Stats.Stat>
         </Stats.Row>
 
         <Stats.Row>
-          <AttackStat>{stats.defense}</AttackStat>
+          <AttackStat appearance="inverted">{stats.defense}</AttackStat>
 
-          <DefenseStat>{stats.defense}</DefenseStat>
+          <DefenseStat appearance="inverted">{stats.defense}</DefenseStat>
         </Stats.Row>
 
         <Stats.Row>
