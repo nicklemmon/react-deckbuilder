@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import { screenReaderOnly } from 'src/styles/helpers'
 import { CardRadioButtonProps } from './types'
@@ -15,10 +14,15 @@ const Wrapper = styled.div<{ checked: boolean }>`
   border-color: ${props => (props.checked ? props.theme.colors.green : 'transparent')};
   transition-duration: ${props => props.theme.duration[1]};
   transition-timing-function: ease-in-out;
-  transition-property: box-shadow, border-color;
+  transition-property: box-shadow, border-color, transform;
 
   &:focus-within {
     box-shadow: 0 0 0 3px ${props => props.theme.colors.gray};
+  }
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.25);
   }
 `
 

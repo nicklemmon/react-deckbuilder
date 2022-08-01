@@ -1,7 +1,19 @@
-import MageImg from 'src/images/hooded-mage.png'
-import BerzerkerImg from 'src/images/berzerker.png'
-import ArchWizardImg from 'src/images/arch-wizard.png'
-import StoneDruidImg from 'src/images/stone-druid.png'
+import BerzerkerImg from 'src/images/player-portraits/berzerker.png'
+import Knight1Img from 'src/images/player-portraits/knight-1.png'
+import Knight2Img from 'src/images/player-portraits/knight-2.png'
+import Knight3Img from 'src/images/player-portraits/knight-3.png'
+import Knight4Img from 'src/images/player-portraits/knight-4.png'
+import Wizard1Img from 'src/images/player-portraits/wizard-1.png'
+import Wizard2Img from 'src/images/player-portraits/wizard-2.png'
+import Wizard3Img from 'src/images/player-portraits/wizard-3.png'
 
-// eslint-disable-next-line
-export default [BerzerkerImg, MageImg, ArchWizardImg, StoneDruidImg]
+export const PLAYER_PORTRAITS = [
+  BerzerkerImg,
+  Knight1Img,
+  Knight2Img,
+  Knight3Img,
+  Knight4Img,
+  Wizard1Img,
+  Wizard2Img,
+  Wizard3Img,
+]

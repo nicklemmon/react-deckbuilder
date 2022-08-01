@@ -2,6 +2,7 @@
 @import '../node_modules/reset-css/reset.css';
 
 body,
-button {
+button,
+.dagger-cursor-override {
   cursor: url('./images/dagger.png'), auto;
 }

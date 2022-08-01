@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from 'react'
+import { SyntheticEvent } from 'react'
 import { SpawnedActorRef } from 'xstate'
 import { useActor } from '@xstate/react'
 import config from 'src/config'
@@ -13,7 +13,7 @@ import {
   Stack,
 } from 'src/components'
 import { CharacterCreationEvent } from 'src/machines/characterCreation'
-import { CardRadioButtons, Directions, Form, PortraitImg, Wrapper } from './CharacterCreationStyles'
+import { CardRadioButtons, Directions, Form, PortraitImg, Wrapper } from './styles'
 
 interface CharacterCreationProps {
   machine: SpawnedActorRef<CharacterCreationEvent>
@@ -89,7 +89,12 @@ export function CharacterCreation(props: CharacterCreationProps) {
                     checked={characterPortrait === portrait}
                     value={portrait}
                   >
-                    <PortraitImg src={portrait} alt="" role="presentation" />
+                    <PortraitImg
+                      className="dagger-cursor-override"
+                      src={portrait}
+                      alt=""
+                      role="presentation"
+                    />
                   </CardRadioButton>
                 )
               })}

@@ -1,6 +1,5 @@
-import React from 'react'
 import { motion } from 'framer-motion'
-import { FeedbackText } from './FeedbackStyles'
+import { FeedbackText } from './styles'
 
 const FEEDBACK_DURATION = 0.8
 

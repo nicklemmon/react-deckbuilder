@@ -12,7 +12,7 @@ import {
   Overlay,
   OverlayImg,
   OverlayText,
-} from './CardStyles'
+} from './styles'
 import bagImg from 'src/images/bag.png'
 import { CardStatus } from 'src/interfaces'
 import { CardProps } from './types'

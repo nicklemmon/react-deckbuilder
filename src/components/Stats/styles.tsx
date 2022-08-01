@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import { Stats } from 'src/components/Stats'
 import swordImg from 'src/images/sword.png'
