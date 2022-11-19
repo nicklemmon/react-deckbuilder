@@ -1,8 +1,7 @@
-import React from 'react'
-import { toTitleCase } from 'src/functions'
-import { Avatar, Bar, Feedback, Stats } from 'src/components'
-import { Player as PlayerInterface } from 'src/interfaces'
-import { AvatarStatus } from 'src/components/Avatar/types'
+import { toTitleCase } from '../../functions'
+import { Avatar, Bar, Feedback, Stats } from '../../components'
+import { Player as PlayerInterface } from '../../interfaces'
+import { AvatarStatus } from '../../components/Avatar/types'
 
 interface PlayerAvatarProps extends PlayerInterface {
   status: AvatarStatus

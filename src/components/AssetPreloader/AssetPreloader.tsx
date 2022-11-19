@@ -1,6 +1,6 @@
 import React from 'react'
 import { Howl } from 'howler'
-import { imagesLoadEvent, sfxLoadEvent } from 'src/events'
+import { imagesLoadEvent, sfxLoadEvent } from '../../events'
 
 export function AssetPreloader() {
   const [imagesLoadedCount, setImagesLoadedCount] = React.useState(0)
@@ -21,7 +21,7 @@ export function AssetPreloader() {
 
   // Load all SFX so they will be cached and then dispatch a custom event attached to the window
   new Howl({
-    src: sfxArr.map(sfx => sfx.src),
+    src: sfxArr.map((sfx) => sfx.src),
     preload: true,
     onload: () => window.dispatchEvent(sfxLoadEvent),
   })
@@ -29,7 +29,7 @@ export function AssetPreloader() {
   // Render hidden images to the DOM so they will load and be cached by the browser and update the loaded count
   return (
     <>
-      {imagesArr.map(image => (
+      {imagesArr.map((image) => (
         <img
           key={image.name}
           src={image.src}
@@ -43,44 +43,44 @@ export function AssetPreloader() {
   )
 }
 
-// See: https://stackoverflow.com/questions/42118296/dynamically-import-images-from-a-directory-using-webpack
-function importAll(assets) {
-  let importedAssets = {}
-  assets.keys().map((item, index) => {
-    return (importedAssets[item.replace('./', '')] = assets(item))
-  })
+// // See: https://stackoverflow.com/questions/42118296/dynamically-import-images-from-a-directory-using-webpack
+// function importAll(assets) {
+//   let importedAssets = {}
+//   assets.keys().map((item, index) => {
+//     return (importedAssets[item.replace('./', '')] = assets(item))
+//   })
 
-  return importedAssets
-}
+//   return importedAssets
+// }
 
 /**
  * Generates an array of objects containing meta information derived from static image files
  */
 function getImagesArray() {
-  const assets = importAll(require.context('../../images', false, /\.(png|jpe?g|svg)$/))
-  const assetKeys = Object.keys(assets)
-  const assetsArr = assetKeys.map(key => {
-    return {
-      name: key,
-      src: assets[key].default,
-    }
-  })
+  const assets = import.meta.glob('../../images/*.(png|svg)')
+  const images = []
 
-  return assetsArr
+  for (const path in assets) {
+    assets[path]().then((asset, path) => {
+      images.push(asset)
+    })
+  }
+
+  return images
 }
 
 /**
  * Generates an array of objects containing meta information derived from static sound files
  */
 function getSfxArray() {
-  const assets = importAll(require.context('../../sounds', false, /\.(wav|flac)$/))
-  const assetKeys = Object.keys(assets)
-  const assetsArr = assetKeys.map(key => {
-    return {
-      name: key,
-      src: assets[key].default,
-    }
-  })
+  const assets = import.meta.glob('../../sounds/**.wav')
+  const sounds = []
 
-  return assetsArr
+  for (const path in assets) {
+    assets[path]().then((asset) => {
+      sounds.push(asset)
+    })
+  }
+
+  return sounds
 }

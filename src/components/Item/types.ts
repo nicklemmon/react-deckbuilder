@@ -1,4 +1,4 @@
-import { Item } from 'src/interfaces'
+import { Item } from '../../interfaces'
 
 export interface ItemProps extends Item {
   itemIndex: number

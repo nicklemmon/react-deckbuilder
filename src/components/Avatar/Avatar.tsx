@@ -1,7 +1,6 @@
-import React from 'react'
 import { motion } from 'framer-motion'
-import { rng } from 'src/functions'
-import theme from 'src/styles/theme'
+import { rng } from '../../functions'
+import theme from '../../styles/theme'
 import { AvatarStatus } from './types'
 import { Wrapper, PortraitImg, Name, Flash } from './styles'
 

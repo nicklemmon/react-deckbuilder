@@ -1,11 +1,10 @@
 import { SpawnedActorRef } from 'xstate'
 import { useActor } from '@xstate/react'
 import { motion, AnimatePresence } from 'framer-motion'
-
-import { Card, Deck, GoldStat, Monster, Player, Stats, StatusBar } from 'src/components'
-import { AvatarStatus } from 'src/components/Avatar/types'
-import { PlayAreaEvent } from 'src/machines/playArea'
-import { Card as CardInterface, CardStatus, Item as ItemInterface } from 'src/interfaces'
+import { Card, Deck, GoldStat, Monster, Player, Stats, StatusBar } from '../../components'
+import { AvatarStatus } from '../../components/Avatar/types'
+import { PlayAreaEvent } from '../../machines/playArea'
+import { Card as CardInterface, CardStatus, Item as ItemInterface } from '../../interfaces'
 import {
   CardDestructionModal,
   CardInPlay,

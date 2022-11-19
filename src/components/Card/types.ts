@@ -1,4 +1,4 @@
-import { Card, CardStatus } from 'src/interfaces'
+import { Card, CardStatus } from '../../interfaces'
 
 export type CardOnClick = () => void | ((card: Card) => void)
 

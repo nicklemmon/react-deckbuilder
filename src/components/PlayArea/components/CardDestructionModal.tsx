@@ -1,12 +1,12 @@
 import styled from 'styled-components'
-import { Card as CardInterface, CardStatus, Deck as DeckInterface } from 'src/interfaces'
-import { Button, ButtonVariant, Card, GoldStat, Modal } from 'src/components'
+import { Card as CardInterface, CardStatus, Deck as DeckInterface } from '../../../interfaces'
+import { Button, ButtonVariant, Card, GoldStat, Modal } from '../..'
 
 const CardGrid = styled.div<{ numberOfCards: number }>`
   display: grid;
-  grid-template-columns: ${props => `repeat(${props.numberOfCards}, 1fr)`};
+  grid-template-columns: ${(props) => `repeat(${props.numberOfCards}, 1fr)`};
   grid-template-rows: auto;
-  grid-gap: ${props => props.theme.space[3]};
+  grid-gap: ${(props) => props.theme.space[3]};
   width: 100%;
   overflow-x: scroll;
 `
@@ -26,14 +26,14 @@ const Empty = styled('div')`
 `
 
 const EmptyText = styled('p')`
-  font-family: ${props => props.theme.fonts.heading};
-  font-size: ${props => props.theme.fontSizes[2]};
+  font-family: ${(props) => props.theme.fonts.heading};
+  font-size: ${(props) => props.theme.fontSizes[2]};
 `
 
 const DestroyableCard = styled(Card)`
   transform: unset;
   float: unset;
-  margin-bottom: ${props => props.theme.space[3]};
+  margin-bottom: ${(props) => props.theme.space[3]};
 `
 
 interface CardDestructionModalProps {

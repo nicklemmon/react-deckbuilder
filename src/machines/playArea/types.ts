@@ -1,4 +1,4 @@
-import { Player, Card, Deck, Item, Monster } from 'src/interfaces'
+import { Player, Card, Deck, Item, Monster } from '../../interfaces'
 
 export interface PlayAreaStateSchema {
   states: {

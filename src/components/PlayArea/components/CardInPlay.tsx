@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Card } from 'src/components'
+import { Card } from '../../Card'
 
 interface CardInPlayProps {
   state: any // TODO: Implement real type

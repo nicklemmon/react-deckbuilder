@@ -1,7 +1,7 @@
 import { SyntheticEvent } from 'react'
 import { SpawnedActorRef } from 'xstate'
 import { useActor } from '@xstate/react'
-import config from 'src/config'
+import config from '../../config'
 import {
   Button,
   ButtonVariant,
@@ -11,8 +11,8 @@ import {
   TextInput,
   Select,
   Stack,
-} from 'src/components'
-import { CharacterCreationEvent } from 'src/machines/characterCreation'
+} from '../../components'
+import { CharacterCreationEvent } from '../../machines/characterCreation'
 import { CardRadioButtons, Directions, Form, PortraitImg, Wrapper } from './styles'
 
 interface CharacterCreationProps {
@@ -44,7 +44,7 @@ export function CharacterCreation(props: CharacterCreationProps) {
               id="character-name"
               name="name"
               autoComplete="off"
-              onChange={e => send({ type: 'NAME_CHANGE', name: e.target.value })}
+              onChange={(e) => send({ type: 'NAME_CHANGE', name: e.target.value })}
               value={name}
               required
             />
@@ -56,7 +56,7 @@ export function CharacterCreation(props: CharacterCreationProps) {
               id="character-class"
               name="characterClass"
               value={characterClass}
-              onChange={e => {
+              onChange={(e) => {
                 const { value } = e.target
 
                 send({
@@ -83,7 +83,7 @@ export function CharacterCreation(props: CharacterCreationProps) {
                     label="Character Portrait"
                     name="artwork"
                     id={`card-radio-button-${index}`}
-                    onChange={e =>
+                    onChange={(e) =>
                       send({ type: 'CHARACTER_PORTRAIT_CHANGE', characterPortrait: e.target.value })
                     }
                     checked={characterPortrait === portrait}

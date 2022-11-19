@@ -1,6 +1,5 @@
-import React from 'react'
-import { Card, Deck } from 'src/components'
-import { Card as CardInterface, CardStatus } from 'src/interfaces/Card'
+import { Card, Deck } from '../..'
+import { Card as CardInterface, CardStatus } from '../../../interfaces'
 
 interface DiscardPileProps {
   state: any // TODO: Implement real type

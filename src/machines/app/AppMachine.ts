@@ -1,14 +1,14 @@
 import { Machine, assign } from 'xstate'
-import config from 'src/config'
+import config from '../../config'
 import {
   CharacterCreationMachine,
   CHARACTER_CREATION_MACHINE_ID,
-} from 'src/machines/characterCreation'
+} from '../../machines/characterCreation'
 import {
   PlayAreaMachine,
   PLAY_AREA_MACHINE_ID,
   PLAY_AREA_MACHINE_DEFAULT_CONTEXT,
-} from 'src/machines/playArea'
+} from '../../machines/playArea'
 import { APP_MACHINE_ID } from './constants'
 import { AppContext, AppStateSchema } from './types'
 

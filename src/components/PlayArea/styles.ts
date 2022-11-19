@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import DarkLibraryImg from 'src/images/backgrounds/dark-library.png'
+import DarkLibraryImg from '../../images/backgrounds/dark-library.png'
 
 const padding = '2rem'
 const monsterLayer = 0
@@ -10,7 +10,7 @@ export const PlayAreaWrapper = styled.div`
   position: relative;
   height: 100vh;
   width: 100vw;
-  background-color: ${props => props.theme.colors.darkGray};
+  background-color: ${(props) => props.theme.colors.darkGray};
   background-image: url(${DarkLibraryImg});
   background-repeat: no-repeat;
   background-size: 100vw;
@@ -73,7 +73,7 @@ export const CenteredCard = styled.div`
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  z-index: ${props => props.theme.zIndices[6]};
+  z-index: ${(props) => props.theme.zIndices[6]};
 `
 
 export const Feedback = styled.div`

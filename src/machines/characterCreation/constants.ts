@@ -1,4 +1,4 @@
-import config from 'src/config'
+import config from '../../config'
 import { CharacterCreationContext } from './types'
 
 const [firstPortrait] = config.playerPortraits

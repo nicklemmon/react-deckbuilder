@@ -1,7 +1,7 @@
 import React from 'react'
-import { Stats, HealthStat, GoldStat } from 'src/components'
+import { Stats, HealthStat, GoldStat } from '../../components'
 import { ArtworkWrapper, Artwork, ItemWrapper, Footer } from './styles'
-import { ItemStatus } from 'src/interfaces'
+import { ItemStatus } from '../../interfaces'
 import { ItemProps } from './types'
 
 export function Item(props: ItemProps) {

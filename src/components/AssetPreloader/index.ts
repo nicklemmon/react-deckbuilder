@@ -1,1 +1,1 @@
-export { AssetPreloader } from './AssetPreloader.js'
+export { AssetPreloader } from './AssetPreloader'

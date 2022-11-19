@@ -1,10 +1,10 @@
-import { Item } from 'src/interfaces'
-import { getSound } from 'src/functions'
-import SmallPotionImg from 'src/images/small-potion.png'
-import LargePotionImg from 'src/images/large-potion.png'
-import PotionObtainSfx from 'src/sounds/potion.obtain.wav'
-import PotionUseSfx from 'src/sounds/potion.use.wav'
-import PotionEffectSfx from 'src/sounds/potion.effect.wav'
+import { Item } from '../../interfaces'
+import { getSound } from '../../functions'
+import SmallPotionImg from '../../images/small-potion.png'
+import LargePotionImg from '../../images/large-potion.png'
+import PotionObtainSfx from '../../sounds/potion.obtain.wav'
+import PotionUseSfx from '../../sounds/potion.use.wav'
+import PotionEffectSfx from '../../sounds/potion.effect.wav'
 
 const getItemSound = (src: string) => getSound({ src })
 

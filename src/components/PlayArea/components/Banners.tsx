@@ -1,8 +1,7 @@
-import React from 'react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
-import { Button, ButtonVariant } from 'src/components/Button'
-import { Banner } from 'src/components/Banner'
+import { Button, ButtonVariant } from '../../Button'
+import { Banner } from '../../Banner'
 
 interface VictoryBannerProps {
   send: any // TODO: Implement real type

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import RoyalDaggerImg from 'src/images/royal-dagger.png'
-import { formFieldStyles } from 'src/styles/helpers'
+import RoyalDaggerImg from '../../images/royal-dagger.png'
+import { formFieldStyles } from '../../styles/helpers'
 import { SelectProps, SelectVariant } from './types'
 
 const SelectElWrapper = styled.div`
@@ -19,7 +19,7 @@ const SelectIcon = styled.img`
   width: auto;
   height: 100%;
   opacity: 0.75;
-  padding: ${props => props.theme.space[2]};
+  padding: ${(props) => props.theme.space[2]};
   pointer-events: none;
   filter: grayscale(100%);
 `

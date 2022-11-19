@@ -1,7 +1,7 @@
-import { Avatar } from 'src/components/Avatar'
-import { Feedback } from 'src/components'
-import { Stats, AttackStat, DefenseStat, Bar } from 'src/components/Stats'
-import { AvatarStatus } from 'src/components/Avatar/types'
+import { Avatar } from '../Avatar'
+import { Feedback } from '../Feedback'
+import { Stats, AttackStat, DefenseStat, Bar } from '../Stats'
+import { AvatarStatus } from '../Avatar/types'
 
 interface MonsterProps {
   id: string
@@ -20,7 +20,6 @@ interface MonsterProps {
 }
 
 function Monster(props: MonsterProps) {
-  console.log('props', props)
   const { name, level, stats, artwork, status = AvatarStatus['idle'], damageTaken } = props
   const health = stats.health < 0 ? 0 : stats.health
 
