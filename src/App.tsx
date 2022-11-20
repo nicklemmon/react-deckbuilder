@@ -22,7 +22,6 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <AssetPreloader />
-
       <Game />
     </ThemeProvider>
   )
