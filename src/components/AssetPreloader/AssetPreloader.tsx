@@ -1,43 +1,55 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Howl } from 'howler'
 import { imagesLoadEvent, sfxLoadEvent } from '../../events'
+import { URL } from 'url'
 
 export function AssetPreloader() {
-  const [imagesLoadedCount, setImagesLoadedCount] = React.useState(0)
-  const imagesArr = getImagesArray()
-  const sfxArr = getSfxArray()
+  const [imagesLoadedCount, setImagesLoadedCount] = useState(0)
+  const [imagesArr, setImagesArr] = useState<Array<string>>([])
+  const [sfxArr, setSfxArr] = useState<Array<string>>([])
 
-  // Increase the loaded count for each image loaded
+  console.log('sfxArr', sfxArr)
+
+  // Increment the loaded count for each image loaded, and dispatch an event when all are loaded
   function handleImgLoad() {
     setImagesLoadedCount(imagesLoadedCount + 1)
-  }
 
-  // When all images are loaded, dispatch a custom event attached to the window
-  React.useEffect(() => {
-    if (imagesLoadedCount === imagesArr.length) {
+    if (imagesLoadedCount === imagesArr.length - 1) {
       window.dispatchEvent(imagesLoadEvent)
     }
-  }, [imagesLoadedCount, imagesArr])
+  }
 
-  // Load all SFX so they will be cached and then dispatch a custom event attached to the window
-  new Howl({
-    src: sfxArr.map((sfx) => sfx.src),
-    preload: true,
-    onload: () => window.dispatchEvent(sfxLoadEvent),
-  })
+  useEffect(() => {
+    // Load all SFX so they will be cached and then dispatch a custom event attached to the window
+    new Howl({
+      src: sfxArr,
+      preload: true,
+      onload: () => window.dispatchEvent(sfxLoadEvent),
+    })
+  }, [sfxArr])
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      const images: Array<string> = await getImagesArray()
+
+      setImagesArr(images)
+    }
+
+    const fetchSounds = async () => {
+      const sounds: Array<string> = await getSfxArray()
+
+      setSfxArr(sounds)
+    }
+
+    fetchImages()
+    fetchSounds()
+  }, [])
 
   // Render hidden images to the DOM so they will load and be cached by the browser and update the loaded count
   return (
     <>
       {imagesArr.map((image) => (
-        <img
-          key={image.name}
-          src={image.src}
-          alt=""
-          onLoad={handleImgLoad}
-          role="presentation"
-          hidden
-        />
+        <img key={image} src={image} alt="" onLoad={handleImgLoad} role="presentation" hidden />
       ))}
     </>
   )
@@ -56,31 +68,21 @@ export function AssetPreloader() {
 /**
  * Generates an array of objects containing meta information derived from static image files
  */
-function getImagesArray() {
-  const assets = import.meta.glob('../../images/*.(png|svg)')
-  const images = []
+async function getImagesArray(): Promise<Array<string>> {
+  const images = import.meta.glob('../../images/*.(png|svg)', { eager: true })
+  const imagesArr = Object.entries(images).map(([_path, mod]) => mod.default)
 
-  for (const path in assets) {
-    assets[path]().then((asset, path) => {
-      images.push(asset)
-    })
-  }
-
-  return images
+  return imagesArr
 }
 
 /**
  * Generates an array of objects containing meta information derived from static sound files
  */
-function getSfxArray() {
-  const assets = import.meta.glob('../../sounds/**.wav')
-  const sounds = []
+async function getSfxArray(): Promise<Array<string>> {
+  const sounds = import.meta.glob('../../sounds/**.wav', { eager: true })
+  const soundsArr = Object.entries(sounds).map(([_path, mod]) => mod.default)
+  console.log('sounds', sounds)
+  console.log('soundsArr', soundsArr)
 
-  for (const path in assets) {
-    assets[path]().then((asset) => {
-      sounds.push(asset)
-    })
-  }
-
-  return sounds
+  return soundsArr
 }
