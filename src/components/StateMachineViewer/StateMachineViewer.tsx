@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 
 interface StateMachineViewerProps {
@@ -15,7 +14,7 @@ const StyledStateMachineViewer = styled('div')`
   padding: 1rem;
   width: 300px;
   font-family: monospace;
-  border-radius: ${props => props.theme.radii[1]};
+  border-radius: ${(props) => props.theme.radii[1]};
 `
 
 export default function StateMachineViewer(props: StateMachineViewerProps) {

@@ -1,9 +1,9 @@
 import styled from 'styled-components'
-import { Stats } from 'src/components/Stats'
-import swordImg from 'src/images/sword.png'
-import shieldImg from 'src/images/wooden-shield.png'
-import goldCoinsImg from 'src/images/gold-coins.png'
-import heartImg from 'src/images/heart.png'
+import { Stats } from '../Stats'
+import swordImg from '../../images/sword.png'
+import shieldImg from '../../images/wooden-shield.png'
+import goldCoinsImg from '../../images/gold-coins.png'
+import heartImg from '../../images/heart.png'
 
 interface StatProps {
   children: any
@@ -61,15 +61,15 @@ export function HealthStat(props: StatProps) {
 const BarWrapper = styled.div<{ status: string }>`
   position: relative;
   display: flex;
-  border-radius: ${props => props.theme.radii[0]};
+  border-radius: ${(props) => props.theme.radii[0]};
   overflow: hidden;
-  height: ${props => props.theme.space[3]};
+  height: ${(props) => props.theme.space[3]};
   width: 100%;
-  border: 1px solid ${props => props.theme.colors.red};
-  background: ${props =>
+  border: 1px solid ${(props) => props.theme.colors.red};
+  background: ${(props) =>
     `linear-gradient(180deg, ${props.theme.colors.darkGray} 10%, ${props.theme.colors.gray} 100%)`};
-  box-shadow: ${props => props.theme.shadows[0]},
-    0px 0px 0px 1px ${props => props.theme.colors.lightGray};
+  box-shadow: ${(props) => props.theme.shadows[0]},
+    0px 0px 0px 1px ${(props) => props.theme.colors.lightGray};
 `
 
 const BarFill = styled.div<{ percentage: number; status: string }>`
@@ -77,9 +77,9 @@ const BarFill = styled.div<{ percentage: number; status: string }>`
   left: 0;
   top: 0;
   height: 100%;
-  width: ${props => `${props.percentage}%`};
-  background-color: ${props => props.theme.colors.red};
-  background: ${props =>
+  width: ${(props) => `${props.percentage}%`};
+  background-color: ${(props) => props.theme.colors.red};
+  background: ${(props) =>
     `linear-gradient(180deg, ${props.theme.colors.lightRed} 0%, ${props.theme.colors.darkRed} 80%, ${props.theme.colors.darkRed} 100%)`};
 `
 

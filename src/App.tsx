@@ -1,7 +1,7 @@
 import React from 'react'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
-import { Game, AssetPreloader } from 'src/components'
-import theme from 'src/styles/theme'
+import { Game, AssetPreloader } from './components'
+import theme from './styles/theme'
 
 const GlobalStyles = createGlobalStyle`
   *,

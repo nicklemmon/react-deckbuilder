@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { labelStyles } from 'src/styles/helpers'
+import { labelStyles } from '../../styles/helpers'
 import { LegendProps } from './types'
 
 const LegendEl = styled.legend`

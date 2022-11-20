@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Stats, AttackStat, GoldStat } from 'src/components/Stats'
+import { Stats, AttackStat, GoldStat } from '../Stats'
 import {
   CardWrapper,
   Header,
@@ -13,8 +13,8 @@ import {
   OverlayImg,
   OverlayText,
 } from './styles'
-import bagImg from 'src/images/bag.png'
-import { CardStatus } from 'src/interfaces'
+import bagImg from '../../images/bag.png'
+import { CardStatus } from '../../interfaces'
 import { CardProps } from './types'
 
 function Card(props: CardProps) {

@@ -1,4 +1,4 @@
-import { Deck } from 'src/interfaces'
+import { Deck } from '../interfaces'
 
 export function shuffle(cards: Deck) {
   for (let i = cards.length - 1; i > 0; i--) {

@@ -1,23 +1,23 @@
 import styled from 'styled-components'
-import { screenReaderOnly } from 'src/styles/helpers'
+import { screenReaderOnly } from '../../styles/helpers'
 import { CardRadioButtonProps } from './types'
 
 const Wrapper = styled.div<{ checked: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: ${props => props.theme.space[2]};
-  border-radius: ${props => props.theme.radii[1]};
-  background-color: ${props => props.theme.colors.white};
+  padding: ${(props) => props.theme.space[2]};
+  border-radius: ${(props) => props.theme.radii[1]};
+  background-color: ${(props) => props.theme.colors.white};
   object-fit: cover;
   border: 3px solid;
-  border-color: ${props => (props.checked ? props.theme.colors.green : 'transparent')};
-  transition-duration: ${props => props.theme.duration[1]};
+  border-color: ${(props) => (props.checked ? props.theme.colors.green : 'transparent')};
+  transition-duration: ${(props) => props.theme.duration[1]};
   transition-timing-function: ease-in-out;
   transition-property: box-shadow, border-color, transform;
 
   &:focus-within {
-    box-shadow: 0 0 0 3px ${props => props.theme.colors.gray};
+    box-shadow: 0 0 0 3px ${(props) => props.theme.colors.gray};
   }
 
   &:hover {

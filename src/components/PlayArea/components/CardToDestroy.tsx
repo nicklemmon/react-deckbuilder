@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
-import { Card } from 'src/components'
-import { Card as CardInterface } from 'src/interfaces'
+import { Card } from '../../Card'
+import { Card as CardInterface } from '../../../interfaces'
 
 interface CardToDestroyProps {
   cardToDestroy: CardInterface

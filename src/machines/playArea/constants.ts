@@ -1,6 +1,6 @@
 import uniqueId from 'lodash/uniqueId'
-import config from 'src/config'
-import { Card, CardStatus } from 'src/interfaces'
+import config from '../../config'
+import { Card, CardStatus } from '../../interfaces'
 import { PlayAreaContext } from './types'
 
 export const PLAY_AREA_MACHINE_ID = 'game-machine'

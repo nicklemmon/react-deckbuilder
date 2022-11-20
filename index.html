@@ -1,24 +1,18 @@
 <!DOCTYPE html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/site.webmanifest" />
-    <link rel="mask-icon" href="%PUBLIC_URL%/safari-pinned-tab.svg" color="#5bbad5" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
     <title>React Deckbuilder</title>
+
     <style>
       @keyframes pulse {
         50% {
@@ -97,10 +91,10 @@
         opacity: 1;
         visibility: visible;
         transition: opacity 0.75s ease-in-out, visibility 0.75s ease-in-out;
-        transition-delay: 2s;
+        transition-delay: 0.5s;
       }
 
-      .js-loading-overlay.bundle-loaded.images-loaded.sfx-loaded {
+      .js-loading-overlay.images-loaded.sfx-loaded {
         opacity: 0;
         visibility: hidden;
         pointer-events: none;
@@ -112,24 +106,26 @@
         return document.querySelector('.js-loading-overlay')
       }
 
-      window.addEventListener('bundle load', () => {
-        getLoadingOverlay().classList.add('bundle-loaded')
-      })
       window.addEventListener('images load', () => {
+        console.log('images load')
         getLoadingOverlay().classList.add('images-loaded')
       })
+
       window.addEventListener('sfx load', () => {
+        console.log('sfx load')
         getLoadingOverlay().classList.add('sfx-loaded')
       })
     </script>
   </head>
+
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+
     <!-- loading overlay -->
     <div class="js-loading-overlay loading-overlay">
       <div class="loading-overlay__content">
         <div class="loading-overlay__img-frame">
-          <img src="%PUBLIC_URL%/spell-book.png" role="presentation" alt="" />
+          <img src="/spell-book.png" role="presentation" alt="" />
         </div>
 
         <h1 class="loading-overlay__heading">Loading...</h1>
@@ -139,5 +135,7 @@
     </div>
 
     <div id="root"></div>
+
+    <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>

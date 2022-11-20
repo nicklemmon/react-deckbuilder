@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { LabelProps, LabelVariant } from './types'
-import { labelStyles } from 'src/styles/helpers'
+import { labelStyles } from '../../styles/helpers'
 
 const LabelEl = styled.label<{ variant: LabelVariant }>`
   ${labelStyles}

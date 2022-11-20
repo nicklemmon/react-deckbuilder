@@ -1,8 +1,8 @@
 import styled from 'styled-components'
-import type { Card as CardInterface, Item as ItemInterface } from 'src/interfaces'
-import type { ItemShop } from 'src/machines/playArea/types'
-import { Card, Deck, Item, Modal, Stack } from 'src/components'
-import { Button, ButtonVariant } from 'src/components/Button'
+import type { Card as CardInterface, Item as ItemInterface } from '../../../interfaces'
+import type { ItemShop } from '../../../machines/playArea/types'
+import { Card, Deck, Item, Modal, Stack } from '../../../components'
+import { Button, ButtonVariant } from '../../../components/Button'
 
 interface ShoppingModalProps {
   itemShop: ItemShop
@@ -75,10 +75,7 @@ export function ShoppingModal(props: ShoppingModalProps) {
           Next Battle
         </Button>
 
-        <Button
-          variant={ButtonVariant['secondary']}
-          onClick={onLeaveShopClick}
-        >
+        <Button variant={ButtonVariant['secondary']} onClick={onLeaveShopClick}>
           Leave Shop
         </Button>
       </Modal.ButtonRow>

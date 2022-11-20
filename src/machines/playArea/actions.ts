@@ -1,13 +1,13 @@
 import { assign, ActionObject } from 'xstate'
 import uniqueId from 'lodash/uniqueId'
-import config from 'src/config'
-import { shuffle, rng, getSound } from 'src/functions'
-import { Card, CardStatus, Item, ItemStatus } from 'src/interfaces'
-import ImpactSfx from 'src/sounds/impact.slice.wav'
-import CoinsSfx from 'src/sounds/items.coin.wav'
-import CashRegisterSfx from 'src/sounds/items.cash-register.wav'
-import DoorOpenSfx from 'src/sounds/door.open.wav'
-import CardDestroySfx from 'src/sounds/card.destroy.wav'
+import config from '../../config'
+import { shuffle, rng, getSound } from '../../functions'
+import { Card, CardStatus, Item, ItemStatus } from '../../interfaces'
+import ImpactSfx from '../../sounds/impact.slice.wav'
+import CoinsSfx from '../../sounds/items.coin.wav'
+import CashRegisterSfx from '../../sounds/items.cash-register.wav'
+import DoorOpenSfx from '../../sounds/door.open.wav'
+import CardDestroySfx from '../../sounds/card.destroy.wav'
 import { IMPACT_SFX_VOLUME } from './constants'
 import type { PlayAreaEvent, PlayAreaContext } from './types'
 
@@ -15,9 +15,9 @@ const impactSound = getSound({ src: ImpactSfx, volume: IMPACT_SFX_VOLUME })
 const coinsSound = getSound({ src: CoinsSfx })
 const cashRegisterSound = getSound({ src: CashRegisterSfx })
 const doorOpenSound = getSound({ src: DoorOpenSfx, volume: 0.33 })
-const cardDestroySound = getSound({ src: CardDestroySfx });
+const cardDestroySound = getSound({ src: CardDestroySfx })
 
-export const awardSpoils: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
+export const awardSpoils: ActionObject<PlayAreaContext, PlayAreaEvent> = assign((ctx) => {
   const { player, monster, spoils } = ctx
   const { inventory } = player
 
@@ -42,7 +42,7 @@ export const awardSpoils: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(
   }
 })
 
-export const getNewMonster: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
+export const getNewMonster: ActionObject<PlayAreaContext, PlayAreaEvent> = assign((ctx) => {
   const newMonster = config.monsters[rng(config.monsters.length)]
   newMonster.sfx.intro.play()
 
@@ -54,7 +54,7 @@ export const getNewMonster: ActionObject<PlayAreaContext, PlayAreaEvent> = assig
   }
 })
 
-export const monsterAttack: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
+export const monsterAttack: ActionObject<PlayAreaContext, PlayAreaEvent> = assign((ctx) => {
   const { monster, player } = ctx
 
   if (!monster) return {}
@@ -75,7 +75,7 @@ export const monsterAttack: ActionObject<PlayAreaContext, PlayAreaEvent> = assig
   }
 })
 
-export const playerAttack: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
+export const playerAttack: ActionObject<PlayAreaContext, PlayAreaEvent> = assign((ctx) => {
   const { monster, cardInPlay } = ctx
 
   if (!cardInPlay || !monster) return {}
@@ -98,7 +98,7 @@ export const playerAttack: ActionObject<PlayAreaContext, PlayAreaEvent> = assign
   }
 })
 
-export const createDrawPile: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
+export const createDrawPile: ActionObject<PlayAreaContext, PlayAreaEvent> = assign((ctx) => {
   const newDrawPile = (shuffle(ctx.playerDeck) as any[]).map((card: Card) => ({
     ...card,
     status: CardStatus['face-down'],
@@ -109,7 +109,7 @@ export const createDrawPile: ActionObject<PlayAreaContext, PlayAreaEvent> = assi
   }
 })
 
-export const reshuffle: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
+export const reshuffle: ActionObject<PlayAreaContext, PlayAreaEvent> = assign((ctx) => {
   const discardPile = ctx.discardPile
 
   return {
@@ -118,21 +118,19 @@ export const reshuffle: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ct
   }
 })
 
-export const prepareNextBattle: ActionObject<
-  PlayAreaContext,
-  { type: 'NEXT_BATTLE_CLICK' }
-> = assign(ctx => {
-  return {
-    drawPile: [],
-    discardPile: [],
-    currentHand: [],
-  }
-})
+export const prepareNextBattle: ActionObject<PlayAreaContext, { type: 'NEXT_BATTLE_CLICK' }> =
+  assign((ctx) => {
+    return {
+      drawPile: [],
+      discardPile: [],
+      currentHand: [],
+    }
+  })
 
-export const drawHand: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
+export const drawHand: ActionObject<PlayAreaContext, PlayAreaEvent> = assign((ctx) => {
   const drawnCards = ctx.drawPile.filter((_card, index) => index < 3) // First 3 cards
   const remainingCards = ctx.drawPile.filter((_card, index) => index >= 3)
-  const currentHand = [...ctx.currentHand, ...drawnCards].map(card => {
+  const currentHand = [...ctx.currentHand, ...drawnCards].map((card) => {
     return {
       ...card,
       status: CardStatus['face-up'],
@@ -149,7 +147,7 @@ export const playCard: ActionObject<PlayAreaContext, { type: 'CHOOSE_CARD'; card
   (ctx, event) => {
     const chosenCard = event.card
 
-    const remainingCards = [...ctx.currentHand.filter(card => card.id !== chosenCard.id)]
+    const remainingCards = [...ctx.currentHand.filter((card) => card.id !== chosenCard.id)]
     chosenCard.sfx.play()
 
     return {
@@ -159,7 +157,7 @@ export const playCard: ActionObject<PlayAreaContext, { type: 'CHOOSE_CARD'; card
   },
 )
 
-export const killMonster: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
+export const killMonster: ActionObject<PlayAreaContext, PlayAreaEvent> = assign((ctx) => {
   if (!ctx.monster) return {}
 
   ctx.monster.sfx.death.play()
@@ -169,7 +167,7 @@ export const killMonster: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(
   }
 })
 
-export const stockShop: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
+export const stockShop: ActionObject<PlayAreaContext, PlayAreaEvent> = assign((ctx) => {
   const { player } = ctx
   const cardsRngMax = ctx.classDeck.length - 1
   const cardsOnOffer = [
@@ -203,79 +201,75 @@ export const stockShop: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ct
   }
 })
 
-export const buyCard: ActionObject<
-  PlayAreaContext,
-  { type: 'NEW_CARD_CLICK'; card: Card }
-> = assign((ctx, event) => {
-  const { player, playerDeck, itemShop } = ctx
-  const { inventory } = player
-  const { gold } = inventory
-  const chosenCard = event.card
+export const buyCard: ActionObject<PlayAreaContext, { type: 'NEW_CARD_CLICK'; card: Card }> =
+  assign((ctx, event) => {
+    const { player, playerDeck, itemShop } = ctx
+    const { inventory } = player
+    const { gold } = inventory
+    const chosenCard = event.card
 
-  cashRegisterSound.play()
+    cashRegisterSound.play()
 
-  return {
-    playerDeck: [...playerDeck, chosenCard],
-    player: {
-      ...player,
-      inventory: {
-        ...player.inventory,
-        gold: gold - chosenCard.price,
+    return {
+      playerDeck: [...playerDeck, chosenCard],
+      player: {
+        ...player,
+        inventory: {
+          ...player.inventory,
+          gold: gold - chosenCard.price,
+        },
       },
-    },
-    itemShop: {
-      ...itemShop,
-      cards: (itemShop.cards as any[]).map((card: Card) => {
-        if (card.id === chosenCard.id) {
-          return {
-            ...chosenCard,
-            status: CardStatus['purchased'],
+      itemShop: {
+        ...itemShop,
+        cards: (itemShop.cards as any[]).map((card: Card) => {
+          if (card.id === chosenCard.id) {
+            return {
+              ...chosenCard,
+              status: CardStatus['purchased'],
+            }
           }
-        }
 
-        return card
-      }),
-    },
-  }
-})
-
-export const buyItem: ActionObject<
-  PlayAreaContext,
-  { type: 'NEW_ITEM_CLICK'; item: Item }
-> = assign((ctx, event) => {
-  const { player, itemShop } = ctx
-  const currentGold = player.inventory.gold
-  const currentItems = player.inventory.items
-  const id = uniqueId(event.item.id) // A new unique ID is generated for the item to ensure de-duplication
-  const chosenItem = { ...event.item, id }
-
-  cashRegisterSound.play()
-  chosenItem.sfx.obtain.play()
-
-  return {
-    player: {
-      ...player,
-      inventory: {
-        ...player.inventory,
-        gold: currentGold - chosenItem.price,
-        items: [...currentItems, chosenItem],
+          return card
+        }),
       },
-    },
-    itemShop: {
-      ...itemShop,
-      items: (itemShop.items as any[]).map((item: Item) => {
-        if (item.id === chosenItem.id) {
-          return {
-            ...item,
-            status: ItemStatus['purchased'],
-          }
-        }
+    }
+  })
 
-        return item
-      }),
-    },
-  }
-})
+export const buyItem: ActionObject<PlayAreaContext, { type: 'NEW_ITEM_CLICK'; item: Item }> =
+  assign((ctx, event) => {
+    const { player, itemShop } = ctx
+    const currentGold = player.inventory.gold
+    const currentItems = player.inventory.items
+    const id = uniqueId(event.item.id) // A new unique ID is generated for the item to ensure de-duplication
+    const chosenItem = { ...event.item, id }
+
+    cashRegisterSound.play()
+    chosenItem.sfx.obtain.play()
+
+    return {
+      player: {
+        ...player,
+        inventory: {
+          ...player.inventory,
+          gold: currentGold - chosenItem.price,
+          items: [...currentItems, chosenItem],
+        },
+      },
+      itemShop: {
+        ...itemShop,
+        items: (itemShop.items as any[]).map((item: Item) => {
+          if (item.id === chosenItem.id) {
+            return {
+              ...item,
+              status: ItemStatus['purchased'],
+            }
+          }
+
+          return item
+        }),
+      },
+    }
+  })
 
 export const disableUnaffordableItems: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(
   (ctx: PlayAreaContext) => {
@@ -330,26 +324,27 @@ export const disableUnaffordableCards: ActionObject<PlayAreaContext, PlayAreaEve
       playerDeck: (playerDeck as any[]).map((card: Card) => {
         return {
           ...card,
-          status: getCardStatus(ctx)
+          status: getCardStatus(ctx),
         }
-      })
+      }),
     }
-  }
+  },
 )
 
-export const resetPlayerDeckStatuses: ActionObject<PlayAreaContext, PlayAreaEvent> = assign((ctx: PlayAreaContext) => {
-  const { playerDeck } = ctx
+export const resetPlayerDeckStatuses: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(
+  (ctx: PlayAreaContext) => {
+    const { playerDeck } = ctx
 
-  return {
-    playerDeck: (playerDeck as any[]).map((card: Card) => {
-      return {
-        ...card,
-        status: CardStatus['face-down']
-      }
-    })
-  }
-})
-
+    return {
+      playerDeck: (playerDeck as any[]).map((card: Card) => {
+        return {
+          ...card,
+          status: CardStatus['face-down'],
+        }
+      }),
+    }
+  },
+)
 
 export const useItem: ActionObject<PlayAreaContext, { type: 'CHOOSE_ITEM'; item: Item }> = assign(
   (ctx, event) => {
@@ -377,7 +372,7 @@ export const playShopEntrySfx = () => {
   doorOpenSound.play()
 }
 
-export const healPlayer: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
+export const healPlayer: ActionObject<PlayAreaContext, PlayAreaEvent> = assign((ctx) => {
   const { player, chosenItem } = ctx
 
   if (!chosenItem) return {}
@@ -411,11 +406,14 @@ function getPlayerHealth(currentHealth: number, healingAmount: number, maxHealth
   return currentHealth + healingAmount
 }
 
-export const destroyCard: ActionObject<PlayAreaContext, { type: 'CARD_TO_DESTROY_CLICK'; card: Card }> = assign((ctx, event) => {
-  const { playerDeck, player } = ctx;
-  const { inventory } = player;
+export const destroyCard: ActionObject<
+  PlayAreaContext,
+  { type: 'CARD_TO_DESTROY_CLICK'; card: Card }
+> = assign((ctx, event) => {
+  const { playerDeck, player } = ctx
+  const { inventory } = player
   const nextGold = inventory.gold - 100
-  const nextPlayerDeck = playerDeck.filter(card => card.id !== event.card.id)
+  const nextPlayerDeck = playerDeck.filter((card) => card.id !== event.card.id)
   cardDestroySound.play()
 
   return {
@@ -423,7 +421,7 @@ export const destroyCard: ActionObject<PlayAreaContext, { type: 'CARD_TO_DESTROY
       ...player,
       inventory: {
         ...inventory,
-        gold: nextGold
+        gold: nextGold,
       },
     },
     cardToDestroy: event.card,
@@ -431,8 +429,8 @@ export const destroyCard: ActionObject<PlayAreaContext, { type: 'CARD_TO_DESTROY
   }
 })
 
-export const unsetCardToDestroy: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(ctx => {
+export const unsetCardToDestroy: ActionObject<PlayAreaContext, PlayAreaEvent> = assign((ctx) => {
   return {
-    cardToDestroy: undefined
+    cardToDestroy: undefined,
   }
 })

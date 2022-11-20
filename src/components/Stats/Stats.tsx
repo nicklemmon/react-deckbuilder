@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 
 const Row = styled.div`
@@ -7,11 +6,11 @@ const Row = styled.div`
   justify-content: center;
 
   + * {
-    margin-top: ${props => props.theme.space[2]};
+    margin-top: ${(props) => props.theme.space[2]};
   }
 
   > * + * {
-    margin-left: ${props => props.theme.space[3]};
+    margin-left: ${(props) => props.theme.space[3]};
   }
 `
 
@@ -19,21 +18,21 @@ const Stat = styled.div<{ appearance?: 'normal' | 'inverted' }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${props =>
+  color: ${(props) =>
     props.appearance === 'inverted' ? props.theme.colors.white : props.theme.colors.darkGray};
 `
 
 const Icon = styled.img`
   width: 1.85rem;
   height: 1.85rem;
-  border-radius: ${props => props.theme.radii[0]};
+  border-radius: ${(props) => props.theme.radii[0]};
   overflow: hidden;
 `
 
 const Value = styled.span`
-  font-family: ${props => props.theme.fonts.heading};
-  font-size: ${props => props.theme.fontSizes[1]};
-  margin-left: ${props => props.theme.space[2]};
+  font-family: ${(props) => props.theme.fonts.heading};
+  font-size: ${(props) => props.theme.fontSizes[1]};
+  margin-left: ${(props) => props.theme.space[2]};
   color: currentColor;
 `
 
