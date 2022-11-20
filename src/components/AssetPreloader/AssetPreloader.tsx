@@ -19,6 +19,8 @@ export function AssetPreloader() {
 
   // Load all SFX so they will be cached and then dispatch a custom event attached to the window
   useEffect(() => {
+    if (!sfxArr || sfxArr.length === 0) return
+
     new Howl({
       src: sfxArr,
       preload: true,

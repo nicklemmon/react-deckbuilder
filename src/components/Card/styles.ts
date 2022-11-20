@@ -86,7 +86,7 @@ export const CardWrapper = styled('div')<{
 function getFilterStyles(status: CardStatus) {
   switch (status) {
     case CardStatus['disabled']: {
-      return 'grayscale(95%)'
+      return 'grayscale(25%)'
     }
 
     case CardStatus['purchased']: {
