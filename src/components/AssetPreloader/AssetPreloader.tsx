@@ -35,13 +35,16 @@ export function AssetPreloader() {
       setImagesArr(images)
     }
 
+    fetchImages()
+  }, [])
+
+  useEffect(() => {
     const fetchSounds = async () => {
       const sounds: Array<string> = await getSfxArray()
 
       setSfxArr(sounds)
     }
 
-    fetchImages()
     fetchSounds()
   }, [])
 
