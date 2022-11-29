@@ -44,7 +44,7 @@ export const awardSpoils: ActionObject<PlayAreaContext, PlayAreaEvent> = assign(
 
 export const getNewMonster: ActionObject<PlayAreaContext, PlayAreaEvent> = assign((ctx) => {
   const newMonster = config.monsters[rng(config.monsters.length)]
-  newMonster.sfx.intro.play()
+  newMonster.sfx?.intro.play()
 
   return {
     monster: {
@@ -81,7 +81,7 @@ export const playerAttack: ActionObject<PlayAreaContext, PlayAreaEvent> = assign
   if (!cardInPlay || !monster) return {}
 
   const damage = cardInPlay.stats.attack
-  monster.sfx.damage.play()
+  monster.sfx?.damage.play()
   impactSound.play()
 
   return {
@@ -160,7 +160,7 @@ export const playCard: ActionObject<PlayAreaContext, { type: 'CHOOSE_CARD'; card
 export const killMonster: ActionObject<PlayAreaContext, PlayAreaEvent> = assign((ctx) => {
   if (!ctx.monster) return {}
 
-  ctx.monster.sfx.death.play()
+  ctx.monster?.sfx?.death.play()
 
   return {
     monster: undefined,

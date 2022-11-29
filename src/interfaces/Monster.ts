@@ -8,7 +8,7 @@ export interface Monster {
   artwork?: string
   damageTaken?: number
 
-  sfx: {
+  sfx?: {
     intro: Howl
     damage: Howl
     death: Howl

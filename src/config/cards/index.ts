@@ -2,7 +2,7 @@ import { getSound } from '../../functions'
 import { Card, Deck } from '../../interfaces'
 import fireboltImg from '../../images/firebolt.png'
 import knucklesImg from '../../images/knuckles.png'
-import handAxeImg from '../../images/hand-axe.png'
+import strikeImg from '../../images/strike.png'
 import earthquakeImg from '../../images/earthquake.png'
 import lightningImg from '../../images/lightning.png'
 import stilletoImg from '../../images/stilleto.png'
@@ -18,7 +18,7 @@ import meleeShieldSound from '../../sounds/melee.shield.wav'
 const strike: Card = {
   id: 'strike',
   name: 'Strike',
-  artwork: handAxeImg,
+  artwork: strikeImg,
   sfx: getSound({ src: meleeHeavySound }),
   description: 'Smack your opponent!',
   rarity: 0,

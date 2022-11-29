@@ -1,0 +1,14 @@
+import { defineMonster } from '../../functions/monsters'
+
+export default defineMonster({
+  name: 'Zombie Hoard',
+  id: 'zombie-hoard',
+  level: 5,
+  goldBounty: 8,
+  stats: {
+    maxHealth: 30,
+    health: 30,
+    attack: 3,
+    defense: 1,
+  },
+})
