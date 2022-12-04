@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@xstate/react": "1.5.1",
+    "@xstate/react": "1.6.3",
     "eslint": "^8.29.0",
     "eslint-plugin-react": "^7.31.11",
     "framer-motion": "4.1.17",
