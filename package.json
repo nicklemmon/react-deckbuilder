@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@xstate/react": "1.5.1",
+    "eslint": "^8.29.0",
+    "eslint-plugin-react": "^7.31.11",
     "framer-motion": "4.1.17",
     "howler": "2.2.3",
     "lodash": "4.17.21",
@@ -29,30 +31,12 @@
     "@types/styled-components": "5.1.15",
     "@vitejs/plugin-react": "2.2.0",
     "prettier": "2.3.2",
-    "react-scripts": "4.0.3",
     "typescript": "4.4.4",
     "vite": "3.2.3"
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "build": "vite build",
+    "preview": "vite preview"
   }
 }
