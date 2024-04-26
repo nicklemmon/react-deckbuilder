@@ -1,7 +1,7 @@
 import { defineMonster } from '../../functions/monsters'
 
 export default defineMonster({
-  name: 'Vile Wizard',
+  name: 'Creepy',
   level: 5,
   goldBounty: 15,
   stats: {

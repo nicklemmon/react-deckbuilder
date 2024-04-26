@@ -1,4 +1,4 @@
-import { defineCard } from '../../../functions/cards'
+import { defineCard } from '../../functions/cards'
 
 export default defineCard({
   name: 'Strike',
