@@ -1,4 +1,4 @@
-import { Machine } from 'xstate'
+import { createMachine } from 'xstate'
 import { PLAY_AREA_MACHINE_ID, PLAY_AREA_MACHINE_DEFAULT_CONTEXT } from './constants'
 import { PlayAreaStateSchema, PlayAreaEvent, PlayAreaContext } from './types'
 import {
@@ -34,7 +34,7 @@ import {
   playerCannotDraw,
 } from './guards'
 
-export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, PlayAreaEvent>({
+export const PlayAreaMachine = createMachine({
   id: PLAY_AREA_MACHINE_ID,
   initial: 'newRound',
   context: PLAY_AREA_MACHINE_DEFAULT_CONTEXT,
@@ -47,9 +47,9 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
     },
     surveying: {
       after: [
-        { delay: 300, target: 'reshuffling', cond: playerCannotDraw },
-        { delay: 300, target: 'drawing', cond: playerCanDraw },
-        { delay: 300, target: 'choosing', cond: drawingIsNotNeeded },
+        { delay: 300, target: 'reshuffling', guard: playerCannotDraw },
+        { delay: 300, target: 'drawing', guard: playerCanDraw },
+        { delay: 300, target: 'choosing', guard: drawingIsNotNeeded },
       ],
     },
     reshuffling: {
@@ -95,15 +95,15 @@ export const PlayAreaMachine = Machine<PlayAreaContext, PlayAreaStateSchema, Pla
     attacking: {
       entry: playerAttack,
       after: [
-        { delay: 800, target: 'defending', cond: monsterIsAlive },
-        { delay: 800, target: 'victory', cond: monsterIsDead },
+        { delay: 800, target: 'defending', guard: monsterIsAlive },
+        { delay: 800, target: 'victory', guard: monsterIsDead },
       ],
     },
     defending: {
       entry: monsterAttack,
       after: [
-        { delay: 800, target: 'surveying', cond: playerIsAlive },
-        { delay: 800, target: 'defeat', cond: playerIsDead },
+        { delay: 800, target: 'surveying', guard: playerIsAlive },
+        { delay: 800, target: 'defeat', guard: playerIsDead },
       ],
     },
     victory: {

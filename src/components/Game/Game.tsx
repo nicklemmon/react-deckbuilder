@@ -16,11 +16,14 @@ interface ProcessEnv extends ProcessEnvInterface {}
 export default function Game() {
   // eslint-disable-next-line
   const [state, _send, service] = useMachine(AppMachine)
+  state.children
   const characterCreationMachine: SpawnedActorRef<CharacterCreationEvent> | undefined =
-    service.children.get(CHARACTER_CREATION_MACHINE_ID)
+    state.children[CHARACTER_CREATION_MACHINE_ID]
   const gameMachine: SpawnedActorRef<PlayAreaEvent> | undefined =
-    service.children.get(PLAY_AREA_MACHINE_ID)
+    state.children[PLAY_AREA_MACHINE_ID]
   const isProduction: boolean = import.meta.env.PROD === true
+
+  console.log('characterCreationMachine', characterCreationMachine)
 
   return (
     <>

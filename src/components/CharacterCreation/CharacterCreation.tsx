@@ -1,6 +1,6 @@
 import { SyntheticEvent } from 'react'
 import { SpawnedActorRef } from 'xstate'
-import { useActor } from '@xstate/react'
+import { useActor, useSelector } from '@xstate/react'
 import config from '../../config'
 import {
   Button,
@@ -19,9 +19,8 @@ interface CharacterCreationProps {
   machine: SpawnedActorRef<CharacterCreationEvent>
 }
 
-export function CharacterCreation(props: CharacterCreationProps) {
-  const { machine } = props
-  const [state, send] = useActor(machine)
+export function CharacterCreation({ machine }: CharacterCreationProps) {
+  const [state, send] = useSelector(machine)
   const { context } = state
   const { name, characterClass, characterPortrait } = context
 

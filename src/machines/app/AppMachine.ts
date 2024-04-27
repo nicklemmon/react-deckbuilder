@@ -1,4 +1,4 @@
-import { Machine, assign } from 'xstate'
+import { createMachine, assign } from 'xstate'
 import config from '../../config'
 import {
   CharacterCreationMachine,
@@ -12,7 +12,7 @@ import {
 import { APP_MACHINE_ID } from './constants'
 import { AppContext, AppStateSchema } from './types'
 
-export const AppMachine = Machine<AppContext, AppStateSchema>({
+export const AppMachine = createMachine({
   id: APP_MACHINE_ID,
   initial: 'creatingCharacter',
   context: {
