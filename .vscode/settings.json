@@ -1,5 +1,4 @@
 {
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "cSpell.words": ["Berzerker"]
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

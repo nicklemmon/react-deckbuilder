@@ -2,6 +2,11 @@
   "name": "react-deckbuilder",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "@vercel/analytics": "1.0.1",
     "@xstate/react": "1.5.1",
@@ -34,10 +39,5 @@
     "prettier": "2.8.8",
     "typescript": "4.4.4",
     "vite": "3.2.3"
-  },
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
   }
 }
