@@ -107,10 +107,12 @@
       }
 
       window.addEventListener('images load', () => {
+        console.log("images load")
         getLoadingOverlay().classList.add('images-loaded')
       })
 
       window.addEventListener('sfx load', () => {
+        console.log("sfx load")
         getLoadingOverlay().classList.add('sfx-loaded')
       })
     </script>
@@ -120,7 +122,7 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
 
     <!-- loading overlay -->
-    <div class="js-loading-overlay loading-overlay">
+    <!-- <div class="js-loading-overlay loading-overlay">
       <div class="loading-overlay__content">
         <div class="loading-overlay__img-frame">
           <img src="/spell-book.png" role="presentation" alt="" />
@@ -130,7 +132,7 @@
 
         <div class="loading-overlay__circle"></div>
       </div>
-    </div>
+    </div> -->
 
     <div id="root"></div>
 

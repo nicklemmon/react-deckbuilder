@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prepare": "panda codegen",
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview"
