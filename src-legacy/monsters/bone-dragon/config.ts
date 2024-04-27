@@ -1,0 +1,13 @@
+import { defineMonster } from '../../functions/monsters'
+
+export default defineMonster({
+  name: 'Bone Dragon',
+  level: 8,
+  goldBounty: 10,
+  stats: {
+    maxHealth: 20,
+    health: 20,
+    attack: 8,
+    defense: 8,
+  },
+})

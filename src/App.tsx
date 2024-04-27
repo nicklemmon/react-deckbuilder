@@ -1,28 +1,10 @@
-import React from 'react'
-import { createGlobalStyle, ThemeProvider } from 'styled-components'
-import { Game, AssetPreloader } from './components'
-import theme from './styles/theme'
+import { AssetPreloader } from './components/asset-preloader.tsx'
 
-const GlobalStyles = createGlobalStyle`
-  *,
-  *:before,
-  *:after {
-    box-sizing: border-box;
-  }
-
-  html {
-    margin: 0;
-    font-family: sans-serif;
-    font-size: 16px;
-  }
-`
-
-export default function App() {
+export function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyles />
+    <>
       <AssetPreloader />
-      <Game />
-    </ThemeProvider>
+      Hello, world
+    </>
   )
 }
