@@ -1,4 +1,4 @@
-import { defineMonster } from '../../functions/monsters'
+import { defineMonster } from '../../helpers/monsters'
 
 export default defineMonster({
   name: 'Troll',

@@ -1,4 +1,4 @@
-import type { Card, Deck } from '../types'
+import type { Card, Deck } from '../types/cards'
 
 /** Defines a card config. */
 export function defineCard(config: Omit<Card, 'id' | 'artwork' | 'sfx'>) {

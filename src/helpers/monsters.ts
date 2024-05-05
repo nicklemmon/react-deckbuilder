@@ -1,4 +1,4 @@
-import type { Monster } from '../interfaces'
+import type { Monster } from '../types/monsters'
 
 export function defineMonster(config: Omit<Monster, 'id' | 'artwork' | 'sfx'>) {
   return config
