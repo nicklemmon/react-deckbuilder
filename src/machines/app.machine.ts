@@ -1,6 +1,8 @@
 import { assign, fromPromise, createMachine } from 'xstate'
-import { CharacterClass } from '../types/character-classes'
+import type { CharacterClass } from '../types/character-classes'
+import { resolveModules } from '../helpers/vite'
 import { MONSTERS } from '../helpers/monsters'
+import { CARDS } from '../helpers/cards'
 
 /** Unique ID for the application machine */
 export const APP_MACHINE_ID = 'app'
@@ -18,22 +20,6 @@ const CHARACTER_CLASS_MODULES = import.meta.glob('../character-classes/**/config
 
 /* Resolved character class configs */
 const CHARACTER_CLASSES = resolveModules<CharacterClass>(CHARACTER_CLASS_MODULES)
-
-/**
- * Helper function to return eagerly resolved modules.
- * @param modules - The return value of import.meta.glob with eager loading enabled.
- * @returns An object containing the resolved modules.
- */
-function resolveModules<T>(modules: Record<string, any>) {
-  const result: Array<any> = []
-
-  // Loop through each module entry and assign the default export to the result.
-  for (const [_path, module] of Object.entries(modules)) {
-    result.push(module.default || module) // Handle cases where there's no default export
-  }
-
-  return result as Array<T>
-}
 
 /** Prefetches assets from multiple sources returned by `import.meta.glob` */
 export async function prefetchAssets() {
@@ -64,6 +50,7 @@ export const appMachine = createMachine({
   context: {
     characterClasses: CHARACTER_CLASSES,
     monsters: MONSTERS,
+    cards: CARDS,
     player: {
       characterClass: undefined,
       characterName: undefined,
