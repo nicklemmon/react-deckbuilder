@@ -35,3 +35,12 @@ export const CARDS = Object.entries(CARD_CONFIG_MODULES).map(([path, mod]) => {
     sfx: getSound({ src: CARD_SFX_MODULES[`${dir}/sfx.wav`] as string }),
   }
 }) as Array<Card>
+
+/** Default starting deck - TODO: Build starting decks per character class */
+export const STARTING_DECK = [
+  getCard('assassinate', CARDS),
+  getCard('strike', CARDS),
+  getCard('strike', CARDS),
+  getCard('strike', CARDS),
+  getCard('firebolt', CARDS),
+].filter(Boolean) as Array<Card>

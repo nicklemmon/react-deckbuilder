@@ -2,7 +2,7 @@ import { assign, fromPromise, createMachine } from 'xstate'
 import type { CharacterClass } from '../types/character-classes'
 import { resolveModules } from '../helpers/vite'
 import { MONSTERS } from '../helpers/monsters'
-import { CARDS } from '../helpers/cards'
+import { CARDS, STARTING_DECK } from '../helpers/cards'
 
 /** Unique ID for the application machine */
 export const APP_MACHINE_ID = 'app'
@@ -55,6 +55,7 @@ export const appMachine = createMachine({
       characterClass: undefined,
       characterName: undefined,
       characterPortrait: undefined,
+      startingDeck: STARTING_DECK,
     },
   },
   states: {
@@ -71,8 +72,9 @@ export const appMachine = createMachine({
         CREATE_CHARACTER: {
           target: 'PlayingGame',
           actions: assign({
-            player: ({ event }) => {
+            player: ({ context, event }) => {
               return {
+                ...context.player,
                 characterClass: event.characterClass,
                 characterName: event.characterName,
                 characterPortrait: event.characterPortrait,
