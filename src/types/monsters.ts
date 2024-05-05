@@ -7,13 +7,11 @@ export type Monster = {
   goldBounty: number
   artwork?: string
   damageTaken?: number
-
   sfx?: {
     intro: Howl
     damage: Howl
     death: Howl
   }
-
   stats: {
     maxHealth: number
     health: number

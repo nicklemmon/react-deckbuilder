@@ -13,7 +13,7 @@ import warrior2Img from '../images/player-portraits/warrior-2.png'
 import { useMachine } from '@xstate/react'
 import { appMachine } from '../machines/app.machine'
 
-/** Array of available player portraits */
+/** Array of available player portraits when creating a character */
 const PLAYER_PORTRAITS = [
   berzerker1Img,
   berzerker2Img,
@@ -62,7 +62,7 @@ export function CharacterCreation({
             {context.characterClasses.map((characterClass, index) => {
               return (
                 <option key={`${characterClass.id}${index}`} value={characterClass.id}>
-                  {characterClass.id}
+                  {characterClass.name}
                 </option>
               )
             })}
