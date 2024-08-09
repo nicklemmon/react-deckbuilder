@@ -1,6 +1,5 @@
 import { useMachine } from '@xstate/react'
-// import { AssetPreloader } from './components/asset-preloader.tsx'
-import { appMachine } from './machines/app.machine.ts'
+import { appMachine } from './machines/app-machine/app-machine.ts'
 import { AppPreloader } from './components/app-preloader.tsx'
 import { CharacterCreation } from './components/character-creation.tsx'
 import { Game } from './components/game.tsx'
@@ -15,17 +14,18 @@ export function App() {
 
   if (snapshot.value === 'CharacterCreation') {
     return (
-      <CharacterCreation onCreate={(formData) => send({ type: 'CREATE_CHARACTER', ...formData })} />
+      <CharacterCreation
+        onCreate={(formData) => send({ type: 'CREATE_CHARACTER', data: formData })}
+      />
     )
   }
 
   if (snapshot.value === 'PlayingGame') {
-    console.log('snapshot', snapshot)
     return (
       <>
-        <div>Character name: {snapshot.context.player.characterName}</div>
-        <div>Character class: {snapshot.context.player.characterClass}</div>
-        <img src={snapshot.context.player.characterPortrait} />
+        <div>Character name: {snapshot.context.game.player.characterName}</div>
+        <div>Character class: {snapshot.context.game.player.characterClass?.name}</div>
+        <img src={snapshot.context.game.player.characterPortrait} />
         <Game />
       </>
     )

@@ -2,6 +2,7 @@ import { Howl } from 'howler'
 
 export type Monster = {
   id: string
+  status: 'idle' | 'defeated'
   name: string
   level: number
   goldBounty: number

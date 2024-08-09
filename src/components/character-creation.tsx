@@ -1,5 +1,5 @@
 import { type SyntheticEvent } from 'react'
-import { Button } from './button'
+import { useMachine } from '@xstate/react'
 import berzerker1Img from '../images/player-portraits/berzerker-1.png'
 import berzerker2Img from '../images/player-portraits/berzerker-2.png'
 import fallenKingImg from '../images/player-portraits/fallen-king.png'
@@ -10,8 +10,8 @@ import mage1Img from '../images/player-portraits/mage-1.png'
 import samuraiImg from '../images/player-portraits/samurai.png'
 import warrior1Img from '../images/player-portraits/warrior-1.png'
 import warrior2Img from '../images/player-portraits/warrior-2.png'
-import { useMachine } from '@xstate/react'
-import { appMachine } from '../machines/app.machine'
+import { appMachine } from '../machines/app-machine/app-machine'
+import { Button } from './button'
 
 /** Array of available player portraits when creating a character */
 const PLAYER_PORTRAITS = [
@@ -59,7 +59,7 @@ export function CharacterCreation({
         <div>
           <label htmlFor="character-class">Character class</label>
           <select id="character-class" name="characterClass" required>
-            {context.characterClasses.map((characterClass, index) => {
+            {context.assets.characterClasses.map((characterClass, index) => {
               return (
                 <option key={`${characterClass.id}${index}`} value={characterClass.id}>
                   {characterClass.name}

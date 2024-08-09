@@ -3,7 +3,12 @@
   "ignorePaths": [],
   "dictionaryDefinitions": [],
   "dictionaries": [],
-  "words": ["janky", "firebolt", "Berzerker"],
+  "words": [
+    "Berzerker",
+    "firebolt",
+    "janky",
+    "xstate"
+  ],
   "ignoreWords": [],
   "import": []
 }
