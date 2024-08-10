@@ -1,5 +1,6 @@
 import { type SyntheticEvent } from 'react'
 import { useMachine } from '@xstate/react'
+import artistWarrior1Img from '../images/player-portraits/artist-warrior-1.png'
 import berzerker1Img from '../images/player-portraits/berzerker-1.png'
 import berzerker2Img from '../images/player-portraits/berzerker-2.png'
 import fallenKingImg from '../images/player-portraits/fallen-king.png'
@@ -13,20 +14,15 @@ import warrior2Img from '../images/player-portraits/warrior-2.png'
 import { appMachine } from '../machines/app-machine/app-machine'
 import { Button } from './button'
 import css from './character-creation.module.css'
+import { resolveModules } from '../helpers/vite'
 
-/** Array of available player portraits when creating a character */
-const PLAYER_PORTRAITS = [
-  berzerker1Img,
-  berzerker2Img,
-  fallenKingImg,
-  giant1Img,
-  giant2Img,
-  goldenWarriorImg,
-  mage1Img,
-  samuraiImg,
-  warrior1Img,
-  warrior2Img,
-]
+// TODO Use import globbing here instead
+
+const PLAYER_PORTRAIT_MODULES = import.meta.glob('../images/player-portraits/*.(png|webp)', {
+  eager: true,
+})
+
+const PLAYER_PORTRAITS = resolveModules<string>(PLAYER_PORTRAIT_MODULES)
 
 /** UI view for character creation */
 export function CharacterCreation({

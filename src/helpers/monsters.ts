@@ -2,7 +2,7 @@ import type { Monster } from '../types/monsters'
 import { getSound } from './get-sound'
 
 /** Helper function to define and configure a monster */
-export function defineMonster(config: Omit<Monster, 'id' | 'artwork' | 'sfx'>) {
+export function defineMonster(config: Omit<Monster, 'id' | 'artwork' | 'sfx' | 'status'>) {
   return config
 }
 

@@ -1,6 +1,6 @@
 .avatar-img {
   display: inline-flex;
   border-radius: var(--rounding-1000);
-  width: var(--sizing-400);
-  height: var(--sizing-400);
+  width: var(--size-500);
+  height: var(--size-500);
 }

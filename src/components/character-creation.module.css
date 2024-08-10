@@ -20,6 +20,6 @@
 }
 
 .character-portrait-img {
-  width: var(--sizing-400);
-  height: var(--sizing-400);
+  width: var(--size-500);
+  height: var(--size-500);
 }

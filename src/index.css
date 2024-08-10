@@ -12,11 +12,11 @@
   --spacing-500: 2.5rem;
 
   /** Sizing tokens */
-  --size-100: 0;
-  --size-200: 0;
-  --size-300: 0;
-  --size-400: 0;
-  --size-500: 0;
+  --size-100: 1rem;
+  --size-200: 2rem;
+  --size-300: 4rem;
+  --size-400: 8rem;
+  --size-500: 16rem;
 
   /** Color tokens */
 
