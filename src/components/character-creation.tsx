@@ -81,6 +81,7 @@ export function CharacterCreation({
                   type="radio"
                   value={portrait}
                   className={css['character-portrait-input']}
+                  defaultChecked={index === 0}
                 />
 
                 <img src={portrait} className={css['character-portrait-img']} />

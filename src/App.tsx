@@ -2,6 +2,7 @@ import { useMachine } from '@xstate/react'
 import { appMachine } from './machines/app-machine/app-machine.ts'
 import { AppPreloader } from './components/app-preloader.tsx'
 import { CharacterCreation } from './components/character-creation.tsx'
+import { Avatar } from './components/avatar.tsx'
 import { Game } from './components/game.tsx'
 import { GameError } from './components/game-error.tsx'
 import './index.css'
@@ -26,10 +27,14 @@ export function App() {
       <>
         <div>Character name: {context.game.player.characterName}</div>
         <div>Character class: {context.game.player.characterClass?.name}</div>
-        <img src={context.game.player.characterPortrait} />
+        {context.game.player.characterPortrait ? (
+          <Avatar src={context.game.player.characterPortrait} />
+        ) : null}
 
         <div>Monster:</div>
-        <img src={context.game.monster?.artwork} />
+        {context.game.monster?.artwork ? <Avatar src={context.game.monster?.artwork} /> : null}
+
+        {JSON.stringify(context.game.monster?.stats)}
       </>
     )
   }

@@ -22,11 +22,12 @@
 
   /** Border-radius tokens */
   --rounding-0: 0;
-  --rounding-100: 0;
-  --rounding-200: 0;
-  --rounding-300: 0;
-  --rounding-400: 0;
-  --rounding-500: 0;
+  --rounding-100: 0.5rem;
+  --rounding-200: 1rem;
+  --rounding-300: 2rem;
+  --rounding-400: 4rem;
+  --rounding-500: 8rem;
+  --rounding-1000: 100%;
 }
 
 body,
