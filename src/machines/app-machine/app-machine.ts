@@ -1,5 +1,7 @@
 import { assign, fromPromise, setup } from 'xstate'
+import arrayShuffle from 'array-shuffle'
 import { resolveModules } from '../../helpers/vite'
+import { rng } from '../../helpers/rng'
 import { MONSTERS } from '../../helpers/monsters'
 import { CARDS, STARTING_DECK } from '../../helpers/cards'
 import type { CharacterClass } from '../../types/character-classes'
@@ -82,6 +84,39 @@ export const appMachine = setup({
       data: { characterClass: CharacterClass; characterName: string; characterPortrait: string }
     },
   },
+  actions: {
+    createDrawPile: assign({
+      game: ({ context }) => {
+        const newDrawPile = arrayShuffle(context.game.player.startingDeck).map((card) => {
+          return {
+            ...card,
+            status: 'face-down',
+          }
+        })
+
+        console.log('newDrawPile', newDrawPile)
+
+        return {
+          ...context.game,
+          drawPile: newDrawPile,
+        }
+      },
+    }),
+    getNextMonster: assign({
+      game: ({ context }) => {
+        const shuffledMonsters = arrayShuffle(context.assets.monsters)
+        const nextMonster = shuffledMonsters[rng(shuffledMonsters.length)]
+
+        return {
+          ...context.game,
+          monster: {
+            ...nextMonster,
+            status: 'idle',
+          },
+        }
+      },
+    }),
+  },
   actors: {
     loadAllAssets: fromPromise(prefetchAssets),
   },
@@ -142,7 +177,9 @@ export const appMachine = setup({
         },
       },
     },
-    PlayingGame: {},
+    PlayingGame: {
+      entry: ['getNextMonster', 'createDrawPile'],
+    },
     Victory: {},
     Defeat: {},
   },

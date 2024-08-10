@@ -1,7 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Eczar:wght@600;800&family=Roboto&display=swap');
 @import '../node_modules/reset-css/reset.css';
 
-@layer reset, base, tokens, recipes, utilities;
+:root {
+  font-size: 16px;
+
+  /** Spacing tokens */
+  --spacing-100: 0.5rem;
+  --spacing-200: 0.75rem;
+  --spacing-300: 1rem;
+  --spacing-400: 1.5rem;
+  --spacing-500: 2.5rem;
+
+  /** Sizing tokens */
+  --size-100: 0;
+  --size-200: 0;
+  --size-300: 0;
+  --size-400: 0;
+  --size-500: 0;
+
+  /** Color tokens */
+
+  /** Border-radius tokens */
+  --rounding-0: 0;
+  --rounding-100: 0;
+  --rounding-200: 0;
+  --rounding-300: 0;
+  --rounding-400: 0;
+  --rounding-500: 0;
+}
 
 body,
 button,

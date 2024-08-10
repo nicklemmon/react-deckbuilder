@@ -12,6 +12,7 @@ import warrior1Img from '../images/player-portraits/warrior-1.png'
 import warrior2Img from '../images/player-portraits/warrior-2.png'
 import { appMachine } from '../machines/app-machine/app-machine'
 import { Button } from './button'
+import css from './character-creation.module.css'
 
 /** Array of available player portraits when creating a character */
 const PLAYER_PORTRAITS = [
@@ -69,15 +70,20 @@ export function CharacterCreation({
           </select>
         </div>
 
-        <fieldset>
+        <fieldset className={css['character-portrait-fieldset']}>
           <legend>Character portrait</legend>
 
           {PLAYER_PORTRAITS.map((portrait, index) => {
             return (
-              <label key={`portrait-ratio-${index}`}>
-                <input name="characterPortrait" type="radio" value={portrait} />
+              <label key={`portrait-ratio-${index}`} className={css['character-portrait-label']}>
+                <input
+                  name="characterPortrait"
+                  type="radio"
+                  value={portrait}
+                  className={css['character-portrait-input']}
+                />
 
-                <img src={portrait} />
+                <img src={portrait} className={css['character-portrait-img']} />
               </label>
             )
           })}
