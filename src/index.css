@@ -16,7 +16,9 @@
   --size-200: 2rem;
   --size-300: 4rem;
   --size-400: 8rem;
-  --size-500: 16rem;
+  --size-500: 12rem;
+  --size-600: 18rem;
+  --size-700: 22rem;
 
   /** Color tokens */
 
@@ -28,6 +30,15 @@
   --rounding-400: 4rem;
   --rounding-500: 8rem;
   --rounding-1000: 100%;
+
+  /** Animation duration */
+  --anim-dur-100: 0.1s;
+  --anim-dur-200: 0.2s;
+  --anim-dur-300: 0.3s;
+  --anim-dur-400: 0.6s;
+
+  /** Animation easing */
+  --anim-easing-100: ease-in-out;
 }
 
 body,

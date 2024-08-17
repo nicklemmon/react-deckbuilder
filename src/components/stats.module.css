@@ -1,0 +1,40 @@
+.stats {
+  --color: darkgray;
+}
+
+.stats.inverted {
+  --color: white;
+}
+
+.stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  + * {
+    margin-top: --var(--spacing-200);
+  }
+
+  > * + * {
+    margin-left: --var(--spacing-300);
+  }
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color);
+}
+
+.stat-icon {
+  width: var(--size-300);
+  height: var(--size-300);
+  border-radius: var(--rounding-400);
+  overflow: hidden;
+}
+
+.stat-val {
+  margin-left: var(--spacing-200);
+  color: var(--color);
+}

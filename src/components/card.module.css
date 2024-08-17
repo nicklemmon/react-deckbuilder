@@ -1,0 +1,53 @@
+.card {
+  --card-width: 11.25rem;
+  --card-offset: calc(var(--card-width) * 0.975);
+
+  display: inline-flex;
+  margin-left: var(--margin-left);
+  border: 1px solid lightgray;
+  border-radius: var(--rounding-100);
+  overflow: hidden;
+  height: 17.5rem;
+  width: var(--card-width);
+  perspective: 1000px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: whitesmoke;
+  transition-duration: var(--anim-dur-300);
+  transition-timing-function: var(--anim-easing-100);
+  transition-property: transform, box-shadow;
+}
+
+.card.stacked.align-left {
+  float: 'left';
+  transform: translateX(calc(-1 * calc(var(--card-offset) * var(--margin-left))));
+}
+
+.card.stacked.align-right {
+  float: right;
+  transform: translateX(calc(var(--card-offset) * var(--margin-left)));
+}
+
+.card.disabled {
+  filter: grayscale(25%);
+}
+
+.card.disabled,
+.card.purchased {
+  pointer-events: none;
+}
+
+.card-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  background-color: darkgray;
+}
+
+.card-back.face-down {
+  opacity: 1;
+}

@@ -3,8 +3,9 @@ import { appMachine } from './machines/app-machine/app-machine.ts'
 import { AppPreloader } from './components/app-preloader.tsx'
 import { CharacterCreation } from './components/character-creation.tsx'
 import { Avatar } from './components/avatar.tsx'
-import { Game } from './components/game.tsx'
 import { GameError } from './components/game-error.tsx'
+import { Deck } from './components/deck.tsx'
+import { Card } from './components/card.tsx'
 import './index.css'
 
 export function App() {
@@ -35,6 +36,19 @@ export function App() {
         {context.game.monster?.artwork ? <Avatar src={context.game.monster?.artwork} /> : null}
 
         {JSON.stringify(context.game.monster?.stats)}
+
+        <Deck isStacked>
+          {context.game.drawPile.map((card, index) => {
+            return (
+              <Card
+                {...card}
+                deckIndex={index}
+                key={`draw-pile-card-${card.id}-${index}`}
+                orientation="face-down"
+              />
+            )
+          })}
+        </Deck>
       </>
     )
   }

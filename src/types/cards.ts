@@ -10,8 +10,10 @@ export type Card = {
   stats: {
     attack: number
   }
+  align?: 'left' | 'right'
   artwork?: string
-  status?: 'face-down' | 'face-up' | 'purchased' | 'disabled'
+  status?: 'purchased' | 'disabled'
+  orientation?: 'face-up' | 'face-down'
 }
 
 export type Deck = Array<Card> | []

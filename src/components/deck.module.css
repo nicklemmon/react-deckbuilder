@@ -1,0 +1,6 @@
+.deck {
+  /* allows absolute positioning within */
+  position: relative;
+  /* allows clicking "through" the deck */
+  pointer-events: none;
+}

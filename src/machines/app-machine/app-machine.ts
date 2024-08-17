@@ -94,8 +94,6 @@ export const appMachine = setup({
           }
         })
 
-        console.log('newDrawPile', newDrawPile)
-
         return {
           ...context.game,
           drawPile: newDrawPile,
