@@ -6,6 +6,7 @@ import { Avatar } from './components/avatar.tsx'
 import { GameError } from './components/game-error.tsx'
 import { Deck } from './components/deck.tsx'
 import { Card } from './components/card.tsx'
+import { Stack } from './components/stack.tsx'
 import './index.css'
 
 export function App() {
@@ -37,18 +38,22 @@ export function App() {
 
         {JSON.stringify(context.game.monster?.stats)}
 
-        <Deck isStacked>
-          {context.game.drawPile.map((card, index) => {
-            return (
-              <Card
-                {...card}
-                deckIndex={index}
-                key={`draw-pile-card-${card.id}-${index}`}
-                orientation="face-down"
-              />
-            )
-          })}
-        </Deck>
+        <Stack>
+          <Deck isStacked>
+            {context.game.drawPile.map((card, index) => {
+              return (
+                <Card
+                  {...card}
+                  deckIndex={index}
+                  align="right"
+                  key={`draw-pile-card-${card.id}-${index}`}
+                  orientation="face-down"
+                />
+              )
+            })}
+          </Deck>
+          Draw pile
+        </Stack>
       </>
     )
   }

@@ -4,3 +4,8 @@
   /* allows clicking "through" the deck */
   pointer-events: none;
 }
+
+.deck {
+  display: flex;
+  flex-direction: row;
+}

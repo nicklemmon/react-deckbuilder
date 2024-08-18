@@ -13,11 +13,19 @@ export function Deck({
 }) {
   function renderChildren() {
     return React.Children.map(children, (child, index) => {
-      return React.cloneElement(child, {
-        cardIndex: index,
-        isStacked,
-        align,
-      })
+      if (React.isValidElement(child)) {
+        return React.cloneElement(child, {
+          cardIndex: index,
+          isStacked,
+          align,
+          style: {
+            ...child.props.style,
+            transform: `translateX(calc(-${index} * 3rem))`,
+          },
+        })
+      }
+
+      return child
     })
   }
 
@@ -30,7 +38,18 @@ export function Deck({
         [css['align-right']]: align === 'right',
       })}
     >
-      {renderChildren()}
+      {React.Children.map(children, (child, index) => {
+        return (
+          <div
+            key={`deckchild${index}`}
+            style={{
+              transform: `translateX(calc(-${index} * 11.15rem))`,
+            }}
+          >
+            {child}
+          </div>
+        )
+      })}
 
       {isStacked ? <div style={{ clear: 'both' }} /> : null}
     </div>

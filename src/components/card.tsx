@@ -21,10 +21,8 @@ export function Card({
       [css['disabled']]: status === 'disabled',
       [css['purchased']]: status === 'purchased',
       [css['face-down']]: orientation === 'face-down',
-      [css['face-down']]: orientation === 'face-up',
+      [css['face-up']]: orientation === 'face-up',
       [css['stacked']]: isStacked === true,
-      [css['align-left']]: align === 'left',
-      [css['align-right']]: align === 'right',
       [css['rarity-0']]: rarity === 0,
       [css['rarity-1']]: rarity === 1,
       [css['rarity-2']]: rarity === 2,
@@ -36,7 +34,7 @@ export function Card({
     <div
       className={withStateClsx(css['card'])}
       onClick={onClick}
-      style={{ '--card-offset': isStacked ? `${deckIndex * 1}rem` : '0' } as React.CSSProperties}
+      // style={{ '--margin-left': isStacked ? `${deckIndex * 1}rem` : '0' } as React.CSSProperties}
     >
       <div className={withStateClsx(css['card-front'])}>
         <div className={withStateClsx(css['card-header'])}>

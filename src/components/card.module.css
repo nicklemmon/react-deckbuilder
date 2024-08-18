@@ -1,9 +1,8 @@
 .card {
   --card-width: 11.25rem;
-  --card-offset: calc(var(--card-width) * 0.975);
 
   display: inline-flex;
-  margin-left: var(--margin-left);
+  /* margin-left: var(--margin-left); */
   border: 1px solid lightgray;
   border-radius: var(--rounding-100);
   overflow: hidden;
@@ -17,16 +16,6 @@
   transition-duration: var(--anim-dur-300);
   transition-timing-function: var(--anim-easing-100);
   transition-property: transform, box-shadow;
-}
-
-.card.stacked.align-left {
-  float: 'left';
-  transform: translateX(calc(-1 * calc(var(--card-offset) * var(--margin-left))));
-}
-
-.card.stacked.align-right {
-  float: right;
-  transform: translateX(calc(var(--card-offset) * var(--margin-left)));
 }
 
 .card.disabled {
