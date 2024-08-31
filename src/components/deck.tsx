@@ -1,57 +1,29 @@
 import React from 'react'
 import { clsx } from 'clsx'
+import { EmptyDeck } from './empty-deck'
 import css from './deck.module.css'
 
-export function Deck({
-  children,
-  isStacked = true,
-  align = 'left',
-}: {
-  children: React.ReactNode
-  isStacked?: boolean
-  align?: 'left' | 'right'
-}) {
-  function renderChildren() {
-    return React.Children.map(children, (child, index) => {
-      if (React.isValidElement(child)) {
-        return React.cloneElement(child, {
-          cardIndex: index,
-          isStacked,
-          align,
-          style: {
-            ...child.props.style,
-            transform: `translateX(calc(-${index} * 3rem))`,
-          },
-        })
-      }
-
-      return child
-    })
-  }
-
+export function Deck({ children }: { children?: React.ReactNode }) {
   return (
     <div
       className={clsx({
         [css['deck']]: true,
-        [css['stacked']]: isStacked === true,
-        [css['align-left']]: align === 'left',
-        [css['align-right']]: align === 'right',
       })}
     >
-      {React.Children.map(children, (child, index) => {
-        return (
-          <div
-            key={`deckchild${index}`}
-            style={{
-              transform: `translateX(calc(-${index} * 11.15rem))`,
-            }}
-          >
-            {child}
-          </div>
-        )
-      })}
-
-      {isStacked ? <div style={{ clear: 'both' }} /> : null}
+      {React.Children.count(children) === 0 ? (
+        <EmptyDeck />
+      ) : (
+        React.Children.map(children, (child, index) => {
+          return (
+            <div
+              key={`deck-child${index}`}
+              style={{ position: 'absolute', left: `-${index * 5}px`, top: '0', zIndex: index }}
+            >
+              {child}
+            </div>
+          )
+        })
+      )}
     </div>
   )
 }

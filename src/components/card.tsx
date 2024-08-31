@@ -1,11 +1,10 @@
 import { clsx } from 'clsx'
 import type { Card } from '../types/cards'
-import { Stats, StatsRow, Stat, StatIcon, StatVal } from './stats'
+import cardBackImg from '../images/card-back.png'
+import { Stats, StatsRow, Stat, StatVal } from './stats'
 import css from './card.module.css'
 
 export function Card({
-  align,
-  deckIndex,
   description,
   name,
   onClick,
@@ -14,7 +13,9 @@ export function Card({
   orientation,
   status,
   stats,
-}: { deckIndex: number; isStacked?: boolean; onClick?: () => void } & Card) {
+  artwork,
+  id,
+}: { isStacked?: boolean; onClick?: () => void } & Card) {
   const withStateClsx = (rootClass: string) => {
     return clsx({
       [rootClass]: true,
@@ -31,17 +32,20 @@ export function Card({
   }
 
   return (
-    <div
-      className={withStateClsx(css['card'])}
-      onClick={onClick}
-      // style={{ '--margin-left': isStacked ? `${deckIndex * 1}rem` : '0' } as React.CSSProperties}
-    >
+    <div className={withStateClsx(css['card'])} onClick={onClick} id={id}>
       <div className={withStateClsx(css['card-front'])}>
         <div className={withStateClsx(css['card-header'])}>
           <div className={withStateClsx(css['card-name'])}>{name}</div>
         </div>
 
         <div className={withStateClsx(css['card-content'])}>
+          <img
+            src={artwork}
+            className={withStateClsx(css['card-artwork'])}
+            alt=""
+            role="presentation"
+          />
+
           <div className={withStateClsx(css['card-description'])}>{description}</div>
         </div>
 
@@ -58,7 +62,10 @@ export function Card({
         </div>
       </div>
 
-      <div className={withStateClsx(css['card-back'])} />
+      <div className={withStateClsx(css['card-back'])}>
+        <img className={css['card-back-img']} src={cardBackImg} alt="" role="presentation" />
+        <div className={css['card-back-overlay']} />
+      </div>
     </div>
   )
 }

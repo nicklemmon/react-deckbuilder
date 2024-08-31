@@ -1,11 +1,9 @@
 .deck {
   /* allows absolute positioning within */
   position: relative;
-  /* allows clicking "through" the deck */
   pointer-events: none;
-}
-
-.deck {
   display: flex;
   flex-direction: row;
+  width: var(--card-width);
+  height: var(--card-height);
 }

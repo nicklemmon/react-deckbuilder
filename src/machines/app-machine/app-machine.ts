@@ -11,6 +11,10 @@ import type { Card } from '../../types/cards'
 /** Unique ID for the application machine */
 const APP_MACHINE_ID = 'app'
 
+const STARTING_HAND_SIZE = 5
+
+const MAX_HAND_SIZE = 10
+
 /** All image files in the project */
 const IMAGE_MODULES = import.meta.glob('../**/**/*.(png|webp)', { eager: true })
 
@@ -79,18 +83,45 @@ type AppMachineContext = {
 export const appMachine = setup({
   types: {
     context: {} as AppMachineContext,
-    events: {} as {
-      type: 'CREATE_CHARACTER'
-      data: { characterClass: CharacterClass; characterName: string; characterPortrait: string }
-    },
+    events: {} as
+      | {
+          type: 'CREATE_CHARACTER'
+          data: { characterClass: CharacterClass; characterName: string; characterPortrait: string }
+        }
+      | {
+          type: 'PLAY_CARD'
+          data: { card: Card }
+        }
+      | {
+          type: 'CARD_IN_PLAY_ANIMATION_COMPLETE'
+          data: { card: Card }
+        }
+      | { type: 'CARD_EFFECTS_APPLIED' },
   },
   actions: {
+    applyCardEffects: assign({
+      game: ({ context }) => {
+        // This should be an impossible state, but need to keep TypeScript happy
+        if (!context.game.monster || !context.game.cardInPlay) {
+          return context.game
+        }
+
+        return {
+          ...context.game,
+          monster: {
+            ...context.game.monster,
+            health: context.game.monster?.stats.health - context.game.cardInPlay?.stats.attack,
+          },
+        }
+      },
+    }),
     createDrawPile: assign({
       game: ({ context }) => {
         const newDrawPile = arrayShuffle(context.game.player.startingDeck).map((card) => {
           return {
             ...card,
-            status: 'face-down',
+            id: `${card.id}-${crypto.randomUUID()}`,
+            orientation: 'face-down' as const,
           }
         })
 
@@ -109,14 +140,49 @@ export const appMachine = setup({
           ...context.game,
           monster: {
             ...nextMonster,
-            status: 'idle',
+            stats: {
+              ...nextMonster.stats,
+              health: nextMonster.stats.maxHealth,
+            },
+            status: 'idle' as const,
           },
+        }
+      },
+    }),
+    reshuffle: assign({
+      game: ({ context }) => {
+        const newDrawPile = arrayShuffle(context.game.discardPile)
+
+        return {
+          ...context.game,
+          drawPile: newDrawPile,
+        }
+      },
+    }),
+    dealStartingHand: assign({
+      game: ({ context }) => {
+        const newHand = arrayShuffle(context.game.drawPile).slice(0, STARTING_HAND_SIZE)
+
+        return {
+          ...context.game,
+          currentHand: newHand,
         }
       },
     }),
   },
   actors: {
     loadAllAssets: fromPromise(prefetchAssets),
+  },
+  guards: {
+    playerCanDraw: ({ context }) => {
+      return context.game.drawPile.length > 0
+    },
+    drawingNotNeeded: ({ context }) => {
+      return context.game.drawPile.length === 0 && context.game.currentHand.length > 0
+    },
+    playerCannotDraw: ({ context }) => {
+      return context.game.drawPile.length === 0 && context.game.currentHand.length === 0
+    },
   },
 }).createMachine({
   id: APP_MACHINE_ID,
@@ -156,7 +222,7 @@ export const appMachine = setup({
     CharacterCreation: {
       on: {
         CREATE_CHARACTER: {
-          target: 'PlayingGame',
+          target: 'NewRound',
           actions: assign({
             game: (args) => {
               const { context, event } = args
@@ -175,8 +241,82 @@ export const appMachine = setup({
         },
       },
     },
-    PlayingGame: {
+    NewRound: {
       entry: ['getNextMonster', 'createDrawPile'],
+      always: ['Surveying'],
+    },
+    Surveying: {
+      always: [
+        {
+          target: 'Reshuffling',
+          guard: 'playerCannotDraw',
+        },
+        {
+          target: 'Drawing',
+          guard: 'playerCanDraw',
+        },
+        {
+          target: 'PlayerChoosing',
+          guard: 'drawingNotNeeded',
+        },
+      ],
+    },
+    Reshuffling: {
+      entry: 'reshuffle',
+      always: 'Drawing',
+    },
+    Drawing: {
+      entry: 'dealStartingHand',
+      always: 'PlayerChoosing',
+    },
+    PlayerChoosing: {
+      on: {
+        PLAY_CARD: {
+          target: 'CardInPlay',
+          actions: assign({
+            game: ({ context, event }) => {
+              return {
+                ...context.game,
+                currentHand: context.game.currentHand.filter(
+                  (card) => card.id !== event.data.card.id,
+                ),
+                cardInPlay: {
+                  ...event.data.card,
+                  orientation: 'face-up' as const,
+                  status: 'disabled' as const,
+                },
+              }
+            },
+          }),
+        },
+      },
+    },
+    CardInPlay: {
+      on: {
+        CARD_IN_PLAY_ANIMATION_COMPLETE: {
+          target: 'ApplyingCardEffects',
+        },
+      },
+    },
+    ApplyingCardEffects: {
+      entry: 'applyCardEffects',
+      on: {
+        CARD_EFFECTS_APPLIED: {
+          target: 'CardPlayed',
+        },
+      },
+    },
+    CardPlayed: {
+      target: 'PlayerChoosing',
+      entry: assign({
+        game: ({ context }) => {
+          return {
+            ...context.game,
+            discardPile: [...context.game.discardPile, context.game?.cardInPlay as Card],
+            cardInPlay: undefined,
+          }
+        },
+      }),
     },
     Victory: {},
     Defeat: {},

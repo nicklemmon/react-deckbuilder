@@ -1,0 +1,26 @@
+.health-bar {
+  --health-percentage: 1;
+
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  height: var(--size-100);
+  border-radius: var(--rounding-100);
+  border: var(--border-width-100) solid var(--color-blood-300);
+  background: linear-gradient(0deg, var(--color-stone-600) 50%, var(--color-stone-800) 100%);
+  box-shadow: var(--shadow-500);
+}
+
+.health-bar-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: calc(var(--health-percentage) * 100%);
+  background: linear-gradient(
+    180deg,
+    var(--color-blood-300) 0%,
+    var(--color-blood-900) 60%,
+    var(--color-blood-900) 100%
+  );
+}

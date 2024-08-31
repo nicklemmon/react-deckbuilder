@@ -1,0 +1,10 @@
+.empty-deck {
+  display: inline-flex;
+  width: var(--card-width);
+  height: var(--card-height);
+  border-radius: var(--rounding-200);
+  background-color: var(--color-stone-400);
+  outline: var(--spacing-100) solid var(--color-stone-400);
+  border: var(--border-width-300) dashed var(--color-stone-800);
+  opacity: 0.25;
+}
