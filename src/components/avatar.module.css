@@ -1,6 +1,17 @@
-.avatar-img {
+.avatar {
+  position: relative;
   display: inline-flex;
   border-radius: var(--rounding-1000);
   width: var(--size-500);
   height: var(--size-500);
+  overflow: hidden;
+  border: var(--border-width-400) solid var(--color-stone-400);
+  outline: var(--border-width-200) solid var(--color-stone-300);
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
 }

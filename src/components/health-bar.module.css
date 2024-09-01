@@ -16,7 +16,11 @@
   left: 0;
   top: 0;
   height: 100%;
-  width: calc(var(--health-percentage) * 100%);
+  width: 100%;
+  transform: scaleX(var(--health-percentage));
+  transform-origin: left;
+  transition: transform var(--anim-dur-400) var(--anim-easing-100);
+  transition-delay: var(--anim-dur-300);
   background: linear-gradient(
     180deg,
     var(--color-blood-300) 0%,

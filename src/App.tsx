@@ -5,17 +5,16 @@ import { type Card as CardType } from './types/cards.ts'
 import { AppPreloader } from './components/app-preloader.tsx'
 import { CharacterCreation } from './components/character-creation.tsx'
 import { Avatar } from './components/avatar.tsx'
-import { HealthBar } from './components/health-bar.tsx'
-import { Deck } from './components/deck.tsx'
 import { Card } from './components/card.tsx'
+import { Deck } from './components/deck.tsx'
+import { HealthBar } from './components/health-bar.tsx'
+import { Feedback } from './components/feedback.tsx'
 import { Stack } from './components/stack.tsx'
 import css from './app.module.css'
 import './index.css'
 
 export function App() {
   const [{ context, value }, send] = useMachine(appMachine)
-  console.log('context.game.monster', context.game.monster)
-  console.log('context.game.monster?.stats.maxHealth', context.game.monster?.stats.maxHealth)
 
   if (value === 'LoadingAssets') {
     return <AppPreloader />
@@ -52,18 +51,63 @@ export function App() {
             </Stack>
           </div>
 
-          {context.game.monster ? (
-            <div className={css['monster']}>
-              <Stack spacing="200">
-                {context.game.monster.artwork ? (
-                  <Avatar src={context.game.monster.artwork} />
-                ) : null}
-                <HealthBar
-                  health={context.game.monster.stats.health / context.game.monster.stats.maxHealth}
-                />
-              </Stack>
-            </div>
-          ) : null}
+          <Stack>
+            <AnimatePresence
+              initial={false}
+              onExitComplete={() => send({ type: 'MONSTER_DEATH_ANIMATION_COMPLETE' })}
+            >
+              {context.game.monster
+                ? [
+                    <motion.div
+                      key={context.game.monster.id}
+                      initial={{ x: 50, y: 0, opacity: 0, filter: 'grayscale(0)' }}
+                      animate={{ x: 0, y: 0, opacity: 1, filter: 'grayscale(0)' }}
+                      exit={{ x: 0, y: 75, opacity: 0, filter: 'grayscale(1)' }}
+                      transition={{ delay: 0.33 }}
+                    >
+                      <div className={css['monster']}>
+                        <Stack spacing="200">
+                          {context.game.monster.artwork ? (
+                            <Avatar
+                              src={context.game.monster.artwork}
+                              status={context.game.monster.status}
+                            />
+                          ) : null}
+
+                          {value === 'ApplyingCardEffects' ? (
+                            <Feedback
+                              variant="negative"
+                              onAnimationComplete={() =>
+                                send({ type: 'CARD_EFFECTS_ANIMATION_COMPLETE' })
+                              }
+                            >
+                              {context.game.cardInPlay?.stats.attack}
+                            </Feedback>
+                          ) : null}
+                        </Stack>
+                      </div>
+                    </motion.div>,
+                    <motion.div
+                      key={`health-bar-${context.game.monster?.id}`}
+                      initial={{ x: 0, y: -25, opacity: 0 }}
+                      animate={{ x: 0, y: 0, opacity: 1 }}
+                      exit={{
+                        scale: 0.9,
+                        opacity: 0,
+                      }}
+                      transition={{ duration: 0.166 }}
+                    >
+                      <HealthBar
+                        health={
+                          context.game?.monster?.stats?.health /
+                            context?.game.monster?.stats?.maxHealth ?? 0
+                        }
+                      />
+                    </motion.div>,
+                  ]
+                : null}
+            </AnimatePresence>
+          </Stack>
         </div>
 
         <Stack className={css['current-hand']}>
@@ -97,17 +141,17 @@ export function App() {
           <div>Discard pile</div>
         </Stack>
 
-        <AnimatePresence>
+        <AnimatePresence onExitComplete={() => send({ type: 'DISCARD_CARD_ANIMATION_COMPLETE' })}>
           {context.game.cardInPlay ? (
             <motion.div
               style={{ position: 'absolute', left: '50%', bottom: 0, zIndex: 100 }}
               initial={{ y: 0, opacity: 0.25, x: '-50%', scale: 1 }}
-              animate={{ y: '-25vh', opacity: 1, x: '-50%', scale: 1.1 }}
-              exit={{ y: '0vh', x: '33vw', opacity: 0, rotate: 15, scale: 1 }}
+              animate={{ y: '-40vh', opacity: 1, x: '-50%', scale: 1.125 }}
+              exit={{ opacity: 0, rotate: 15, scale: 1 }}
               transition={{ type: 'spring', damping: 5, mass: 0.1, stiffness: 30 }}
               onAnimationComplete={() =>
                 send({
-                  type: 'CARD_IN_PLAY_ANIMATION_COMPLETE',
+                  type: 'PLAY_CARD_ANIMATION_COMPLETE',
                   data: { card: context.game.cardInPlay as CardType },
                 })
               }

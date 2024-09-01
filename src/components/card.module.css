@@ -26,17 +26,22 @@
   outline-offset: -2px;
 }
 
-.card:hover {
+.card.face-up.idle:hover {
   transform: translateY(calc(-1 * var(--spacing-100)));
 }
 
 .card.face-up {
-  box-shadow: 0 var(--spacing-300) var(--spacing-300) calc(var(--spacing-200) * -1)
+  box-shadow: 0 var(--spacing-100) var(--spacing-300) calc(var(--spacing-200) * -1)
     var(--color-stone-700);
 }
 
 .card.face-up:hover {
-  box-shadow: 0 var(--spacing-300) var(--spacing-400) calc(var(--spacing-100) * -1)
+  box-shadow: 0 var(--spacing-200) var(--spacing-400) calc(var(--spacing-100) * -1)
+    var(--color-stone-700);
+}
+
+.card.in-play {
+  box-shadow: 0 var(--spacing-200) var(--spacing-500) calc(var(--spacing-100) * -1)
     var(--color-stone-700);
 }
 
@@ -45,7 +50,8 @@
 }
 
 .card.disabled,
-.card.purchased {
+.card.purchased,
+.card.in-play {
   pointer-events: none;
 }
 

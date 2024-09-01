@@ -1,5 +1,5 @@
-import { getSound } from '../../functions'
-import { Card, Deck } from '../../interfaces'
+import { getSound } from '../helpers/get-sound.ts'
+import type { Card } from '../types/cards'
 import fireboltImg from '../../images/firebolt.png'
 import knucklesImg from '../../images/knuckles.png'
 import strikeImg from '../../images/strike.png'
@@ -108,4 +108,11 @@ const lightning: Card = {
 
 export const cards: Deck = [strike, shieldSlam, assassinate, punch, firebolt, earthquake, lightning]
 
-export const startingDeck: Deck = [firebolt, firebolt, lightning, earthquake, strike, strike]
+export const startingDeck: Deck = [
+  earthquake,
+  earthquake,
+  lightning,
+  lightning,
+  lightning,
+  lightning,
+]

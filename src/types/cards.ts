@@ -12,7 +12,7 @@ export type Card = {
   }
   align?: 'left' | 'right'
   artwork?: string
-  status?: 'purchased' | 'disabled'
+  status?: 'purchased' | 'disabled' | 'in-play' | 'idle'
   orientation?: 'face-up' | 'face-down'
 }
 

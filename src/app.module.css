@@ -62,3 +62,23 @@
   right: var(--play-area-bleed);
   bottom: var(--play-area-bleed);
 }
+
+.debugger {
+  border: 1px solid black;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.currentState,
+.events {
+  margin-bottom: 1rem;
+}
+
+.events ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.events li {
+  margin-bottom: 0.5rem;
+}

@@ -1,6 +1,7 @@
 import { clsx } from 'clsx'
 import type { Card } from '../types/cards'
 import cardBackImg from '../images/card-back.png'
+import { DebugTag } from './debug-tag'
 import { Stats, StatsRow, Stat, StatVal } from './stats'
 import css from './card.module.css'
 
@@ -11,7 +12,7 @@ export function Card({
   rarity,
   isStacked,
   orientation,
-  status,
+  status = 'idle',
   stats,
   artwork,
   id,
@@ -21,6 +22,8 @@ export function Card({
       [rootClass]: true,
       [css['disabled']]: status === 'disabled',
       [css['purchased']]: status === 'purchased',
+      [css['in-play']]: status === 'in-play',
+      [css['idle']]: status === 'idle',
       [css['face-down']]: orientation === 'face-down',
       [css['face-up']]: orientation === 'face-up',
       [css['stacked']]: isStacked === true,
@@ -34,6 +37,15 @@ export function Card({
   return (
     <div className={withStateClsx(css['card'])} onClick={onClick} id={id}>
       <div className={withStateClsx(css['card-front'])}>
+        <DebugTag
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+          }}
+        >
+          {status}
+        </DebugTag>
         <div className={withStateClsx(css['card-header'])}>
           <div className={withStateClsx(css['card-name'])}>{name}</div>
         </div>

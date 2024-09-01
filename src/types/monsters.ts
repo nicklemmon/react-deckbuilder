@@ -1,8 +1,9 @@
 import { Howl } from 'howler'
+import type { AvatarStatus } from '../components/avatar'
 
 export type Monster = {
   id: string
-  status: 'idle' | 'defeated'
+  status: AvatarStatus
   name: string
   level: number
   goldBounty: number

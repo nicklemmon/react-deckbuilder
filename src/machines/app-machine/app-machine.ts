@@ -1,12 +1,14 @@
 import { assign, fromPromise, setup } from 'xstate'
 import arrayShuffle from 'array-shuffle'
-import { resolveModules } from '../../helpers/vite'
-import { rng } from '../../helpers/rng'
-import { MONSTERS } from '../../helpers/monsters'
-import { CARDS, STARTING_DECK } from '../../helpers/cards'
-import type { CharacterClass } from '../../types/character-classes'
-import type { Monster } from '../../types/monsters'
-import type { Card } from '../../types/cards'
+import impactSfx from '../../sfx/impact.slice.wav'
+import { resolveModules } from '../../helpers/vite.ts'
+import { rng } from '../../helpers/rng.ts'
+import { getSound } from '../../helpers/get-sound.ts'
+import { MONSTERS } from '../../helpers/monsters.ts'
+import { CARDS, STARTING_DECK } from '../../helpers/cards.ts'
+import type { CharacterClass } from '../../types/character-classes.ts'
+import type { Monster } from '../../types/monsters.ts'
+import type { Card } from '../../types/cards.ts'
 
 /** Unique ID for the application machine */
 const APP_MACHINE_ID = 'app'
@@ -29,6 +31,8 @@ const CHARACTER_CLASS_MODULES = import.meta.glob('../../character-classes/**/con
 /* Resolved character class configs */
 const CHARACTER_CLASSES = resolveModules<CharacterClass>(CHARACTER_CLASS_MODULES)
 
+const impactSound = getSound({ src: impactSfx })
+
 /** Prefetches assets from multiple sources returned by `import.meta.glob` */
 async function prefetchAssets() {
   return Promise.all([
@@ -50,7 +54,7 @@ async function prefetchAssets() {
 }
 
 /** Context for the app-machine */
-type AppMachineContext = {
+export type AppMachineContext = {
   assets: {
     characterClasses: Array<CharacterClass>
     monsters: Array<Monster>
@@ -93,10 +97,13 @@ export const appMachine = setup({
           data: { card: Card }
         }
       | {
-          type: 'CARD_IN_PLAY_ANIMATION_COMPLETE'
+          type: 'PLAY_CARD_ANIMATION_COMPLETE'
           data: { card: Card }
         }
-      | { type: 'CARD_EFFECTS_APPLIED' },
+      | { type: 'CARD_EFFECTS_ANIMATION_COMPLETE' }
+      | { type: 'PLAY_CARD_ANIMATION_COMPLETE' }
+      | { type: 'DISCARD_CARD_ANIMATION_COMPLETE' }
+      | { type: 'MONSTER_DEATH_ANIMATION_COMPLETE' },
   },
   actions: {
     applyCardEffects: assign({
@@ -106,17 +113,27 @@ export const appMachine = setup({
           return context.game
         }
 
+        context.game.monster.sfx?.damage.play()
+        impactSound.play()
+
         return {
           ...context.game,
           monster: {
             ...context.game.monster,
-            health: context.game.monster?.stats.health - context.game.cardInPlay?.stats.attack,
+            status: 'taking-damage' as const,
+            stats: {
+              ...context.game.monster.stats,
+              health: context.game.monster?.stats.health - context.game.cardInPlay?.stats.attack,
+            },
           },
         }
       },
     }),
     createDrawPile: assign({
       game: ({ context }) => {
+        // If a draw pile already exists, do not create a new one
+        if (context.game.drawPile.length !== 0) return context.game
+
         const newDrawPile = arrayShuffle(context.game.player.startingDeck).map((card) => {
           return {
             ...card,
@@ -142,6 +159,7 @@ export const appMachine = setup({
             ...nextMonster,
             stats: {
               ...nextMonster.stats,
+              id: `${nextMonster.id}-${crypto.randomUUID()}`,
               health: nextMonster.stats.maxHealth,
             },
             status: 'idle' as const,
@@ -275,6 +293,8 @@ export const appMachine = setup({
           target: 'CardInPlay',
           actions: assign({
             game: ({ context, event }) => {
+              event.data.card.sfx?.play()
+
               return {
                 ...context.game,
                 currentHand: context.game.currentHand.filter(
@@ -283,17 +303,32 @@ export const appMachine = setup({
                 cardInPlay: {
                   ...event.data.card,
                   orientation: 'face-up' as const,
-                  status: 'disabled' as const,
+                  status: 'in-play' as const,
                 },
               }
             },
           }),
         },
       },
+      entry: assign({
+        game: ({ context }) => {
+          if (!context.game.monster) {
+            return context.game
+          }
+
+          return {
+            ...context.game,
+            monster: {
+              ...context.game.monster,
+              status: 'idle' as const,
+            },
+          }
+        },
+      }),
     },
     CardInPlay: {
       on: {
-        CARD_IN_PLAY_ANIMATION_COMPLETE: {
+        PLAY_CARD_ANIMATION_COMPLETE: {
           target: 'ApplyingCardEffects',
         },
       },
@@ -301,24 +336,70 @@ export const appMachine = setup({
     ApplyingCardEffects: {
       entry: 'applyCardEffects',
       on: {
-        CARD_EFFECTS_APPLIED: {
+        CARD_EFFECTS_ANIMATION_COMPLETE: {
           target: 'CardPlayed',
         },
       },
     },
     CardPlayed: {
-      target: 'PlayerChoosing',
       entry: assign({
         game: ({ context }) => {
+          // Should be an impossible state, but need to keep TypeScript happy
+          if (!context.game.monster) {
+            return context.game
+          }
+
           return {
             ...context.game,
-            discardPile: [...context.game.discardPile, context.game?.cardInPlay as Card],
+            monster: {
+              ...context.game.monster,
+              status: 'idle' as const,
+            },
             cardInPlay: undefined,
+            discardPile: [
+              ...context.game.discardPile,
+              {
+                ...(context.game?.cardInPlay as Card),
+                status: 'idle',
+              },
+            ],
           }
         },
       }),
+      on: {
+        DISCARD_CARD_ANIMATION_COMPLETE: [
+          {
+            target: 'Victory',
+            guard: ({ context }) => (context.game.monster as Monster).stats.health <= 0,
+            actions: assign({
+              game: ({ context }) => {
+                // Should be an impossible state, but need to keep TypeScript happy
+                if (!context.game.monster) {
+                  return context.game
+                }
+
+                context.game.monster.sfx?.death.play()
+
+                return {
+                  ...context.game,
+                  monster: undefined,
+                }
+              },
+            }),
+          },
+          {
+            target: 'PlayerChoosing',
+          },
+        ],
+      },
     },
-    Victory: {},
+    Victory: {
+      on: {
+        MONSTER_DEATH_ANIMATION_COMPLETE: {
+          target: 'NewRound',
+        },
+      },
+    },
     Defeat: {},
   },
 })
