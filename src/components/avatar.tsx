@@ -34,7 +34,7 @@ function AvatarAnimationWrapper({
 }) {
   const animation =
     status === 'taking-damage'
-      ? { x: [0, -rng(25), rng(10), rng(-10), 0], y: [0, -rng(5), rng(5), rng(5), 0] }
+      ? { x: [0, -rng(25), rng(25), rng(-25), 0], y: [0, -rng(15), rng(15), rng(-15), 0] }
       : { x: [0, 0], y: [0, 0] }
 
   return (

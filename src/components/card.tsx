@@ -1,7 +1,6 @@
 import { clsx } from 'clsx'
 import type { Card } from '../types/cards'
 import cardBackImg from '../images/card-back.png'
-import { DebugTag } from './debug-tag'
 import { Stats, StatsRow, Stat, StatVal } from './stats'
 import css from './card.module.css'
 
@@ -37,15 +36,6 @@ export function Card({
   return (
     <div className={withStateClsx(css['card'])} onClick={onClick} id={id}>
       <div className={withStateClsx(css['card-front'])}>
-        <DebugTag
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-          }}
-        >
-          {status}
-        </DebugTag>
         <div className={withStateClsx(css['card-header'])}>
           <div className={withStateClsx(css['card-name'])}>{name}</div>
         </div>

@@ -35,7 +35,7 @@ export function App() {
     <div className={css['play-area']}>
       <div className={css['play-area-wrapper']}>
         <div className={css['play-area-debugger']}>
-          Current state: <code>"{value}"</code>
+          Current state: <code>{JSON.stringify(value)}</code>
         </div>
 
         <div className={css['combat-zone']}>
@@ -62,8 +62,8 @@ export function App() {
                       key={context.game.monster.id}
                       initial={{ x: 50, y: 0, opacity: 0, filter: 'grayscale(0)' }}
                       animate={{ x: 0, y: 0, opacity: 1, filter: 'grayscale(0)' }}
-                      exit={{ x: 0, y: 75, opacity: 0, filter: 'grayscale(1)' }}
-                      transition={{ delay: 0.33 }}
+                      exit={{ x: 0, y: 50, opacity: 0, filter: 'grayscale(1)' }}
+                      transition={{ delay: 0.25, duration: 0.33 }}
                     >
                       <div className={css['monster']}>
                         <Stack spacing="200">
@@ -146,8 +146,8 @@ export function App() {
             <motion.div
               style={{ position: 'absolute', left: '50%', bottom: 0, zIndex: 100 }}
               initial={{ y: 0, opacity: 0.25, x: '-50%', scale: 1 }}
-              animate={{ y: '-40vh', opacity: 1, x: '-50%', scale: 1.125 }}
-              exit={{ opacity: 0, rotate: 15, scale: 1 }}
+              animate={{ y: '-33vh', opacity: 1, x: '-50%', scale: 1.25 }}
+              exit={{ x: '50vh', opacity: 0, rotate: 15, scale: 1 }}
               transition={{ type: 'spring', damping: 5, mass: 0.1, stiffness: 30 }}
               onAnimationComplete={() =>
                 send({

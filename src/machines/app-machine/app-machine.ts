@@ -13,9 +13,9 @@ import type { Card } from '../../types/cards.ts'
 /** Unique ID for the application machine */
 const APP_MACHINE_ID = 'app'
 
-const STARTING_HAND_SIZE = 5
+const STARTING_HAND_SIZE = 3
 
-const MAX_HAND_SIZE = 10
+const MAX_HAND_SIZE = 8
 
 /** All image files in the project */
 const IMAGE_MODULES = import.meta.glob('../**/**/*.(png|webp)', { eager: true })
@@ -131,9 +131,6 @@ export const appMachine = setup({
     }),
     createDrawPile: assign({
       game: ({ context }) => {
-        // If a draw pile already exists, do not create a new one
-        if (context.game.drawPile.length !== 0) return context.game
-
         const newDrawPile = arrayShuffle(context.game.player.startingDeck).map((card) => {
           return {
             ...card,
@@ -153,6 +150,8 @@ export const appMachine = setup({
         const shuffledMonsters = arrayShuffle(context.assets.monsters)
         const nextMonster = shuffledMonsters[rng(shuffledMonsters.length)]
 
+        nextMonster.sfx?.intro.play()
+
         return {
           ...context.game,
           monster: {
@@ -169,21 +168,36 @@ export const appMachine = setup({
     }),
     reshuffle: assign({
       game: ({ context }) => {
-        const newDrawPile = arrayShuffle(context.game.discardPile)
+        const nextDrawPile = arrayShuffle(context.game.discardPile)
 
         return {
           ...context.game,
-          drawPile: newDrawPile,
+          drawPile: nextDrawPile,
+          discardPile: [],
         }
       },
     }),
-    dealStartingHand: assign({
+    drawHand: assign({
       game: ({ context }) => {
-        const newHand = arrayShuffle(context.game.drawPile).slice(0, STARTING_HAND_SIZE)
+        const newCards = arrayShuffle(context.game.drawPile).slice(0, 3)
+        let nextHand = [...context.game.currentHand, ...newCards]
+
+        if (nextHand.length >= MAX_HAND_SIZE) {
+          nextHand = nextHand.slice(0, MAX_HAND_SIZE)
+        }
+
+        console.log('context.game.drawPile', context.game.drawPile)
+
+        const nextDrawPile = context.game.drawPile.filter(
+          (card) => !nextHand.some((nextCard) => nextCard.id === card.id),
+        )
+
+        console.log('nextDrawPile', nextDrawPile)
 
         return {
           ...context.game,
-          currentHand: newHand,
+          drawPile: nextDrawPile,
+          currentHand: nextHand,
         }
       },
     }),
@@ -193,13 +207,13 @@ export const appMachine = setup({
   },
   guards: {
     playerCanDraw: ({ context }) => {
-      return context.game.drawPile.length > 0
-    },
-    drawingNotNeeded: ({ context }) => {
-      return context.game.drawPile.length === 0 && context.game.currentHand.length > 0
+      return context.game.currentHand.length < MAX_HAND_SIZE && context.game.drawPile.length > 0
     },
     playerCannotDraw: ({ context }) => {
-      return context.game.drawPile.length === 0 && context.game.currentHand.length === 0
+      return context.game.drawPile.length === 0
+    },
+    drawingNotNeeded: ({ context }) => {
+      return context.game.currentHand.length === MAX_HAND_SIZE
     },
   },
 }).createMachine({
@@ -284,7 +298,7 @@ export const appMachine = setup({
       always: 'Drawing',
     },
     Drawing: {
-      entry: 'dealStartingHand',
+      entry: ['drawHand'],
       always: 'PlayerChoosing',
     },
     PlayerChoosing: {
@@ -388,7 +402,7 @@ export const appMachine = setup({
             }),
           },
           {
-            target: 'PlayerChoosing',
+            target: 'Drawing',
           },
         ],
       },

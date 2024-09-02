@@ -40,7 +40,7 @@
 
 .current-hand-wrapper {
   display: flex;
-  gap: var(--spacing-200);
+  gap: var(--spacing-100);
 }
 
 .play-area-wrapper {
