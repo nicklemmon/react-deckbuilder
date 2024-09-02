@@ -62,8 +62,14 @@ export function App() {
                       key={context.game.monster.id}
                       initial={{ x: 50, y: 0, opacity: 0, filter: 'grayscale(0)' }}
                       animate={{ x: 0, y: 0, opacity: 1, filter: 'grayscale(0)' }}
-                      exit={{ x: 0, y: 50, opacity: 0, filter: 'grayscale(1)' }}
-                      transition={{ delay: 0.25, duration: 0.33 }}
+                      exit={{
+                        x: 0,
+                        y: 50,
+                        opacity: 0,
+                        filter: 'grayscale(1)',
+                        transition: { delay: 0.33, duration: 0.66 },
+                      }}
+                      transition={{ duration: 0.33 }}
                     >
                       <div className={css['monster']}>
                         <Stack spacing="200">
@@ -87,10 +93,11 @@ export function App() {
                         </Stack>
                       </div>
                     </motion.div>,
+
                     <motion.div
                       key={`health-bar-${context.game.monster?.id}`}
                       initial={{ x: 0, y: -25, opacity: 0 }}
-                      animate={{ x: 0, y: 0, opacity: 1 }}
+                      animate={{ x: 0, y: 0, opacity: 1, transition: { delay: 0.66 } }}
                       exit={{
                         scale: 0.9,
                         opacity: 0,
@@ -141,7 +148,10 @@ export function App() {
           <div>Discard pile</div>
         </Stack>
 
-        <AnimatePresence onExitComplete={() => send({ type: 'DISCARD_CARD_ANIMATION_COMPLETE' })}>
+        <AnimatePresence
+          onExitComplete={() => send({ type: 'DISCARD_CARD_ANIMATION_COMPLETE' })}
+          mode="popLayout"
+        >
           {context.game.cardInPlay ? (
             <motion.div
               style={{ position: 'absolute', left: '50%', bottom: 0, zIndex: 100 }}
