@@ -39,7 +39,14 @@ export function CharacterCreation({
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="character-name">Character name</label>
-          <input id="character-name" type="text" name="characterName" autoComplete="off" required />
+          <input
+            defaultValue="Nick"
+            id="character-name"
+            type="text"
+            name="characterName"
+            autoComplete="off"
+            required
+          />
         </div>
 
         <div>

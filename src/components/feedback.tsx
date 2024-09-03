@@ -19,6 +19,7 @@ export function Feedback({
 }) {
   return (
     <motion.div
+      key={`feedback-${variant}-${orientation}`}
       style={{
         position: 'absolute',
         top: orientation === 'top' ? '25%' : '75%',

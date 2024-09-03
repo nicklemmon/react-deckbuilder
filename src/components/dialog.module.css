@@ -1,0 +1,34 @@
+.dialog {
+  max-width: 800px;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  background-color: var(--color-stone-800);
+  color: var(--color-stone-100);
+  border-radius: var(--rounding-200);
+  transform: scale(0);
+  display: none;
+}
+
+.dialog.is-open {
+  display: flex;
+  position: fixed;
+  opacity: 1;
+  visibility: visible;
+  top: 50%;
+  left: 50%;
+  transform: scale(1) translate(-50%, -50%);
+}
+
+.dialog-content {
+  padding: var(--spacing-400);
+}
+
+.dialog-overlay {
+}
+
+.dialog-overlay.is-open {
+  height: 100vh;
+  width: 100vw;
+  background-color: hotpink;
+}

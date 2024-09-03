@@ -3,31 +3,48 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { appMachine } from './machines/app-machine/app-machine.ts'
 import { type Card as CardType } from './types/cards.ts'
 import { AppPreloader } from './components/app-preloader.tsx'
+import { rng } from './helpers/rng.ts'
 import { CharacterCreation } from './components/character-creation.tsx'
 import { Avatar } from './components/avatar.tsx'
 import { Card } from './components/card.tsx'
 import { Deck } from './components/deck.tsx'
+import { Dialog, DialogContent } from './components/dialog.tsx'
 import { HealthBar } from './components/health-bar.tsx'
 import { Feedback } from './components/feedback.tsx'
 import { Stack } from './components/stack.tsx'
 import css from './app.module.css'
 import './index.css'
+import { Button } from './components/button.tsx'
 
 export function App() {
   const [{ context, value }, send] = useMachine(appMachine)
 
+  console.log('value', value)
+
   if (value === 'LoadingAssets') {
-    return <AppPreloader />
+    return (
+      <>
+        <div className={css['play-area-debugger']}>
+          Current state: <code>{JSON.stringify(value)}</code>
+        </div>
+        <AppPreloader />
+      </>
+    )
   }
 
   if (value === 'CharacterCreation') {
     return (
-      <CharacterCreation
-        onCreate={(formData) => {
-          console.log('formData', formData)
-          send({ type: 'CREATE_CHARACTER', data: formData })
-        }}
-      />
+      <>
+        <div className={css['play-area-debugger']}>
+          Current state: <code>{JSON.stringify(value)}</code>
+        </div>
+        <CharacterCreation
+          onCreate={(formData) => {
+            console.log('formData', formData)
+            send({ type: 'CREATE_CHARACTER', data: formData })
+          }}
+        />
+      </>
     )
   }
 
@@ -39,17 +56,29 @@ export function App() {
         </div>
 
         <div className={css['combat-zone']}>
-          <div className={css['character']}>
-            <Stack spacing="200">
-              {context.game.player.characterPortrait ? (
-                <Avatar src={context.game.player.characterPortrait} />
-              ) : null}
+          <AnimatePresence>
+            {context.game.player.characterPortrait ? (
+              <motion.div
+                key={`character-${context.game.player.characterName}`}
+                initial={{ x: 0, y: 0, opacity: 1 }}
+                animate={{ x: 0, y: 0, opacity: 1 }}
+                exit={{ x: 0, y: 0, opacity: 0 }}
+                transition={{ duration: 0.33 }}
+              >
+                <div className={css['character']}>
+                  <Stack spacing="200">
+                    {context.game.player.characterPortrait ? (
+                      <Avatar src={context.game.player.characterPortrait} />
+                    ) : null}
 
-              {/* <HealthBar
+                    {/* <HealthBar
                 health={context.game.player.stats.health / context.game.player.stats.maxHealth}
               /> */}
-            </Stack>
-          </div>
+                  </Stack>
+                </div>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
 
           <Stack>
             <AnimatePresence
@@ -59,7 +88,7 @@ export function App() {
               {context.game.monster
                 ? [
                     <motion.div
-                      key={context.game.monster.id}
+                      key={`monster-${context.game.monster.id}-${rng(0, 100)}`}
                       initial={{ x: 50, y: 0, opacity: 0, filter: 'grayscale(0)' }}
                       animate={{ x: 0, y: 0, opacity: 1, filter: 'grayscale(0)' }}
                       exit={{
@@ -97,12 +126,12 @@ export function App() {
                     <motion.div
                       key={`health-bar-${context.game.monster?.id}`}
                       initial={{ x: 0, y: -25, opacity: 0 }}
-                      animate={{ x: 0, y: 0, opacity: 1, transition: { delay: 0.66 } }}
+                      animate={{ x: 0, y: 0, opacity: 1, transition: { delay: 0.25 } }}
                       exit={{
                         scale: 0.9,
                         opacity: 0,
                       }}
-                      transition={{ duration: 0.166 }}
+                      transition={{ duration: 0.25 }}
                     >
                       <HealthBar
                         health={
@@ -118,19 +147,22 @@ export function App() {
         </div>
 
         <Stack className={css['current-hand']}>
-          <div className={css['current-hand-wrapper']}>
-            {context.game.currentHand.map((card, index) => {
-              return (
-                <Card
-                  {...card}
-                  key={`current-hand-card-${card.id}-${index}`}
-                  orientation="face-up"
-                  status={context.game.cardInPlay !== undefined ? 'disabled' : card.status}
-                  onClick={() => send({ type: 'PLAY_CARD', data: { card } })}
-                />
-              )
-            })}
-          </div>
+          <Stack spacing="100">
+            <div className={css['current-hand-wrapper']}>
+              {context.game.currentHand.map((card, index) => {
+                return (
+                  <Card
+                    {...card}
+                    key={`current-hand-card-${card.id}-${index}`}
+                    orientation="face-up"
+                    status={context.game.cardInPlay !== undefined ? 'disabled' : card.status}
+                    onClick={() => send({ type: 'PLAY_CARD', data: { card } })}
+                  />
+                )
+              })}
+            </div>
+            Current hand with {context.game.currentHand.length} cards
+          </Stack>
         </Stack>
 
         <Stack className={css['discard-pile']}>
@@ -145,7 +177,7 @@ export function App() {
               )
             })}
           </Deck>
-          <div>Discard pile</div>
+          <div>Discard pile with {context.game.discardPile.length} cards</div>
         </Stack>
 
         <AnimatePresence
@@ -154,6 +186,7 @@ export function App() {
         >
           {context.game.cardInPlay ? (
             <motion.div
+              key={`card-in-play-${context.game.cardInPlay.id}`}
               style={{ position: 'absolute', left: '50%', bottom: 0, zIndex: 100 }}
               initial={{ y: 0, opacity: 0.25, x: '-50%', scale: 1 }}
               animate={{ y: '-33vh', opacity: 1, x: '-50%', scale: 1.25 }}
@@ -183,9 +216,15 @@ export function App() {
               )
             })}
           </Deck>
-          <div>Draw pile</div>
+          <div>Draw pile with {context.game.drawPile.length} cards</div>
         </Stack>
       </div>
+
+      <Dialog open={value === 'BetweenRounds'}>
+        <DialogContent>
+          <Button onClick={() => send({ type: 'NEXT_BATTLE_CLICK' })}>Next battle</Button>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

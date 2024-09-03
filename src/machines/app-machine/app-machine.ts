@@ -1,6 +1,7 @@
 import { assign, fromPromise, setup } from 'xstate'
 import arrayShuffle from 'array-shuffle'
 import impactSfx from '../../sfx/impact.slice.wav'
+import cardUseSfx from '../../sfx/card.use.wav'
 import { resolveModules } from '../../helpers/vite.ts'
 import { rng } from '../../helpers/rng.ts'
 import { getSound } from '../../helpers/get-sound.ts'
@@ -13,9 +14,12 @@ import type { Card } from '../../types/cards.ts'
 /** Unique ID for the application machine */
 const APP_MACHINE_ID = 'app'
 
+/** Shared default `after` delay for state transitions - useful for debugging immediate transitions with guards */
+const DEFAULT_AFTER_DELAY = 500
+
 const STARTING_HAND_SIZE = 3
 
-const MAX_HAND_SIZE = 8
+const MAX_HAND_SIZE = 6
 
 /** All image files in the project */
 const IMAGE_MODULES = import.meta.glob('../**/**/*.(png|webp)', { eager: true })
@@ -32,6 +36,8 @@ const CHARACTER_CLASS_MODULES = import.meta.glob('../../character-classes/**/con
 const CHARACTER_CLASSES = resolveModules<CharacterClass>(CHARACTER_CLASS_MODULES)
 
 const impactSound = getSound({ src: impactSfx })
+
+const cardUseSound = getSound({ src: cardUseSfx })
 
 /** Prefetches assets from multiple sources returned by `import.meta.glob` */
 async function prefetchAssets() {
@@ -67,6 +73,9 @@ export type AppMachineContext = {
       characterPortrait: string | undefined
       startingDeck: Array<Card>
       deck: Array<Card>
+      stats: {
+        health: number
+      }
     }
     shop: {
       cards: Array<Card>
@@ -84,26 +93,29 @@ export type AppMachineContext = {
   }
 }
 
+type AppMachineEvent =
+  | {
+      type: 'CREATE_CHARACTER'
+      data: { characterClass: CharacterClass; characterName: string; characterPortrait: string }
+    }
+  | {
+      type: 'PLAY_CARD'
+      data: { card: Card }
+    }
+  | {
+      type: 'PLAY_CARD_ANIMATION_COMPLETE'
+      data: { card: Card }
+    }
+  | { type: 'CARD_EFFECTS_ANIMATION_COMPLETE' }
+  | { type: 'PLAY_CARD_ANIMATION_COMPLETE' }
+  | { type: 'DISCARD_CARD_ANIMATION_COMPLETE' }
+  | { type: 'MONSTER_DEATH_ANIMATION_COMPLETE' }
+  | { type: 'NEXT_BATTLE_CLICK' }
+
 export const appMachine = setup({
   types: {
     context: {} as AppMachineContext,
-    events: {} as
-      | {
-          type: 'CREATE_CHARACTER'
-          data: { characterClass: CharacterClass; characterName: string; characterPortrait: string }
-        }
-      | {
-          type: 'PLAY_CARD'
-          data: { card: Card }
-        }
-      | {
-          type: 'PLAY_CARD_ANIMATION_COMPLETE'
-          data: { card: Card }
-        }
-      | { type: 'CARD_EFFECTS_ANIMATION_COMPLETE' }
-      | { type: 'PLAY_CARD_ANIMATION_COMPLETE' }
-      | { type: 'DISCARD_CARD_ANIMATION_COMPLETE' }
-      | { type: 'MONSTER_DEATH_ANIMATION_COMPLETE' },
+    events: {} as AppMachineEvent,
   },
   actions: {
     applyCardEffects: assign({
@@ -168,52 +180,67 @@ export const appMachine = setup({
     }),
     reshuffle: assign({
       game: ({ context }) => {
-        const nextDrawPile = arrayShuffle(context.game.discardPile)
+        const nextDrawPile = arrayShuffle(context.game.player.deck)
+        console.log('reshuffle!')
 
         return {
           ...context.game,
           drawPile: nextDrawPile,
+          currentHand: [],
           discardPile: [],
         }
       },
     }),
     drawHand: assign({
       game: ({ context }) => {
-        const newCards = arrayShuffle(context.game.drawPile).slice(0, 3)
-        let nextHand = [...context.game.currentHand, ...newCards]
-
-        if (nextHand.length >= MAX_HAND_SIZE) {
-          nextHand = nextHand.slice(0, MAX_HAND_SIZE)
-        }
-
-        console.log('context.game.drawPile', context.game.drawPile)
-
-        const nextDrawPile = context.game.drawPile.filter(
-          (card) => !nextHand.some((nextCard) => nextCard.id === card.id),
+        const drawPile = context.game.drawPile
+        const drawnCards = drawPile.slice(0, 3)
+        const remainingCards = drawPile.slice(3)
+        const currentHand = context.game.currentHand.concat(
+          drawnCards.map((card) => ({
+            ...card,
+            orientation: 'face-up',
+          })),
         )
-
-        console.log('nextDrawPile', nextDrawPile)
 
         return {
           ...context.game,
-          drawPile: nextDrawPile,
-          currentHand: nextHand,
+          currentHand,
+          drawPile: remainingCards,
         }
       },
     }),
+    awardSpoils: () => {},
+    stockShop: () => {},
   },
   actors: {
     loadAllAssets: fromPromise(prefetchAssets),
   },
   guards: {
+    playerIsAlive: ({ context }) => {
+      return context.game.player.stats.health > 0
+    },
+    playerIsDead: ({ context }) => {
+      return context.game.player.stats.health <= 0
+    },
+    monsterIsAlive: ({ context }) => {
+      if (!context.game.monster) return false
+
+      return context.game.monster.stats.health > 0
+    },
+    monsterIsDead: ({ context }) => {
+      if (!context.game.monster) return false
+
+      return context.game.monster.stats.health <= 0
+    },
     playerCanDraw: ({ context }) => {
-      return context.game.currentHand.length < MAX_HAND_SIZE && context.game.drawPile.length > 0
+      return context.game.drawPile.length > 0 && context.game.currentHand.length < MAX_HAND_SIZE
     },
     playerCannotDraw: ({ context }) => {
-      return context.game.drawPile.length === 0
+      return context.game.currentHand.length === 0 && context.game.drawPile.length === 0
     },
     drawingNotNeeded: ({ context }) => {
-      return context.game.currentHand.length === MAX_HAND_SIZE
+      return context.game.drawPile.length === 0 && context.game.currentHand.length === MAX_HAND_SIZE
     },
   },
 }).createMachine({
@@ -232,6 +259,9 @@ export const appMachine = setup({
         characterPortrait: undefined,
         startingDeck: STARTING_DECK,
         deck: [],
+        stats: {
+          health: 100,
+        },
       },
       shop: {
         cards: [],
@@ -278,28 +308,34 @@ export const appMachine = setup({
       always: ['Surveying'],
     },
     Surveying: {
-      always: [
-        {
-          target: 'Reshuffling',
-          guard: 'playerCannotDraw',
-        },
-        {
-          target: 'Drawing',
-          guard: 'playerCanDraw',
-        },
-        {
-          target: 'PlayerChoosing',
-          guard: 'drawingNotNeeded',
-        },
-      ],
+      after: {
+        500: [
+          {
+            target: 'PlayerChoosing',
+            guard: 'drawingNotNeeded',
+          },
+          {
+            target: 'Drawing',
+            guard: 'playerCanDraw',
+          },
+          {
+            target: 'Reshuffling',
+            guard: 'playerCannotDraw',
+          },
+        ],
+      },
     },
     Reshuffling: {
       entry: 'reshuffle',
-      always: 'Drawing',
+      after: {
+        500: 'Drawing',
+      },
     },
     Drawing: {
       entry: ['drawHand'],
-      always: 'PlayerChoosing',
+      after: {
+        [DEFAULT_AFTER_DELAY]: 'PlayerChoosing',
+      },
     },
     PlayerChoosing: {
       on: {
@@ -307,10 +343,14 @@ export const appMachine = setup({
           target: 'CardInPlay',
           actions: assign({
             game: ({ context, event }) => {
-              event.data.card.sfx?.play()
+              cardUseSound.play()
+
+              // TODO: Need to have a slight delay here
+              context.game.cardInPlay?.sfx?.play()
 
               return {
                 ...context.game,
+                // Remove the selected card from the current hand
                 currentHand: context.game.currentHand.filter(
                   (card) => card.id !== event.data.card.id,
                 ),
@@ -360,16 +400,26 @@ export const appMachine = setup({
         game: ({ context }) => {
           // Should be an impossible state, but need to keep TypeScript happy
           if (!context.game.monster) {
-            return context.game
+            return {
+              ...context.game,
+              cardInPlay: undefined,
+              discardPile: [
+                ...context.game.discardPile,
+                {
+                  ...(context.game?.cardInPlay as Card),
+                  status: 'idle',
+                },
+              ],
+            }
           }
 
           return {
             ...context.game,
+            cardInPlay: undefined,
             monster: {
               ...context.game.monster,
               status: 'idle' as const,
             },
-            cardInPlay: undefined,
             discardPile: [
               ...context.game.discardPile,
               {
@@ -380,36 +430,43 @@ export const appMachine = setup({
           }
         },
       }),
-      on: {
-        DISCARD_CARD_ANIMATION_COMPLETE: [
-          {
-            target: 'Victory',
-            guard: ({ context }) => (context.game.monster as Monster).stats.health <= 0,
-            actions: assign({
-              game: ({ context }) => {
-                // Should be an impossible state, but need to keep TypeScript happy
-                if (!context.game.monster) {
-                  return context.game
-                }
+      always: [
+        {
+          target: 'Victory',
+          guard: 'monsterIsDead',
+          actions: assign({
+            game: ({ context }) => {
+              // Should be an impossible state, but need to keep TypeScript happy
+              if (!context.game.monster) {
+                return context.game
+              }
 
-                context.game.monster.sfx?.death.play()
+              context.game.monster.sfx?.death.play()
 
-                return {
-                  ...context.game,
-                  monster: undefined,
-                }
-              },
-            }),
-          },
-          {
-            target: 'Drawing',
-          },
-        ],
-      },
+              return {
+                ...context.game,
+                monster: undefined,
+              }
+            },
+          }),
+        },
+        {
+          target: 'Surveying',
+          guard: 'monsterIsAlive',
+        },
+      ],
     },
     Victory: {
+      entry: ['awardSpoils', 'stockShop'],
       on: {
         MONSTER_DEATH_ANIMATION_COMPLETE: {
+          target: 'BetweenRounds',
+        },
+      },
+    },
+    BetweenRounds: {
+      on: {
+        NEXT_BATTLE_CLICK: {
           target: 'NewRound',
         },
       },
