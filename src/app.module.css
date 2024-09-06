@@ -4,6 +4,7 @@
   width: 100vw;
   height: 100vh;
   background-color: whitesmoke;
+  overflow: hidden;
 }
 
 .play-area-debugger {
@@ -11,7 +12,7 @@
   top: var(--play-area-bleed);
   left: 50%;
   transform: translateX(-50%);
-  z-index: 100;
+  z-index: var(--z-index-100);
   background-color: rgba(0, 0, 0, 0.8);
   border-radius: var(--rounding-100);
   color: var(--color-stone-100);
@@ -30,9 +31,13 @@
   transform: translate(-50%, -25%);
 }
 
+.character {
+  position: relative;
+}
+
 .current-hand {
   position: fixed;
-  z-index: 100;
+  z-index: var(--z-index-100);
   bottom: var(--play-area-bleed);
   left: 50%;
   transform: translateX(-50%);

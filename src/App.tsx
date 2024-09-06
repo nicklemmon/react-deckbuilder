@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { appMachine } from './machines/app-machine/app-machine.ts'
 import { type Card as CardType } from './types/cards.ts'
 import { AppPreloader } from './components/app-preloader.tsx'
-import { rng } from './helpers/rng.ts'
 import { CharacterCreation } from './components/character-creation.tsx'
 import { Avatar } from './components/avatar.tsx'
 import { Card } from './components/card.tsx'
@@ -18,8 +17,6 @@ import { Button } from './components/button.tsx'
 
 export function App() {
   const [{ context, value }, send] = useMachine(appMachine)
-
-  console.log('value', value)
 
   if (value === 'LoadingAssets') {
     return (
@@ -68,12 +65,29 @@ export function App() {
                 <div className={css['character']}>
                   <Stack spacing="200">
                     {context.game.player.characterPortrait ? (
-                      <Avatar src={context.game.player.characterPortrait} />
+                      <Avatar
+                        src={context.game.player.characterPortrait}
+                        status={context.game.player.status}
+                      />
                     ) : null}
 
-                    {/* <HealthBar
-                health={context.game.player.stats.health / context.game.player.stats.maxHealth}
-              /> */}
+                    <HealthBar
+                      health={
+                        context.game.player.stats.health / context.game.player.stats.maxHealth
+                      }
+                    />
+
+                    {value === 'Defending' ? (
+                      <Feedback
+                        variant="negative"
+                        onAnimationComplete={() =>
+                          send({ type: 'MONSTER_ATTACK_ANIMATION_COMPLETE' })
+                        }
+                      >
+                        {/* TODO: This is the wrong value! */}
+                        {context.game.monster?.stats.attack}
+                      </Feedback>
+                    ) : null}
                   </Stack>
                 </div>
               </motion.div>
@@ -82,13 +96,12 @@ export function App() {
 
           <Stack>
             <AnimatePresence
-              initial={false}
               onExitComplete={() => send({ type: 'MONSTER_DEATH_ANIMATION_COMPLETE' })}
             >
               {context.game.monster
                 ? [
                     <motion.div
-                      key={`monster-${context.game.monster.id}-${rng(0, 100)}`}
+                      key={`monster-${context.game.monster.id}`}
                       initial={{ x: 50, y: 0, opacity: 0, filter: 'grayscale(0)' }}
                       animate={{ x: 0, y: 0, opacity: 1, filter: 'grayscale(0)' }}
                       exit={{

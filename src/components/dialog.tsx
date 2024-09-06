@@ -1,7 +1,14 @@
 import { clsx } from 'clsx'
 import css from './dialog.module.css'
 
-export function Dialog({ open, children }: { open: boolean; children: React.ReactNode }) {
+export function Dialog({
+  open,
+  children,
+}: {
+  open: boolean
+  children: React.ReactNode
+  onClose?: () => void
+}) {
   const withStatusClsx = (root: string) =>
     clsx({
       [css[root]]: true,
@@ -10,8 +17,10 @@ export function Dialog({ open, children }: { open: boolean; children: React.Reac
 
   return (
     <>
-      <div role="dialog" className={withStatusClsx('dialog')}>
-        {children}
+      <div className={withStatusClsx('dialog-container')}>
+        <div role="dialog" className={withStatusClsx('dialog')}>
+          {children}
+        </div>
       </div>
 
       <div className={withStatusClsx('dialog-overlay')} />

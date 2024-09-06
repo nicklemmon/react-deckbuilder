@@ -2,6 +2,7 @@ import { assign, fromPromise, setup } from 'xstate'
 import arrayShuffle from 'array-shuffle'
 import impactSfx from '../../sfx/impact.slice.wav'
 import cardUseSfx from '../../sfx/card.use.wav'
+import buttonClickSfx from '../../sfx/button.click.wav'
 import { resolveModules } from '../../helpers/vite.ts'
 import { rng } from '../../helpers/rng.ts'
 import { getSound } from '../../helpers/get-sound.ts'
@@ -10,16 +11,13 @@ import { CARDS, STARTING_DECK } from '../../helpers/cards.ts'
 import type { CharacterClass } from '../../types/character-classes.ts'
 import type { Monster } from '../../types/monsters.ts'
 import type { Card } from '../../types/cards.ts'
+import { AvatarStatus } from '../../components/avatar.tsx'
 
 /** Unique ID for the application machine */
 const APP_MACHINE_ID = 'app'
 
-/** Shared default `after` delay for state transitions - useful for debugging immediate transitions with guards */
-const DEFAULT_AFTER_DELAY = 500
-
-const STARTING_HAND_SIZE = 3
-
-const MAX_HAND_SIZE = 6
+/** THe maximum number of allowed cards in the `currentHand` */
+const MAX_HAND_SIZE = 7
 
 /** All image files in the project */
 const IMAGE_MODULES = import.meta.glob('../**/**/*.(png|webp)', { eager: true })
@@ -38,6 +36,8 @@ const CHARACTER_CLASSES = resolveModules<CharacterClass>(CHARACTER_CLASS_MODULES
 const impactSound = getSound({ src: impactSfx })
 
 const cardUseSound = getSound({ src: cardUseSfx })
+
+const buttonClickSound = getSound({ src: buttonClickSfx, volume: 0.5 })
 
 /** Prefetches assets from multiple sources returned by `import.meta.glob` */
 async function prefetchAssets() {
@@ -73,8 +73,11 @@ export type AppMachineContext = {
       characterPortrait: string | undefined
       startingDeck: Array<Card>
       deck: Array<Card>
+      status: AvatarStatus
       stats: {
+        maxHealth: number
         health: number
+        defense: number
       }
     }
     shop: {
@@ -110,6 +113,7 @@ type AppMachineEvent =
   | { type: 'PLAY_CARD_ANIMATION_COMPLETE' }
   | { type: 'DISCARD_CARD_ANIMATION_COMPLETE' }
   | { type: 'MONSTER_DEATH_ANIMATION_COMPLETE' }
+  | { type: 'MONSTER_ATTACK_ANIMATION_COMPLETE' }
   | { type: 'NEXT_BATTLE_CLICK' }
 
 export const appMachine = setup({
@@ -120,13 +124,12 @@ export const appMachine = setup({
   actions: {
     applyCardEffects: assign({
       game: ({ context }) => {
-        // This should be an impossible state, but need to keep TypeScript happy
+        context.game?.monster?.sfx?.damage.play()
+        impactSound.play()
+
         if (!context.game.monster || !context.game.cardInPlay) {
           return context.game
         }
-
-        context.game.monster.sfx?.damage.play()
-        impactSound.play()
 
         return {
           ...context.game,
@@ -153,6 +156,7 @@ export const appMachine = setup({
 
         return {
           ...context.game,
+          discardPile: [],
           drawPile: newDrawPile,
         }
       },
@@ -168,9 +172,9 @@ export const appMachine = setup({
           ...context.game,
           monster: {
             ...nextMonster,
+            id: `${nextMonster.id}-${crypto.randomUUID()}`,
             stats: {
               ...nextMonster.stats,
-              id: `${nextMonster.id}-${crypto.randomUUID()}`,
               health: nextMonster.stats.maxHealth,
             },
             status: 'idle' as const,
@@ -180,14 +184,16 @@ export const appMachine = setup({
     }),
     reshuffle: assign({
       game: ({ context }) => {
-        const nextDrawPile = arrayShuffle(context.game.player.deck)
-        console.log('reshuffle!')
+        const nextDrawPile = arrayShuffle([
+          ...context.game.currentHand,
+          ...context.game.discardPile,
+        ])
 
         return {
           ...context.game,
-          drawPile: nextDrawPile,
           currentHand: [],
           discardPile: [],
+          drawPile: nextDrawPile,
         }
       },
     }),
@@ -207,6 +213,35 @@ export const appMachine = setup({
           ...context.game,
           currentHand,
           drawPile: remainingCards,
+        }
+      },
+    }),
+    discardCurrentHand: assign({
+      game: ({ context }) => {
+        return {
+          ...context.game,
+          currentHand: [],
+        }
+      },
+    }),
+    monsterAttack: assign({
+      game: ({ context }) => {
+        if (!context.game.monster) return context.game
+
+        const rawDamage = context.game.monster.stats.attack - context.game.player.stats.defense
+        const damage = rawDamage > 0 ? rawDamage : 0
+        impactSound.play()
+
+        return {
+          ...context.game,
+          player: {
+            ...context.game.player,
+            status: 'taking-damage' as const,
+            stats: {
+              ...context.game.player.stats,
+              health: context.game.player.stats.health - damage,
+            },
+          },
         }
       },
     }),
@@ -237,7 +272,7 @@ export const appMachine = setup({
       return context.game.drawPile.length > 0 && context.game.currentHand.length < MAX_HAND_SIZE
     },
     playerCannotDraw: ({ context }) => {
-      return context.game.currentHand.length === 0 && context.game.drawPile.length === 0
+      return context.game.drawPile.length === 0
     },
     drawingNotNeeded: ({ context }) => {
       return context.game.drawPile.length === 0 && context.game.currentHand.length === MAX_HAND_SIZE
@@ -259,8 +294,12 @@ export const appMachine = setup({
         characterPortrait: undefined,
         startingDeck: STARTING_DECK,
         deck: [],
+        status: 'idle' as const,
         stats: {
+          // TODO: Update with character class stats
+          maxHealth: 100,
           health: 100,
+          defense: 0,
         },
       },
       shop: {
@@ -304,38 +343,39 @@ export const appMachine = setup({
       },
     },
     NewRound: {
-      entry: ['getNextMonster', 'createDrawPile'],
+      entry: ['discardCurrentHand', 'getNextMonster', 'createDrawPile'],
       always: ['Surveying'],
     },
     Surveying: {
-      after: {
-        500: [
-          {
-            target: 'PlayerChoosing',
-            guard: 'drawingNotNeeded',
-          },
-          {
-            target: 'Drawing',
-            guard: 'playerCanDraw',
-          },
-          {
-            target: 'Reshuffling',
-            guard: 'playerCannotDraw',
-          },
-        ],
-      },
+      // Resets player status to idle
+      entry: assign({
+        game: ({ context }) => ({
+          ...context.game,
+          player: { ...context.game.player, status: 'idle' as const },
+        }),
+      }),
+      always: [
+        {
+          target: 'PlayerChoosing',
+          guard: 'drawingNotNeeded',
+        },
+        {
+          target: 'Drawing',
+          guard: 'playerCanDraw',
+        },
+        {
+          target: 'Reshuffling',
+          guard: 'playerCannotDraw',
+        },
+      ],
     },
     Reshuffling: {
       entry: 'reshuffle',
-      after: {
-        500: 'Drawing',
-      },
+      always: 'Drawing',
     },
     Drawing: {
       entry: ['drawHand'],
-      after: {
-        [DEFAULT_AFTER_DELAY]: 'PlayerChoosing',
-      },
+      always: 'PlayerChoosing',
     },
     PlayerChoosing: {
       on: {
@@ -346,7 +386,7 @@ export const appMachine = setup({
               cardUseSound.play()
 
               // TODO: Need to have a slight delay here
-              context.game.cardInPlay?.sfx?.play()
+              event.data.card?.sfx?.play()
 
               return {
                 ...context.game,
@@ -451,10 +491,25 @@ export const appMachine = setup({
           }),
         },
         {
-          target: 'Surveying',
+          target: 'Defending',
           guard: 'monsterIsAlive',
         },
       ],
+    },
+    Defending: {
+      entry: 'monsterAttack',
+      on: {
+        MONSTER_ATTACK_ANIMATION_COMPLETE: [
+          {
+            target: 'Surveying',
+            guard: 'playerIsAlive',
+          },
+          {
+            target: 'Defeat',
+            guard: 'playerIsDead',
+          },
+        ],
+      },
     },
     Victory: {
       entry: ['awardSpoils', 'stockShop'],
@@ -468,6 +523,7 @@ export const appMachine = setup({
       on: {
         NEXT_BATTLE_CLICK: {
           target: 'NewRound',
+          actions: () => buttonClickSound.play(),
         },
       },
     },

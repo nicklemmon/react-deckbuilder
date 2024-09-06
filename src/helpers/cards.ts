@@ -39,9 +39,9 @@ export const CARDS = Object.entries(CARD_CONFIG_MODULES).map(([path, mod]) => {
 /** Default starting deck - TODO: Build starting decks per character class */
 export const STARTING_DECK = [
   getCard('earthquake', CARDS),
-  getCard('earthquake', CARDS),
-  getCard('lightning', CARDS),
-  getCard('lightning', CARDS),
-  getCard('lightning', CARDS),
-  getCard('lightning', CARDS),
+  getCard('strike', CARDS),
+  getCard('strike', CARDS),
+  getCard('strike', CARDS),
+  getCard('firebolt', CARDS),
+  getCard('firebolt', CARDS),
 ].filter(Boolean) as Array<Card>
