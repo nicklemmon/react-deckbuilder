@@ -14,6 +14,7 @@ import { Stack } from './components/stack.tsx'
 import css from './app.module.css'
 import './index.css'
 import { Button } from './components/button.tsx'
+import { cardUseSound } from './machines/app-machine/app-machine.ts'
 
 export function App() {
   const [{ context, value }, send] = useMachine(appMachine)
@@ -164,13 +165,25 @@ export function App() {
             <div className={css['current-hand-wrapper']}>
               {context.game.currentHand.map((card, index) => {
                 return (
-                  <Card
-                    {...card}
-                    key={`current-hand-card-${card.id}-${index}`}
-                    orientation="face-up"
-                    status={context.game.cardInPlay !== undefined ? 'disabled' : card.status}
-                    onClick={() => send({ type: 'PLAY_CARD', data: { card } })}
-                  />
+                  <motion.div
+                    layout
+                    key={`current-hand-card-${card.id}`}
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    onAnimationStart={() => {
+                      setTimeout(() => {
+                        cardUseSound.play()
+                      }, index * 100)
+                    }}
+                  >
+                    <Card
+                      {...card}
+                      orientation="face-up"
+                      status={context.game.cardInPlay !== undefined ? 'disabled' : card.status}
+                      onClick={() => send({ type: 'PLAY_CARD', data: { card } })}
+                    />
+                  </motion.div>
                 )
               })}
             </div>

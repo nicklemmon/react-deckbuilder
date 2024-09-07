@@ -35,7 +35,8 @@ const CHARACTER_CLASSES = resolveModules<CharacterClass>(CHARACTER_CLASS_MODULES
 
 const impactSound = getSound({ src: impactSfx })
 
-const cardUseSound = getSound({ src: cardUseSfx })
+// TODO: We really need to keep these somewhere else
+export const cardUseSound = getSound({ src: cardUseSfx, volume: 0.33 })
 
 const buttonClickSound = getSound({ src: buttonClickSfx, volume: 0.5 })
 
@@ -208,6 +209,10 @@ export const appMachine = setup({
             orientation: 'face-up',
           })),
         )
+
+        for (const _card of drawnCards) {
+          cardUseSound.play()
+        }
 
         return {
           ...context.game,
