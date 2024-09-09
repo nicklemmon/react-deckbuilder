@@ -73,9 +73,8 @@ export function App() {
                     ) : null}
 
                     <HealthBar
-                      health={
-                        context.game.player.stats.health / context.game.player.stats.maxHealth
-                      }
+                      health={context.game.player.stats.health}
+                      maxHealth={context.game.player.stats.maxHealth}
                     />
 
                     {value === 'Defending' ? (
@@ -148,10 +147,8 @@ export function App() {
                       transition={{ duration: 0.25 }}
                     >
                       <HealthBar
-                        health={
-                          context.game?.monster?.stats?.health /
-                            context?.game.monster?.stats?.maxHealth ?? 0
-                        }
+                        health={context.game.monster?.stats.health}
+                        maxHealth={context.game.monster?.stats.maxHealth}
                       />
                     </motion.div>,
                   ]

@@ -28,3 +28,9 @@
     var(--color-blood-900) 100%
   );
 }
+
+.health-bar-text {
+  font-size: var(--font-size-300);
+  font-weight: 900;
+  color: var(--color-blood-500);
+}
