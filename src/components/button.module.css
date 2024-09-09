@@ -5,9 +5,10 @@
   padding: var(--spacing-200) var(--spacing-400);
   border-radius: var(--rounding-100);
   cursor: pointer;
-  transition: all var(--anim-dur-100) var(--anim-easing-100);
+  transition-property: transform, filter;
+  transition-duration: var(--anim-dur-100);
+  transition-timing-function: var(--anim-easing-100);
   border: var(--border-width-200) solid transparent;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   box-shadow:
     0 2px 4px rgba(0, 0, 0, 0.1),
     0 4px 8px rgba(0, 0, 0, 0.1),
@@ -15,8 +16,8 @@
 }
 
 .button:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.1);
+  transform: translateY(-1px);
+  filter: brightness(1.05);
 }
 
 .button:active {

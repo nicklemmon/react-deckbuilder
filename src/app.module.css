@@ -87,3 +87,11 @@
 .events li {
   margin-bottom: 0.5rem;
 }
+
+.monster-name {
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-stone-700);
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-400);
+}
