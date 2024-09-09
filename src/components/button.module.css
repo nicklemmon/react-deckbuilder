@@ -1,0 +1,66 @@
+.button {
+  font-family: 'Merriweather Sans', sans-serif;
+  font-weight: 600;
+  font-size: var(--font-size-300);
+  padding: var(--spacing-200) var(--spacing-400);
+  border-radius: var(--rounding-100);
+  cursor: pointer;
+  transition: all var(--anim-dur-100) var(--anim-easing-100);
+  border: var(--border-width-200) solid transparent;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.button:active {
+  transform: translateY(1px);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.1),
+    inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.primary {
+  background: linear-gradient(to bottom, var(--color-blood-300), var(--color-primary));
+  color: var(--color-stone-100);
+  border: var(--border-width-100) solid var(--color-blood-900);
+}
+
+.secondary {
+  background: linear-gradient(to bottom, var(--color-magic-100), var(--color-secondary));
+  color: var(--color-stone-100);
+  border: var(--border-width-100) solid var(--color-magic-900);
+}
+
+.tertiary {
+  background: linear-gradient(to bottom, var(--color-stone-100), var(--color-stone-200));
+  color: var(--color-stone-800);
+  border: var(--border-width-100) solid var(--color-stone-400);
+}
+
+.destructive {
+  background: linear-gradient(to bottom, var(--color-blood-300), var(--color-danger));
+  color: var(--color-stone-100);
+  border: var(--border-width-100) solid var(--color-blood-900);
+}
+
+.unstyled {
+  background: none;
+  color: inherit;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+.unstyled:hover {
+  text-decoration: underline;
+  transform: none;
+  filter: none;
+}

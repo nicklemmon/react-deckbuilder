@@ -1,23 +1,23 @@
-import { css } from '../../styled-system/css'
-
-/** Props fot eh re-usable button component */
-type ButtonProps = {
-  children: React.ReactNode
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'destructive' | 'unstyled'
-} & React.ComponentPropsWithRef<'button'>
+import { clsx } from 'clsx'
+import css from './button.module.css'
 
 /** Re-usable button component */
-export function Button({ children, variant = 'primary', ...props }: ButtonProps) {
+export function Button({
+  children,
+  variant = 'primary',
+  ...props
+}: {
+  children: React.ReactNode
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'destructive' | 'unstyled'
+} & React.ComponentPropsWithRef<'button'>) {
+  const withClsx = (root: string) =>
+    clsx({
+      [css[root]]: true,
+      [css[variant]]: true,
+    })
+
   return (
-    <button
-      className={css({
-        display: 'inline-flex',
-        paddingX: '6',
-        paddingY: '3',
-        border: '1px solid ActiveBorder',
-      })}
-      {...props}
-    >
+    <button className={withClsx('button')} {...props}>
       <span>{children}</span>
     </button>
   )

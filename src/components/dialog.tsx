@@ -1,4 +1,5 @@
 import { clsx } from 'clsx'
+import { AnimatePresence, motion } from 'framer-motion'
 import css from './dialog.module.css'
 
 export function Dialog({
@@ -18,12 +19,34 @@ export function Dialog({
   return (
     <>
       <div className={withStatusClsx('dialog-container')}>
-        <div role="dialog" className={withStatusClsx('dialog')}>
-          {children}
-        </div>
+        <AnimatePresence>
+          {open ? (
+            <motion.div
+              role="dialog"
+              key="dialog"
+              className={withStatusClsx('dialog')}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95, transition: { delay: 0 } }}
+              transition={{ delay: 0.2 }}
+            >
+              {children}
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
       </div>
 
-      <div className={withStatusClsx('dialog-overlay')} />
+      <AnimatePresence>
+        {open ? (
+          <motion.div
+            key="dialog-overlay"
+            className={withStatusClsx('dialog-overlay')}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          />
+        ) : null}
+      </AnimatePresence>
     </>
   )
 }

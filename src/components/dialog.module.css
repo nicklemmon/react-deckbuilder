@@ -5,10 +5,6 @@
   container-name: dialog;
   width: 100%;
   max-width: 800px;
-  display: none;
-}
-
-.dialog-container.is-open {
   display: flex;
   justify-content: center;
   position: fixed;
@@ -38,7 +34,7 @@
   }
 }
 
-.dialog.is-open {
+.dialog {
   opacity: 1;
   visibility: visible;
   display: flex;
@@ -55,7 +51,7 @@
   display: none;
 }
 
-.dialog-overlay.is-open {
+.dialog-overlay {
   display: block;
   position: fixed;
   top: 0;
