@@ -5,6 +5,7 @@
   font-size: 14px;
 
   /** Spacing tokens */
+  --spacing-50: 0.25rem;
   --spacing-100: 0.5rem;
   --spacing-200: 0.75rem;
   --spacing-300: 1rem;

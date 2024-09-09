@@ -1,14 +1,18 @@
+.health-bar-wrapper {
+  filter: drop-shadow(0 2px 2px var(--color-stone-400));
+}
+
 .health-bar {
   --health-percentage: 1;
 
   position: relative;
   display: flex;
   overflow: hidden;
-  height: var(--size-100);
-  border-radius: var(--rounding-100);
-  border: var(--border-width-100) solid var(--color-blood-300);
+  height: var(--size-150);
+  border-radius: var(--rounding-200);
+  border-bottom-left-radius: 0;
+  border: var(--border-width-100) solid var(--color-blood-500);
   background: linear-gradient(0deg, var(--color-stone-600) 50%, var(--color-stone-800) 100%);
-  box-shadow: var(--shadow-500);
 }
 
 .health-bar-fill {
@@ -29,8 +33,20 @@
   );
 }
 
+.health-bar-text-wrapper {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-50) 0;
+  width: 40%;
+  background: linear-gradient(180deg, var(--color-blood-300) 5%, var(--color-blood-500) 80%);
+  border-bottom-right-radius: var(--rounding-200);
+  border-bottom-left-radius: var(--rounding-200);
+  border: var(--border-width-100) solid var(--color-blood-500);
+}
+
 .health-bar-text {
-  font-size: var(--font-size-300);
+  font-size: var(--font-size-200);
   font-weight: 900;
-  color: var(--color-blood-500);
+  color: var(--color-stone-100);
 }
