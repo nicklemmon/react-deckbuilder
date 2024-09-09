@@ -1,23 +1,8 @@
-.stats {
-  --color: darkgray;
-}
-
-.stats.inverted {
-  --color: white;
-}
-
 .stats-row {
   display: flex;
   align-items: center;
   justify-content: center;
-
-  + * {
-    margin-top: --var(--spacing-200);
-  }
-
-  > * + * {
-    margin-left: --var(--spacing-300);
-  }
+  gap: var(--spacing-100);
 }
 
 .stat {
@@ -28,13 +13,23 @@
 }
 
 .stat-icon {
-  width: var(--size-300);
-  height: var(--size-300);
-  border-radius: var(--rounding-400);
-  overflow: hidden;
+  border-radius: var(--rounding-100);
+  width: var(--size-150);
+  height: var(--size-150);
+  box-shadow: 0 2px 3px -1px var(--color-stone-900);
 }
 
 .stat-val {
-  margin-left: var(--spacing-200);
-  color: var(--color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--rounding-100);
+  background-color: var(--color-stone-100);
+  color: var(--color-stone-700);
+  font-size: var(--font-size-300);
+  padding: var(--spacing-100);
+  font-weight: bold;
+  width: var(--size-150);
+  height: var(--size-150);
+  box-shadow: 0 2px 3px -1px var(--color-stone-900);
 }

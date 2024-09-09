@@ -1,7 +1,8 @@
 import { clsx } from 'clsx'
 import type { Card } from '../types/cards'
 import cardBackImg from '../images/card-back.png'
-import { Stats, StatsRow, Stat, StatVal } from './stats'
+import swordIcon from '../images/sword.png'
+import { Stats, StatsRow, Stat, StatIcon, StatVal } from './stats'
 import css from './card.module.css'
 
 export function Card({
@@ -52,15 +53,14 @@ export function Card({
         </div>
 
         <div className={withStateClsx(css['card-footer'])}>
-          <Stats>
-            <StatsRow>
-              {stats?.attack ? (
-                <Stat>
-                  <StatVal>{stats.attack}</StatVal>
-                </Stat>
-              ) : null}
-            </StatsRow>
-          </Stats>
+          <StatsRow className={css['card-stats-row']}>
+            {stats?.attack ? (
+              <>
+                <StatIcon src={swordIcon} />
+                <StatVal>{stats.attack}</StatVal>
+              </>
+            ) : null}
+          </StatsRow>
         </div>
       </div>
 

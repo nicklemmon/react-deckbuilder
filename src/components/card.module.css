@@ -140,3 +140,20 @@
 .card-back.face-down {
   opacity: 1;
 }
+
+.card-stats-row {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: radial-gradient(
+    circle at bottom left,
+    var(--color-stone-800) 0%,
+    var(--color-stone-600) 50%,
+    var(--color-stone-800) 100%
+  );
+  padding: var(--spacing-100);
+  border-top-right-radius: var(--rounding-100);
+  border-bottom-right-radius: var(--rounding-100);
+  box-shadow: 2px 2px 3px -1px var(--color-stone-900);
+  overflow: hidden;
+}

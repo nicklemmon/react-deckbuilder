@@ -1,21 +1,34 @@
 import css from './stats.module.css'
+import { clsx } from 'clsx'
 
-export function Stats({ children }: { children: React.ReactNode }) {
-  return <div className={css['stats']}>{children}</div>
+export function Stats({ children, className }: { children: React.ReactNode; className?: string }) {
+  return <div className={clsx(css['stats'], className)}>{children}</div>
 }
 
-export function StatsRow({ children }: { children: React.ReactNode }) {
-  return <div className={css['stats-row']}>{children}</div>
+export function StatsRow({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  return <div className={clsx(css['stats-row'], className)}>{children}</div>
 }
 
-export function Stat({ children }: { children: React.ReactNode }) {
-  return <div className={css['stat']}>{children}</div>
+export function Stat({ children, className }: { children: React.ReactNode; className?: string }) {
+  return <div className={clsx(css['stat'], className)}>{children}</div>
 }
 
-export function StatIcon({ src }: { src: string }) {
-  return <img src={src} className={css['stat-icon']} />
+export function StatIcon({ src, className }: { src: string; className?: string }) {
+  return <img src={src} className={clsx(css['stat-icon'], className)} />
 }
 
-export function StatVal({ children }: { children: React.ReactNode }) {
-  return <div className={css['stat-val']}>{children}</div>
+export function StatVal({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  return <div className={clsx(css['stat-val'], className)}>{children}</div>
 }
