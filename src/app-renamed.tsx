@@ -138,7 +138,7 @@ export function App() {
 
                     <motion.div
                       key={`monster-name-${context.game.monster?.id}`}
-                      initial={{ x: 0, y: -25, scaleX: 0.9, opacity: 0 }}
+                      initial={{ x: 0, y: 0, scaleX: 0.9, opacity: 0 }}
                       animate={{ x: 0, y: 0, scaleX: 1, opacity: 1, transition: { delay: 0.25 } }}
                       exit={{
                         scaleX: 0.9,
@@ -146,7 +146,9 @@ export function App() {
                       }}
                       transition={{ duration: 0.25 }}
                     >
-                      <div className={css['monster-name']}>{context.game.monster?.name}</div>
+                      <div className={css['monster-name-wrapper']}>
+                        <div className={css['monster-name']}>{context.game.monster?.name}</div>
+                      </div>
                     </motion.div>,
 
                     <motion.div

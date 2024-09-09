@@ -88,6 +88,16 @@
   margin-bottom: 0.5rem;
 }
 
+.monster-name-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  padding: var(--spacing-100) var(--spacing-300);
+  background-color: rgba(0, 0, 0, 0.15);
+  clip-path: polygon(0% 0%, 100% 0%, 97% 50%, 100% 100%, 0% 100%, 3% 50%);
+}
+
 .monster-name {
   font-weight: 700;
   text-align: center;

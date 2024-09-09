@@ -76,7 +76,6 @@
 }
 
 .card-description {
-  display: flex;
   text-wrap: pretty;
   text-align: center;
   height: var(--size-300);
