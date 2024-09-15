@@ -1,11 +1,11 @@
-.stack {
+.inline {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: var(--gap);
   text-align: inherit;
 }
 
-.left {
+.top {
   align-items: flex-start;
 }
 

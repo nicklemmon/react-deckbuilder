@@ -1,5 +1,6 @@
 .health-bar-wrapper {
   filter: drop-shadow(0 2px 2px var(--color-stone-400));
+  width: 100%;
 }
 
 .health-bar {

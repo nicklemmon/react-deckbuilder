@@ -1,23 +1,23 @@
 import { clsx } from 'clsx'
 import type { Spacing } from '../types/tokens'
-import css from './stack.module.css'
+import css from './inline.module.css'
 
-export function Stack({
+export function Inline({
   className,
   children,
   spacing = '300',
-  align = 'left',
+  align = 'center',
 }: {
   children: React.ReactNode
   className?: string
   spacing?: Spacing
-  align?: 'left' | 'right' | 'center'
+  align?: 'top' | 'bottom' | 'center'
 }) {
-  const alignClass = align === 'left' ? css.left : align === 'right' ? css.right : css.center
+  const alignClass = align === 'top' ? css.top : align === 'bottom' ? css.bottom : css.center
 
   return (
     <div
-      className={clsx(css['stack'], alignClass, className)}
+      className={clsx(css['inline'], alignClass, className)}
       style={{ '--gap': `var(--spacing-${spacing})` } as React.CSSProperties}
     >
       {children}

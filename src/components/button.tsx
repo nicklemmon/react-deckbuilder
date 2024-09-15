@@ -18,7 +18,8 @@ export function Button({
 
   return (
     <button className={withClsx('button')} {...props}>
-      <span>{children}</span>
+      <span className={withClsx('button-content')}>{children}</span>
+      <span className={withClsx('button-bg')} />
     </button>
   )
 }

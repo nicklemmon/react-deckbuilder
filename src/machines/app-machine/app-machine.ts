@@ -116,6 +116,10 @@ type AppMachineEvent =
   | { type: 'MONSTER_DEATH_ANIMATION_COMPLETE' }
   | { type: 'MONSTER_ATTACK_ANIMATION_COMPLETE' }
   | { type: 'NEXT_BATTLE_CLICK' }
+  | { type: 'ITEM_SHOP_CLICK' }
+  | { type: 'DESTROY_CARDS_CLICK' }
+  | { type: 'LEAVE_ITEM_SHOP_CLICK' }
+  | { type: 'LEAVE_DESTROYING_CARDS_CLICK' }
 
 export const appMachine = setup({
   types: {
@@ -526,6 +530,38 @@ export const appMachine = setup({
     },
     BetweenRounds: {
       on: {
+        NEXT_BATTLE_CLICK: {
+          target: 'NewRound',
+          actions: () => buttonClickSound.play(),
+        },
+        ITEM_SHOP_CLICK: {
+          target: 'ItemShop',
+          actions: () => buttonClickSound.play(),
+        },
+        DESTROY_CARDS_CLICK: {
+          target: 'DestroyingCards',
+          actions: () => buttonClickSound.play(),
+        },
+      },
+    },
+    ItemShop: {
+      on: {
+        LEAVE_ITEM_SHOP_CLICK: {
+          target: 'BetweenRounds',
+          actions: () => buttonClickSound.play(),
+        },
+        NEXT_BATTLE_CLICK: {
+          target: 'NewRound',
+          actions: () => buttonClickSound.play(),
+        },
+      },
+    },
+    DestroyingCards: {
+      on: {
+        LEAVE_DESTROYING_CARDS_CLICK: {
+          target: 'BetweenRounds',
+          actions: () => buttonClickSound.play(),
+        },
         NEXT_BATTLE_CLICK: {
           target: 'NewRound',
           actions: () => buttonClickSound.play(),

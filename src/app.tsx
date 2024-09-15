@@ -11,6 +11,7 @@ import { Dialog, DialogContent } from './components/dialog.tsx'
 import { HealthBar } from './components/health-bar.tsx'
 import { Feedback } from './components/feedback.tsx'
 import { Stack } from './components/stack.tsx'
+import { Inline } from './components/inline.tsx'
 import css from './app.module.css'
 import './index.css'
 import { Button } from './components/button.tsx'
@@ -94,7 +95,7 @@ export function App() {
             ) : null}
           </AnimatePresence>
 
-          <Stack spacing="100">
+          <Stack spacing="100" align="center">
             <AnimatePresence
               onExitComplete={() => send({ type: 'MONSTER_DEATH_ANIMATION_COMPLETE' })}
             >
@@ -160,6 +161,7 @@ export function App() {
                         opacity: 0,
                       }}
                       transition={{ duration: 0.25 }}
+                      style={{ width: '100%' }}
                     >
                       <HealthBar
                         health={context.game.monster?.stats.health}
@@ -260,7 +262,30 @@ export function App() {
 
       <Dialog open={value === 'BetweenRounds'}>
         <DialogContent>
-          <Button onClick={() => send({ type: 'NEXT_BATTLE_CLICK' })}>Next battle</Button>
+          <div>Between rounds</div>
+
+          <Inline>
+            <Button onClick={() => send({ type: 'DESTROY_CARDS_CLICK' })} variant="tertiary">
+              Destroy cards
+            </Button>
+            <Button onClick={() => send({ type: 'ITEM_SHOP_CLICK' })} variant="secondary">
+              Item shop
+            </Button>
+            <Button onClick={() => send({ type: 'NEXT_BATTLE_CLICK' })}>Next battle</Button>
+          </Inline>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={value === 'ItemShop'}>
+        <DialogContent>
+          <div>Item shop</div>
+
+          <Inline>
+            <Button onClick={() => send({ type: 'LEAVE_ITEM_SHOP_CLICK' })} variant="tertiary">
+              Leave shop
+            </Button>
+            <Button onClick={() => send({ type: 'NEXT_BATTLE_CLICK' })}>Next battle</Button>
+          </Inline>
         </DialogContent>
       </Dialog>
     </div>
