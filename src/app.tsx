@@ -39,7 +39,6 @@ export function App() {
         </div>
         <CharacterCreation
           onCreate={(formData) => {
-            console.log('formData', formData)
             send({ type: 'CREATE_CHARACTER', data: formData })
           }}
         />
@@ -276,12 +275,16 @@ export function App() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={value === 'ItemShop'}>
+      <Dialog open={value === 'Shopping'}>
         <DialogContent>
           <div>Item shop</div>
 
+          {context.game.shop.cards.map((card) => {
+            return <Card key={`item-shop-${card.id}`} {...card} />
+          })}
+
           <Inline>
-            <Button onClick={() => send({ type: 'LEAVE_ITEM_SHOP_CLICK' })} variant="tertiary">
+            <Button onClick={() => send({ type: 'LEAVE_SHOP_CLICK' })} variant="tertiary">
               Leave shop
             </Button>
             <Button onClick={() => send({ type: 'NEXT_BATTLE_CLICK' })}>Next battle</Button>

@@ -6,6 +6,7 @@ import buttonClickSfx from '../../sfx/button.click.wav'
 import { resolveModules } from '../../helpers/vite.ts'
 import { rng } from '../../helpers/rng.ts'
 import { getSound } from '../../helpers/get-sound.ts'
+import { getCharacterClass } from '../../helpers/character-classes.ts'
 import { MONSTERS } from '../../helpers/monsters.ts'
 import { CARDS, STARTING_DECK } from '../../helpers/cards.ts'
 import type { CharacterClass } from '../../types/character-classes.ts'
@@ -70,6 +71,7 @@ export type AppMachineContext = {
   game: {
     player: {
       characterClass: CharacterClass | undefined
+      characterClassDeck: Array<Card>
       characterName: string | undefined
       characterPortrait: string | undefined
       startingDeck: Array<Card>
@@ -100,7 +102,7 @@ export type AppMachineContext = {
 type AppMachineEvent =
   | {
       type: 'CREATE_CHARACTER'
-      data: { characterClass: CharacterClass; characterName: string; characterPortrait: string }
+      data: { characterClass: string; characterName: string; characterPortrait: string }
     }
   | {
       type: 'PLAY_CARD'
@@ -118,8 +120,10 @@ type AppMachineEvent =
   | { type: 'NEXT_BATTLE_CLICK' }
   | { type: 'ITEM_SHOP_CLICK' }
   | { type: 'DESTROY_CARDS_CLICK' }
-  | { type: 'LEAVE_ITEM_SHOP_CLICK' }
+  | { type: 'LEAVE_SHOP_CLICK' }
   | { type: 'LEAVE_DESTROYING_CARDS_CLICK' }
+  | { type: 'BUY_CARD_CLICK' }
+  | { type: 'BUY_ITEM_CLICK' }
 
 export const appMachine = setup({
   types: {
@@ -165,6 +169,36 @@ export const appMachine = setup({
           drawPile: newDrawPile,
         }
       },
+    }),
+    stockShop: assign({
+      game: ({ context }) => {
+        if (!context.game.player.characterClass) return context.game
+
+        const classDeck = arrayShuffle(context.game.player.characterClassDeck)
+        console.log('classDeck', classDeck)
+        const rngMax = classDeck.length - 1
+        const cardsOnOffer = [
+          classDeck[rng(rngMax)],
+          classDeck[rng(rngMax)],
+          classDeck[rng(rngMax)],
+        ].map((card) => {
+          return {
+            ...card,
+            id: `${card.id}-${crypto.randomUUID()}`,
+          }
+        })
+
+        return {
+          ...context.game,
+          shop: {
+            cards: cardsOnOffer,
+            items: [],
+          },
+        }
+      },
+    }),
+    disableUnaffordableItems: assign({
+      game: ({ context }) => context.game,
     }),
     getNextMonster: assign({
       game: ({ context }) => {
@@ -255,7 +289,6 @@ export const appMachine = setup({
       },
     }),
     awardSpoils: () => {},
-    stockShop: () => {},
   },
   actors: {
     loadAllAssets: fromPromise(prefetchAssets),
@@ -299,6 +332,7 @@ export const appMachine = setup({
     game: {
       player: {
         characterClass: undefined,
+        characterClassDeck: [],
         characterName: undefined,
         characterPortrait: undefined,
         startingDeck: STARTING_DECK,
@@ -336,6 +370,9 @@ export const appMachine = setup({
           actions: assign({
             game: (args) => {
               const { context, event } = args
+              const characterClass = getCharacterClass(event.data.characterClass, CHARACTER_CLASSES)
+
+              if (!characterClass) return context
 
               return {
                 ...context.game,
@@ -344,6 +381,7 @@ export const appMachine = setup({
                   characterClass: event.data.characterClass,
                   characterName: event.data.characterName,
                   characterPortrait: event.data.characterPortrait,
+                  characterClassDeck: characterClass.deck,
                 },
               }
             },
@@ -535,7 +573,7 @@ export const appMachine = setup({
           actions: () => buttonClickSound.play(),
         },
         ITEM_SHOP_CLICK: {
-          target: 'ItemShop',
+          target: 'Shopping',
           actions: () => buttonClickSound.play(),
         },
         DESTROY_CARDS_CLICK: {
@@ -544,10 +582,19 @@ export const appMachine = setup({
         },
       },
     },
-    ItemShop: {
+    Shopping: {
+      entry: 'disableUnaffordableItems',
       on: {
-        LEAVE_ITEM_SHOP_CLICK: {
+        LEAVE_SHOP_CLICK: {
           target: 'BetweenRounds',
+          actions: () => buttonClickSound.play(),
+        },
+        BUY_CARD_CLICK: {
+          target: 'Shopping',
+          actions: () => buttonClickSound.play(),
+        },
+        BUY_ITEM_CLICK: {
+          target: 'Shopping',
           actions: () => buttonClickSound.play(),
         },
         NEXT_BATTLE_CLICK: {

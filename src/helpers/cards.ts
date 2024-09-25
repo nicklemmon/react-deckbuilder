@@ -8,7 +8,7 @@ export function defineCard(config: Omit<Card, 'id' | 'artwork' | 'sfx'>) {
 
 /** Returns a card from a deck by its id */
 export function getCard(id: string, deck: Deck) {
-  return [...deck].find((card) => card.id === id)
+  return [...deck].find((card) => card.id === id) as Card
 }
 
 const CARD_CONFIG_MODULES = import.meta.glob('../cards/**/config.ts', {
