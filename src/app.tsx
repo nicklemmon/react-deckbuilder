@@ -2,6 +2,7 @@ import { useMachine } from '@xstate/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { appMachine } from './machines/app-machine/app-machine.ts'
 import { type Card as CardType } from './types/cards.ts'
+import coinsIcon from './images/gold-coins.png'
 import { AppPreloader } from './components/app-preloader.tsx'
 import { CharacterCreation } from './components/character-creation.tsx'
 import { Avatar } from './components/avatar.tsx'
@@ -12,49 +13,39 @@ import { HealthBar } from './components/health-bar.tsx'
 import { Feedback } from './components/feedback.tsx'
 import { Stack } from './components/stack.tsx'
 import { Inline } from './components/inline.tsx'
-import css from './app.module.css'
-import './index.css'
 import { Button } from './components/button.tsx'
 import { cardUseSound } from './machines/app-machine/app-machine.ts'
 import { ItemShopCard, ItemShopStatus } from './components/item-shop-card.tsx'
+import { StatsRow, StatIcon, StatVal } from './components/stats.tsx'
+import './index.css'
+import css from './app.module.css'
 
 export function App() {
   const [{ context, value }, send] = useMachine(appMachine)
 
   if (value === 'LoadingAssets') {
-    return (
-      <>
-        <div className={css['play-area-debugger']}>
-          Current state: <code>{JSON.stringify(value)}</code>
-        </div>
-        <AppPreloader />
-      </>
-    )
+    return <AppPreloader />
   }
 
   if (value === 'CharacterCreation') {
     return (
-      <>
-        <div className={css['play-area-debugger']}>
-          Current state: <code>{JSON.stringify(value)}</code>
-        </div>
-        <CharacterCreation
-          onCreate={(formData) => {
-            send({ type: 'CREATE_CHARACTER', data: formData })
-          }}
-        />
-      </>
+      <CharacterCreation
+        onCreate={(formData) => {
+          send({ type: 'CREATE_CHARACTER', data: formData })
+        }}
+      />
     )
   }
 
   return (
     <div className={css['play-area']}>
       <div className={css['play-area-wrapper']}>
-        <div className={css['play-area-debugger']}>
-          Current state: <code>{JSON.stringify(value)}</code>
+        <div className={css['play-area-banner']}>
+          <StatsRow className={css['card-stats-row']}>
+            <StatIcon src={coinsIcon} />
+            <StatVal>{context.game.player.gold}</StatVal>
+          </StatsRow>
         </div>
-
-        <div className={css['play-area-banner']}>Player gold: {context.game.player.gold}</div>
 
         <div className={css['combat-zone']}>
           <AnimatePresence>
@@ -280,7 +271,7 @@ export function App() {
 
       <Dialog open={value === 'Shopping'}>
         <DialogContent>
-          <Stack>
+          <Stack align="center" spacing="400">
             <Inline>
               {context.game.shop.cards.map((card) => {
                 let status: ItemShopStatus = 'affordable'
@@ -304,7 +295,11 @@ export function App() {
               })}
             </Inline>
 
-            <h4>Items</h4>
+            <Inline>
+              {context.game.shop.items.map((item) => {
+                return <div key={`item-${item.id}`}>{item.name}</div>
+              })}
+            </Inline>
 
             <Inline>
               <Button onClick={() => send({ type: 'LEAVE_SHOP_CLICK' })} variant="tertiary">

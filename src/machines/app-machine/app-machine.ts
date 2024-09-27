@@ -20,7 +20,7 @@ import { AvatarStatus } from '../../components/avatar.tsx'
 const APP_MACHINE_ID = 'app'
 
 /** THe maximum number of allowed cards in the `currentHand` */
-const MAX_HAND_SIZE = 7
+const MAX_HAND_SIZE = 5
 
 /** All image files in the project */
 const IMAGE_MODULES = import.meta.glob('../**/**/*.(png|webp)', { eager: true })
@@ -244,14 +244,12 @@ export const appMachine = setup({
     drawHand: assign({
       game: ({ context }) => {
         const drawPile = context.game.drawPile
-        const drawnCards = drawPile.slice(0, 3)
-        const remainingCards = drawPile.slice(3)
-        const currentHand = context.game.currentHand.concat(
-          drawnCards.map((card) => ({
-            ...card,
-            orientation: 'face-up',
-          })),
-        )
+        const currentHandSize = context.game.currentHand.length
+
+        // Draw up to 3 cards, but stop if we hit the max hand size
+        const cardsToDrawCount = Math.min(3, MAX_HAND_SIZE - currentHandSize)
+        const drawnCards = drawPile.slice(0, cardsToDrawCount)
+        const remainingCards = drawPile.slice(cardsToDrawCount)
 
         for (const _card of drawnCards) {
           cardUseSound.play()
@@ -259,7 +257,15 @@ export const appMachine = setup({
 
         return {
           ...context.game,
-          currentHand,
+          currentHand: [
+            ...context.game.currentHand,
+            ...drawnCards.map((card) => {
+              return {
+                ...card,
+                orientation: 'face-up' as const,
+              }
+            }),
+          ],
           drawPile: remainingCards,
         }
       },
@@ -319,7 +325,7 @@ export const appMachine = setup({
       return context.game.drawPile.length > 0 && context.game.currentHand.length < MAX_HAND_SIZE
     },
     playerCannotDraw: ({ context }) => {
-      return context.game.drawPile.length === 0
+      return context.game.drawPile.length === 0 && context.game.currentHand.length < MAX_HAND_SIZE
     },
     drawingNotNeeded: ({ context }) => {
       return context.game.drawPile.length === 0 && context.game.currentHand.length === MAX_HAND_SIZE

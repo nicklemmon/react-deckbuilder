@@ -130,7 +130,7 @@
   --shadow-900: 0 var(--border-width-100) var(--border-width-300) var(--color-shadow-900);
 
   /** Clip path tokens */
-  --clip-path-banner: clip-path: polygon(0% 0%, 100% 0%, 97% 50%, 100% 100%, 0% 100%, 3% 50%);
+  --clip-path-banner: polygon(0% 0%, 100% 0%, 97% 50%, 100% 100%, 0% 100%, 3% 50%);
 }
 
 * {

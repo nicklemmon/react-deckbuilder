@@ -27,9 +27,9 @@
   background-color: var(--color-stone-100);
   color: var(--color-stone-700);
   font-size: var(--font-size-300);
-  padding: var(--spacing-100);
+  padding: var(--spacing-100) 0;
   font-weight: bold;
-  width: var(--size-150);
+  min-width: var(--size-150);
   height: var(--size-150);
   box-shadow: 0 2px 3px -1px var(--color-stone-900);
 }

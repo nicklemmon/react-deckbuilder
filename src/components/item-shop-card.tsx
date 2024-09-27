@@ -46,7 +46,6 @@ export function ItemShopCard({
       <AnimatePresence>
         {shopStatus === 'purchased' ? (
           <motion.div
-            key={shopStatus}
             className={css['item-shop-card-purchased-overlay']}
             initial={{
               opacity: 0,
