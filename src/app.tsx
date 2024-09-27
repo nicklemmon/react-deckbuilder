@@ -255,17 +255,17 @@ export function App() {
 
       <Dialog open={value === 'BetweenRounds'}>
         <DialogContent>
-          <div>Between rounds</div>
-
-          <Inline>
-            <Button onClick={() => send({ type: 'DESTROY_CARDS_CLICK' })} variant="tertiary">
-              Destroy cards
-            </Button>
-            <Button onClick={() => send({ type: 'ITEM_SHOP_CLICK' })} variant="secondary">
-              Item shop
-            </Button>
-            <Button onClick={() => send({ type: 'NEXT_BATTLE_CLICK' })}>Next battle</Button>
-          </Inline>
+          <Stack align="center">
+            <Inline>
+              <Button onClick={() => send({ type: 'DESTROY_CARDS_CLICK' })} variant="tertiary">
+                Destroy cards
+              </Button>
+              <Button onClick={() => send({ type: 'ITEM_SHOP_CLICK' })} variant="secondary">
+                Item shop
+              </Button>
+              <Button onClick={() => send({ type: 'NEXT_BATTLE_CLICK' })}>Next battle</Button>
+            </Inline>
+          </Stack>
         </DialogContent>
       </Dialog>
 

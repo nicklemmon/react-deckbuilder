@@ -1,5 +1,5 @@
-import css from './stats.module.css'
 import { clsx } from 'clsx'
+import css from './stats.module.css'
 
 export function Stats({ children, className }: { children: React.ReactNode; className?: string }) {
   return <div className={clsx(css['stats'], className)}>{children}</div>

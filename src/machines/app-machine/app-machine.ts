@@ -4,7 +4,8 @@ import impactSfx from '../../sfx/impact.slice.wav'
 import cardUseSfx from '../../sfx/card.use.wav'
 import buttonClickSfx from '../../sfx/button.click.wav'
 import doorOpenSfx from '../../sfx/door.open.wav'
-import cashRegisterSfx from '../../sfx/items.cash-register.wav'
+import coinsSfx from '../../sfx/coins.wav'
+import cashRegisterSfx from '../../sfx/cash-register.wav'
 import { resolveModules } from '../../helpers/vite.ts'
 import { rng } from '../../helpers/rng.ts'
 import { getSound } from '../../helpers/get-sound.ts'
@@ -46,6 +47,8 @@ const buttonClickSound = getSound({ src: buttonClickSfx, volume: 0.5 })
 const doorOpenSound = getSound({ src: doorOpenSfx, volume: 0.5 })
 
 const cashRegisterSound = getSound({ src: cashRegisterSfx, volume: 0.5 })
+
+const coinsSound = getSound({ src: coinsSfx, volume: 0.7 })
 
 /** Prefetches assets from multiple sources returned by `import.meta.glob` */
 async function prefetchAssets() {
@@ -102,6 +105,7 @@ export type AppMachineContext = {
     cardInPlay?: Card
     cardToDestroy?: Card
     monster?: Monster
+    lastDefeatedMonster?: Monster
   }
 }
 
@@ -299,7 +303,23 @@ export const appMachine = setup({
         }
       },
     }),
-    awardSpoils: () => {},
+    awardSpoils: assign({
+      game: ({ context }) => {
+        const lastDefeatedMonster = context.game.lastDefeatedMonster
+
+        if (!lastDefeatedMonster) return context.game
+
+        coinsSound.play()
+
+        return {
+          ...context.game,
+          player: {
+            ...context.game.player,
+            gold: context.game.player.gold + lastDefeatedMonster.goldBounty,
+          },
+        }
+      },
+    }),
   },
   actors: {
     loadAllAssets: fromPromise(prefetchAssets),
@@ -543,6 +563,7 @@ export const appMachine = setup({
 
               return {
                 ...context.game,
+                lastDefeatedMonster: context.game.monster,
                 monster: undefined,
               }
             },
@@ -570,9 +591,10 @@ export const appMachine = setup({
       },
     },
     Victory: {
-      entry: ['awardSpoils', 'stockShop'],
+      entry: ['stockShop'],
       on: {
         MONSTER_DEATH_ANIMATION_COMPLETE: {
+          actions: ['awardSpoils'],
           target: 'BetweenRounds',
         },
       },
