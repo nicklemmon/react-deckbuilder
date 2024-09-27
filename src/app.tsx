@@ -16,6 +16,7 @@ import css from './app.module.css'
 import './index.css'
 import { Button } from './components/button.tsx'
 import { cardUseSound } from './machines/app-machine/app-machine.ts'
+import { ItemShopCard, ItemShopStatus } from './components/item-shop-card.tsx'
 
 export function App() {
   const [{ context, value }, send] = useMachine(appMachine)
@@ -52,6 +53,8 @@ export function App() {
         <div className={css['play-area-debugger']}>
           Current state: <code>{JSON.stringify(value)}</code>
         </div>
+
+        <div className={css['play-area-banner']}>Player gold: {context.game.player.gold}</div>
 
         <div className={css['combat-zone']}>
           <AnimatePresence>
@@ -277,18 +280,40 @@ export function App() {
 
       <Dialog open={value === 'Shopping'}>
         <DialogContent>
-          <div>Item shop</div>
+          <Stack>
+            <Inline>
+              {context.game.shop.cards.map((card) => {
+                let status: ItemShopStatus = 'affordable'
 
-          {context.game.shop.cards.map((card) => {
-            return <Card key={`item-shop-${card.id}`} {...card} />
-          })}
+                if (context.game.player.gold <= card.price) {
+                  status = 'unaffordable'
+                }
 
-          <Inline>
-            <Button onClick={() => send({ type: 'LEAVE_SHOP_CLICK' })} variant="tertiary">
-              Leave shop
-            </Button>
-            <Button onClick={() => send({ type: 'NEXT_BATTLE_CLICK' })}>Next battle</Button>
-          </Inline>
+                if (context.game.player.deck.find((deckCard) => deckCard.id === card.id)) {
+                  status = 'purchased'
+                }
+
+                return (
+                  <ItemShopCard
+                    key={`item-shop-${card.id}`}
+                    shopStatus={status}
+                    onClick={() => send({ type: 'BUY_CARD_CLICK', data: { card } })}
+                    {...card}
+                  />
+                )
+              })}
+            </Inline>
+
+            <h4>Items</h4>
+
+            <Inline>
+              <Button onClick={() => send({ type: 'LEAVE_SHOP_CLICK' })} variant="tertiary">
+                Leave shop
+              </Button>
+
+              <Button onClick={() => send({ type: 'NEXT_BATTLE_CLICK' })}>Next battle</Button>
+            </Inline>
+          </Stack>
         </DialogContent>
       </Dialog>
     </div>

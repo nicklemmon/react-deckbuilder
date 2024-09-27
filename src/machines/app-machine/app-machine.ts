@@ -3,6 +3,8 @@ import arrayShuffle from 'array-shuffle'
 import impactSfx from '../../sfx/impact.slice.wav'
 import cardUseSfx from '../../sfx/card.use.wav'
 import buttonClickSfx from '../../sfx/button.click.wav'
+import doorOpenSfx from '../../sfx/door.open.wav'
+import cashRegisterSfx from '../../sfx/items.cash-register.wav'
 import { resolveModules } from '../../helpers/vite.ts'
 import { rng } from '../../helpers/rng.ts'
 import { getSound } from '../../helpers/get-sound.ts'
@@ -41,6 +43,10 @@ export const cardUseSound = getSound({ src: cardUseSfx, volume: 0.33 })
 
 const buttonClickSound = getSound({ src: buttonClickSfx, volume: 0.5 })
 
+const doorOpenSound = getSound({ src: doorOpenSfx, volume: 0.5 })
+
+const cashRegisterSound = getSound({ src: cashRegisterSfx, volume: 0.5 })
+
 /** Prefetches assets from multiple sources returned by `import.meta.glob` */
 async function prefetchAssets() {
   return Promise.all([
@@ -74,9 +80,9 @@ export type AppMachineContext = {
       characterClassDeck: Array<Card>
       characterName: string | undefined
       characterPortrait: string | undefined
-      startingDeck: Array<Card>
       deck: Array<Card>
       status: AvatarStatus
+      gold: number
       stats: {
         maxHealth: number
         health: number
@@ -122,7 +128,7 @@ type AppMachineEvent =
   | { type: 'DESTROY_CARDS_CLICK' }
   | { type: 'LEAVE_SHOP_CLICK' }
   | { type: 'LEAVE_DESTROYING_CARDS_CLICK' }
-  | { type: 'BUY_CARD_CLICK' }
+  | { type: 'BUY_CARD_CLICK'; data: { card: Card } }
   | { type: 'BUY_ITEM_CLICK' }
 
 export const appMachine = setup({
@@ -155,7 +161,7 @@ export const appMachine = setup({
     }),
     createDrawPile: assign({
       game: ({ context }) => {
-        const newDrawPile = arrayShuffle(context.game.player.startingDeck).map((card) => {
+        const newDrawPile = arrayShuffle(context.game.player.deck).map((card) => {
           return {
             ...card,
             id: `${card.id}-${crypto.randomUUID()}`,
@@ -175,7 +181,6 @@ export const appMachine = setup({
         if (!context.game.player.characterClass) return context.game
 
         const classDeck = arrayShuffle(context.game.player.characterClassDeck)
-        console.log('classDeck', classDeck)
         const rngMax = classDeck.length - 1
         const cardsOnOffer = [
           classDeck[rng(rngMax)],
@@ -335,8 +340,8 @@ export const appMachine = setup({
         characterClassDeck: [],
         characterName: undefined,
         characterPortrait: undefined,
-        startingDeck: STARTING_DECK,
-        deck: [],
+        deck: STARTING_DECK,
+        gold: 150,
         status: 'idle' as const,
         stats: {
           // TODO: Update with character class stats
@@ -372,13 +377,13 @@ export const appMachine = setup({
               const { context, event } = args
               const characterClass = getCharacterClass(event.data.characterClass, CHARACTER_CLASSES)
 
-              if (!characterClass) return context
+              if (!characterClass) return context.game
 
               return {
                 ...context.game,
                 player: {
                   ...context.game.player,
-                  characterClass: event.data.characterClass,
+                  characterClass: characterClass,
                   characterName: event.data.characterName,
                   characterPortrait: event.data.characterPortrait,
                   characterClassDeck: characterClass.deck,
@@ -583,7 +588,7 @@ export const appMachine = setup({
       },
     },
     Shopping: {
-      entry: 'disableUnaffordableItems',
+      entry: ['disableUnaffordableItems', () => doorOpenSound.play()],
       on: {
         LEAVE_SHOP_CLICK: {
           target: 'BetweenRounds',
@@ -591,7 +596,21 @@ export const appMachine = setup({
         },
         BUY_CARD_CLICK: {
           target: 'Shopping',
-          actions: () => buttonClickSound.play(),
+          actions: assign({
+            game: ({ context, event }) => {
+              buttonClickSound.play()
+              cashRegisterSound.play()
+
+              return {
+                ...context.game,
+                player: {
+                  ...context.game.player,
+                  deck: [...context.game.player.deck, event.data.card],
+                  gold: context.game.player.gold - event.data.card.price,
+                },
+              }
+            },
+          }),
         },
         BUY_ITEM_CLICK: {
           target: 'Shopping',
