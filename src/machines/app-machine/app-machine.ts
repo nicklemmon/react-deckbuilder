@@ -12,10 +12,12 @@ import { getSound } from '../../helpers/get-sound.ts'
 import { getCharacterClass } from '../../helpers/character-classes.ts'
 import { MONSTERS } from '../../helpers/monsters.ts'
 import { CARDS, STARTING_DECK } from '../../helpers/cards.ts'
+import { getItem, ITEMS } from '../../helpers/item.ts'
 import type { CharacterClass } from '../../types/character-classes.ts'
 import type { Monster } from '../../types/monsters.ts'
 import type { Card } from '../../types/cards.ts'
-import { AvatarStatus } from '../../components/avatar.tsx'
+import type { Item } from '../../types/items.ts'
+import type { AvatarStatus } from '../../components/avatar.tsx'
 
 /** Unique ID for the application machine */
 const APP_MACHINE_ID = 'app'
@@ -86,6 +88,7 @@ export type AppMachineContext = {
       deck: Array<Card>
       status: AvatarStatus
       gold: number
+      inventory: Array<Item>
       stats: {
         maxHealth: number
         health: number
@@ -94,9 +97,9 @@ export type AppMachineContext = {
     }
     shop: {
       cards: Array<Card>
-      // TODO: Update type for item
-      items: Array<any>
+      items: Array<Item>
     }
+    items: Array<Item>
     currentHand: Array<Card>
     discardPile: Array<Card>
     drawPile: Array<Card>
@@ -132,8 +135,9 @@ type AppMachineEvent =
   | { type: 'DESTROY_CARDS_CLICK' }
   | { type: 'LEAVE_SHOP_CLICK' }
   | { type: 'LEAVE_DESTROYING_CARDS_CLICK' }
-  | { type: 'BUY_CARD_CLICK'; data: { card: Card } }
-  | { type: 'BUY_ITEM_CLICK' }
+  | { type: 'ITEM_SHOP_CARD_CLICK'; data: { card: Card } }
+  | { type: 'ITEM_SHOP_ITEM_CLICK'; data: { item: Item } }
+  | { type: 'INVENTORY_ITEM_CLICK'; data: { item: Item } }
 
 export const appMachine = setup({
   types: {
@@ -245,6 +249,7 @@ export const appMachine = setup({
         }
       },
     }),
+    /** Draws a hand of cards from the draw pile */
     drawHand: assign({
       game: ({ context }) => {
         const drawPile = context.game.drawPile
@@ -274,6 +279,7 @@ export const appMachine = setup({
         }
       },
     }),
+    /** Discards the player's current hand */
     discardCurrentHand: assign({
       game: ({ context }) => {
         return {
@@ -282,6 +288,7 @@ export const appMachine = setup({
         }
       },
     }),
+    /** The monster attacks the player */
     monsterAttack: assign({
       game: ({ context }) => {
         if (!context.game.monster) return context.game
@@ -303,6 +310,7 @@ export const appMachine = setup({
         }
       },
     }),
+    /** Awards the player with the spoils of war */
     awardSpoils: assign({
       game: ({ context }) => {
         const lastDefeatedMonster = context.game.lastDefeatedMonster
@@ -367,7 +375,7 @@ export const appMachine = setup({
         characterName: undefined,
         characterPortrait: undefined,
         deck: STARTING_DECK,
-        gold: 150,
+        gold: 25,
         status: 'idle' as const,
         stats: {
           // TODO: Update with character class stats
@@ -375,7 +383,9 @@ export const appMachine = setup({
           health: 100,
           defense: 0,
         },
+        inventory: [],
       },
+      items: ITEMS,
       shop: {
         cards: [],
         items: [],
@@ -622,7 +632,7 @@ export const appMachine = setup({
           target: 'BetweenRounds',
           actions: () => buttonClickSound.play(),
         },
-        BUY_CARD_CLICK: {
+        ITEM_SHOP_CARD_CLICK: {
           target: 'Shopping',
           actions: assign({
             game: ({ context, event }) => {
@@ -640,9 +650,29 @@ export const appMachine = setup({
             },
           }),
         },
-        BUY_ITEM_CLICK: {
+        ITEM_SHOP_ITEM_CLICK: {
           target: 'Shopping',
-          actions: () => buttonClickSound.play(),
+          actions: assign({
+            game: ({ context, event }) => {
+              buttonClickSound.play()
+              cashRegisterSound.play()
+
+              const item = event.data.item
+
+              return {
+                ...context.game,
+                player: {
+                  ...context.game.player,
+                  inventory: [
+                    ...context.game.player.inventory,
+                    // We need to add a unique identifier in the case of duplicate inventory items in player inventory
+                    { ...item, id: `${item.id}-${crypto.randomUUID()}` },
+                  ],
+                  gold: context.game.player.gold - item.cost,
+                },
+              }
+            },
+          }),
         },
         NEXT_BATTLE_CLICK: {
           target: 'NewRound',

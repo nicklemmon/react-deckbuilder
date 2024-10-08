@@ -1,0 +1,13 @@
+.price-stats-row {
+  background: var(--color-stone-700);
+  padding: var(--spacing-100);
+  border-radius: var(--rounding-100);
+  margin-top: var(--spacing-200);
+  background: radial-gradient(
+    circle at bottom left,
+    var(--color-stone-800) 0%,
+    var(--color-stone-600) 33%,
+    var(--color-stone-800) 100%
+  );
+  box-shadow: var(--shadow-900);
+}

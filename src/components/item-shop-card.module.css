@@ -12,7 +12,15 @@
   filter: grayscale(1);
 }
 
-.item-shop-card-purchased-overlay {
+.purchased {
+  --clip-path: var(--clip-path-banner);
+}
+
+.unaffordable {
+  --clip-path: none;
+}
+
+.item-shop-card-overlay {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,21 +41,6 @@
     background-color: rgba(0, 0, 0, 0.75);
     padding: var(--spacing-100) var(--spacing-200);
     box-shadow: var(--shadow-900);
-    clip-path: var(--clip-path-banner);
+    clip-path: var(--clip-path);
   }
-}
-
-.item-shop-card-stats {
-  background: var(--color-stone-700);
-  padding: var(--spacing-100);
-  border-radius: var(--rounding-100);
-  border: 1px solid var(--color-stone-400);
-  margin-top: var(--spacing-200);
-  background: radial-gradient(
-    circle at bottom left,
-    var(--color-stone-800) 0%,
-    var(--color-stone-600) 33%,
-    var(--color-stone-800) 100%
-  );
-  box-shadow: var(--shadow-900);
 }

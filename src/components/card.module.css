@@ -13,8 +13,6 @@
     var(--color-stone-900)
   );
   color: var(--color-stone-100);
-  background-size: contain;
-  background-repeat: no-repeat;
   transition-duration: var(--anim-dur-300);
   transition-timing-function: var(--anim-easing-100);
   transition-property: transform, box-shadow;

@@ -15,10 +15,12 @@ import { Stack } from './components/stack.tsx'
 import { Inline } from './components/inline.tsx'
 import { Button } from './components/button.tsx'
 import { cardUseSound } from './machines/app-machine/app-machine.ts'
-import { ItemShopCard, ItemShopStatus } from './components/item-shop-card.tsx'
+import { ItemShopCard, type ItemShopCardStatus } from './components/item-shop-card.tsx'
+import { ItemShopItem } from './components/item-shop-item.tsx'
 import { StatsRow, StatIcon, StatVal } from './components/stats.tsx'
 import './index.css'
 import css from './app.module.css'
+import { getItem } from './helpers/item.ts'
 
 export function App() {
   const [{ context, value }, send] = useMachine(appMachine)
@@ -41,10 +43,26 @@ export function App() {
     <div className={css['play-area']}>
       <div className={css['play-area-wrapper']}>
         <div className={css['play-area-banner']}>
-          <StatsRow className={css['card-stats-row']}>
-            <StatIcon src={coinsIcon} />
-            <StatVal>{context.game.player.gold}</StatVal>
-          </StatsRow>
+          <Inline>
+            <StatsRow>
+              <StatIcon src={coinsIcon} />
+              <StatVal>{context.game.player.gold}</StatVal>
+            </StatsRow>
+          </Inline>
+
+          <Inline spacing="100">
+            {context.game.player.inventory.map((item) => {
+              return (
+                <button
+                  className={css['play-area-item-btn']}
+                  key={`inventory-item-${item.id}`}
+                  onClick={() => send({ type: 'INVENTORY_ITEM_CLICK', data: { item } })}
+                >
+                  <img src={item.artwork} />
+                </button>
+              )
+            })}
+          </Inline>
         </div>
 
         <div className={css['combat-zone']}>
@@ -57,33 +75,29 @@ export function App() {
                 exit={{ x: 0, y: 0, opacity: 0 }}
                 transition={{ duration: 0.33 }}
               >
-                <div className={css['character']}>
-                  <Stack spacing="200">
-                    {context.game.player.characterPortrait ? (
-                      <Avatar
-                        src={context.game.player.characterPortrait}
-                        status={context.game.player.status}
-                      />
-                    ) : null}
-
-                    <HealthBar
-                      health={context.game.player.stats.health}
-                      maxHealth={context.game.player.stats.maxHealth}
+                <Stack spacing="200">
+                  {context.game.player.characterPortrait ? (
+                    <Avatar
+                      src={context.game.player.characterPortrait}
+                      status={context.game.player.status}
                     />
+                  ) : null}
 
-                    {value === 'Defending' ? (
-                      <Feedback
-                        variant="negative"
-                        onAnimationComplete={() =>
-                          send({ type: 'MONSTER_ATTACK_ANIMATION_COMPLETE' })
-                        }
-                      >
-                        {/* TODO: This is the wrong value! */}
-                        {context.game.monster?.stats.attack}
-                      </Feedback>
-                    ) : null}
-                  </Stack>
-                </div>
+                  <HealthBar
+                    health={context.game.player.stats.health}
+                    maxHealth={context.game.player.stats.maxHealth}
+                  />
+                </Stack>
+
+                {value === 'Defending' ? (
+                  <Feedback
+                    variant="negative"
+                    onAnimationComplete={() => send({ type: 'MONSTER_ATTACK_ANIMATION_COMPLETE' })}
+                  >
+                    {/* TODO: This is the wrong value! */}
+                    {context.game.monster?.stats.attack}
+                  </Feedback>
+                ) : null}
               </motion.div>
             ) : null}
           </AnimatePresence>
@@ -260,6 +274,7 @@ export function App() {
               <Button onClick={() => send({ type: 'DESTROY_CARDS_CLICK' })} variant="tertiary">
                 Destroy cards
               </Button>
+
               <Button onClick={() => send({ type: 'ITEM_SHOP_CLICK' })} variant="secondary">
                 Item shop
               </Button>
@@ -274,7 +289,7 @@ export function App() {
           <Stack align="center" spacing="400">
             <Inline>
               {context.game.shop.cards.map((card) => {
-                let status: ItemShopStatus = 'affordable'
+                let status: ItemShopCardStatus = 'affordable'
 
                 if (context.game.player.gold <= card.price) {
                   status = 'unaffordable'
@@ -288,7 +303,7 @@ export function App() {
                   <ItemShopCard
                     key={`item-shop-${card.id}`}
                     shopStatus={status}
-                    onClick={() => send({ type: 'BUY_CARD_CLICK', data: { card } })}
+                    onClick={() => send({ type: 'ITEM_SHOP_CARD_CLICK', data: { card } })}
                     {...card}
                   />
                 )
@@ -296,9 +311,27 @@ export function App() {
             </Inline>
 
             <Inline>
-              {context.game.shop.items.map((item) => {
-                return <div key={`item-${item.id}`}>{item.name}</div>
-              })}
+              <ItemShopItem
+                item={getItem('small-potion', context.game.items)}
+                shopStatus={context.game.player.gold >= 30 ? 'affordable' : 'unaffordable'}
+                onClick={() =>
+                  send({
+                    type: 'ITEM_SHOP_ITEM_CLICK',
+                    data: { item: getItem('small-potion', context.game.items) },
+                  })
+                }
+              />
+
+              <ItemShopItem
+                item={getItem('large-potion', context.game.items)}
+                shopStatus={context.game.player.gold >= 50 ? 'affordable' : 'unaffordable'}
+                onClick={() =>
+                  send({
+                    type: 'ITEM_SHOP_ITEM_CLICK',
+                    data: { item: getItem('large-potion', context.game.items) },
+                  })
+                }
+              />
             </Inline>
 
             <Inline>

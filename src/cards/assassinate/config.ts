@@ -2,7 +2,7 @@ import { defineCard } from '../../helpers/cards'
 
 export default defineCard({
   name: 'Assassinate',
-  description: 'Back stab for huge damage!',
+  description: 'A quick stab in the back',
   rarity: 1,
   price: 14,
   stats: {

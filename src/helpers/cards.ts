@@ -1,4 +1,4 @@
-import type { Card, Deck } from '../types/cards'
+import type { Card } from '../types/cards'
 import { getSound } from './get-sound'
 
 /** Defines a card config. */
@@ -7,7 +7,7 @@ export function defineCard(config: Omit<Card, 'id' | 'artwork' | 'sfx'>) {
 }
 
 /** Returns a card from a deck by its id */
-export function getCard(id: string, deck: Deck) {
+export function getCard(id: string, deck: Array<Card>) {
   return [...deck].find((card) => card.id === id) as Card
 }
 
@@ -38,16 +38,10 @@ export const CARDS = Object.entries(CARD_CONFIG_MODULES).map(([path, mod]) => {
 
 /** Default starting deck - TODO: Build starting decks per character class */
 export const STARTING_DECK = [
-  // getCard('earthquake', CARDS),
-  // getCard('strike', CARDS),
-  // getCard('strike', CARDS),
-  // getCard('strike', CARDS),
-  // getCard('firebolt', CARDS),
-  // getCard('firebolt', CARDS),
   getCard('earthquake', CARDS),
-  getCard('earthquake', CARDS),
-  getCard('earthquake', CARDS),
-  getCard('earthquake', CARDS),
-  getCard('earthquake', CARDS),
-  getCard('earthquake', CARDS),
+  getCard('strike', CARDS),
+  getCard('strike', CARDS),
+  getCard('strike', CARDS),
+  getCard('firebolt', CARDS),
+  getCard('firebolt', CARDS),
 ].filter(Boolean) as Array<Card>

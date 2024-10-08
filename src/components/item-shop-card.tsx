@@ -1,12 +1,11 @@
 import { clsx } from 'clsx'
 import { AnimatePresence, motion } from 'framer-motion'
 import type { Card as CardType } from '../types/cards'
-import coinsIcon from '../images/gold-coins.png'
+import { PriceStatsRow } from './price-stats-row'
 import { Card } from './card'
-import { StatsRow, StatIcon, StatVal } from './stats'
 import css from './item-shop-card.module.css'
 
-export type ItemShopStatus = 'affordable' | 'unaffordable' | 'purchased'
+export type ItemShopCardStatus = 'affordable' | 'unaffordable' | 'purchased'
 
 export function ItemShopCard({
   className,
@@ -14,7 +13,7 @@ export function ItemShopCard({
   onClick,
   ...props
 }: {
-  shopStatus: ItemShopStatus
+  shopStatus: ItemShopCardStatus
   onClick: () => void
   className?: string
 } & CardType) {
@@ -46,7 +45,25 @@ export function ItemShopCard({
       <AnimatePresence>
         {shopStatus === 'purchased' ? (
           <motion.div
-            className={css['item-shop-card-purchased-overlay']}
+            className={css['item-shop-card-overlay']}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, scale: 1.0 }}
+            transition={{ delay: 0.2, duration: 0.2, scale: 1.0 }}
+          >
+            <motion.span
+              className={css['item-shop-card-purchased-text']}
+              initial={{ y: 50, opacity: 0, scale: 0.9 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5 }}
+            >
+              Purchased!
+            </motion.span>
+          </motion.div>
+        ) : null}
+
+        {shopStatus === 'unaffordable' ? (
+          <motion.div
+            className={css['item-shop-card-overlay']}
             initial={{
               opacity: 0,
             }}
@@ -54,11 +71,12 @@ export function ItemShopCard({
             transition={{ delay: 0.2, duration: 0.2, scale: 1.0 }}
           >
             <motion.span
+              className={css['item-shop-card-unaffordable-text']}
               initial={{ y: 50, opacity: 0, scale: 0.9 }}
               animate={{ y: 0, opacity: 1, scale: 1 }}
               transition={{ delay: 0.5 }}
             >
-              Purchased
+              Unaffordable
             </motion.span>
           </motion.div>
         ) : null}
@@ -70,10 +88,7 @@ export function ItemShopCard({
         {...props}
       />
 
-      <StatsRow className={css['item-shop-card-stats']}>
-        <StatIcon src={coinsIcon} />
-        <StatVal>{props.price}</StatVal>
-      </StatsRow>
+      <PriceStatsRow price={props.price} />
     </div>
   )
 }
