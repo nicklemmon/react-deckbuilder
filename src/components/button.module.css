@@ -1,0 +1,66 @@
+.button {
+  --text-color: var(--color-stone-800);
+  --gradient-start: var(--color-stone-300);
+  --gradient-end: var(--color-stone-100);
+
+  display: grid;
+  cursor: pointer;
+  color: var(--text-color);
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-400);
+  border-radius: var(--rounding-100);
+  overflow: hidden;
+  border: 0;
+  padding: 0;
+  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.33);
+  border: 2px solid var(--gradient-end);
+  transition:
+    transform var(--anim-dur-100) var(--anim-easing-100),
+    box-shadow var(--anim-dur-100) var(--anim-easing-100);
+}
+
+.button-content,
+.button-bg {
+  padding: var(--spacing-200) var(--spacing-400);
+  align-items: center;
+  justify-content: center;
+  grid-row: 1;
+  grid-column: 1;
+  height: 100%;
+  width: 100%;
+}
+
+.button-content {
+  color: var(--text-color);
+  transform: translateY(-1px); /* helps make text look vertically centered */
+  box-shadow: inset 0 -5px var(--gradient-start);
+  z-index: 1;
+}
+
+.button-bg {
+  height: 150%;
+  z-index: 0;
+  background: linear-gradient(180deg, var(--gradient-start) 10%, var(--gradient-end) 100%);
+  transition: transform var(--anim-dur-200) var(--anim-easing-100);
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px 0px rgba(0, 0, 0, 0.33);
+
+  & .button-bg {
+    transform: translateY(-25%);
+  }
+}
+
+.button.primary {
+  --text-color: var(--color-stone-100);
+  --gradient-start: var(--color-blood-500);
+  --gradient-end: var(--color-blood-300);
+}
+
+.button.secondary {
+  /* --text-color: var(--color-stone-900);
+  --gradient-start: var(--color-stone-500);
+  --gradient-end: var(--color-stone-300); */
+}

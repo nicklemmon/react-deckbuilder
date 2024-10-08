@@ -1,0 +1,53 @@
+.health-bar-wrapper {
+  filter: drop-shadow(0 2px 2px var(--color-stone-400));
+  width: 100%;
+}
+
+.health-bar {
+  --health-percentage: 1;
+
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  height: var(--size-150);
+  border-radius: var(--rounding-200);
+  border-bottom-left-radius: 0;
+  border: var(--border-width-100) solid var(--color-blood-500);
+  background: linear-gradient(0deg, var(--color-stone-600) 50%, var(--color-stone-800) 100%);
+}
+
+.health-bar-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  transform: scaleX(var(--health-percentage));
+  transform-origin: left;
+  transition: transform var(--anim-dur-400) var(--anim-easing-100);
+  transition-delay: var(--anim-dur-300);
+  background: linear-gradient(
+    180deg,
+    var(--color-blood-300) 0%,
+    var(--color-blood-900) 60%,
+    var(--color-blood-900) 100%
+  );
+}
+
+.health-bar-text-wrapper {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-50) 0;
+  width: 40%;
+  background: linear-gradient(180deg, var(--color-blood-300) 5%, var(--color-blood-500) 80%);
+  border-bottom-right-radius: var(--rounding-200);
+  border-bottom-left-radius: var(--rounding-200);
+  border: var(--border-width-100) solid var(--color-blood-500);
+}
+
+.health-bar-text {
+  font-size: var(--font-size-200);
+  font-weight: 900;
+  color: var(--color-stone-100);
+}

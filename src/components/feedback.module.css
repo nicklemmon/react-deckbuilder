@@ -1,0 +1,18 @@
+.feedback-text {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--font-size-300);
+  text-shadow: 0 2px 1px var(--color-shadow-200);
+}
+
+.feedback-text.neutral {
+  color: var(--color-stone-200);
+}
+
+.feedback-text.positive {
+  color: var(--color-success);
+}
+
+.feedback-text.negative {
+  color: var(--color-danger);
+}

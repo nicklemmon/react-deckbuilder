@@ -1,0 +1,18 @@
+.inline {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap);
+  text-align: inherit;
+}
+
+.top {
+  align-items: flex-start;
+}
+
+.right {
+  align-items: flex-end;
+}
+
+.center {
+  align-items: center;
+}

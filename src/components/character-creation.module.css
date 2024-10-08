@@ -1,0 +1,25 @@
+.character-portrait-fieldset {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-400);
+}
+
+.character-portrait-label {
+  display: block;
+  line-height: 0;
+  border-radius: var(--rounding-300);
+  overflow: hidden;
+}
+
+.character-portrait-label:has(input:checked) {
+  outline: 5px solid hotpink;
+}
+
+.character-portrait-input {
+  display: none;
+}
+
+.character-portrait-img {
+  width: var(--size-500);
+  height: var(--size-500);
+}

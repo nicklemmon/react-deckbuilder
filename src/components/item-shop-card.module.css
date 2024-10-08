@@ -1,0 +1,46 @@
+.item-shop-card {
+  position: relative;
+}
+
+.unaffordable,
+.purchased {
+  cursor: not-allowed;
+}
+
+.item-shop-card-card.unaffordable,
+.item-shop-card-card.purchased {
+  filter: grayscale(1);
+}
+
+.purchased {
+  --clip-path: var(--clip-path-banner);
+}
+
+.unaffordable {
+  --clip-path: none;
+}
+
+.item-shop-card-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: var(--color-stone-200);
+  font-size: var(--font-size-400);
+  font-family: var(--font-secondary);
+  font-weight: var(--font-weight-bold);
+  position: absolute;
+  z-index: 90;
+  top: 0;
+  left: 0;
+  width: var(--card-width);
+  height: var(--card-height);
+
+  span {
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.75);
+    padding: var(--spacing-100) var(--spacing-200);
+    box-shadow: var(--shadow-900);
+    clip-path: var(--clip-path);
+  }
+}

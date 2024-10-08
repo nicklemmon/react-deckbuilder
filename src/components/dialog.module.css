@@ -1,0 +1,65 @@
+.dialog-container {
+  --dialog-max-width: 800px;
+
+  container-type: inline-size;
+  container-name: dialog;
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  z-index: var(--z-index-600);
+  top: 50%;
+  left: 50%;
+  transform: scale(1) translate(-50%, -50%);
+}
+
+.dialog {
+  max-width: var(--dialog-max-width);
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  background-image: linear-gradient(to top, var(--color-stone-800) 10%, var(--color-stone-900));
+  color: var(--color-stone-100);
+  border-radius: var(--rounding-200);
+  transform: scale(0);
+  display: none;
+  z-index: var(--z-index-600);
+}
+
+/** The max width of the dialog is hit when shrinking the viewport, so we reduce the max width slightly so that it does not touch the edges of the viewport. */
+@container dialog (max-width: 800px) {
+  .dialog {
+    width: 90%;
+  }
+}
+
+.dialog {
+  opacity: 1;
+  visibility: visible;
+  display: flex;
+  border: 1px solid var(--color-stone-600);
+  filter: drop-shadow(0 0.75rem 0.75rem rgba(0, 0, 0, 0.5));
+  transform: scale(1);
+}
+
+.dialog-content {
+  width: 100%;
+  padding: var(--spacing-400);
+}
+
+.dialog-overlay {
+  display: none;
+}
+
+.dialog-overlay {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: var(--z-index-500);
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+}

@@ -1,0 +1,9 @@
+.deck {
+  /* allows absolute positioning within */
+  position: relative;
+  pointer-events: none;
+  display: flex;
+  flex-direction: row;
+  width: var(--card-width);
+  height: var(--card-height);
+}

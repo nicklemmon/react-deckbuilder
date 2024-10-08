@@ -1,0 +1,156 @@
+.card {
+  display: inline-flex;
+  border: 1px solid var(--color-stone-400);
+  border-radius: var(--rounding-100);
+  overflow: hidden;
+  height: var(--card-height);
+  width: var(--card-width);
+  perspective: 1000px;
+  background: linear-gradient(
+    to bottom,
+    var(--color-stone-800),
+    var(--color-stone-500),
+    var(--color-stone-900)
+  );
+  color: var(--color-stone-100);
+  transition-duration: var(--anim-dur-300);
+  transition-timing-function: var(--anim-easing-100);
+  transition-property: transform, box-shadow;
+}
+
+.card-front {
+  outline: 1px solid var(--color-stone-500);
+  border-radius: calc(1 * var(--rounding-100));
+  outline-offset: -2px;
+}
+
+.card.face-up.idle:hover {
+  transform: translateY(calc(-1 * var(--spacing-100)));
+}
+
+.card.face-up {
+  box-shadow: 0 var(--spacing-100) var(--spacing-300) calc(var(--spacing-200) * -1)
+    var(--color-stone-700);
+}
+
+.card.face-up:hover {
+  box-shadow: 0 var(--spacing-200) var(--spacing-400) calc(var(--spacing-100) * -1)
+    var(--color-stone-700);
+}
+
+.card.in-play {
+  box-shadow: 0 var(--spacing-200) var(--spacing-500) calc(var(--spacing-100) * -1)
+    var(--color-stone-700);
+}
+
+.card.face-down {
+  pointer-events: none;
+}
+
+.card.disabled,
+.card.purchased,
+.card.in-play {
+  pointer-events: none;
+}
+
+.card-header {
+  padding: var(--spacing-100);
+}
+
+.card-content {
+  padding-inline: var(--spacing-100);
+}
+
+.card-artwork {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: var(--rounding-100) var(--rounding-100) 0 0;
+  border: var(--border-width-300) solid var(--color-stone-200);
+  z-index: 15;
+  box-shadow: 0 var(--spacing-200) var(--spacing-200) calc(var(--spacing-200) * -1)
+    var(--color-stone-400);
+}
+
+.card-description {
+  text-wrap: pretty;
+  text-align: center;
+  height: var(--size-300);
+  background-color: var(--color-stone-200);
+  border-radius: 0 0 var(--rounding-50) var(--rounding-50);
+  padding: var(--spacing-100);
+  color: var(--color-stone-700);
+  font-size: var(--font-size-200);
+}
+
+.card-name {
+  display: flex;
+  background-color: var(--color-stone-200);
+  border-radius: var(--rounding-50);
+  border: var(--border-width-200) solid var(--color-stone-100);
+  padding-inline: var(--spacing-100);
+  font-family: var(--font-secondary);
+  color: var(--color-stone-700);
+  font-size: var(--font-size-300);
+  text-shadow: 0 2px 1px var(--color-stone-100);
+  box-shadow: inset 0 var(--spacing-200) var(--spacing-100) calc(var(--spacing-200) * -1)
+    var(--color-stone-400);
+}
+
+.card-footer {
+  position: absolute;
+  width: 100%;
+  height: var(--size-200);
+  bottom: 0;
+  z-index: 99;
+}
+
+.card-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 100;
+  background-color: var(--color-stone-900);
+}
+
+.card-back-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.75;
+}
+
+.card-back-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-stone-900);
+  opacity: 0.825;
+}
+
+.card-back.face-down {
+  opacity: 1;
+}
+
+.card-stats-row {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: radial-gradient(
+    circle at bottom left,
+    var(--color-stone-800) 0%,
+    var(--color-stone-600) 50%,
+    var(--color-stone-800) 100%
+  );
+  padding: var(--spacing-100);
+  border-top-right-radius: var(--rounding-100);
+  border-bottom-right-radius: var(--rounding-100);
+  box-shadow: 2px 2px 3px -1px var(--color-stone-900);
+  overflow: hidden;
+}

@@ -1,0 +1,130 @@
+.play-area {
+  --play-area-bleed: var(--spacing-500);
+
+  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
+  background-color: whitesmoke;
+  overflow: hidden;
+}
+
+.play-area-debugger {
+  position: fixed;
+  top: var(--play-area-bleed);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-index-100);
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: var(--rounding-100);
+  color: var(--color-stone-100);
+  padding: var(--spacing-200);
+}
+
+.combat-zone {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 50%;
+  max-width: 50vw;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -25%);
+}
+
+.current-hand {
+  position: fixed;
+  z-index: var(--z-index-100);
+  bottom: var(--play-area-bleed);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.current-hand-wrapper {
+  display: flex;
+  gap: var(--spacing-100);
+}
+
+.play-area-wrapper {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  padding: var(--play-area-bleed);
+  box-sizing: border-box;
+}
+
+.discard-pile {
+  position: absolute;
+  right: var(--play-area-bleed);
+  top: var(--play-area-bleed);
+}
+
+.draw-pile {
+  position: absolute;
+  right: var(--play-area-bleed);
+  bottom: var(--play-area-bleed);
+}
+
+.monster-name-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  padding: var(--spacing-100) var(--spacing-300);
+  background-color: rgba(0, 0, 0, 0.15);
+  clip-path: var(--clip-path-banner);
+}
+
+.monster-name {
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-stone-700);
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-400);
+}
+
+.play-area-banner {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 33vw;
+  height: 7.5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-300);
+  background-color: var(--color-stone-800);
+  border-right: 1px solid var(--color-stone-300);
+  border-bottom: 1px solid var(--color-stone-300);
+  border-left: 1px solid var(--color-stone-300);
+  box-shadow: 0 15px 15px -10px rgba(0, 0, 0, 0.5);
+  border-bottom-left-radius: var(--rounding-200);
+  border-bottom-right-radius: var(--rounding-200);
+  color: var(--color-stone-100);
+}
+
+.play-area-item-btn {
+  width: var(--spacing-500);
+  height: var(--spacing-500);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--rounding-500);
+  outline: none;
+  border: 0;
+  box-shadow: var(--shadow-900);
+  padding: var(--spacing-50);
+  background-color: var(--color-stone-800);
+  border: var(--border-width-200) solid var(--color-stone-700);
+  cursor: pointer;
+  transition-property: background-color;
+  transition-duration: var(--anim-easing-100);
+  transition-duration: var(--anim-dur-200);
+
+  &:hover {
+    background-color: var(--color-stone-700);
+  }
+}

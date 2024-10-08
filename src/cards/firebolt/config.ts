@@ -1,8 +1,8 @@
-import { defineCard } from '../../functions/cards'
+import { defineCard } from '../../helpers/cards'
 
 export default defineCard({
   name: 'Firebolt',
-  description: 'A burst of directed flames',
+  description: 'Ashes to ashes',
   rarity: 2,
   price: 15,
   stats: {
