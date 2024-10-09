@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prepare": "panda codegen",
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview"
@@ -27,7 +26,6 @@
     "xstate": "5.13.1"
   },
   "devDependencies": {
-    "@pandacss/dev": "^0.37.2",
     "@testing-library/jest-dom": "6.4.2",
     "@testing-library/react": "15.0.5",
     "@testing-library/user-event": "14.5.2",
