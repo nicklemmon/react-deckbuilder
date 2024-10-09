@@ -13,7 +13,7 @@
     "array-shuffle": "3.0.0",
     "clsx": "2.1.1",
     "eslint-plugin-react": "^7.31.11",
-    "framer-motion": "11.1.7",
+    "framer-motion": "11.11.7",
     "howler": "2.2.4",
     "lodash": "4.17.21",
     "random": "4.1.0",
