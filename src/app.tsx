@@ -51,17 +51,29 @@ export function App() {
           </Inline>
 
           <Inline spacing="100">
-            {context.game.player.inventory.map((item) => {
-              return (
-                <button
-                  className={css['play-area-item-btn']}
-                  key={`inventory-item-${item.id}`}
-                  onClick={() => send({ type: 'INVENTORY_ITEM_CLICK', data: { item } })}
-                >
-                  <img src={item.artwork} />
-                </button>
-              )
-            })}
+            <AnimatePresence>
+              {context.game.player.inventory.map((item) => {
+                return (
+                  <motion.div
+                    key={`inventory-item-${item.id}`}
+                    onAnimationComplete={() =>
+                      send({ type: 'USING_ITEM_ANIMATION_COMPLETE', data: { item } })
+                    }
+                    initial={{ x: 1, y: 1, opacity: 1 }}
+                    animate={{ x: 1, y: 1, opacity: 1 }}
+                    exit={{ x: 0.33, y: 0.33, opacity: 0 }}
+                    transition={{ duration: 0.33 }}
+                  >
+                    <button
+                      className={css['play-area-item-btn']}
+                      onClick={() => send({ type: 'INVENTORY_ITEM_CLICK', data: { item } })}
+                    >
+                      <img src={item.artwork} />
+                    </button>
+                  </motion.div>
+                )
+              })}
+            </AnimatePresence>
           </Inline>
         </div>
 
@@ -80,6 +92,7 @@ export function App() {
                     <Avatar
                       src={context.game.player.characterPortrait}
                       status={context.game.player.status}
+                      onAnimationComplete={() => send({ type: 'ITEM_EFFECTS_ANIMATION_COMPLETE' })}
                     />
                   ) : null}
 

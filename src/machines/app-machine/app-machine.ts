@@ -10,9 +10,9 @@ import { resolveModules } from '../../helpers/vite.ts'
 import { rng } from '../../helpers/rng.ts'
 import { getSound } from '../../helpers/get-sound.ts'
 import { getCharacterClass } from '../../helpers/character-classes.ts'
-import { MONSTERS } from '../../helpers/monsters.ts'
+import { getAllMonsters } from '../../helpers/monsters.ts'
 import { CARDS, STARTING_DECK } from '../../helpers/cards.ts'
-import { getItem, ITEMS } from '../../helpers/item.ts'
+import { getAllItems } from '../../helpers/item.ts'
 import type { CharacterClass } from '../../types/character-classes.ts'
 import type { Monster } from '../../types/monsters.ts'
 import type { Card } from '../../types/cards.ts'
@@ -76,7 +76,6 @@ async function prefetchAssets() {
 export type AppMachineContext = {
   assets: {
     characterClasses: Array<CharacterClass>
-    monsters: Array<Monster>
     cards: Array<Card>
   }
   game: {
@@ -99,12 +98,12 @@ export type AppMachineContext = {
       cards: Array<Card>
       items: Array<Item>
     }
+    monsters: Array<Monster>
     items: Array<Item>
     currentHand: Array<Card>
     discardPile: Array<Card>
     drawPile: Array<Card>
-    // TODO: Update type for item
-    chosenItem?: any
+    itemInPlay?: Item
     cardInPlay?: Card
     cardToDestroy?: Card
     monster?: Monster
@@ -125,7 +124,12 @@ type AppMachineEvent =
       type: 'PLAY_CARD_ANIMATION_COMPLETE'
       data: { card: Card }
     }
+  | {
+      type: 'USING_ITEM_ANIMATION_COMPLETE'
+      data: { item: Item }
+    }
   | { type: 'CARD_EFFECTS_ANIMATION_COMPLETE' }
+  | { type: 'ITEM_EFFECTS_ANIMATION_COMPLETE' }
   | { type: 'PLAY_CARD_ANIMATION_COMPLETE' }
   | { type: 'DISCARD_CARD_ANIMATION_COMPLETE' }
   | { type: 'MONSTER_DEATH_ANIMATION_COMPLETE' }
@@ -163,6 +167,31 @@ export const appMachine = setup({
               ...context.game.monster.stats,
               health: context.game.monster?.stats.health - context.game.cardInPlay?.stats.attack,
             },
+          },
+        }
+      },
+    }),
+    applyItemEffects: assign({
+      game: ({ context }) => {
+        if (!context.game.itemInPlay) return context.game
+
+        context.game.itemInPlay.sfx.effect.play()
+
+        let nextHealth = context.game.player.stats.health + context.game.itemInPlay.value
+
+        if (nextHealth > context.game.player.stats.maxHealth) {
+          nextHealth = context.game.player.stats.maxHealth
+        }
+
+        return {
+          ...context.game,
+          player: {
+            ...context.game.player,
+            stats: {
+              ...context.game.player.stats,
+              health: nextHealth,
+            },
+            status: 'healing' as const,
           },
         }
       },
@@ -215,7 +244,7 @@ export const appMachine = setup({
     }),
     getNextMonster: assign({
       game: ({ context }) => {
-        const shuffledMonsters = arrayShuffle(context.assets.monsters)
+        const shuffledMonsters = arrayShuffle(context.game.monsters)
         const nextMonster = shuffledMonsters[rng(shuffledMonsters.length)]
 
         nextMonster.sfx?.intro.play()
@@ -365,7 +394,6 @@ export const appMachine = setup({
   context: {
     assets: {
       characterClasses: CHARACTER_CLASSES,
-      monsters: MONSTERS,
       cards: CARDS,
     },
     game: {
@@ -385,7 +413,8 @@ export const appMachine = setup({
         },
         inventory: [],
       },
-      items: ITEMS,
+      monsters: [],
+      items: [],
       shop: {
         cards: [],
         items: [],
@@ -417,6 +446,8 @@ export const appMachine = setup({
 
               return {
                 ...context.game,
+                items: getAllItems(),
+                monsters: getAllMonsters(),
                 player: {
                   ...context.game.player,
                   characterClass: characterClass,
@@ -491,6 +522,27 @@ export const appMachine = setup({
             },
           }),
         },
+        INVENTORY_ITEM_CLICK: {
+          target: 'UsingItem',
+          actions: assign({
+            game: ({ context, event }) => {
+              const itemInPlay = event.data.item
+
+              itemInPlay.sfx.use.play()
+
+              return {
+                ...context.game,
+                itemInPlay,
+                player: {
+                  ...context.game.player,
+                  inventory: context.game.player.inventory.filter((item) => {
+                    return item.id !== itemInPlay.id
+                  }),
+                },
+              }
+            },
+          }),
+        },
       },
       entry: assign({
         game: ({ context }) => {
@@ -515,11 +567,26 @@ export const appMachine = setup({
         },
       },
     },
+    UsingItem: {
+      on: {
+        USING_ITEM_ANIMATION_COMPLETE: {
+          target: 'ApplyingItemEffects',
+        },
+      },
+    },
     ApplyingCardEffects: {
       entry: 'applyCardEffects',
       on: {
         CARD_EFFECTS_ANIMATION_COMPLETE: {
           target: 'CardPlayed',
+        },
+      },
+    },
+    ApplyingItemEffects: {
+      entry: 'applyItemEffects',
+      on: {
+        ITEM_EFFECTS_ANIMATION_COMPLETE: {
+          target: 'PlayerChoosing',
         },
       },
     },
@@ -658,6 +725,8 @@ export const appMachine = setup({
               cashRegisterSound.play()
 
               const item = event.data.item
+
+              item.sfx.obtain.play()
 
               return {
                 ...context.game,

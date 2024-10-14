@@ -8,16 +8,26 @@ const HEALING_FLASH_DURATION = 0.75
 export type AvatarStatus = 'idle' | 'taking-damage' | 'healing' | 'dead'
 
 /** Displays the current player character portrait */
-export function Avatar({ src, status = 'idle' }: { src: string; status?: AvatarStatus }) {
+export function Avatar({
+  src,
+  status = 'idle',
+  onAnimationComplete,
+}: {
+  src: string
+  status?: AvatarStatus
+  onAnimationComplete?: () => void
+}) {
   return (
     <div>
       <AvatarAnimationWrapper status={status}>
         <div className={css['avatar']}>
           <img className={css['avatar-img']} src={src} />
 
-          {status === 'taking-damage' ? <DamageFlash /> : null}
+          {status === 'taking-damage' ? (
+            <DamageFlash onAnimationComplete={onAnimationComplete} />
+          ) : null}
 
-          {status === 'healing' ? <HealingFlash /> : null}
+          {status === 'healing' ? <HealingFlash onAnimationComplete={onAnimationComplete} /> : null}
         </div>
       </AvatarAnimationWrapper>
     </div>
@@ -45,9 +55,10 @@ function AvatarAnimationWrapper({
 }
 
 /** Overlays the avatar and applies a flash when taking damage */
-function DamageFlash() {
+function DamageFlash({ onAnimationComplete }: { onAnimationComplete?: () => void }) {
   return (
     <motion.div
+      onAnimationComplete={onAnimationComplete}
       style={{
         position: 'absolute',
         top: 0,
@@ -67,9 +78,10 @@ function DamageFlash() {
 }
 
 /** Overlays the avatar and applies a flash when healing */
-function HealingFlash() {
+function HealingFlash({ onAnimationComplete }: { onAnimationComplete?: () => void }) {
   return (
     <motion.div
+      onAnimationComplete={onAnimationComplete}
       style={{
         position: 'absolute',
         top: 0,

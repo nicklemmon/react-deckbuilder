@@ -12,7 +12,7 @@ export function getItem(id: string, items: Array<Item>) {
 }
 
 /** Starting volume for monster sound effects */
-const ITEM_SFX_VOLUME = 0.55
+const ITEM_SFX_VOLUME = 0.75
 
 /** Retrieves monster sound with build in defaults */
 const getItemSound = (sfx: string) => getSound({ src: sfx, volume: ITEM_SFX_VOLUME })
@@ -33,20 +33,19 @@ const ITEM_ARTWORK = import.meta.glob('../items/**/*.png', {
 })
 
 /** Array of available monsters derived from `src/monsters` file contents */
-export const ITEMS = Object.entries(ITEM_CONFIG_MODULES).map(([path, mod]) => {
-  const dir = path.replace('/config.ts', '')
-  const id = dir.replace('../items/', '')
+export const getAllItems = () =>
+  Object.entries(ITEM_CONFIG_MODULES).map(([path, mod]) => {
+    const dir = path.replace('/config.ts', '')
+    const id = dir.replace('../items/', '')
 
-  return {
-    ...(mod as Item),
-    id,
-    artwork: ITEM_ARTWORK[`${dir}/artwork.png`],
-    sfx: {
-      obtain: getItemSound(ITEM_SFX_MODULES[`${dir}/sfx.intro.wav`] as string),
-      use: getItemSound(ITEM_SFX_MODULES[`${dir}/sfx.damage.wav`] as string),
-      effect: getItemSound(ITEM_SFX_MODULES[`${dir}/sfx.death.wav`] as string),
-    },
-  }
-}) as Array<Item>
-
-console.log('ITEMS', ITEMS)
+    return {
+      ...(mod as Item),
+      id,
+      artwork: ITEM_ARTWORK[`${dir}/artwork.png`],
+      sfx: {
+        obtain: getItemSound(ITEM_SFX_MODULES[`${dir}/sfx.obtain.wav`] as string),
+        use: getItemSound(ITEM_SFX_MODULES[`${dir}/sfx.use.wav`] as string),
+        effect: getItemSound(ITEM_SFX_MODULES[`${dir}/sfx.effect.wav`] as string),
+      },
+    }
+  }) as Array<Item>

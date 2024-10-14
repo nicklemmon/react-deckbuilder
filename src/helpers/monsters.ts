@@ -28,18 +28,19 @@ const MONSTER_ARTWORK = import.meta.glob('../monsters/**/*.png', {
 })
 
 /** Array of available monsters derived from `src/monsters` file contents */
-export const MONSTERS = Object.entries(MONSTER_CONFIG_MODULES).map(([path, mod]) => {
-  const dir = path.replace('/config.ts', '')
-  const id = dir.replace('../monsters/', '')
+export const getAllMonsters = () =>
+  Object.entries(MONSTER_CONFIG_MODULES).map(([path, mod]) => {
+    const dir = path.replace('/config.ts', '')
+    const id = dir.replace('../monsters/', '')
 
-  return {
-    ...(mod as Monster),
-    id,
-    artwork: MONSTER_ARTWORK[`${dir}/artwork.png`],
-    sfx: {
-      intro: getMonsterSound(MONSTER_SFX_MODULES[`${dir}/sfx.intro.wav`] as string),
-      damage: getMonsterSound(MONSTER_SFX_MODULES[`${dir}/sfx.damage.wav`] as string),
-      death: getMonsterSound(MONSTER_SFX_MODULES[`${dir}/sfx.death.wav`] as string),
-    },
-  }
-}) as Array<Monster>
+    return {
+      ...(mod as Monster),
+      id,
+      artwork: MONSTER_ARTWORK[`${dir}/artwork.png`],
+      sfx: {
+        intro: getMonsterSound(MONSTER_SFX_MODULES[`${dir}/sfx.intro.wav`] as string),
+        damage: getMonsterSound(MONSTER_SFX_MODULES[`${dir}/sfx.damage.wav`] as string),
+        death: getMonsterSound(MONSTER_SFX_MODULES[`${dir}/sfx.death.wav`] as string),
+      },
+    }
+  }) as Array<Monster>

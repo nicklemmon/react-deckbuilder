@@ -36,8 +36,6 @@ export function ItemShopItem({
     return onClick()
   }
 
-  console.log('item', item)
-
   return (
     <div className={withClsx(css['item-shop-item'], className)}>
       <AnimatePresence>
