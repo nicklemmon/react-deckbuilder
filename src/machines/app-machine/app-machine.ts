@@ -206,7 +206,6 @@ export const appMachine = setup({
         const newDrawPile = arrayShuffle(context.game.player.deck).map((card) => {
           return {
             ...card,
-            id: `${card.id}-${crypto.randomUUID()}`,
             orientation: 'face-down' as const,
           }
         })
@@ -407,7 +406,13 @@ export const appMachine = setup({
         characterClassDeck: [],
         characterName: undefined,
         characterPortrait: undefined,
-        deck: STARTING_DECK,
+        deck: STARTING_DECK.map((card) => {
+          return {
+            ...card,
+            // Create a unique identifier for every card in the game
+            id: `${card.id}-${crypto.randomUUID()}`,
+          }
+        }),
         gold: 125,
         status: 'idle' as const,
         stats: {
@@ -767,6 +772,8 @@ export const appMachine = setup({
               const nextDeck = [
                 ...context.game.player.deck.filter((card) => card.id !== event.data.card.id),
               ]
+
+              console.log(nextDeck)
 
               return {
                 ...context.game,
