@@ -34,6 +34,6 @@
     "vite-plugin-compression": "0.5.1"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.9.5"
+    "@rollup/rollup-linux-x64-gnu": "4.25.0"
   }
 }
