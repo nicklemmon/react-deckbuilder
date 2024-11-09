@@ -25,6 +25,9 @@ const APP_MACHINE_ID = 'app'
 /** THe maximum number of allowed cards in the `currentHand` */
 const MAX_HAND_SIZE = 5
 
+/** The price (in gold) of destroying a card */
+const CARD_DESTRUCTION_PRICE = 100
+
 /** All image files in the project */
 const IMAGE_MODULES = import.meta.glob('../**/**/*.(png|webp)', { eager: true })
 
@@ -103,6 +106,7 @@ export type AppMachineContext = {
     currentHand: Array<Card>
     discardPile: Array<Card>
     drawPile: Array<Card>
+    cardDestructionPrice: number
     itemInPlay?: Item
     cardInPlay?: Card
     cardToDestroy?: Card
@@ -140,6 +144,7 @@ type AppMachineEvent =
   | { type: 'LEAVE_SHOP_CLICK' }
   | { type: 'LEAVE_DESTROYING_CARDS_CLICK' }
   | { type: 'ITEM_SHOP_CARD_CLICK'; data: { card: Card } }
+  | { type: 'DESTRUCTION_SHOP_CARD_CLICK'; data: { card: Card } }
   | { type: 'ITEM_SHOP_ITEM_CLICK'; data: { item: Item } }
   | { type: 'INVENTORY_ITEM_CLICK'; data: { item: Item } }
 
@@ -403,7 +408,7 @@ export const appMachine = setup({
         characterName: undefined,
         characterPortrait: undefined,
         deck: STARTING_DECK,
-        gold: 25,
+        gold: 125,
         status: 'idle' as const,
         stats: {
           // TODO: Update with character class stats
@@ -419,6 +424,7 @@ export const appMachine = setup({
         cards: [],
         items: [],
       },
+      cardDestructionPrice: CARD_DESTRUCTION_PRICE,
       currentHand: [],
       discardPile: [],
       drawPile: [],
@@ -751,6 +757,28 @@ export const appMachine = setup({
     },
     DestroyingCards: {
       on: {
+        DESTRUCTION_SHOP_CARD_CLICK: {
+          target: 'DestroyingCards',
+          actions: assign({
+            game: ({ context, event }) => {
+              buttonClickSound.play()
+              cashRegisterSound.play()
+
+              const nextDeck = [
+                ...context.game.player.deck.filter((card) => card.id !== event.data.card.id),
+              ]
+
+              return {
+                ...context.game,
+                player: {
+                  ...context.game.player,
+                  deck: nextDeck,
+                  gold: context.game.player.gold - context.game.cardDestructionPrice,
+                },
+              }
+            },
+          }),
+        },
         LEAVE_DESTROYING_CARDS_CLICK: {
           target: 'BetweenRounds',
           actions: () => buttonClickSound.play(),

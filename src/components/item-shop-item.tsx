@@ -10,11 +10,13 @@ export function ItemShopItem({
   className,
   item,
   shopStatus,
+  price,
   onClick,
 }: {
   shopStatus: ItemShopItemStatus
   item: Item
   onClick: () => void
+  price?: number
   className?: string
 }) {
   const withClsx = (rootClass: string, className?: string) => {
@@ -65,7 +67,7 @@ export function ItemShopItem({
         <img src={item.artwork} />
       </button>
 
-      <PriceStatsRow price={item.cost} />
+      <PriceStatsRow price={price ?? item.cost} />
     </div>
   )
 }

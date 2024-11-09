@@ -300,6 +300,8 @@ export function App() {
       <Dialog open={value === 'Shopping'}>
         <DialogContent>
           <Stack align="center" spacing="400">
+            <h2>Buy cards and items</h2>
+
             <Inline>
               {context.game.shop.cards.map((card) => {
                 let status: ItemShopCardStatus = 'affordable'
@@ -349,6 +351,53 @@ export function App() {
 
             <Inline>
               <Button onClick={() => send({ type: 'LEAVE_SHOP_CLICK' })} variant="tertiary">
+                Leave shop
+              </Button>
+
+              <Button onClick={() => send({ type: 'NEXT_BATTLE_CLICK' })}>Next battle</Button>
+            </Inline>
+          </Stack>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={value === 'DestroyingCards'}>
+        <DialogContent>
+          <Stack style={{ overflowX: 'hidden' }} align="center">
+            <h2>Permanently destroy cards</h2>
+
+            <div
+              style={{
+                overflowX: 'scroll',
+                whiteSpace: 'nowrap',
+                display: 'flex',
+                gap: 'var(--spacing-300)',
+                paddingBottom: 'var(--spacing-300)',
+                paddingTop: 'var(--spacing-300)',
+                width: '100%',
+              }}
+            >
+              {context.game.player.deck.map((card) => {
+                return (
+                  <ItemShopCard
+                    key={`destruction-shop-${card.id}`}
+                    {...card}
+                    shopStatus={
+                      context.game.player.gold >= context.game.cardDestructionPrice
+                        ? 'affordable'
+                        : 'unaffordable'
+                    }
+                    price={context.game.cardDestructionPrice}
+                    onClick={() => send({ type: 'DESTRUCTION_SHOP_CARD_CLICK', data: { card } })}
+                  />
+                )
+              })}
+            </div>
+
+            <Inline>
+              <Button
+                onClick={() => send({ type: 'LEAVE_DESTROYING_CARDS_CLICK' })}
+                variant="tertiary"
+              >
                 Leave shop
               </Button>
 
