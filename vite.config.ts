@@ -5,4 +5,5 @@ import compress from 'vite-plugin-compression'
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   plugins: [react(), mode === 'production' ? compress() : undefined].filter(Boolean),
+  assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.svg', '**/*.wav'],
 }))
