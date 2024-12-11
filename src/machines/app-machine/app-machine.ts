@@ -61,15 +61,15 @@ async function prefetchAssets() {
     ...Object.values(IMAGE_MODULES).map((module: any) => {
       return new Promise((resolve) => {
         const img = new Image()
-        img.onload = () => resolve(null)
         img.src = module.default
+        img.onload = () => resolve(null)
       })
     }),
     ...Object.values(SFX_MODULES).map((module: any) => {
       return new Promise((resolve) => {
         const audio = new Audio()
-        audio.oncanplaythrough = () => resolve(null)
         audio.src = module.default
+        audio.oncanplaythrough = () => resolve(null)
       })
     }),
   ])
