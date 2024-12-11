@@ -14,13 +14,12 @@ import { Feedback } from './components/feedback.tsx'
 import { Stack } from './components/stack.tsx'
 import { Inline } from './components/inline.tsx'
 import { Button } from './components/button.tsx'
-import { cardUseSound } from './machines/app-machine/app-machine.ts'
 import { ItemShopCard, type ItemShopCardStatus } from './components/item-shop-card.tsx'
 import { ItemShopItem } from './components/item-shop-item.tsx'
 import { StatsRow, StatIcon, StatVal } from './components/stats.tsx'
-import './index.css'
-import css from './app.module.css'
+import { cardUseSound } from './machines/app-machine/app-machine.ts'
 import { getItem } from './helpers/item.ts'
+import css from './app.module.css'
 
 export function App() {
   const [{ context, value }, send] = useMachine(appMachine)
@@ -33,7 +32,11 @@ export function App() {
     return (
       <CharacterCreation
         onCreate={(formData) => {
-          send({ type: 'CREATE_CHARACTER', data: formData })
+          send({
+            type: 'CREATE_CHARACTER',
+            // @ts-expect-error
+            data: formData,
+          })
         }}
       />
     )

@@ -2,7 +2,7 @@ import React from 'react'
 import { inject } from '@vercel/analytics'
 import ReactDOM from 'react-dom/client'
 import { App } from './app.tsx'
-import './index.css'
+import './global.css'
 
 inject()
 
