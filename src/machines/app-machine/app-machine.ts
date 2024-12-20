@@ -134,6 +134,7 @@ type AppMachineEvent =
     }
   | { type: 'CARD_EFFECTS_ANIMATION_COMPLETE' }
   | { type: 'ITEM_EFFECTS_ANIMATION_COMPLETE' }
+  | { type: 'CARD_DESTRUCTION_ANIMATION_COMPLETE'; data: { card: Card } }
   | { type: 'PLAY_CARD_ANIMATION_COMPLETE' }
   | { type: 'DISCARD_CARD_ANIMATION_COMPLETE' }
   | { type: 'MONSTER_DEATH_ANIMATION_COMPLETE' }
@@ -760,27 +761,49 @@ export const appMachine = setup({
         },
       },
     },
+    DestroyingCard: {
+      entry: assign({
+        game: ({ context }) => {
+          buttonClickSound.play()
+          cashRegisterSound.play()
+
+          const cardToDestroy = context.game.cardToDestroy
+
+          if (!cardToDestroy) return context.game
+
+          const nextDeck = [
+            ...context.game.player.deck.filter((card) => card.id !== cardToDestroy.id),
+          ]
+
+          return {
+            ...context.game,
+            cardToDestroy: undefined,
+            player: {
+              ...context.game.player,
+              deck: nextDeck,
+              gold: context.game.player.gold - context.game.cardDestructionPrice,
+            },
+          }
+        },
+      }),
+      on: {
+        CARD_DESTRUCTION_ANIMATION_COMPLETE: {
+          target: 'DestroyingCards',
+        },
+      },
+    },
     DestroyingCards: {
       on: {
         DESTRUCTION_SHOP_CARD_CLICK: {
-          target: 'DestroyingCards',
+          target: 'DestroyingCard',
           actions: assign({
             game: ({ context, event }) => {
-              buttonClickSound.play()
-              cashRegisterSound.play()
-
-              const nextDeck = [
-                ...context.game.player.deck.filter((card) => card.id !== event.data.card.id),
-              ]
-
-              console.log(nextDeck)
-
               return {
                 ...context.game,
-                player: {
-                  ...context.game.player,
-                  deck: nextDeck,
-                  gold: context.game.player.gold - context.game.cardDestructionPrice,
+                cardToDestroy: {
+                  ...event.data.card,
+                  orientation: 'face-up' as const,
+                  status: 'in-play' as const,
                 },
               }
             },

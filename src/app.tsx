@@ -363,10 +363,31 @@ export function App() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={value === 'DestroyingCards'}>
+      <Dialog open={value === 'DestroyingCards' || value === 'DestroyingCard'}>
         <DialogContent>
           <Stack style={{ overflowX: 'hidden' }} align="center">
             <h2>Permanently destroy cards</h2>
+
+            <AnimatePresence>
+              {value === 'DestroyingCard' ? (
+                <motion.div
+                  key="card-to-destroy"
+                  style={{ position: 'absolute', left: '50%', bottom: 0, zIndex: 100 }}
+                  initial={{ y: 0, opacity: 0.25, x: '-50%', scale: 1 }}
+                  animate={{ y: '-33vh', opacity: 1, x: '-50%', scale: 1.25 }}
+                  exit={{ x: '50vh', opacity: 0, rotate: 15, scale: 1 }}
+                  transition={{ type: 'spring', damping: 5, mass: 0.1, stiffness: 30 }}
+                  onAnimationEnd={() =>
+                    send({
+                      type: 'CARD_DESTRUCTION_ANIMATION_COMPLETE',
+                      data: { card: context.game.cardToDestroy as CardType },
+                    })
+                  }
+                >
+                  <Card {...(context.game.cardToDestroy as CardType)} />
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
 
             <div
               style={{
