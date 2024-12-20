@@ -1,16 +1,9 @@
 import { defineConfig, type PluginOption } from 'vite'
 import react from '@vitejs/plugin-react'
 import compression from 'vite-plugin-compression'
-import imageMin from 'vite-plugin-imagemin'
+import { ViteImageOptimizer as imageOptimizer } from 'vite-plugin-image-optimizer'
 
-const DEFAULT_PLUGINS: PluginOption = [
-  react(),
-  imageMin({
-    mozjpeg: { quality: 75 },
-    pngquant: { quality: [0.65, 0.9] },
-    webp: { quality: 75 },
-  }),
-]
+const DEFAULT_PLUGINS: PluginOption = [react(), imageOptimizer()]
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
