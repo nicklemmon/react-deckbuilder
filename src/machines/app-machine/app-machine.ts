@@ -777,7 +777,6 @@ export const appMachine = setup({
 
           return {
             ...context.game,
-            cardToDestroy: undefined,
             player: {
               ...context.game.player,
               deck: nextDeck,
@@ -798,6 +797,7 @@ export const appMachine = setup({
           target: 'DestroyingCard',
           actions: assign({
             game: ({ context, event }) => {
+              console.log('event.data.card', event.data.card)
               return {
                 ...context.game,
                 cardToDestroy: {

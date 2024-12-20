@@ -20,6 +20,7 @@ import { StatsRow, StatIcon, StatVal } from './components/stats.tsx'
 import { cardUseSound } from './machines/app-machine/app-machine.ts'
 import { getItem } from './helpers/item.ts'
 import css from './app.module.css'
+import { DebugTag } from './components/debug-tag.tsx'
 
 export function App() {
   const [{ context, value }, send] = useMachine(appMachine)
@@ -376,13 +377,19 @@ export function App() {
                   initial={{ y: 0, opacity: 0.25, x: '-50%', scale: 1 }}
                   animate={{ y: '-33vh', opacity: 1, x: '-50%', scale: 1.25 }}
                   exit={{ x: '50vh', opacity: 0, rotate: 15, scale: 1 }}
-                  transition={{ type: 'spring', damping: 5, mass: 0.1, stiffness: 30 }}
-                  onAnimationEnd={() =>
+                  transition={{
+                    type: 'spring',
+                    damping: 5,
+                    mass: 0.1,
+                    stiffness: 30,
+                  }}
+                  onAnimationComplete={() => {
+                    console.log('here')
                     send({
                       type: 'CARD_DESTRUCTION_ANIMATION_COMPLETE',
                       data: { card: context.game.cardToDestroy as CardType },
                     })
-                  }
+                  }}
                 >
                   <Card {...(context.game.cardToDestroy as CardType)} />
                 </motion.div>
