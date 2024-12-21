@@ -6,9 +6,16 @@ import imageMin from 'vite-plugin-imagemin'
 const DEFAULT_PLUGINS: PluginOption = [
   react(),
   imageMin({
-    mozjpeg: { quality: 75 },
-    pngquant: { quality: [0.65, 0.9] },
-    webp: { quality: 75 },
+    optipng: {
+      optimizationLevel: 7,
+    },
+    mozjpeg: {
+      quality: 20,
+    },
+    pngquant: {
+      quality: [0.8, 0.9],
+      speed: 4,
+    },
   }),
 ]
 
