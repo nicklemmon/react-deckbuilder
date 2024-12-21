@@ -13,7 +13,7 @@
     "@xstate/react": "5.0.0",
     "array-shuffle": "3.0.0",
     "clsx": "2.1.1",
-    "eslint-plugin-react": "^7.31.11",
+    "eslint-plugin-react": "7.31.11",
     "howler": "2.2.4",
     "motion": "11.15.0",
     "react": "18.3.1",
@@ -28,14 +28,11 @@
     "@types/react": "18.3.16",
     "@types/react-dom": "18.3.5",
     "@vitejs/plugin-react": "4.3.4",
-    "eslint": "9.16.0",
+    "eslint": "8.57.0",
     "prettier": "3.4.2",
     "typescript": "5.7.2",
-    "vite": "5.4.11",
+    "vite": "6.0.5",
     "vite-plugin-compression": "0.5.1",
-    "vite-plugin-imagemin": "^0.4.6"
-  },
-  "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.28.1"
+    "vite-plugin-imagemin": "0.4.6"
   }
 }
