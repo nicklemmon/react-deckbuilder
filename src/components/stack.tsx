@@ -2,6 +2,16 @@ import { clsx } from 'clsx'
 import type { Spacing } from '../types/tokens'
 import css from './stack.module.css'
 
+const ALIGN_PROP_VALS = ['left', 'right', 'center'] as const
+
+type AlignProp = (typeof ALIGN_PROP_VALS)[number]
+
+const ALIGN_CLASS_MAP: Record<AlignProp, string> = {
+  left: css['left'],
+  right: css['right'],
+  center: css['center'],
+}
+
 export function Stack({
   className,
   children,
@@ -12,10 +22,10 @@ export function Stack({
   children: React.ReactNode
   className?: string
   spacing?: Spacing
-  align?: 'left' | 'right' | 'center'
+  align?: AlignProp
   style?: React.CSSProperties
 }) {
-  const alignClass = align === 'left' ? css.left : align === 'right' ? css.right : css.center
+  const alignClass = ALIGN_CLASS_MAP[align]
 
   return (
     <div

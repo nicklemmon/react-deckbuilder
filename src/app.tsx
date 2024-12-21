@@ -20,7 +20,7 @@ import { StatsRow, StatIcon, StatVal } from './components/stats.tsx'
 import { cardUseSound } from './machines/app-machine/app-machine.ts'
 import { getItem } from './helpers/item.ts'
 import css from './app.module.css'
-import { DebugTag } from './components/debug-tag.tsx'
+import { Banner } from './components/banner.tsx'
 
 export function App() {
   const [{ context, value }, send] = useMachine(appMachine)
@@ -91,7 +91,7 @@ export function App() {
                 exit={{ x: 0, y: 0, opacity: 0 }}
                 transition={{ duration: 0.33 }}
               >
-                <Stack spacing="200">
+                <Stack spacing="100" align="center">
                   {context.game.player.characterPortrait ? (
                     <Avatar
                       src={context.game.player.characterPortrait}
@@ -99,6 +99,8 @@ export function App() {
                       onAnimationComplete={() => send({ type: 'ITEM_EFFECTS_ANIMATION_COMPLETE' })}
                     />
                   ) : null}
+
+                  <Banner>{context.game.player.characterName}</Banner>
 
                   <HealthBar
                     health={context.game.player.stats.health}
@@ -171,9 +173,7 @@ export function App() {
                       }}
                       transition={{ duration: 0.25 }}
                     >
-                      <div className={css['monster-name-wrapper']}>
-                        <div className={css['monster-name']}>{context.game.monster?.name}</div>
-                      </div>
+                      <Banner>{context.game.monster?.name}</Banner>
                     </motion.div>,
 
                     <motion.div
