@@ -25,15 +25,15 @@
     "@types/howler": "2.2.12",
     "@types/node": "22.10.2",
     "@types/random": "3.0.1",
-    "@types/react": "18.3.16",
+    "@types/react": "18.3.18",
     "@types/react-dom": "18.3.5",
     "@vitejs/plugin-react": "4.3.4",
-    "eslint": "9.16.0",
+    "eslint": "9.17.0",
     "prettier": "3.4.2",
     "typescript": "5.7.2",
     "vite": "5.4.11",
     "vite-plugin-compression": "0.5.1",
-    "vite-plugin-imagemin": "^0.4.6"
+    "vite-plugin-imagemin": "^0.6.0"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.28.1"
