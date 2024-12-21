@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { appMachine } from './machines/app-machine/app-machine.ts'
 import { type Card as CardType } from './types/cards.ts'
 import coinsIcon from './images/gold-coins.png'

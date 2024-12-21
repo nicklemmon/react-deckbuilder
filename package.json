@@ -13,8 +13,8 @@
     "array-shuffle": "3.0.0",
     "clsx": "2.1.1",
     "eslint-plugin-react": "^7.31.11",
-    "framer-motion": "11.14.0",
     "howler": "2.2.4",
+    "motion": "11.15.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "reset-css": "5.0.2",
@@ -32,7 +32,7 @@
     "typescript": "5.7.2",
     "vite": "6.0.3",
     "vite-plugin-compression": "0.5.1",
-    "vite-plugin-imagemin": "0.6.1"
+    "vite-plugin-imagemin": "^0.4.6"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.28.1"

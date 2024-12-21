@@ -1,5 +1,5 @@
 import { clsx } from 'clsx'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 import { PriceStatsRow } from './price-stats-row'
 import type { Item } from '../types/items'
 import css from './item-shop-item.module.css'

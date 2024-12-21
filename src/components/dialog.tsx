@@ -1,5 +1,5 @@
 import { clsx } from 'clsx'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 import css from './dialog.module.css'
 
 export function Dialog({

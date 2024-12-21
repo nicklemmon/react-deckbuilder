@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { rng } from '../helpers/rng'
 import css from './avatar.module.css'
 
