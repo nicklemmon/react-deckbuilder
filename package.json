@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@vercel/analytics": "1.4.1",
-    "@xstate/react": "5.0.0",
+    "@xstate/react": "5.0.1",
     "array-shuffle": "3.0.0",
     "clsx": "2.1.1",
     "eslint-plugin-react": "^7.31.11",
@@ -19,7 +19,7 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "reset-css": "5.0.2",
-    "xstate": "5.19.0"
+    "xstate": "5.19.1"
   },
   "devDependencies": {
     "@types/howler": "2.2.12",
