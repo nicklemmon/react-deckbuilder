@@ -36,6 +36,6 @@
     "vite-plugin-imagemin": "^0.6.0"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.28.1"
+    "@rollup/rollup-linux-x64-gnu": "4.29.1"
   }
 }
