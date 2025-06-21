@@ -3,10 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "check-node": "node -e \"const semver = require('semver'); const current = process.version; const required = require('./package.json').engines.node; if (semver.satisfies(current, required)) { console.log('✅ Node version', current, 'satisfies requirement:', required); } else { console.error('❌ Node version', current, 'does not satisfy requirement:', required); process.exit(1); }\""
   },
   "dependencies": {
     "@vercel/analytics": "1.5.0",
@@ -22,6 +28,9 @@
     "xstate": "5.19.2"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/howler": "2.2.12",
     "@types/node": "22.14.0",
     "@types/random": "3.0.1",
@@ -29,11 +38,14 @@
     "@types/react-dom": "19.1.1",
     "@vitejs/plugin-react": "4.3.4",
     "eslint": "9.24.0",
+    "happy-dom": "^18.0.1",
     "prettier": "3.5.3",
+    "semver": "^7.7.2",
     "typescript": "5.8.3",
     "vite": "6.2.5",
     "vite-plugin-compression": "0.5.1",
-    "vite-plugin-imagemin": "^0.6.0"
+    "vite-plugin-imagemin": "^0.6.0",
+    "vitest": "^3.2.4"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.39.0"
