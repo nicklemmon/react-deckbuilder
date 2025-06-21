@@ -29,5 +29,9 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: DEFAULT_PLUGINS,
+    test: {
+      environment: 'happy-dom',
+      setupFiles: ['./src/test-setup.ts'],
+    },
   }
 })

@@ -18,19 +18,21 @@ export function Stack({
   spacing = '300',
   align = 'left',
   style,
+  ...props
 }: {
   children: React.ReactNode
   className?: string
   spacing?: Spacing
   align?: AlignProp
   style?: React.CSSProperties
-}) {
+} & React.ComponentPropsWithRef<'div'>) {
   const alignClass = ALIGN_CLASS_MAP[align]
 
   return (
     <div
       className={clsx(css['stack'], alignClass, className)}
       style={{ '--gap': `var(--spacing-${spacing})`, ...style } as React.CSSProperties}
+      {...props}
     >
       {children}
     </div>
