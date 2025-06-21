@@ -1,0 +1,129 @@
+/* -------- base layout (unchanged) --------------------------- */
+.container {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: system-ui, sans-serif;
+}
+
+.label {
+  font-weight: 600;
+}
+
+.checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 4rem;
+  height: 2.2rem;
+  cursor: pointer;
+}
+
+/* -------- track -------------------------------------------- */
+.slider {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: #c5c5c5; /* dad mode track color */
+  transition: background 0.3s;
+}
+
+/* rainbow gradient border (still hides until checked) */
+.slider::after {
+  content: '';
+  position: absolute;
+  inset: -0.15rem;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #ff004d, #ff7c00, #f7ff00, #00ff87, #0094ff, #8e00ff, #ff004d);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* -------- thumb -------------------------------------------- */
+.slider::before {
+  content: '';
+  position: absolute;
+  left: 0.2rem;
+  top: 0.2rem;
+  width: 1.8rem;
+  height: 1.8rem;
+  background: #ffffff;
+  border-radius: 50%;
+
+  /* NEW: subtle drop shadow for depth */
+  box-shadow: 0 0.15rem 0.35rem rgba(0, 0, 0, 0.25);
+
+  /* bouncy slide */
+  transition:
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s;
+}
+
+/* -------- shiny glint overlay ------------------------------ */
+.glint {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  overflow: hidden; /* mask the moving strip */
+  opacity: 0; /* hidden until rainbow mode */
+}
+
+/* moving highlight strip */
+.glint::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%; /* start well off‑screen */
+  width: 50%; /* width of the strip */
+  height: 100%;
+  transform: skewX(-20deg);
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.85) 50%,
+    transparent 100%
+  );
+}
+
+/* animation */
+@keyframes glintSweep {
+  to {
+    left: 150%;
+  }
+}
+
+/* -------- checked state tweaks ----------------------------- */
+.checkbox:checked + .slider {
+  background: #ffd6f6; /* pastel track */
+}
+.checkbox:checked + .slider::before {
+  transform: translateX(1.8rem);
+  /* add gentle glow so the thumb feels lit */
+  box-shadow:
+    0 0.15rem 0.35rem rgba(0, 0, 0, 0.25),
+    0 0 0.6rem rgba(255, 255, 255, 0.6);
+}
+.checkbox:checked + .slider::after {
+  opacity: 1; /* show rainbow border */
+}
+.checkbox:checked + .slider .glint {
+  opacity: 1; /* enable glint layer */
+}
+.checkbox:checked + .slider .glint::before {
+  animation: glintSweep 1.2s linear infinite;
+}
+
+/* -------- keyboard focus ring ------------------------------ */
+.checkbox:focus-visible + .slider {
+  outline: 3px solid #000;
+  outline-offset: 3px;
+}

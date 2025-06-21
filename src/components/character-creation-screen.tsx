@@ -2,7 +2,7 @@ import { type SyntheticEvent } from 'react'
 import { useMachine } from '@xstate/react'
 import { appMachine } from '../machines/app-machine/app-machine'
 import { Button } from './button'
-import css from './character-creation.module.css'
+import css from './character-creation-screen.module.css'
 import { resolveModules } from '../helpers/vite'
 import { Stack } from './stack'
 
@@ -15,7 +15,7 @@ const PLAYER_PORTRAIT_MODULES = import.meta.glob('../images/player-portraits/*.(
 const PLAYER_PORTRAITS = resolveModules<string>(PLAYER_PORTRAIT_MODULES)
 
 /** UI view for character creation */
-export function CharacterCreation({
+export function CharacterCreationScreen({
   onCreate,
 }: {
   onCreate: (data: Record<string, FormDataEntryValue>) => void
