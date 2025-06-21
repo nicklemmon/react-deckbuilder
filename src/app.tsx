@@ -4,7 +4,8 @@ import { appMachine } from './machines/app-machine/app-machine.ts'
 import { type Card as CardType } from './types/cards.ts'
 import coinsIcon from './images/gold-coins.png'
 import { AppPreloader } from './components/app-preloader.tsx'
-import { CharacterCreation } from './components/character-creation.tsx'
+import { CharacterCreationScreen } from './components/character-creation-screen.tsx'
+import { ModeSelectScreen } from './components/mode-select-screen.tsx'
 import { Avatar } from './components/avatar.tsx'
 import { Card } from './components/card.tsx'
 import { Deck } from './components/deck.tsx'
@@ -17,10 +18,10 @@ import { Button } from './components/button.tsx'
 import { ItemShopCard, type ItemShopCardStatus } from './components/item-shop-card.tsx'
 import { ItemShopItem } from './components/item-shop-item.tsx'
 import { StatsRow, StatIcon, StatVal } from './components/stats.tsx'
+import { Banner } from './components/banner.tsx'
 import { cardUseSound } from './machines/app-machine/app-machine.ts'
 import { getItem } from './helpers/item.ts'
 import css from './app.module.css'
-import { Banner } from './components/banner.tsx'
 
 export function App() {
   const [{ context, value }, send] = useMachine(appMachine)
@@ -29,9 +30,13 @@ export function App() {
     return <AppPreloader />
   }
 
+  if (value === 'ModeSelect') {
+    return <ModeSelectScreen />
+  }
+
   if (value === 'CharacterCreation') {
     return (
-      <CharacterCreation
+      <CharacterCreationScreen
         onCreate={(formData) => {
           send({
             type: 'CREATE_CHARACTER',

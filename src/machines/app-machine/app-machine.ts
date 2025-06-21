@@ -55,6 +55,8 @@ const cashRegisterSound = getSound({ src: cashRegisterSfx, volume: 0.5 })
 
 const coinsSound = getSound({ src: coinsSfx, volume: 0.7 })
 
+type GameMode = 'rainbow' | 'dad'
+
 /** Prefetches assets from multiple sources returned by `import.meta.glob` */
 async function prefetchAssets() {
   return Promise.all([
@@ -101,6 +103,7 @@ export type AppMachineContext = {
       cards: Array<Card>
       items: Array<Item>
     }
+    mode: GameMode
     monsters: Array<Monster>
     items: Array<Item>
     currentHand: Array<Card>
@@ -148,6 +151,7 @@ type AppMachineEvent =
   | { type: 'DESTRUCTION_SHOP_CARD_CLICK'; data: { card: Card } }
   | { type: 'ITEM_SHOP_ITEM_CLICK'; data: { item: Item } }
   | { type: 'INVENTORY_ITEM_CLICK'; data: { item: Item } }
+  | { type: 'MODE_SELECT'; data: { mode: GameMode } }
 
 export const appMachine = setup({
   types: {
@@ -424,6 +428,7 @@ export const appMachine = setup({
         },
         inventory: [],
       },
+      mode: 'dad',
       monsters: [],
       items: [],
       shop: {
@@ -440,11 +445,29 @@ export const appMachine = setup({
     LoadingAssets: {
       invoke: {
         src: 'loadAllAssets',
-        onDone: 'CharacterCreation',
+        onDone: 'ModeSelect',
         onError: 'LoadingAssetsError',
       },
     },
     LoadingAssetsError: {},
+    ModeSelect: {
+      on: {
+        MODE_SELECT: {
+          target: 'CharacterCreation',
+          actions: assign({
+            game: (args) => {
+              const { context, event } = args
+              const mode = event.data.mode
+
+              return {
+                ...context.game,
+                mode,
+              }
+            },
+          }),
+        },
+      },
+    },
     CharacterCreation: {
       on: {
         CREATE_CHARACTER: {
