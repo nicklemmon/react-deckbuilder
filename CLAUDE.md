@@ -7,6 +7,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm start` - Start development server using Vite
 - `npm run build` - Build production bundle
 - `npm run preview` - Preview production build locally
+- `npm run prettier:write` - Format all files with Prettier
+
+## Code Quality
+
+**IMPORTANT**: Always run `npm run prettier:write` on files you have changed to ensure consistent formatting.
 
 ## Architecture Overview
 
