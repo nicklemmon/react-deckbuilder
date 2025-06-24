@@ -47,9 +47,9 @@ describe('Button', () => {
   it('handles click events', async () => {
     const user = userEvent.setup()
     const handleClick = vi.fn()
-    
+
     render(<Button onClick={handleClick}>Click me</Button>)
-    
+
     await user.click(screen.getByRole('button'))
     expect(handleClick).toHaveBeenCalledTimes(1)
   })
@@ -61,7 +61,11 @@ describe('Button', () => {
   })
 
   it('forwards other button props', () => {
-    render(<Button type="submit" data-testid="submit-btn">Submit</Button>)
+    render(
+      <Button type="submit" data-testid="submit-btn">
+        Submit
+      </Button>,
+    )
     const button = screen.getByTestId('submit-btn')
     expect(button).toHaveAttribute('type', 'submit')
   })
@@ -69,13 +73,13 @@ describe('Button', () => {
   it('has proper structure with content and background elements', () => {
     render(<Button>Test Content</Button>)
     const button = screen.getByRole('button')
-    
+
     // Check that button has 2 child elements (content span and bg span)
     expect(button.children).toHaveLength(2)
-    
+
     // Check that content is accessible
     expect(button).toHaveTextContent('Test Content')
-    
+
     // Check spans exist with appropriate classes
     const spans = button.querySelectorAll('span')
     expect(spans).toHaveLength(2)
