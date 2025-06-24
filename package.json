@@ -12,6 +12,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
+    "prettier:write": "prettier --write .",
     "check-node": "node -e \"const semver = require('semver'); const current = process.version; const required = require('./package.json').engines.node; if (semver.satisfies(current, required)) { console.log('✅ Node version', current, 'satisfies requirement:', required); } else { console.error('❌ Node version', current, 'does not satisfy requirement:', required); process.exit(1); }\""
   },
   "dependencies": {
