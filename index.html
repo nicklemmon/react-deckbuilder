@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 
 <html lang="en">
   <head>
@@ -90,7 +90,9 @@
       .js-loading-overlay {
         opacity: 1;
         visibility: visible;
-        transition: opacity 0.75s ease-in-out, visibility 0.75s ease-in-out;
+        transition:
+          opacity 0.75s ease-in-out,
+          visibility 0.75s ease-in-out;
         transition-delay: 0.5s;
       }
 
@@ -107,12 +109,12 @@
       }
 
       window.addEventListener('images load', () => {
-        console.log("images load")
+        console.log('images load')
         getLoadingOverlay().classList.add('images-loaded')
       })
 
       window.addEventListener('sfx load', () => {
-        console.log("sfx load")
+        console.log('sfx load')
         getLoadingOverlay().classList.add('sfx-loaded')
       })
     </script>

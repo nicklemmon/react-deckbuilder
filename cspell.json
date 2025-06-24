@@ -3,15 +3,7 @@
   "ignorePaths": [],
   "dictionaryDefinitions": [],
   "dictionaries": [],
-  "words": [
-    "Berzerker",
-    "clsx",
-    "deckbuilder",
-    "firebolt",
-    "janky",
-    "webp",
-    "xstate"
-  ],
+  "words": ["Berzerker", "clsx", "deckbuilder", "firebolt", "janky", "webp", "xstate"],
   "ignoreWords": [],
   "import": []
 }
