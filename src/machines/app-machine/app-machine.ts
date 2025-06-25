@@ -57,19 +57,62 @@ const coinsSound = getSound({ src: coinsSfx, volume: 0.7 })
 
 /** Prefetches assets from multiple sources returned by `import.meta.glob` */
 async function prefetchAssets() {
+  // Initialize helper functions to ensure all assets are discovered
+  const allMonsters = getAllMonsters()
+  const allItems = getAllItems()
+  // CARDS is already initialized at module level
+
+  // Collect all assets from both glob imports and helper functions
+  const allImages = new Set<string>()
+  const allSounds = new Set<string>()
+
+  // Add glob-imported assets
+  Object.values(IMAGE_MODULES).forEach((module: any) => {
+    allImages.add(module.default)
+  })
+  Object.values(SFX_MODULES).forEach((module: any) => {
+    allSounds.add(module.default)
+  })
+
+  // Add assets from cards
+  CARDS.forEach((card) => {
+    if (card.artwork) allImages.add(card.artwork as string)
+    if (card.sfx?.howl?.src) allSounds.add(card.sfx.howl.src as string)
+  })
+
+  // Add assets from monsters
+  allMonsters.forEach((monster) => {
+    if (monster.artwork) allImages.add(monster.artwork as string)
+    if (monster.sfx?.intro?.howl?.src) allSounds.add(monster.sfx.intro.howl.src as string)
+    if (monster.sfx?.damage?.howl?.src) allSounds.add(monster.sfx.damage.howl.src as string)
+    if (monster.sfx?.death?.howl?.src) allSounds.add(monster.sfx.death.howl.src as string)
+  })
+
+  // Add assets from items
+  allItems.forEach((item) => {
+    if (item.artwork) allImages.add(item.artwork as string)
+    if (item.sfx?.obtain?.howl?.src) allSounds.add(item.sfx.obtain.howl.src as string)
+    if (item.sfx?.use?.howl?.src) allSounds.add(item.sfx.use.howl.src as string)
+    if (item.sfx?.effect?.howl?.src) allSounds.add(item.sfx.effect.howl.src as string)
+  })
+
   return Promise.all([
-    ...Object.values(IMAGE_MODULES).map((module: any) => {
-      return new Promise((resolve) => {
+    // Preload all images
+    ...Array.from(allImages).map((src) => {
+      return new Promise((resolve, reject) => {
         const img = new Image()
-        img.src = module.default
+        img.src = src
         img.onload = () => resolve(null)
+        img.onerror = () => resolve(null) // Don't fail the entire load for missing images
       })
     }),
-    ...Object.values(SFX_MODULES).map((module: any) => {
-      return new Promise((resolve) => {
+    // Preload all sounds
+    ...Array.from(allSounds).map((src) => {
+      return new Promise((resolve, reject) => {
         const audio = new Audio()
-        audio.src = module.default
+        audio.src = src
         audio.oncanplaythrough = () => resolve(null)
+        audio.onerror = () => resolve(null) // Don't fail the entire load for missing sounds
       })
     }),
   ])
