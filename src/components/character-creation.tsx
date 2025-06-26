@@ -6,8 +6,6 @@ import css from './character-creation.module.css'
 import { resolveModules } from '../helpers/vite'
 import { Stack } from './stack'
 
-// TODO Use import globbing here instead
-
 const PLAYER_PORTRAIT_MODULES = import.meta.glob('../images/player-portraits/*.(png|webp)', {
   eager: true,
 })
