@@ -10,6 +10,7 @@
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "lint:types": "tsc --noEmit",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "prettier:write": "prettier --write .",

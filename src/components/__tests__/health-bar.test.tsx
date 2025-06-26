@@ -31,28 +31,28 @@ describe('HealthBar', () => {
     const { container } = render(<HealthBar health={100} maxHealth={100} />)
 
     const healthBar = container.querySelector('[style*="--health-percentage"]')
-    expect(healthBar?.style.getPropertyValue('--health-percentage')).toBe('1')
+    expect((healthBar as HTMLElement)?.style.getPropertyValue('--health-percentage')).toBe('1')
   })
 
   it('calculates health percentage correctly for half health', () => {
     const { container } = render(<HealthBar health={50} maxHealth={100} />)
 
     const healthBar = container.querySelector('[style*="--health-percentage"]')
-    expect(healthBar?.style.getPropertyValue('--health-percentage')).toBe('0.5')
+    expect((healthBar as HTMLElement)?.style.getPropertyValue('--health-percentage')).toBe('0.5')
   })
 
   it('calculates health percentage correctly for quarter health', () => {
     const { container } = render(<HealthBar health={25} maxHealth={100} />)
 
     const healthBar = container.querySelector('[style*="--health-percentage"]')
-    expect(healthBar?.style.getPropertyValue('--health-percentage')).toBe('0.25')
+    expect((healthBar as HTMLElement)?.style.getPropertyValue('--health-percentage')).toBe('0.25')
   })
 
   it('calculates health percentage correctly for zero health', () => {
     const { container } = render(<HealthBar health={0} maxHealth={100} />)
 
     const healthBar = container.querySelector('[style*="--health-percentage"]')
-    expect(healthBar?.style.getPropertyValue('--health-percentage')).toBe('0')
+    expect((healthBar as HTMLElement)?.style.getPropertyValue('--health-percentage')).toBe('0')
   })
 
   it('handles different max health values correctly', () => {
@@ -61,7 +61,7 @@ describe('HealthBar', () => {
     expect(screen.getByText('60 HP')).toBeInTheDocument()
 
     const healthBar = container.querySelector('[style*="--health-percentage"]')
-    expect(healthBar?.style.getPropertyValue('--health-percentage')).toBe('0.3')
+    expect((healthBar as HTMLElement)?.style.getPropertyValue('--health-percentage')).toBe('0.3')
   })
 
   it('handles fractional health calculations', () => {
@@ -70,7 +70,7 @@ describe('HealthBar', () => {
     expect(screen.getByText('33 HP')).toBeInTheDocument()
 
     const healthBar = container.querySelector('[style*="--health-percentage"]')
-    expect(healthBar?.style.getPropertyValue('--health-percentage')).toBe('0.33')
+    expect((healthBar as HTMLElement)?.style.getPropertyValue('--health-percentage')).toBe('0.33')
   })
 
   it('has proper component structure', () => {
@@ -79,12 +79,12 @@ describe('HealthBar', () => {
     // Check for wrapper (outermost div)
     const wrapper = container.firstChild
     expect(wrapper).toBeInTheDocument()
-    expect(wrapper?.className).toContain('health-bar-wrapper')
+    expect((wrapper as HTMLElement)?.className).toContain('health-bar-wrapper')
 
     // Check for health bar container (has the CSS variable)
     const healthBar = container.querySelector('[style*="--health-percentage"]')
     expect(healthBar).toBeInTheDocument()
-    expect(healthBar?.className).toContain('health-bar')
+    expect((healthBar as HTMLElement)?.className).toContain('health-bar')
 
     // Check for health bar fill
     const healthBarFill = healthBar?.querySelector('div')
@@ -103,7 +103,7 @@ describe('HealthBar', () => {
     expect(screen.getByText('1 HP')).toBeInTheDocument()
 
     const healthBar = container.querySelector('[style*="--health-percentage"]')
-    expect(healthBar?.style.getPropertyValue('--health-percentage')).toBe('1')
+    expect((healthBar as HTMLElement)?.style.getPropertyValue('--health-percentage')).toBe('1')
   })
 
   it('handles edge case with very high health values', () => {
@@ -112,7 +112,7 @@ describe('HealthBar', () => {
     expect(screen.getByText('9999 HP')).toBeInTheDocument()
 
     const healthBar = container.querySelector('[style*="--health-percentage"]')
-    expect(healthBar?.style.getPropertyValue('--health-percentage')).toBe('0.9999')
+    expect((healthBar as HTMLElement)?.style.getPropertyValue('--health-percentage')).toBe('0.9999')
   })
 
   it('handles negative health with proper percentage calculation', () => {
@@ -122,6 +122,6 @@ describe('HealthBar', () => {
     expect(screen.getByText('0 HP')).toBeInTheDocument()
 
     const healthBar = container.querySelector('[style*="--health-percentage"]')
-    expect(healthBar?.style.getPropertyValue('--health-percentage')).toBe('-0.5')
+    expect((healthBar as HTMLElement)?.style.getPropertyValue('--health-percentage')).toBe('-0.5')
   })
 })

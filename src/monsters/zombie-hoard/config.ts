@@ -2,7 +2,6 @@ import { defineMonster } from '../../helpers/monsters'
 
 export default defineMonster({
   name: 'Zombie Hoard',
-  id: 'zombie-hoard',
   level: 5,
   goldBounty: 8,
   stats: {

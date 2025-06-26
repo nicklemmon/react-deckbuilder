@@ -90,10 +90,10 @@ describe('Avatar', () => {
 
     // Simulate animation completion
     const motionDivs = screen.getAllByTestId('motion-div')
-    const damageFlash = motionDivs.find((div) => div.onAnimationEnd === mockCallback)
+    const damageFlash = motionDivs.find((div) => (div as HTMLDivElement).onanimationend === mockCallback)
 
-    if (damageFlash?.onAnimationEnd) {
-      damageFlash.onAnimationEnd({} as any)
+    if ((damageFlash as HTMLDivElement)?.onanimationend) {
+      ;(damageFlash as HTMLDivElement).onanimationend!({} as any)
       expect(mockCallback).toHaveBeenCalledTimes(1)
     }
   })
