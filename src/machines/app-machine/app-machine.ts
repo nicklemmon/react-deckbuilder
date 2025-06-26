@@ -77,29 +77,22 @@ async function prefetchAssets() {
   // Add assets from cards
   CARDS.forEach((card) => {
     if (card.artwork) allImages.add(card.artwork as string)
-    if (card.sfx?.howl?.src) allSounds.add(card.sfx.howl.src as string)
   })
 
   // Add assets from monsters
   allMonsters.forEach((monster) => {
     if (monster.artwork) allImages.add(monster.artwork as string)
-    if (monster.sfx?.intro?.howl?.src) allSounds.add(monster.sfx.intro.howl.src as string)
-    if (monster.sfx?.damage?.howl?.src) allSounds.add(monster.sfx.damage.howl.src as string)
-    if (monster.sfx?.death?.howl?.src) allSounds.add(monster.sfx.death.howl.src as string)
   })
 
   // Add assets from items
   allItems.forEach((item) => {
     if (item.artwork) allImages.add(item.artwork as string)
-    if (item.sfx?.obtain?.howl?.src) allSounds.add(item.sfx.obtain.howl.src as string)
-    if (item.sfx?.use?.howl?.src) allSounds.add(item.sfx.use.howl.src as string)
-    if (item.sfx?.effect?.howl?.src) allSounds.add(item.sfx.effect.howl.src as string)
   })
 
   return Promise.all([
     // Preload all images
     ...Array.from(allImages).map((src) => {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         const img = new Image()
         img.src = src
         img.onload = () => resolve(null)
@@ -108,7 +101,7 @@ async function prefetchAssets() {
     }),
     // Preload all sounds
     ...Array.from(allSounds).map((src) => {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         const audio = new Audio()
         audio.src = src
         audio.oncanplaythrough = () => resolve(null)
