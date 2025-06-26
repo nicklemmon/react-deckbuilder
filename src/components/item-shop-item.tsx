@@ -49,7 +49,7 @@ export function ItemShopItem({
               opacity: 0,
             }}
             animate={{ opacity: 1, scale: 1.0 }}
-            transition={{ delay: 0.2, duration: 0.2, scale: 1.0 }}
+            transition={{ delay: 0.2, duration: 0.2 }}
           >
             <motion.span
               className={css['item-shop-item-unaffordable-text']}

@@ -48,7 +48,7 @@ export function ItemShopCard({
             className={css['item-shop-card-overlay']}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1, scale: 1.0 }}
-            transition={{ delay: 0.2, duration: 0.2, scale: 1.0 }}
+            transition={{ delay: 0.2, duration: 0.2 }}
           >
             <motion.span
               className={css['item-shop-card-purchased-text']}
@@ -68,7 +68,7 @@ export function ItemShopCard({
               opacity: 0,
             }}
             animate={{ opacity: 1, scale: 1.0 }}
-            transition={{ delay: 0.2, duration: 0.2, scale: 1.0 }}
+            transition={{ delay: 0.2, duration: 0.2 }}
           >
             <motion.span
               className={css['item-shop-card-unaffordable-text']}
