@@ -29,10 +29,10 @@ const MAX_HAND_SIZE = 5
 const CARD_DESTRUCTION_PRICE = 100
 
 /** All image files in the project */
-const IMAGE_MODULES = import.meta.glob('../**/*.(png|webp)', { eager: true })
+const IMAGE_MODULES = import.meta.glob('../../**/*.(png|webp)', { eager: true })
 
 /** All sound effect files in the project */
-const SFX_MODULES = import.meta.glob('../**/*.wav', { eager: true })
+const SFX_MODULES = import.meta.glob('../../**/*.wav', { eager: true })
 
 /** All character class config files in the project */
 const CHARACTER_CLASS_MODULES = import.meta.glob('../../character-classes/**/config.ts', {
