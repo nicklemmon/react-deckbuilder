@@ -44,7 +44,7 @@
     "prettier": "3.6.0",
     "semver": "^7.7.2",
     "typescript": "5.8.3",
-    "vite": "6.3.5",
+    "vite": "7.0.2",
     "vite-plugin-compression": "0.5.1",
     "vite-plugin-imagemin": "^0.6.0",
     "vitest": "^3.2.4"
