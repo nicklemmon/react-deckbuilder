@@ -29,6 +29,16 @@ export function App() {
     return <AppPreloader />
   }
 
+  if (value === 'ModeSelection') {
+    return (
+      <div>
+        <button onClick={() => send({ type: 'STANDARD_MODE_SELECTION' })}>Standard mode</button>
+
+        <button onClick={() => send({ type: 'RAINBOW_MODE_SELECTION' })}>Rainbow mode</button>
+      </div>
+    )
+  }
+
   if (value === 'CharacterCreation') {
     return (
       <CharacterCreation
@@ -46,6 +56,7 @@ export function App() {
   return (
     <div className={css['play-area']}>
       <div className={css['play-area-wrapper']}>
+        CURRENT MODE = {context.game.mode}
         <div className={css['play-area-banner']}>
           <Inline>
             <StatsRow>
@@ -80,7 +91,6 @@ export function App() {
             </AnimatePresence>
           </Inline>
         </div>
-
         <div className={css['combat-zone']}>
           <AnimatePresence>
             {context.game.player.characterPortrait ? (
@@ -197,7 +207,6 @@ export function App() {
             </AnimatePresence>
           </Stack>
         </div>
-
         <Stack className={css['current-hand']}>
           <Stack spacing="100">
             <div className={css['current-hand-wrapper']}>
@@ -228,7 +237,6 @@ export function App() {
             Current hand with {context.game.currentHand.length} cards
           </Stack>
         </Stack>
-
         <Stack className={css['discard-pile']}>
           <Deck>
             {context.game.discardPile.map((card, index) => {
@@ -243,7 +251,6 @@ export function App() {
           </Deck>
           <div>Discard pile with {context.game.discardPile.length} cards</div>
         </Stack>
-
         <AnimatePresence
           onExitComplete={() => send({ type: 'DISCARD_CARD_ANIMATION_COMPLETE' })}
           mode="popLayout"
@@ -267,7 +274,6 @@ export function App() {
             </motion.div>
           ) : null}
         </AnimatePresence>
-
         <Stack className={css['draw-pile']}>
           <Deck>
             {context.game.drawPile.map((card, index) => {

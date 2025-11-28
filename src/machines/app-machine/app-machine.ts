@@ -118,6 +118,7 @@ export type AppMachineContext = {
     cards: Array<Card>
   }
   game: {
+    mode: 'standard' | 'rainbow'
     player: {
       characterClass: CharacterClass | undefined
       characterClassDeck: Array<Card>
@@ -152,6 +153,8 @@ export type AppMachineContext = {
 }
 
 type AppMachineEvent =
+  | { type: 'STANDARD_MODE_SELECTION' }
+  | { type: 'RAINBOW_MODE_SELECTION' }
   | {
       type: 'CREATE_CHARACTER'
       data: { characterClass: string; characterName: string; characterPortrait: string }
@@ -438,6 +441,7 @@ export const appMachine = setup({
       cards: CARDS,
     },
     game: {
+      mode: 'standard',
       player: {
         characterClass: undefined,
         characterClassDeck: [],
@@ -476,11 +480,37 @@ export const appMachine = setup({
     LoadingAssets: {
       invoke: {
         src: 'loadAllAssets',
-        onDone: 'CharacterCreation',
+        onDone: 'ModeSelection',
         onError: 'LoadingAssetsError',
       },
     },
     LoadingAssetsError: {},
+    ModeSelection: {
+      on: {
+        STANDARD_MODE_SELECTION: {
+          actions: assign({
+            game: ({ context }) => {
+              return {
+                ...context.game,
+                mode: 'standard',
+              }
+            },
+          }),
+          target: 'CharacterCreation',
+        },
+        RAINBOW_MODE_SELECTION: {
+          actions: assign({
+            game: ({ context }) => {
+              return {
+                ...context.game,
+                mode: 'rainbow',
+              }
+            },
+          }),
+          target: 'CharacterCreation',
+        },
+      },
+    },
     CharacterCreation: {
       on: {
         CREATE_CHARACTER: {
