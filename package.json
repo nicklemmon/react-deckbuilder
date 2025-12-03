@@ -18,7 +18,7 @@
   "dependencies": {
     "@vercel/analytics": "1.5.0",
     "@xstate/react": "6.0.0",
-    "array-shuffle": "3.0.0",
+    "array-shuffle": "4.0.0",
     "clsx": "2.1.1",
     "eslint-plugin-react": "^7.31.11",
     "howler": "2.2.4",
