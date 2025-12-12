@@ -23,8 +23,8 @@
     "eslint-plugin-react": "^7.31.11",
     "howler": "2.2.4",
     "motion": "12.19.1",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
     "reset-css": "5.0.2",
     "xstate": "5.20.0"
   },
