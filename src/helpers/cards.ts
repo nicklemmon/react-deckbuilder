@@ -7,7 +7,7 @@ export function defineCard(config: Omit<Card, 'id' | 'artwork' | 'sfx'>) {
 }
 
 /** Returns a card from a deck by its id */
-export function getCard(id: string, deck: Array<Card>) {
+export function getCard(id: string, deck: Array<Card>): Card {
   return [...deck].find((card) => card.id === id) as Card
 }
 

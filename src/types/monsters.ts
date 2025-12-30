@@ -1,5 +1,6 @@
 import { Howl } from 'howler'
 import type { AvatarStatus } from '../components/avatar'
+import type { GameMode } from './global'
 
 export type Monster = {
   id: string
@@ -7,6 +8,7 @@ export type Monster = {
   name: string
   level: number
   goldBounty: number
+  gameMode: GameMode
   artwork?: string
   damageTaken?: number
   sfx?: {

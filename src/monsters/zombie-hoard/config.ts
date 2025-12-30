@@ -4,6 +4,7 @@ export default defineMonster({
   name: 'Zombie Hoard',
   level: 5,
   goldBounty: 8,
+  gameMode: 'standard',
   stats: {
     maxHealth: 30,
     health: 30,

@@ -17,6 +17,7 @@ import type { CharacterClass } from '../../types/character-classes.ts'
 import type { Monster } from '../../types/monsters.ts'
 import type { Card } from '../../types/cards.ts'
 import type { Item } from '../../types/items.ts'
+import type { GameMode } from '../../types/global.ts'
 import type { AvatarStatus } from '../../components/avatar.tsx'
 
 /** Unique ID for the application machine */
@@ -60,16 +61,17 @@ async function prefetchAssets() {
   // Initialize helper functions to ensure all assets are discovered
   const allMonsters = getAllMonsters()
   const allItems = getAllItems()
-  // CARDS is already initialized at module level
 
   // Collect all assets from both glob imports and helper functions
   const allImages = new Set<string>()
   const allSounds = new Set<string>()
 
-  // Add glob-imported assets
+  // Add glob-imported images
   Object.values(IMAGE_MODULES).forEach((module: any) => {
     allImages.add(module.default)
   })
+
+  // Add glob-imported sound effects
   Object.values(SFX_MODULES).forEach((module: any) => {
     allSounds.add(module.default)
   })
@@ -118,7 +120,7 @@ export type AppMachineContext = {
     cards: Array<Card>
   }
   game: {
-    mode: 'standard' | 'rainbow'
+    mode: GameMode
     player: {
       characterClass: CharacterClass | undefined
       characterClassDeck: Array<Card>
@@ -525,7 +527,10 @@ export const appMachine = setup({
               return {
                 ...context.game,
                 items: getAllItems(),
-                monsters: getAllMonsters(),
+                monsters: getAllMonsters().filter((monster) => {
+                  // We only want the monsters for the currently selected mode
+                  return monster.gameMode === context.game.mode
+                }),
                 player: {
                   ...context.game.player,
                   characterClass: characterClass,

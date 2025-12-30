@@ -4,6 +4,7 @@ export default defineMonster({
   name: 'Watcher from the Deep',
   level: 10,
   goldBounty: 12,
+  gameMode: 'standard',
   stats: {
     maxHealth: 12,
     health: 12,

@@ -1,10 +1,10 @@
 import { type SyntheticEvent } from 'react'
-import { useMachine } from '@xstate/react'
-import { appMachine } from '../machines/app-machine/app-machine'
 import { Button } from './button'
 import css from './character-creation.module.css'
 import { resolveModules } from '../helpers/vite'
 import { Stack } from './stack'
+import type { GameMode } from '../types/global'
+import type { CharacterClass } from '../types/character-classes'
 
 const PLAYER_PORTRAIT_MODULES = import.meta.glob('../images/player-portraits/*.(png|webp)', {
   eager: true,
@@ -15,11 +15,13 @@ const PLAYER_PORTRAITS = resolveModules<string>(PLAYER_PORTRAIT_MODULES)
 /** UI view for character creation */
 export function CharacterCreation({
   onCreate,
+  gameMode,
+  characterClasses,
 }: {
   onCreate: (data: Record<string, FormDataEntryValue>) => void
+  gameMode: GameMode
+  characterClasses: Array<CharacterClass>
 }) {
-  const [{ context }] = useMachine(appMachine)
-
   /** Handler for the form submit event */
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -58,7 +60,7 @@ export function CharacterCreation({
             </label>
 
             <select id="character-class" name="characterClass" required className={css['input']}>
-              {context.assets.characterClasses.map((characterClass, index) => {
+              {characterClasses.map((characterClass, index) => {
                 return (
                   <option key={`${characterClass.id}${index}`} value={characterClass.id}>
                     {characterClass.name}
@@ -71,7 +73,9 @@ export function CharacterCreation({
           <fieldset className={css['character-portrait-fieldset']}>
             <legend className={css['input-label']}>Character portrait</legend>
 
-            {PLAYER_PORTRAITS.map((portrait, index) => {
+            {PLAYER_PORTRAITS.filter((portrait) => {
+              return portrait.includes(`.${gameMode}.`)
+            }).map((portrait, index) => {
               return (
                 <label key={`portrait-ratio-${index}`} className={css['character-portrait-label']}>
                   <input

@@ -33,7 +33,7 @@
   display: grid;
   width: 100%;
   grid-template-columns: repeat(auto-fit, minmax(var(--size-500), 1fr));
-  gap: var(--spacing-300);
+  gap: var(--spacing-500);
   padding: 0;
   border: 0;
 }
@@ -51,21 +51,12 @@
 
   &:hover,
   &:has(input:checked) {
-    transform: scale(1.1);
-    box-shadow: 0 0 30px 15px rgba(255, 255, 255, 0.7);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px 10px rgba(0, 0, 0, 0.25);
     z-index: var(--z-index-700);
   }
-
-  &:has(input:checked) {
-  }
-}
-
-.character-portrait-label {
 }
 
 .character-portrait-input {
   display: none;
-}
-
-.character-portrait-img {
 }

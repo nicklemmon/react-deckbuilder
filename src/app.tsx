@@ -31,17 +31,19 @@ export function App() {
 
   if (value === 'ModeSelection') {
     return (
-      <div>
-        <button onClick={() => send({ type: 'STANDARD_MODE_SELECTION' })}>Standard mode</button>
+      <Inline>
+        <Button onClick={() => send({ type: 'STANDARD_MODE_SELECTION' })}>Standard mode</Button>
 
-        <button onClick={() => send({ type: 'RAINBOW_MODE_SELECTION' })}>Rainbow mode</button>
-      </div>
+        <Button onClick={() => send({ type: 'RAINBOW_MODE_SELECTION' })}>Rainbow mode</Button>
+      </Inline>
     )
   }
 
   if (value === 'CharacterCreation') {
     return (
       <CharacterCreation
+        gameMode={context.game.mode}
+        characterClasses={context.assets.characterClasses}
         onCreate={(formData) => {
           send({
             type: 'CREATE_CHARACTER',
@@ -56,7 +58,6 @@ export function App() {
   return (
     <div className={css['play-area']}>
       <div className={css['play-area-wrapper']}>
-        CURRENT MODE = {context.game.mode}
         <div className={css['play-area-banner']}>
           <Inline>
             <StatsRow>
@@ -91,6 +92,7 @@ export function App() {
             </AnimatePresence>
           </Inline>
         </div>
+
         <div className={css['combat-zone']}>
           <AnimatePresence>
             {context.game.player.characterPortrait ? (

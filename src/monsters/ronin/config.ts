@@ -4,6 +4,7 @@ export default defineMonster({
   name: 'Ronin',
   level: 3,
   goldBounty: 9,
+  gameMode: 'standard',
   stats: {
     maxHealth: 9,
     health: 9,
