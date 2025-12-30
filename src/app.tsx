@@ -21,6 +21,7 @@ import { cardUseSound } from './machines/app-machine/app-machine.ts'
 import { getItem } from './helpers/item.ts'
 import css from './app.module.css'
 import { Banner } from './components/banner.tsx'
+import { ModeSelection } from './components/mode-selection.tsx'
 
 export function App() {
   const [{ context, value }, send] = useMachine(appMachine)
@@ -31,11 +32,10 @@ export function App() {
 
   if (value === 'ModeSelection') {
     return (
-      <Inline>
-        <Button onClick={() => send({ type: 'STANDARD_MODE_SELECTION' })}>Standard mode</Button>
-
-        <Button onClick={() => send({ type: 'RAINBOW_MODE_SELECTION' })}>Rainbow mode</Button>
-      </Inline>
+      <ModeSelection
+        onStandardModeClick={() => send({ type: 'STANDARD_MODE_SELECTION' })}
+        onRainbowModeClick={() => send({ type: 'RAINBOW_MODE_SELECTION' })}
+      />
     )
   }
 
@@ -253,6 +253,7 @@ export function App() {
           </Deck>
           <div>Discard pile with {context.game.discardPile.length} cards</div>
         </Stack>
+
         <AnimatePresence
           onExitComplete={() => send({ type: 'DISCARD_CARD_ANIMATION_COMPLETE' })}
           mode="popLayout"
@@ -276,6 +277,7 @@ export function App() {
             </motion.div>
           ) : null}
         </AnimatePresence>
+
         <Stack className={css['draw-pile']}>
           <Deck>
             {context.game.drawPile.map((card, index) => {

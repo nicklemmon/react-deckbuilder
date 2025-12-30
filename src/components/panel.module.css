@@ -1,0 +1,11 @@
+.panel {
+  background-image: linear-gradient(to top, var(--color-stone-800) 10%, var(--color-stone-900));
+  color: var(--color-stone-100);
+  border-radius: var(--rounding-200);
+  border: var(--border-width-100) solid var(--color-stone-600);
+  overflow: hidden;
+}
+
+.panel-body {
+  padding: var(--spacing-400);
+}
