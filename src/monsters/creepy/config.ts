@@ -4,6 +4,7 @@ export default defineMonster({
   name: 'Creepy',
   level: 5,
   goldBounty: 15,
+  gameMode: 'standard',
   stats: {
     maxHealth: 6,
     health: 6,

@@ -4,6 +4,7 @@ export default defineMonster({
   name: 'Bone Dragon',
   level: 8,
   goldBounty: 10,
+  gameMode: 'standard',
   stats: {
     maxHealth: 20,
     health: 20,

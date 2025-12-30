@@ -4,6 +4,7 @@ export default defineMonster({
   name: 'Clown',
   level: 3,
   goldBounty: 10,
+  gameMode: 'standard',
   stats: {
     maxHealth: 4,
     health: 4,

@@ -4,6 +4,7 @@ export default defineMonster({
   name: 'Gargoyle',
   level: 3,
   goldBounty: 2,
+  gameMode: 'standard',
   stats: {
     maxHealth: 4,
     health: 4,

@@ -4,6 +4,7 @@ export default defineMonster({
   name: 'The Black Cat',
   level: 2,
   goldBounty: 4,
+  gameMode: 'rainbow',
   stats: {
     maxHealth: 6,
     health: 6,

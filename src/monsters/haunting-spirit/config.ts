@@ -4,6 +4,7 @@ export default defineMonster({
   name: 'Haunting Spirit',
   level: 4,
   goldBounty: 5,
+  gameMode: 'standard',
   stats: {
     maxHealth: 10,
     health: 10,

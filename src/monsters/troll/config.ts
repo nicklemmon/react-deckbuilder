@@ -4,6 +4,7 @@ export default defineMonster({
   name: 'Troll',
   level: 8,
   goldBounty: 9,
+  gameMode: 'standard',
   stats: {
     maxHealth: 10,
     health: 10,

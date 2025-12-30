@@ -10,11 +10,12 @@ export function Button({
   children: React.ReactNode
   variant?: 'primary' | 'secondary' | 'tertiary' | 'destructive' | 'unstyled'
 } & React.ComponentPropsWithRef<'button'>) {
-  const withClsx = (root: string) =>
-    clsx({
+  const withClsx = (root: string) => {
+    return clsx({
       [css[root]]: true,
       [css[variant]]: true,
     })
+  }
 
   return (
     <button className={withClsx('button')} {...props}>

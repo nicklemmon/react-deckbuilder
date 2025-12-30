@@ -4,6 +4,7 @@ export default defineMonster({
   name: 'Ghoul',
   level: 6,
   goldBounty: 9,
+  gameMode: 'standard',
   stats: {
     maxHealth: 15,
     health: 15,

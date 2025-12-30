@@ -9,6 +9,7 @@
   font-family: var(--font-secondary);
   font-size: var(--font-size-400);
   border-radius: var(--rounding-100);
+  corner-shape: scoop;
   overflow: hidden;
   border: 0;
   padding: 0;
@@ -60,7 +61,7 @@
 }
 
 .button.secondary {
-  /* --text-color: var(--color-stone-900);
+  --text-color: var(--color-stone-900);
   --gradient-start: var(--color-stone-500);
-  --gradient-end: var(--color-stone-300); */
+  --gradient-end: var(--color-stone-300);
 }
