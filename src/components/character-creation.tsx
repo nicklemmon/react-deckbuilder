@@ -1,7 +1,7 @@
 import { type SyntheticEvent } from 'react'
 import { Button } from './button'
 import css from './character-creation.module.css'
-import { resolveModules } from '../helpers/vite'
+import { resolveModulesWithPaths } from '../helpers/vite'
 import { Stack } from './stack'
 import type { GameMode } from '../types/global'
 import type { CharacterClass } from '../types/character-classes'
@@ -10,7 +10,7 @@ const PLAYER_PORTRAIT_MODULES = import.meta.glob('../images/player-portraits/*.(
   eager: true,
 })
 
-const PLAYER_PORTRAITS = resolveModules<string>(PLAYER_PORTRAIT_MODULES)
+const PLAYER_PORTRAITS = resolveModulesWithPaths<string>(PLAYER_PORTRAIT_MODULES)
 
 /** UI view for character creation */
 export function CharacterCreation({
@@ -74,19 +74,19 @@ export function CharacterCreation({
             <legend className={css['input-label']}>Character portrait</legend>
 
             {PLAYER_PORTRAITS.filter((portrait) => {
-              return portrait.includes(`.${gameMode}.`)
+              return portrait.path.includes(`.${gameMode}.`)
             }).map((portrait, index) => {
               return (
                 <label key={`portrait-ratio-${index}`} className={css['character-portrait-label']}>
                   <input
                     name="characterPortrait"
                     type="radio"
-                    value={portrait}
+                    value={portrait.url}
                     className={css['character-portrait-input']}
                     defaultChecked={index === 0}
                   />
 
-                  <img src={portrait} className={css['character-portrait-img']} />
+                  <img src={portrait.url} className={css['character-portrait-img']} />
                 </label>
               )
             })}
