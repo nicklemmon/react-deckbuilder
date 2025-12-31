@@ -1,11 +1,13 @@
 .card {
   display: inline-flex;
+  position: relative;
   border: 1px solid var(--color-stone-400);
   border-radius: var(--rounding-100);
   overflow: hidden;
   height: var(--card-height);
   width: var(--card-width);
-  perspective: 1000px;
+  transform-style: preserve-3d;
+  transform-origin: center center;
   background: linear-gradient(
     to bottom,
     var(--color-stone-800),
@@ -13,9 +15,39 @@
     var(--color-stone-900)
   );
   color: var(--color-stone-100);
-  transition-duration: var(--anim-dur-300);
-  transition-timing-function: var(--anim-easing-100);
-  transition-property: transform, box-shadow;
+  transition:
+    transform 0.1s ease-out,
+    box-shadow 0.2s ease-out;
+  --sheen-x: 50%;
+  --sheen-y: 50%;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at var(--sheen-x) var(--sheen-y),
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.1) 30%,
+    transparent 60%
+  );
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity 0.3s ease-out;
+  border-radius: var(--rounding-100);
+}
+
+.card.face-up.idle:hover {
+  will-change: transform;
+}
+
+.card.face-up.idle:hover::before {
+  opacity: 1;
 }
 
 .card-front {
@@ -24,18 +56,17 @@
   outline-offset: -2px;
 }
 
-.card.face-up.idle:hover {
-  transform: translateY(calc(-1 * var(--spacing-100)));
-}
-
 .card.face-up {
-  box-shadow: 0 var(--spacing-100) var(--spacing-300) calc(var(--spacing-200) * -1)
-    var(--color-stone-700);
+  box-shadow:
+    0 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.card.face-up:hover {
-  box-shadow: 0 var(--spacing-200) var(--spacing-400) calc(var(--spacing-100) * -1)
-    var(--color-stone-700);
+.card.face-up.idle:hover {
+  box-shadow:
+    0 12px 24px -4px rgba(0, 0, 0, 0.3),
+    0 6px 12px -2px rgba(0, 0, 0, 0.2),
+    0 3px 6px -1px rgba(0, 0, 0, 0.15);
 }
 
 .card.in-play {
