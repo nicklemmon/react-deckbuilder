@@ -209,21 +209,45 @@ export function App() {
             </AnimatePresence>
           </Stack>
         </div>
+
         <Stack className={css['current-hand']}>
           <Stack spacing="100">
             <div className={css['current-hand-wrapper']}>
               {context.game.currentHand.map((card, index) => {
+                const totalCards = context.game.currentHand.length
+                const middleIndex = (totalCards - 1) / 2
+                const offset = index - middleIndex
+
+                // Rotation like holding cards in hands
+                const rotation = offset * 5
+
+                // Arc: center card highest, edge cards lower (natural hand fan)
+                const absOffset = Math.abs(offset)
+                const verticalOffset = absOffset * absOffset * 6
+
+                // Horizontal offset to create overlapping effect
+                const horizontalOffset = index * -40
+
                 return (
                   <motion.div
                     layout
                     key={`current-hand-card-${card.id}`}
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, y: 50, rotate: 0 }}
+                    animate={{
+                      opacity: 1,
+                      x: horizontalOffset,
+                      y: verticalOffset,
+                      rotate: rotation,
+                    }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                     onAnimationStart={() => {
                       setTimeout(() => {
                         cardUseSound.play()
                       }, index * 100)
+                    }}
+                    style={{
+                      transformOrigin: 'center bottom',
+                      zIndex: index,
                     }}
                   >
                     <Card
