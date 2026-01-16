@@ -17,5 +17,4 @@ npm run build
 
 ## Imagery
 
-The majority of the images used in the game were generated using OpenAI's
-[DALL-E 2](https://openai.com/dall-e-2/).
+The majority of the images used in the game are AI generated, most recently using Nano Banana.
