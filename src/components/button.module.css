@@ -62,6 +62,12 @@
 
 .button.secondary {
   --text-color: var(--color-stone-900);
-  --gradient-start: var(--color-stone-500);
-  --gradient-end: var(--color-stone-300);
+  --gradient-start: var(--color-stone-300);
+  --gradient-end: var(--color-stone-200);
+}
+
+.button.tertiary {
+  --text-color: var(--color-stone-900);
+  --gradient-start: var(--color-stone-300);
+  --gradient-end: var(--color-stone-200);
 }

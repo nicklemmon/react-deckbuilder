@@ -1,0 +1,8 @@
+.screen {
+  width: 100dvw;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-400);
+}
