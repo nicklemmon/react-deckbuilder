@@ -9,6 +9,10 @@
   align-items: flex-start;
 }
 
+.bottom {
+  align-items: flex-end;
+}
+
 .right {
   align-items: flex-end;
 }

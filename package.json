@@ -29,25 +29,25 @@
     "xstate": "5.25.0"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.1",
-    "@testing-library/user-event": "^14.6.1",
     "@types/howler": "2.2.12",
     "@types/node": "25.0.3",
     "@types/random": "3.0.1",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "5.1.2",
+    "@vitest/browser": "^4.0.17",
+    "@vitest/browser-playwright": "^4.0.17",
     "@vitest/ui": "^4.0.16",
     "eslint": "9.39.2",
-    "happy-dom": "^20.0.11",
+    "playwright": "^1.57.0",
     "prettier": "3.7.4",
     "semver": "^7.7.3",
     "typescript": "5.9.3",
     "vite": "7.3.0",
     "vite-plugin-compression": "0.5.1",
     "vite-plugin-imagemin": "^0.6.1",
-    "vitest": "^4.0.16"
+    "vitest": "^4.0.16",
+    "vitest-browser-react": "^2.0.2"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.54.0"

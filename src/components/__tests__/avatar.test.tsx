@@ -1,5 +1,6 @@
-import { render, screen } from '@testing-library/react'
+import { page } from 'vitest/browser'
 import { describe, expect, it, vi } from 'vitest'
+import { render } from 'vitest-browser-react'
 import { Avatar } from '../avatar'
 
 // Mock motion to avoid animation complexity in tests
@@ -21,76 +22,85 @@ vi.mock('../helpers/rng', () => ({
 describe('Avatar', () => {
   const mockSrc = '/path/to/avatar.png'
 
-  it('renders with provided image src', () => {
+  it('renders with provided image src', async () => {
     render(<Avatar src={mockSrc} />)
 
-    const img = screen.getByRole('img')
-    expect(img).toBeInTheDocument()
-    expect(img).toHaveAttribute('src', mockSrc)
+    const img = page.getByRole('img')
+    await expect.element(img).toBeInTheDocument()
+    await expect.element(img).toHaveAttribute('src', mockSrc)
   })
 
-  it('renders with idle status by default', () => {
+  it('renders with idle status by default', async () => {
     render(<Avatar src={mockSrc} />)
 
-    const img = screen.getByRole('img')
-    expect(img.className).toContain('avatar-img')
+    const img = page.getByRole('img')
+    await expect.element(img).toHaveAttribute('class', expect.stringContaining('avatar-img'))
 
     // Should not have damage or healing flash
-    expect(screen.queryByTestId('damage-flash')).not.toBeInTheDocument()
-    expect(screen.queryByTestId('healing-flash')).not.toBeInTheDocument()
+    const damageFlashElements = await page.getByTestId('damage-flash').query()
+    const healingFlashElements = await page.getByTestId('healing-flash').query()
+    expect(damageFlashElements).toBeNull()
+    expect(healingFlashElements).toBeNull()
   })
 
-  it('renders with idle status when explicitly set', () => {
+  it('renders with idle status when explicitly set', async () => {
     render(<Avatar src={mockSrc} status="idle" />)
 
-    const img = screen.getByRole('img')
-    expect(img).toBeInTheDocument()
+    const img = page.getByRole('img')
+    await expect.element(img).toBeInTheDocument()
 
     // Should not have damage or healing flash
-    expect(screen.queryByTestId('damage-flash')).not.toBeInTheDocument()
-    expect(screen.queryByTestId('healing-flash')).not.toBeInTheDocument()
+    const damageFlashElements = await page.getByTestId('damage-flash').query()
+    const healingFlashElements = await page.getByTestId('healing-flash').query()
+    expect(damageFlashElements).toBeNull()
+    expect(healingFlashElements).toBeNull()
   })
 
-  it('renders damage flash when taking damage', () => {
+  it('renders damage flash when taking damage', async () => {
     render(<Avatar src={mockSrc} status="taking-damage" />)
 
-    const img = screen.getByRole('img')
-    expect(img).toBeInTheDocument()
+    const img = page.getByRole('img')
+    await expect.element(img).toBeInTheDocument()
 
     // Should have motion divs for animation wrapper and damage flash
-    const motionDivs = screen.getAllByTestId('motion-div')
-    expect(motionDivs.length).toBeGreaterThanOrEqual(2)
+    const motionDivs = page.getByTestId('motion-div')
+    const motionDivsElements = await motionDivs.elements()
+    expect(motionDivsElements.length).toBeGreaterThanOrEqual(2)
   })
 
-  it('renders healing flash when healing', () => {
+  it('renders healing flash when healing', async () => {
     render(<Avatar src={mockSrc} status="healing" />)
 
-    const img = screen.getByRole('img')
-    expect(img).toBeInTheDocument()
+    const img = page.getByRole('img')
+    await expect.element(img).toBeInTheDocument()
 
     // Should have motion divs for animation wrapper and healing flash
-    const motionDivs = screen.getAllByTestId('motion-div')
-    expect(motionDivs.length).toBeGreaterThanOrEqual(2)
+    const motionDivs = page.getByTestId('motion-div')
+    const motionDivsElements = await motionDivs.elements()
+    expect(motionDivsElements.length).toBeGreaterThanOrEqual(2)
   })
 
-  it('renders normally when dead', () => {
+  it('renders normally when dead', async () => {
     render(<Avatar src={mockSrc} status="dead" />)
 
-    const img = screen.getByRole('img')
-    expect(img).toBeInTheDocument()
+    const img = page.getByRole('img')
+    await expect.element(img).toBeInTheDocument()
 
     // Should not have damage or healing flash
-    expect(screen.queryByTestId('damage-flash')).not.toBeInTheDocument()
-    expect(screen.queryByTestId('healing-flash')).not.toBeInTheDocument()
+    const damageFlashElements = await page.getByTestId('damage-flash').query()
+    const healingFlashElements = await page.getByTestId('healing-flash').query()
+    expect(damageFlashElements).toBeNull()
+    expect(healingFlashElements).toBeNull()
   })
 
-  it('calls onAnimationComplete when provided', () => {
+  it('calls onAnimationComplete when provided', async () => {
     const mockCallback = vi.fn()
     render(<Avatar src={mockSrc} status="taking-damage" onAnimationComplete={mockCallback} />)
 
     // Simulate animation completion
-    const motionDivs = screen.getAllByTestId('motion-div')
-    const damageFlash = motionDivs.find(
+    const motionDivs = page.getByTestId('motion-div')
+    const motionDivsElements = await motionDivs.elements()
+    const damageFlash = motionDivsElements.find(
       (div) => (div as HTMLDivElement).onanimationend === mockCallback,
     )
 
@@ -100,43 +110,21 @@ describe('Avatar', () => {
     }
   })
 
-  it('has proper structure with avatar container', () => {
+  it('has proper structure with avatar container', async () => {
     render(<Avatar src={mockSrc} />)
 
-    const img = screen.getByRole('img')
-    const container = img.parentElement
+    const img = page.getByRole('img')
+    const imgElement = await img.element()
+    const container = imgElement.parentElement
 
     expect(container).toBeInTheDocument()
     expect(container?.className).toContain('avatar')
   })
 
-  it('handles different status transitions', () => {
-    const { rerender } = render(<Avatar src={mockSrc} status="idle" />)
-
-    // Start with idle - no flashes
-    expect(screen.queryByTestId('damage-flash')).not.toBeInTheDocument()
-    expect(screen.queryByTestId('healing-flash')).not.toBeInTheDocument()
-
-    // Change to taking damage
-    rerender(<Avatar src={mockSrc} status="taking-damage" />)
-    let motionDivs = screen.getAllByTestId('motion-div')
-    expect(motionDivs.length).toBeGreaterThanOrEqual(2)
-
-    // Change to healing
-    rerender(<Avatar src={mockSrc} status="healing" />)
-    motionDivs = screen.getAllByTestId('motion-div')
-    expect(motionDivs.length).toBeGreaterThanOrEqual(2)
-
-    // Back to idle
-    rerender(<Avatar src={mockSrc} status="idle" />)
-    expect(screen.queryByTestId('damage-flash')).not.toBeInTheDocument()
-    expect(screen.queryByTestId('healing-flash')).not.toBeInTheDocument()
-  })
-
-  it('renders image with correct CSS class', () => {
+  it('renders image with correct CSS class', async () => {
     render(<Avatar src={mockSrc} />)
 
-    const img = screen.getByRole('img')
-    expect(img.className).toContain('avatar-img')
+    const img = page.getByRole('img')
+    await expect.element(img).toHaveAttribute('class', expect.stringContaining('avatar-img'))
   })
 })

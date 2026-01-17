@@ -2,6 +2,7 @@ import { defineConfig, type PluginOption } from 'vite'
 import react from '@vitejs/plugin-react'
 import compression from 'vite-plugin-compression'
 import imageMin from 'vite-plugin-imagemin'
+import { playwright } from '@vitest/browser-playwright'
 
 const DEFAULT_PLUGINS: PluginOption = [
   react(),
@@ -32,6 +33,16 @@ export default defineConfig(({ mode }) => {
     test: {
       environment: 'happy-dom',
       setupFiles: ['./src/test-setup.ts'],
+      browser: {
+        enabled: true,
+        instances: [
+          {
+            browser: 'chromium',
+          },
+        ],
+        provider: playwright(),
+        headless: true,
+      },
     },
   }
 })
