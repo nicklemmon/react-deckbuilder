@@ -62,6 +62,24 @@
 
 .button.secondary {
   --text-color: var(--color-stone-900);
-  --gradient-start: var(--color-stone-500);
-  --gradient-end: var(--color-stone-300);
+  --gradient-start: var(--color-stone-300);
+  --gradient-end: var(--color-stone-200);
+}
+
+.button.tertiary {
+  --text-color: var(--color-stone-900);
+  --gradient-start: var(--color-stone-300);
+  --gradient-end: var(--color-stone-200);
+}
+
+.button.destructive {
+  --text-color: var(--color-stone-100);
+  --gradient-start: var(--color-blood-700);
+  --gradient-end: var(--color-blood-500);
+}
+
+.button.unstyled {
+  box-shadow: none;
+  border: none;
+  background: transparent;
 }

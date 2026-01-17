@@ -51,6 +51,10 @@ entity-name/
 └── sfx.wav (sound effects)
 ```
 
+### TypeScript conventions
+
+- Use `type` over `interface`
+
 ### Adding New Game Content
 
 - **Cards**: Create folder in `src/cards/` with config.ts using `defineCard()` helper

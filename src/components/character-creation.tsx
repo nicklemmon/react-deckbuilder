@@ -45,7 +45,6 @@ export function CharacterCreation({
             </label>
             <input
               className={css['input']}
-              defaultValue="Nick"
               id="character-name"
               type="text"
               name="characterName"
