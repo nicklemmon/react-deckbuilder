@@ -52,6 +52,7 @@ export function App() {
         <CharacterCreation
           gameMode={context.game.mode}
           characterClasses={context.assets.characterClasses}
+          playerPortraits={context.assets.playerPortraits}
           onCreate={(formData) => {
             send({
               type: 'CREATE_CHARACTER',

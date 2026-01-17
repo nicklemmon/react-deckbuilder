@@ -6,7 +6,7 @@ import buttonClickSfx from '../../sfx/button.click.wav'
 import doorOpenSfx from '../../sfx/door.open.wav'
 import coinsSfx from '../../sfx/coins.wav'
 import cashRegisterSfx from '../../sfx/cash-register.wav'
-import { resolveModules } from '../../helpers/vite.ts'
+import { resolveModules, resolveModulesWithPaths } from '../../helpers/vite.ts'
 import { rng } from '../../helpers/rng.ts'
 import { getSound } from '../../helpers/get-sound.ts'
 import { getCharacterClass } from '../../helpers/character-classes.ts'
@@ -40,8 +40,16 @@ const CHARACTER_CLASS_MODULES = import.meta.glob('../../character-classes/**/con
   eager: true,
 })
 
+/** All player portrait files */
+const PLAYER_PORTRAIT_MODULES = import.meta.glob('../../images/player-portraits/*.(png|webp)', {
+  eager: true,
+})
+
 /* Resolved character class configs */
 const CHARACTER_CLASSES = resolveModules<CharacterClass>(CHARACTER_CLASS_MODULES)
+
+/* Resolved player portraits with paths for game mode filtering */
+const PLAYER_PORTRAITS = resolveModulesWithPaths<string>(PLAYER_PORTRAIT_MODULES)
 
 const impactSound = getSound({ src: impactSfx })
 
@@ -91,6 +99,11 @@ async function prefetchAssets() {
     if (item.artwork) allImages.add(item.artwork as string)
   })
 
+  // Add player portraits
+  PLAYER_PORTRAITS.forEach((portrait) => {
+    allImages.add(portrait.url)
+  })
+
   return Promise.all([
     // Preload all images
     ...Array.from(allImages).map((src) => {
@@ -118,6 +131,7 @@ export type AppMachineContext = {
   assets: {
     characterClasses: Array<CharacterClass>
     cards: Array<Card>
+    playerPortraits: Array<{ path: string; url: string }>
   }
   game: {
     mode: GameMode
@@ -441,6 +455,7 @@ export const appMachine = setup({
     assets: {
       characterClasses: CHARACTER_CLASSES,
       cards: CARDS,
+      playerPortraits: PLAYER_PORTRAITS,
     },
     game: {
       mode: 'standard',
