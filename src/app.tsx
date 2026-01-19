@@ -275,7 +275,6 @@ export function App() {
                   )
                 })}
               </div>
-              Current hand with {context.game.currentHand.length} cards
             </Stack>
           </Stack>
           <Stack className={css['discard-pile']}>
@@ -290,7 +289,6 @@ export function App() {
                 )
               })}
             </Deck>
-            <div>Discard pile with {context.game.discardPile.length} cards</div>
           </Stack>
 
           <AnimatePresence
@@ -329,7 +327,6 @@ export function App() {
                 )
               })}
             </Deck>
-            <div>Draw pile with {context.game.drawPile.length} cards</div>
           </Stack>
         </div>
 
