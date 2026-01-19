@@ -22,7 +22,7 @@
     "clsx": "2.1.1",
     "eslint-plugin-react": "^7.37.5",
     "howler": "2.2.4",
-    "motion": "12.23.26",
+    "motion": "12.27.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "reset-css": "5.0.2",
