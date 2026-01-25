@@ -33,6 +33,7 @@
 
 .button-content {
   color: var(--text-color);
+  text-shadow: var(--text-shadow);
   box-shadow: inset 0 -5px var(--gradient-start);
   z-index: 2;
   transition: transform var(--anim-dur-200) var(--anim-easing-100);
@@ -56,24 +57,28 @@
 
 .button.primary {
   --text-color: var(--color-stone-100);
+  --text-shadow: none;
   --gradient-start: var(--color-blood-500);
   --gradient-end: var(--color-blood-300);
 }
 
 .button.secondary {
   --text-color: var(--color-stone-900);
+  --text-shadow: none;
   --gradient-start: var(--color-stone-300);
   --gradient-end: var(--color-stone-200);
 }
 
 .button.tertiary {
   --text-color: var(--color-stone-900);
+  --text-shadow: none;
   --gradient-start: var(--color-stone-300);
   --gradient-end: var(--color-stone-200);
 }
 
 .button.destructive {
   --text-color: var(--color-stone-100);
+  --text-shadow: none;
   --gradient-start: var(--color-blood-700);
   --gradient-end: var(--color-blood-500);
 }
