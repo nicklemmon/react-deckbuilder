@@ -49,6 +49,40 @@
   animation-play-state: running;
 }
 
+/* Glint/shine effect */
+.rainbow-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.rainbow-btn:hover::after {
+  animation: glint 1.25s ease-in-out;
+}
+
+@keyframes glint {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 150%;
+  }
+}
+
 @keyframes rainbow-shift {
   0% {
     background-position: 0% 50%;
