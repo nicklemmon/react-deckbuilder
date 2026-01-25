@@ -19,6 +19,7 @@ import type { Card } from '../../types/cards.ts'
 import type { Item } from '../../types/items.ts'
 import type { GameMode } from '../../types/global.ts'
 import type { AvatarStatus } from '../../components/avatar.tsx'
+import { TitleScreen } from '../../components/title-screen.tsx'
 
 /** Unique ID for the application machine */
 const APP_MACHINE_ID = 'app'
@@ -169,6 +170,7 @@ export type AppMachineContext = {
 }
 
 type AppMachineEvent =
+  | { type: 'TITLE_SCREEN_START_CLICK' }
   | { type: 'STANDARD_MODE_SELECTION' }
   | { type: 'RAINBOW_MODE_SELECTION' }
   | {
@@ -497,11 +499,16 @@ export const appMachine = setup({
     LoadingAssets: {
       invoke: {
         src: 'loadAllAssets',
-        onDone: 'ModeSelection',
+        onDone: 'TitleScreen',
         onError: 'LoadingAssetsError',
       },
     },
     LoadingAssetsError: {},
+    TitleScreen: {
+      on: {
+        TITLE_SCREEN_START_CLICK: 'ModeSelection',
+      },
+    },
     ModeSelection: {
       on: {
         STANDARD_MODE_SELECTION: {

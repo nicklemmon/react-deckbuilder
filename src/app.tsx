@@ -16,6 +16,7 @@ import { Feedback } from './components/feedback.tsx'
 import { Stack } from './components/stack.tsx'
 import { Inline } from './components/inline.tsx'
 import { Button } from './components/button.tsx'
+import { TitleScreen } from './components/title-screen.tsx'
 import { ItemShopCard, type ItemShopCardStatus } from './components/item-shop-card.tsx'
 import { ItemShopItem } from './components/item-shop-item.tsx'
 import { StatsRow, StatIcon, StatVal } from './components/stats.tsx'
@@ -31,6 +32,14 @@ export function App() {
     return (
       <Screen>
         <AppPreloader />
+      </Screen>
+    )
+  }
+
+  if (value === 'TitleScreen') {
+    return (
+      <Screen>
+        <TitleScreen onStartClick={() => send({ type: 'TITLE_SCREEN_START_CLICK' })} />
       </Screen>
     )
   }

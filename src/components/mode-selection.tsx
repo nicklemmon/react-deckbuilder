@@ -1,5 +1,3 @@
-import { useEffect, useRef } from 'react'
-import { Howler } from 'howler'
 import { Button } from './button'
 import { Inline } from './inline'
 import { Panel, PanelBody } from './panel'
@@ -16,7 +14,9 @@ export function ModeSelection({
   onStandardModeClick,
   onRainbowModeClick,
 }: {
+  /** Handler for clicks on the standard mode button */
   onStandardModeClick: () => void
+  /** Handler for clicks on the rainbow mode button */
   onRainbowModeClick: () => void
 }) {
   return (
@@ -36,7 +36,9 @@ export function ModeSelection({
                   boogieMusic.play()
                 }}
                 onMouseOut={() => {
-                  boogieMusic.stop()
+                  if (boogieMusic.playing()) {
+                    boogieMusic.stop()
+                  }
                 }}
               >
                 Rainbow mode

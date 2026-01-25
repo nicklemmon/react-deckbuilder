@@ -5,15 +5,17 @@
 }
 
 .rainbow-btn {
+  --rainbow-border-hover: #d300c8;
+
   position: relative;
   overflow: hidden;
 }
 
 .rainbow-btn:hover {
   --text-color: var(--color-stone-100);
-  --text-shadow: 0 1px 1px #9400d3;
-  --gradient-start: #9400d3;
-  --gradient-end: #9400d3;
+  --text-shadow: 0 0px 5px var(--rainbow-border-hover);
+  --gradient-start: var(--rainbow-border-hover);
+  --gradient-end: var(--rainbow-border-hover);
 }
 
 /* Rainbow gradient overlay */
