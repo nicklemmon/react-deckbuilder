@@ -5,6 +5,7 @@ import { Stack } from './stack'
 import hoverMusic from '../sfx/music/music.boogie.wav'
 import styles from './mode-selection.module.css'
 import { getSound } from '../helpers/get-sound'
+import { useEffect } from 'react'
 
 const boogieMusic = getSound({ src: hoverMusic, volume: 1.0 })
 
@@ -19,6 +20,14 @@ export function ModeSelection({
   /** Handler for clicks on the rainbow mode button */
   onRainbowModeClick: () => void
 }) {
+  useEffect(() => {
+    return () => {
+      if (boogieMusic.playing()) {
+        boogieMusic.stop()
+      }
+    }
+  }, [])
+
   return (
     <div className={styles['mode-selection']}>
       <Panel>

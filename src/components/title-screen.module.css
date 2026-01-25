@@ -1,0 +1,18 @@
+.heading {
+  --text-color: var(--color-stone-200);
+  --shadow-distance: 0.33rem;
+  --shadow-color: var(--color-stone-400);
+
+  font-size: clamp(7rem, 1vw, var(--font-size-700));
+  color: var(--text-color);
+  font-family: var(--font-secondary);
+  text-align: center;
+  text-shadow:
+    0 var(--shadow-distance) 0 var(--shadow-color),
+    0 calc(var(--shadow-distance) * 1.25) 0 var(--shadow-color),
+    0 calc(var(--shadow-distance) * 1.5) 0 var(--shadow-color),
+    0 calc(var(--shadow-distance) * 1.75) 0 var(--shadow-color);
+  filter: drop-shadow(0 0 3rem var(--color-stone-600));
+  white-space: nowrap;
+  transform: perspective(15rem) rotateX(0deg);
+}
