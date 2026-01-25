@@ -5,11 +5,10 @@ import { Stack } from './stack'
 import hoverMusic from '../sfx/music/music.boogie.wav'
 import styles from './mode-selection.module.css'
 import { getSound } from '../helpers/get-sound'
+import { fadeIn, fadeOut } from '../helpers/fade-sound'
 import { useEffect } from 'react'
 
 const boogieMusic = getSound({ src: hoverMusic, volume: 1.0 })
-
-boogieMusic.fade(0, 1, 500)
 
 export function ModeSelection({
   onStandardModeClick,
@@ -22,9 +21,7 @@ export function ModeSelection({
 }) {
   useEffect(() => {
     return () => {
-      if (boogieMusic.playing()) {
-        boogieMusic.stop()
-      }
+      fadeOut(boogieMusic)
     }
   }, [])
 
@@ -42,12 +39,10 @@ export function ModeSelection({
                 onClick={onRainbowModeClick}
                 className={styles['rainbow-btn']}
                 onMouseOver={() => {
-                  boogieMusic.play()
+                  fadeIn(boogieMusic)
                 }}
                 onMouseOut={() => {
-                  if (boogieMusic.playing()) {
-                    boogieMusic.stop()
-                  }
+                  fadeOut(boogieMusic)
                 }}
               >
                 Rainbow mode

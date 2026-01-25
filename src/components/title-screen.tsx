@@ -3,16 +3,22 @@ import { motion } from 'motion/react'
 import { Stack } from './stack'
 import styles from './title-screen.module.css'
 import { Panel, PanelBody } from './panel'
+import { useState } from 'react'
 
 export function TitleScreen({ onStartClick }: { onStartClick: () => void }) {
+  const [showGlint, setShowGlint] = useState(false)
+
   return (
     <Stack align="center">
       <motion.div
         initial={{ x: 0, y: -25, opacity: 0.85, scaleX: 0.95 }}
         animate={{ x: 0, y: 0, opacity: 1, scaleX: 1 }}
         transition={{ type: 'spring' }}
+        onAnimationComplete={() => setShowGlint(true)}
       >
-        <h1 className={styles['heading']}>React Deckbuilder</h1>
+        <h1 className={`${styles['heading']} ${showGlint ? styles['glint-text'] : ''}`}>
+          React Deckbuilder
+        </h1>
       </motion.div>
 
       <Panel>
