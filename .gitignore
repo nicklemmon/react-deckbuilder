@@ -19,3 +19,4 @@ yarn-error.log*
 __screenshots__
 test-results
 playwright-report
+.playwright-mcp

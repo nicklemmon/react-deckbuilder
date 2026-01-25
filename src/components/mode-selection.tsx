@@ -21,7 +21,9 @@ export function ModeSelection({
             <Inline>
               <Button onClick={onStandardModeClick}> Standard mode</Button>
 
-              <Button onClick={onRainbowModeClick}>Rainbow mode</Button>
+              <Button onClick={onRainbowModeClick} className={styles['rainbow-btn']}>
+                Rainbow mode
+              </Button>
             </Inline>
           </Stack>
         </PanelBody>
