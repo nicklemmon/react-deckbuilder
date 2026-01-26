@@ -11,12 +11,23 @@ export function TitleScreen({ onStartClick }: { onStartClick: () => void }) {
   return (
     <Stack align="center">
       <motion.div
-        initial={{ x: 0, y: -25, opacity: 0.85, scaleX: 0.95 }}
-        animate={{ x: 0, y: 0, opacity: 1, scaleX: 1 }}
-        transition={{ type: 'spring' }}
-        onAnimationComplete={() => setShowGlint(true)}
+        initial={{ y: -200, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{
+          type: 'spring',
+          damping: 12,
+          stiffness: 100,
+          mass: 0.8,
+          duration: 0.8,
+        }}
+        onAnimationComplete={() => {
+          setTimeout(() => {
+            setShowGlint(true)
+            setTimeout(() => setShowGlint(false), 1000)
+          }, 200)
+        }}
       >
-        <h1 className={`${styles['heading']} ${showGlint ? styles['glint-text'] : ''}`}>
+        <h1 className={`${styles['heading']} ${showGlint ? styles['glint-active'] : ''}`}>
           React Deckbuilder
         </h1>
       </motion.div>

@@ -21,9 +21,15 @@ export function fadeIn(sound: Howl, options: FadeOptions = {}) {
     pendingStops.delete(sound)
   }
 
-  sound.volume(0)
-  sound.play()
-  sound.fade(0, 1, duration)
+  // Only start playback if not already playing
+  if (!sound.playing()) {
+    sound.volume(0)
+    sound.play()
+  }
+
+  // Fade from current volume to full
+  const currentVolume = sound.volume()
+  sound.fade(currentVolume, 1, duration)
 }
 
 /** Fade out a sound from current volume to silence, then stop */

@@ -1,18 +1,37 @@
 .heading {
-  --text-color: var(--color-stone-200);
-  --shadow-distance: 0.33rem;
-  --shadow-color: var(--color-stone-400);
+  --text-color: var(--color-stone-100);
 
-  font-size: clamp(7rem, 1vw, var(--font-size-700));
-  color: var(--text-color);
+  font-size: clamp(4rem, 6vw, 8rem);
   font-family: var(--font-secondary);
   text-align: center;
-  text-shadow:
-    0 var(--shadow-distance) 0 var(--shadow-color),
-    0 calc(var(--shadow-distance) * 1.25) 0 var(--shadow-color),
-    0 calc(var(--shadow-distance) * 1.5) 0 var(--shadow-color),
-    0 calc(var(--shadow-distance) * 1.75) 0 var(--shadow-color);
-  filter: drop-shadow(0 0 5rem var(--color-stone-600));
   white-space: nowrap;
-  transform: perspective(15rem) rotateX(0deg);
+  position: relative;
+  display: inline-block;
+  color: var(--text-color);
+  filter: drop-shadow(0 0 5rem rgba(0, 0, 0, 0.5)) drop-shadow(0 3px 0 var(--color-stone-200));
+}
+
+.glint-active {
+  background: linear-gradient(
+    90deg,
+    var(--text-color) 0%,
+    var(--text-color) 30%,
+    #ffffff 50%,
+    var(--text-color) 70%,
+    var(--text-color) 100%
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: glintSweep 1s ease-out;
+}
+
+@keyframes glintSweep {
+  from {
+    background-position: 0% 0;
+  }
+  to {
+    background-position: 100% 0;
+  }
 }
