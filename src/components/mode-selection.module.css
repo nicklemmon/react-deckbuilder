@@ -3,3 +3,94 @@
   max-width: 1100px;
   margin: 0 auto;
 }
+
+.rainbow-btn {
+  --rainbow-border-hover: #d300c8;
+
+  position: relative;
+  overflow: hidden;
+}
+
+.rainbow-btn:hover {
+  --text-color: var(--color-stone-100);
+  --text-shadow: 0 0px 5px var(--rainbow-border-hover);
+  --gradient-start: var(--rainbow-border-hover);
+  --gradient-end: var(--rainbow-border-hover);
+}
+
+/* Rainbow gradient overlay */
+.rainbow-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    #ff0000 0%,
+    #ff7f00 12.5%,
+    #ffff00 25%,
+    #00ff00 37.5%,
+    #0000ff 50%,
+    #4b0082 62.5%,
+    #9400d3 75%,
+    #ff0000 100%
+  );
+  background-size: 200% 200%;
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+  pointer-events: none;
+  z-index: 1;
+  animation: rainbow-shift 3s linear infinite;
+  animation-play-state: paused;
+}
+
+.rainbow-btn:hover::before {
+  opacity: 1;
+  animation-play-state: running;
+}
+
+/* Glint/shine effect */
+.rainbow-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.rainbow-btn:hover::after {
+  animation: glint 1.25s ease-in-out;
+}
+
+@keyframes glint {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 150%;
+  }
+}
+
+@keyframes rainbow-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 200% 50%;
+  }
+}

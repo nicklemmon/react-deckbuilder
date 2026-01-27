@@ -1,0 +1,37 @@
+.heading {
+  --text-color: var(--color-stone-200);
+
+  font-size: clamp(4rem, 6vw, 8rem);
+  font-family: var(--font-secondary);
+  text-align: center;
+  white-space: nowrap;
+  position: relative;
+  display: inline-block;
+  color: var(--text-color);
+  filter: drop-shadow(0 0 5rem rgba(0, 0, 0, 0.75)) drop-shadow(0 2px 0 var(--color-stone-600));
+}
+
+.glint-active {
+  background: linear-gradient(
+    90deg,
+    var(--text-color) 0%,
+    var(--text-color) 30%,
+    #ffffff 50%,
+    var(--text-color) 70%,
+    var(--text-color) 100%
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: glintSweep 1s ease-out;
+}
+
+@keyframes glintSweep {
+  from {
+    background-position: 0% 0;
+  }
+  to {
+    background-position: 100% 0;
+  }
+}

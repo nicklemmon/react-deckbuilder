@@ -169,6 +169,7 @@ export type AppMachineContext = {
 }
 
 type AppMachineEvent =
+  | { type: 'TITLE_SCREEN_START_CLICK' }
   | { type: 'STANDARD_MODE_SELECTION' }
   | { type: 'RAINBOW_MODE_SELECTION' }
   | {
@@ -497,11 +498,19 @@ export const appMachine = setup({
     LoadingAssets: {
       invoke: {
         src: 'loadAllAssets',
-        onDone: 'ModeSelection',
+        onDone: 'TitleScreen',
         onError: 'LoadingAssetsError',
       },
     },
     LoadingAssetsError: {},
+    TitleScreen: {
+      on: {
+        TITLE_SCREEN_START_CLICK: {
+          target: 'ModeSelection',
+          actions: () => buttonClickSound.play(),
+        },
+      },
+    },
     ModeSelection: {
       on: {
         STANDARD_MODE_SELECTION: {

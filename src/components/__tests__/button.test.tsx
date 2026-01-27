@@ -86,4 +86,22 @@ describe('Button', () => {
     expect(spans[0].className).toContain('button-content')
     expect(spans[1].className).toContain('button-bg')
   })
+
+  it('applies custom className only to button element, not child elements', async () => {
+    render(<Button className="custom-class">Test</Button>)
+    const button = page.getByRole('button')
+    const buttonElement = await button.element()
+    const spans = buttonElement.querySelectorAll('span')
+
+    // Button element should have the custom class
+    await expect.element(button).toHaveAttribute('class', expect.stringContaining('custom-class'))
+
+    // Child spans should NOT have the custom class
+    expect(spans[0].className).not.toContain('custom-class')
+    expect(spans[1].className).not.toContain('custom-class')
+
+    // But child spans should still have their base classes
+    expect(spans[0].className).toContain('button-content')
+    expect(spans[1].className).toContain('button-bg')
+  })
 })
