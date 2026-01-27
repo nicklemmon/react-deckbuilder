@@ -1,5 +1,5 @@
 .heading {
-  --text-color: var(--color-stone-100);
+  --text-color: var(--color-stone-200);
 
   font-size: clamp(4rem, 6vw, 8rem);
   font-family: var(--font-secondary);
@@ -8,7 +8,7 @@
   position: relative;
   display: inline-block;
   color: var(--text-color);
-  filter: drop-shadow(0 0 5rem rgba(0, 0, 0, 0.5)) drop-shadow(0 3px 0 var(--color-stone-200));
+  filter: drop-shadow(0 0 5rem rgba(0, 0, 0, 0.75)) drop-shadow(0 2px 0 var(--color-stone-600));
 }
 
 .glint-active {
