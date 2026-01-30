@@ -5,7 +5,7 @@
   z-index: var(--z-index-1000);
   background: linear-gradient(135deg, var(--color-stone-800) 0%, var(--color-stone-900) 100%);
   border: 3px solid var(--color-stone-700);
-  border-radius: var(--rounding-100);
+  border-radius: var(--rounding-500);
   padding: var(--spacing-300) var(--spacing-400);
   display: flex;
   align-items: center;
