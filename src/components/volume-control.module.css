@@ -4,12 +4,12 @@
   left: var(--spacing-400);
   z-index: var(--z-index-1000);
   background: linear-gradient(135deg, var(--color-stone-800) 0%, var(--color-stone-900) 100%);
-  border: 3px solid var(--color-stone-700);
+  border: 2px solid var(--color-stone-700);
   border-radius: var(--rounding-500);
-  padding: var(--spacing-300) var(--spacing-400);
+  padding: var(--spacing-200) var(--spacing-300);
   display: flex;
   align-items: center;
-  gap: var(--spacing-300);
+  gap: var(--spacing-200);
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.6),
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
@@ -45,8 +45,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   position: relative;
 }
 
@@ -74,8 +74,8 @@
 
 .slider-container {
   position: relative;
-  width: 140px;
-  height: 32px;
+  width: 100px;
+  height: 24px;
   display: flex;
   align-items: center;
 }
@@ -85,7 +85,7 @@
   top: 50%;
   transform: translateY(-50%);
   width: 100%;
-  height: 8px;
+  height: 6px;
   background: linear-gradient(to right, var(--color-stone-700) 0%, var(--color-stone-600) 100%);
   border-radius: var(--rounding-50);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
@@ -111,7 +111,7 @@
 .volume-control input[type='range'] {
   position: relative;
   width: 100%;
-  height: 32px;
+  height: 24px;
   background: transparent;
   outline: none;
   cursor: pointer;
@@ -126,10 +126,10 @@
 .volume-control input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   background: radial-gradient(circle, var(--color-blood-300) 0%, var(--color-blood-500) 100%);
-  border: 3px solid var(--color-stone-900);
+  border: 2px solid var(--color-stone-900);
   border-radius: 50%;
   cursor: pointer;
   box-shadow:
@@ -139,7 +139,7 @@
     inset 0 1px 2px rgba(255, 255, 255, 0.3);
   transition: all 0.2s ease;
   position: relative;
-  margin-top: -8px;
+  margin-top: -6px;
 }
 
 .volume-control input[type='range']::-webkit-slider-thumb:hover {
@@ -163,10 +163,10 @@
 
 /* Firefox */
 .volume-control input[type='range']::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   background: radial-gradient(circle, var(--color-blood-300) 0%, var(--color-blood-500) 100%);
-  border: 3px solid var(--color-stone-900);
+  border: 2px solid var(--color-stone-900);
   border-radius: 50%;
   cursor: pointer;
   box-shadow:
@@ -175,7 +175,7 @@
     0 0 16px rgba(183, 28, 28, 0.6),
     inset 0 1px 2px rgba(255, 255, 255, 0.3);
   transition: all 0.2s ease;
-  margin-top: -8px;
+  margin-top: -6px;
 }
 
 .volume-control input[type='range']::-moz-range-thumb:hover {
@@ -222,7 +222,7 @@
 /* Track styles - make transparent since we're using custom background */
 .volume-control input[type='range']::-webkit-slider-runnable-track {
   width: 100%;
-  height: 8px;
+  height: 6px;
   background: transparent;
   border-radius: var(--rounding-50);
   margin-top: 0;
@@ -230,7 +230,7 @@
 
 .volume-control input[type='range']::-moz-range-track {
   width: 100%;
-  height: 8px;
+  height: 6px;
   background: transparent;
   border-radius: var(--rounding-50);
   margin-top: 0;
