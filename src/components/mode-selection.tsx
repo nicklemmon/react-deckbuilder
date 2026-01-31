@@ -2,13 +2,12 @@ import { Button } from './button'
 import { Inline } from './inline'
 import { Panel, PanelBody } from './panel'
 import { Stack } from './stack'
-import hoverMusic from '../sfx/music/music.boogie.wav'
 import styles from './mode-selection.module.css'
-import { getSound } from '../helpers/get-sound'
 import { fadeIn, fadeOut } from '../helpers/fade-sound'
 import { useEffect } from 'react'
+import { TRACKS } from '../machines/soundtrack-machine/tracks'
 
-const boogieMusic = getSound({ src: hoverMusic, volume: 1.0 })
+const boogieMusic = TRACKS.boogie.sound
 
 export function ModeSelection({
   onStandardModeClick,
