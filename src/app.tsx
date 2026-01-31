@@ -8,6 +8,7 @@ import { CharacterCreation } from './components/character-creation.tsx'
 import { Avatar } from './components/avatar.tsx'
 import { Banner } from './components/banner.tsx'
 import { Screen } from './components/screen.tsx'
+import { ScreenTransition } from './components/screen-transition.tsx'
 import { Card } from './components/card.tsx'
 import { Deck } from './components/deck.tsx'
 import { Dialog, DialogContent } from './components/dialog.tsx'
@@ -26,42 +27,40 @@ import css from './app.module.css'
 import { ModeSelection } from './components/mode-selection.tsx'
 
 export function App() {
-  const [{ context, value }, send] = useMachine(appMachine)
+  const [state, send] = useMachine(appMachine)
+  const { context, value } = state
 
-  if (value === 'LoadingAssets') {
-    return (
-      <Screen>
-        <AppPreloader />
-      </Screen>
-    )
-  }
+  /**
+   * Returns a stable screen key for AnimatePresence.
+   * Game play states all share the same key to prevent re-animating during gameplay.
+   */
+  const screenKey = state.hasTag('gameplay') ? 'game-play' : (value as string)
 
-  if (value === 'TitleScreen') {
-    return (
-      <Screen>
-        <TitleScreen onStartClick={() => send({ type: 'TITLE_SCREEN_START_CLICK' })} />
-      </Screen>
-    )
-  }
+  /** Renders the appropriate screen content based on current state */
+  const renderScreenContent = () => {
+    if (value === 'LoadingAssets') {
+      return <AppPreloader />
+    }
 
-  if (value === 'ModeSelection') {
-    return (
-      <Screen>
+    if (value === 'TitleScreen') {
+      return <TitleScreen onStartClick={() => send({ type: 'TITLE_SCREEN_START_CLICK' })} />
+    }
+
+    if (value === 'ModeSelection') {
+      return (
         <ModeSelection
           onStandardModeClick={() => send({ type: 'STANDARD_MODE_SELECTION' })}
           onRainbowModeClick={() => send({ type: 'RAINBOW_MODE_SELECTION' })}
         />
-      </Screen>
-    )
-  }
+      )
+    }
 
-  if (value === 'CharacterCreation') {
-    return (
-      <Screen>
+    if (value === 'CharacterCreation') {
+      return (
         <CharacterCreation
           gameMode={context.game.mode}
           characterClasses={context.assets.characterClasses}
-          playerPortraits={context.assets.playerPortraits}
+          playerPortraits={context.game.availablePlayerPortraits}
           onCreate={(formData) => {
             send({
               type: 'CREATE_CHARACTER',
@@ -70,12 +69,11 @@ export function App() {
             })
           }}
         />
-      </Screen>
-    )
-  }
+      )
+    }
 
-  return (
-    <Screen>
+    // Default: Main game play area
+    return (
       <div className={css['play-area']}>
         <div className={css['play-area-wrapper']}>
           <div className={css['play-area-banner']}>
@@ -494,6 +492,14 @@ export function App() {
           </DialogContent>
         </Dialog>
       </div>
+    )
+  }
+
+  return (
+    <Screen>
+      <AnimatePresence mode="popLayout">
+        <ScreenTransition screenKey={screenKey}>{renderScreenContent()}</ScreenTransition>
+      </AnimatePresence>
     </Screen>
   )
 }

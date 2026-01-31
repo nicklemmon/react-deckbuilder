@@ -139,6 +139,7 @@ export type AppMachineContext = {
   }
   game: {
     mode: GameMode
+    availablePlayerPortraits: Array<{ path: string; url: string }>
     player: {
       characterClass: CharacterClass | undefined
       characterClassDeck: Array<Card>
@@ -464,6 +465,7 @@ export const appMachine = setup({
     },
     game: {
       mode: 'standard',
+      availablePlayerPortraits: [],
       player: {
         characterClass: undefined,
         characterClassDeck: [],
@@ -520,9 +522,13 @@ export const appMachine = setup({
         STANDARD_MODE_SELECTION: {
           actions: assign({
             game: ({ context }) => {
+              const mode = 'standard'
               return {
                 ...context.game,
-                mode: 'standard',
+                mode,
+                availablePlayerPortraits: context.assets.playerPortraits.filter((portrait) =>
+                  portrait.path.includes(`.${mode}.`),
+                ),
               }
             },
           }),
@@ -531,9 +537,13 @@ export const appMachine = setup({
         RAINBOW_MODE_SELECTION: {
           actions: assign({
             game: ({ context }) => {
+              const mode = 'rainbow'
               return {
                 ...context.game,
-                mode: 'rainbow',
+                mode,
+                availablePlayerPortraits: context.assets.playerPortraits.filter((portrait) =>
+                  portrait.path.includes(`.${mode}.`),
+                ),
               }
             },
           }),
@@ -573,10 +583,12 @@ export const appMachine = setup({
       },
     },
     NewRound: {
+      tags: ['gameplay'],
       entry: ['discardCurrentHand', 'getNextMonster', 'createDrawPile'],
       always: ['Surveying'],
     },
     Surveying: {
+      tags: ['gameplay'],
       // Resets player status to idle
       entry: assign({
         game: ({ context }) => ({
@@ -600,14 +612,17 @@ export const appMachine = setup({
       ],
     },
     Reshuffling: {
+      tags: ['gameplay'],
       entry: 'reshuffle',
       always: 'Drawing',
     },
     Drawing: {
+      tags: ['gameplay'],
       entry: ['drawHand'],
       always: 'PlayerChoosing',
     },
     PlayerChoosing: {
+      tags: ['gameplay'],
       on: {
         PLAY_CARD: {
           target: 'CardInPlay',
@@ -672,6 +687,7 @@ export const appMachine = setup({
       }),
     },
     CardInPlay: {
+      tags: ['gameplay'],
       on: {
         PLAY_CARD_ANIMATION_COMPLETE: {
           target: 'ApplyingCardEffects',
@@ -679,6 +695,7 @@ export const appMachine = setup({
       },
     },
     UsingItem: {
+      tags: ['gameplay'],
       on: {
         USING_ITEM_ANIMATION_COMPLETE: {
           target: 'ApplyingItemEffects',
@@ -686,6 +703,7 @@ export const appMachine = setup({
       },
     },
     ApplyingCardEffects: {
+      tags: ['gameplay'],
       entry: 'applyCardEffects',
       on: {
         CARD_EFFECTS_ANIMATION_COMPLETE: {
@@ -694,6 +712,7 @@ export const appMachine = setup({
       },
     },
     ApplyingItemEffects: {
+      tags: ['gameplay'],
       entry: 'applyItemEffects',
       on: {
         ITEM_EFFECTS_ANIMATION_COMPLETE: {
@@ -702,6 +721,7 @@ export const appMachine = setup({
       },
     },
     CardPlayed: {
+      tags: ['gameplay'],
       entry: assign({
         game: ({ context }) => {
           // Should be an impossible state, but need to keep TypeScript happy
@@ -764,6 +784,7 @@ export const appMachine = setup({
       ],
     },
     Defending: {
+      tags: ['gameplay'],
       entry: 'monsterAttack',
       on: {
         MONSTER_ATTACK_ANIMATION_COMPLETE: [
@@ -779,6 +800,7 @@ export const appMachine = setup({
       },
     },
     Victory: {
+      tags: ['gameplay'],
       entry: ['stockShop'],
       on: {
         MONSTER_DEATH_ANIMATION_COMPLETE: {
@@ -788,6 +810,7 @@ export const appMachine = setup({
       },
     },
     BetweenRounds: {
+      tags: ['gameplay'],
       on: {
         NEXT_BATTLE_CLICK: {
           target: 'NewRound',
@@ -804,6 +827,7 @@ export const appMachine = setup({
       },
     },
     Shopping: {
+      tags: ['gameplay'],
       entry: ['disableUnaffordableItems', () => doorOpenSound.play()],
       on: {
         LEAVE_SHOP_CLICK: {
@@ -861,6 +885,7 @@ export const appMachine = setup({
       },
     },
     DestroyingCard: {
+      tags: ['gameplay'],
       entry: assign({
         game: ({ context }) => {
           buttonClickSound.play()
@@ -891,6 +916,7 @@ export const appMachine = setup({
       },
     },
     DestroyingCards: {
+      tags: ['gameplay'],
       on: {
         DESTRUCTION_SHOP_CARD_CLICK: {
           target: 'DestroyingCard',
@@ -918,6 +944,8 @@ export const appMachine = setup({
         },
       },
     },
-    Defeat: {},
+    Defeat: {
+      tags: ['gameplay'],
+    },
   },
 })

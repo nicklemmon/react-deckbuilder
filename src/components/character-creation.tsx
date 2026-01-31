@@ -67,28 +67,21 @@ export function CharacterCreation({
           <fieldset className={css['character-portrait-fieldset']}>
             <legend className={css['input-label']}>Character portrait</legend>
 
-            {playerPortraits
-              .filter((portrait) => {
-                return portrait.path.includes(`.${gameMode}.`)
-              })
-              .map((portrait, index) => {
-                return (
-                  <label
-                    key={`portrait-ratio-${index}`}
-                    className={css['character-portrait-label']}
-                  >
-                    <input
-                      name="characterPortrait"
-                      type="radio"
-                      value={portrait.url}
-                      className={css['character-portrait-input']}
-                      defaultChecked={index === 0}
-                    />
+            {playerPortraits.map((portrait, index) => {
+              return (
+                <label key={`portrait-ratio-${index}`} className={css['character-portrait-label']}>
+                  <input
+                    name="characterPortrait"
+                    type="radio"
+                    value={portrait.url}
+                    className={css['character-portrait-input']}
+                    defaultChecked={index === 0}
+                  />
 
-                    <img src={portrait.url} className={css['character-portrait-img']} />
-                  </label>
-                )
-              })}
+                  <img src={portrait.url} className={css['character-portrait-img']} />
+                </label>
+              )
+            })}
           </fieldset>
 
           <Button type="submit">Create character</Button>
