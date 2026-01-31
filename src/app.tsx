@@ -36,6 +36,14 @@ export function App() {
     )
   }
 
+  if (value === 'TitleScreen') {
+    return (
+      <Screen>
+        <TitleScreen onStartClick={() => send({ type: 'TITLE_SCREEN_START_CLICK' })} />
+      </Screen>
+    )
+  }
+
   if (value === 'ModeSelection') {
     return (
       <Screen>
