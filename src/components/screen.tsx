@@ -1,5 +1,6 @@
 import { clsx } from 'clsx'
 import styles from './screen.module.css'
+import { VolumeControl } from './volume-control.tsx'
 
 /**
  * Standard screen/view wrapper component that provides consistent layout and spacing
@@ -15,6 +16,7 @@ export function Screen({
 } & React.ComponentPropsWithRef<'div'>) {
   return (
     <div className={clsx(styles.screen, className)} {...props}>
+      <VolumeControl />
       {children}
     </div>
   )

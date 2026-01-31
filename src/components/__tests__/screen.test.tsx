@@ -1,9 +1,39 @@
 import { page } from 'vitest/browser'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { Screen } from '../screen'
 
+vi.mock('howler', () => ({
+  Howler: {
+    volume: vi.fn(),
+  },
+}))
+
 describe('Screen', () => {
+  let localStorageMock: Record<string, string>
+
+  beforeEach(() => {
+    localStorageMock = {}
+
+    vi.stubGlobal('localStorage', {
+      getItem: vi.fn((key: string) => localStorageMock[key] || null),
+      setItem: vi.fn((key: string, value: string) => {
+        localStorageMock[key] = value
+      }),
+      removeItem: vi.fn((key: string) => {
+        delete localStorageMock[key]
+      }),
+      clear: vi.fn(() => {
+        localStorageMock = {}
+      }),
+    })
+
+    vi.clearAllMocks()
+  })
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
   it('renders children', async () => {
     render(
       <Screen>
@@ -99,5 +129,39 @@ describe('Screen', () => {
     await expect.element(screenElement).toHaveAttribute('class', expect.stringContaining('screen'))
     const element = await screenElement.element()
     expect(element.className.split(' ')).toHaveLength(1)
+  })
+
+  it('includes volume control', async () => {
+    render(
+      <Screen>
+        <div>Screen content</div>
+      </Screen>,
+    )
+
+    const volumeSlider = page.getByRole('slider', { name: 'Volume control' })
+    await expect.element(volumeSlider).toBeInTheDocument()
+  })
+
+  it('renders volume control before children', async () => {
+    render(
+      <Screen data-testid="screen">
+        <div data-testid="child-content">Child content</div>
+      </Screen>,
+    )
+
+    const screenElement = await page.getByTestId('screen').element()
+    const volumeControl = screenElement.querySelector('[class*="volume-control"]')
+    const childContent = await page.getByTestId('child-content').element()
+
+    expect(volumeControl).toBeTruthy()
+    expect(childContent).toBeTruthy()
+
+    // Volume control should come before child content in DOM order
+    const volumeControlIndex = Array.from(screenElement.children).indexOf(
+      volumeControl?.parentElement || volumeControl!,
+    )
+    const childContentIndex = Array.from(screenElement.children).indexOf(childContent)
+
+    expect(volumeControlIndex).toBeLessThan(childContentIndex)
   })
 })
