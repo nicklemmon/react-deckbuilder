@@ -65,3 +65,11 @@
 .character-portrait-input {
   display: none;
 }
+
+.character-portrait-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
