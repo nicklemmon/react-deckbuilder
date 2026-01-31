@@ -19,11 +19,14 @@ npm run build
 
 ### Coding
 
-This project was initially built *before* the LLM explosion, however, it's now a great place to explore the capabilities of available models. Some code within the project is authored using [Claude Code](https://claude.ai).
+This project was initially built _before_ the LLM explosion, however, it's now a great place to
+explore the capabilities of available models. Some code within the project is authored using
+[Claude Code](https://claude.ai).
 
 ### Imagery
 
-The majority of the images used in the game are AI generated, most recently using Nano Banana. Image models used:
+The majority of the images used in the game are AI generated, most recently using Nano Banana. Image
+models used:
 
 - [Flux v1](https://bfl.ai/)
 - [Nano banana pro](https://gemini.google.com/)
@@ -31,4 +34,5 @@ The majority of the images used in the game are AI generated, most recently usin
 
 ### Audio
 
-For now, the audio is stems from royalty free sound effects and music packs from [Humble Bundle](https://humblebundle.com). These assets are *not* AI-generated.
+For now, the audio is stems from royalty free sound effects and music packs from
+[Humble Bundle](https://humblebundle.com). These assets are _not_ AI-generated.
