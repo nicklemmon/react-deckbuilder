@@ -6,6 +6,9 @@ import buttonClickSfx from '../../sfx/button.click.wav'
 import doorOpenSfx from '../../sfx/door.open.wav'
 import coinsSfx from '../../sfx/coins.wav'
 import cashRegisterSfx from '../../sfx/cash-register.wav'
+import winSfx from '../../sfx/win.wav'
+import loseSfx from '../../sfx/lose.wav'
+import storeMusicSfx from '../../sfx/music/music.store.wav'
 import { resolveModules, resolveModulesWithPaths } from '../../helpers/vite.ts'
 import { rng } from '../../helpers/rng.ts'
 import { getSound } from '../../helpers/get-sound.ts'
@@ -19,6 +22,7 @@ import type { Card } from '../../types/cards.ts'
 import type { Item } from '../../types/items.ts'
 import type { GameMode } from '../../types/global.ts'
 import type { AvatarStatus } from '../../components/avatar.tsx'
+import { fadeIn, fadeOut } from '../../helpers/fade-sound.ts'
 
 /** Unique ID for the application machine */
 const APP_MACHINE_ID = 'app'
@@ -67,6 +71,12 @@ const doorOpenSound = getSound({ src: doorOpenSfx, volume: 0.5 })
 const cashRegisterSound = getSound({ src: cashRegisterSfx, volume: 0.5 })
 
 const coinsSound = getSound({ src: coinsSfx, volume: 0.7 })
+
+const winSound = getSound({ src: winSfx })
+
+const loseSound = getSound({ src: loseSfx })
+
+const storeMusicSound = getSound({ src: storeMusicSfx, volume: 0.7, loop: true })
 
 /** Prefetches assets from multiple sources returned by `import.meta.glob` */
 async function prefetchAssets() {
@@ -802,6 +812,9 @@ export const appMachine = setup({
     Victory: {
       tags: ['gameplay'],
       entry: ['stockShop'],
+      exit: () => {
+        winSound.play()
+      },
       on: {
         MONSTER_DEATH_ANIMATION_COMPLETE: {
           actions: ['awardSpoils'],
@@ -828,11 +841,20 @@ export const appMachine = setup({
     },
     Shopping: {
       tags: ['gameplay'],
-      entry: ['disableUnaffordableItems', () => doorOpenSound.play()],
+      entry: [
+        'disableUnaffordableItems',
+        () => {
+          doorOpenSound.play()
+          fadeIn(storeMusicSound) // TODO: How do I loop this?
+        },
+      ],
       on: {
         LEAVE_SHOP_CLICK: {
           target: 'BetweenRounds',
-          actions: () => buttonClickSound.play(),
+          actions: () => {
+            buttonClickSound.play()
+            fadeOut(storeMusicSound)
+          },
         },
         ITEM_SHOP_CARD_CLICK: {
           target: 'Shopping',
@@ -945,6 +967,9 @@ export const appMachine = setup({
       },
     },
     Defeat: {
+      entry: () => {
+        loseSound.play()
+      },
       tags: ['gameplay'],
     },
   },
