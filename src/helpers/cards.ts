@@ -21,6 +21,7 @@ const CARD_SFX_MODULES = import.meta.glob('../cards/**/*.wav', { eager: true, im
 const CARD_ARTWORK_MODULES = import.meta.glob('../cards/**/*.png', {
   eager: true,
   import: 'default',
+  query: { format: 'webp' },
 })
 
 /** Array of available cards derived from `src/cards` file contents */
