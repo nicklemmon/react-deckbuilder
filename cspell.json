@@ -4,6 +4,6 @@
   "dictionaryDefinitions": [],
   "dictionaries": [],
   "words": ["Berzerker", "clsx", "deckbuilder", "firebolt", "janky", "Ronin", "webp", "xstate"],
-  "ignoreWords": [],
+  "ignoreWords": ["eslintcache"],
   "import": []
 }

@@ -1,0 +1,256 @@
+.volume-control {
+  position: fixed;
+  bottom: var(--spacing-400);
+  left: var(--spacing-400);
+  z-index: var(--z-index-1000);
+  background: linear-gradient(135deg, var(--color-stone-800) 0%, var(--color-stone-900) 100%);
+  border: 2px solid var(--color-stone-700);
+  border-radius: var(--rounding-500);
+  padding: var(--spacing-200) var(--spacing-300);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-200);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 0 1px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.volume-control:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.5);
+}
+
+.volume-control::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--spacing-050));
+  background: linear-gradient(135deg, rgba(183, 28, 28, 0.3) 0%, transparent 50%);
+  border-radius: var(--rounding-100);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.volume-control:hover::before {
+  opacity: 1;
+}
+
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  position: relative;
+}
+
+.icon {
+  width: 100%;
+  height: 100%;
+  color: var(--color-stone-100);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+  transition: all 0.3s ease;
+}
+
+.icon.muted {
+  color: var(--color-stone-400);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.icon.low {
+  color: var(--color-stone-200);
+}
+
+.icon.high {
+  color: var(--color-stone-100);
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.9));
+}
+
+.slider-container {
+  position: relative;
+  width: 100px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.slider-bg {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(to right, var(--color-stone-700) 0%, var(--color-stone-600) 100%);
+  border-radius: var(--rounding-50);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.slider-fill {
+  position: absolute;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--color-blood-900) 0%,
+    var(--color-blood-500) 50%,
+    var(--color-blood-300) 100%
+  );
+  border-radius: var(--rounding-50);
+  box-shadow:
+    0 0 10px rgba(183, 28, 28, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: width 0.15s ease;
+}
+
+.volume-control input[type='range'] {
+  position: relative;
+  width: 100%;
+  height: 24px;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+  z-index: 2;
+  border-radius: 100%;
+}
+
+/* WebKit (Chrome, Safari, Edge) */
+.volume-control input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: radial-gradient(circle, var(--color-blood-300) 0%, var(--color-blood-500) 100%);
+  border: 2px solid var(--color-stone-900);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow:
+    0 0 0 2px var(--color-blood-700),
+    0 4px 8px rgba(0, 0, 0, 0.5),
+    0 0 16px rgba(183, 28, 28, 0.6),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+  position: relative;
+  margin-top: -6px;
+}
+
+.volume-control input[type='range']::-webkit-slider-thumb:hover {
+  background: radial-gradient(circle, var(--color-blood-300) 0%, var(--color-blood-500) 100%);
+  transform: scale(1.15);
+  box-shadow:
+    0 0 0 2px var(--color-blood-700),
+    0 6px 12px rgba(0, 0, 0, 0.6),
+    0 0 20px rgba(183, 28, 28, 0.9),
+    inset 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+
+.volume-control input[type='range']::-webkit-slider-thumb:active {
+  transform: scale(1.05);
+  box-shadow:
+    0 0 0 2px var(--color-blood-700),
+    0 2px 4px rgba(0, 0, 0, 0.6),
+    0 0 12px rgba(183, 28, 28, 0.8),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+/* Firefox */
+.volume-control input[type='range']::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: radial-gradient(circle, var(--color-blood-300) 0%, var(--color-blood-500) 100%);
+  border: 2px solid var(--color-stone-900);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow:
+    0 0 0 2px var(--color-blood-700),
+    0 4px 8px rgba(0, 0, 0, 0.5),
+    0 0 16px rgba(183, 28, 28, 0.6),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+  margin-top: -6px;
+}
+
+.volume-control input[type='range']::-moz-range-thumb:hover {
+  background: radial-gradient(circle, var(--color-blood-300) 0%, var(--color-blood-500) 100%);
+  transform: scale(1.15);
+  box-shadow:
+    0 0 0 2px var(--color-blood-700),
+    0 6px 12px rgba(0, 0, 0, 0.6),
+    0 0 20px rgba(183, 28, 28, 0.9),
+    inset 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+
+.volume-control input[type='range']::-moz-range-thumb:active {
+  transform: scale(1.05);
+  box-shadow:
+    0 0 0 2px var(--color-blood-700),
+    0 2px 4px rgba(0, 0, 0, 0.6),
+    0 0 12px rgba(183, 28, 28, 0.8),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.volume-control input[type='range']:focus {
+  outline: none;
+}
+
+.volume-control input[type='range']:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 2px var(--color-blood-700),
+    0 0 0 4px var(--color-blood-500),
+    0 4px 8px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(183, 28, 28, 0.8),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.volume-control input[type='range']:focus-visible::-moz-range-thumb {
+  box-shadow:
+    0 0 0 2px var(--color-blood-700),
+    0 0 0 4px var(--color-blood-500),
+    0 4px 8px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(183, 28, 28, 0.8),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+/* Track styles - make transparent since we're using custom background */
+.volume-control input[type='range']::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 6px;
+  background: transparent;
+  border-radius: var(--rounding-50);
+  margin-top: 0;
+}
+
+.volume-control input[type='range']::-moz-range-track {
+  width: 100%;
+  height: 6px;
+  background: transparent;
+  border-radius: var(--rounding-50);
+  margin-top: 0;
+}
+
+/* Volume percentage label */
+.volume-label {
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-100);
+  color: var(--color-stone-500);
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.volume-control:hover .volume-label {
+  opacity: 1;
+}
