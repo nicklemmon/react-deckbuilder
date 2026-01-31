@@ -44,6 +44,7 @@
     "semver": "^7.7.3",
     "typescript": "5.9.3",
     "vite": "7.3.0",
+    "vite-imagetools": "^9.0.2",
     "vite-plugin-compression": "0.5.1",
     "vite-plugin-imagemin": "^0.6.1",
     "vitest": "^4.0.16",

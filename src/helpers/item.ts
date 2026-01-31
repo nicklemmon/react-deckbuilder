@@ -30,6 +30,7 @@ const ITEM_SFX_MODULES = import.meta.glob('../items/**/*.wav', {
 const ITEM_ARTWORK = import.meta.glob('../items/**/*.png', {
   eager: true,
   import: 'default',
+  query: { format: 'webp' },
 })
 
 /** Array of available monsters derived from `src/monsters` file contents */

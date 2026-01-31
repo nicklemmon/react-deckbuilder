@@ -2,10 +2,12 @@ import { defineConfig, type PluginOption } from 'vite'
 import react from '@vitejs/plugin-react'
 import compression from 'vite-plugin-compression'
 import imageMin from 'vite-plugin-imagemin'
+import { imagetools } from 'vite-imagetools'
 import { playwright } from '@vitest/browser-playwright'
 
 const DEFAULT_PLUGINS: PluginOption = [
   react(),
+  imagetools(),
   imageMin({
     optipng: {
       optimizationLevel: 7,
