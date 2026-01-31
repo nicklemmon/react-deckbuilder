@@ -2,18 +2,15 @@ import { type SyntheticEvent } from 'react'
 import { Button } from './button'
 import css from './character-creation.module.css'
 import { Stack } from './stack'
-import type { GameMode } from '../types/global'
 import type { CharacterClass } from '../types/character-classes'
 
 /** UI view for character creation */
 export function CharacterCreation({
   onCreate,
-  gameMode,
   characterClasses,
   playerPortraits,
 }: {
   onCreate: (data: Record<string, FormDataEntryValue>) => void
-  gameMode: GameMode
   characterClasses: Array<CharacterClass>
   playerPortraits: Array<{ path: string; url: string }>
 }) {

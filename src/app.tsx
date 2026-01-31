@@ -58,7 +58,6 @@ export function App() {
     if (value === 'CharacterCreation') {
       return (
         <CharacterCreation
-          gameMode={context.game.mode}
           characterClasses={context.assets.characterClasses}
           playerPortraits={context.game.availablePlayerPortraits}
           onCreate={(formData) => {
