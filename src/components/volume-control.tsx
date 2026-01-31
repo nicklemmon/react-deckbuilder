@@ -108,7 +108,10 @@ export function VolumeControl() {
 
       <div className={css['slider-container']}>
         <div className={css['slider-bg']}>
-          <div className={css['slider-fill']} style={{ width: `${volumePercentage}%` }} />
+          <div
+            className={css['slider-fill']}
+            style={{ clipPath: `inset(0 ${100 - volumePercentage}% 0 0)` }}
+          />
         </div>
         <input
           type="range"
