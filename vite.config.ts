@@ -24,14 +24,10 @@ const DEFAULT_PLUGINS: PluginOption = [
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  if (mode === 'production') {
-    return {
-      plugins: [...DEFAULT_PLUGINS, compression()],
-    }
-  }
+  const plugins = mode === 'production' ? [...DEFAULT_PLUGINS, compression()] : DEFAULT_PLUGINS
 
   return {
-    plugins: DEFAULT_PLUGINS,
+    plugins,
     test: {
       environment: 'happy-dom',
       setupFiles: ['./src/test-setup.ts'],
