@@ -14,8 +14,6 @@
     "webp",
     "xstate"
   ],
-  "ignoreWords": [
-    "eslintcache"
-  ],
+  "ignoreWords": ["eslintcache"],
   "import": []
 }
