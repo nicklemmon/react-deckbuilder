@@ -3,7 +3,17 @@
   "ignorePaths": [],
   "dictionaryDefinitions": [],
   "dictionaries": [],
-  "words": ["Berzerker", "clsx", "deckbuilder", "firebolt", "janky", "Ronin", "webp", "xstate"],
+  "words": [
+    "Berzerker",
+    "clsx",
+    "deckbuilder",
+    "firebolt",
+    "imagetools",
+    "janky",
+    "Ronin",
+    "webp",
+    "xstate"
+  ],
   "ignoreWords": ["eslintcache"],
   "import": []
 }

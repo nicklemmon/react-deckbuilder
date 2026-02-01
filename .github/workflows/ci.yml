@@ -30,5 +30,11 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Run QA scripts in parallel
-        run: npm run qa
+      - name: Run tests
+        run: npm test
+
+      - name: Type check
+        run: npm run lint:types
+
+      - name: Build project
+        run: npm run build
