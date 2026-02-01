@@ -2,24 +2,37 @@ import { assign, setup } from 'xstate'
 import { fadeIn, fadeOut } from '../../helpers/fade-sound'
 import { TRACKS, type TrackId } from './tracks'
 
+/** Default duration in milliseconds for fade in/out transitions */
 const DEFAULT_FADE_DURATION = 500
 
+/** State machine context that tracks the currently playing track and fade settings */
 type SoundtrackContext = {
   currentTrack: TrackId | null
   fadeDuration: number
 }
 
+/** Events that can be sent to the soundtrack machine */
 type SoundtrackEvent =
   | { type: 'PLAY_TRACK'; track: TrackId }
   | { type: 'STOP' }
   | { type: 'SET_FADE_DURATION'; duration: number }
 
+/**
+ * XState machine that manages music playback for the game.
+ * Ensures only one track plays at a time and handles smooth cross-fading between tracks.
+ * The machine has two states: silent (no music playing) and playing (one track active).
+ */
 export const soundtrackMachine = setup({
   types: {
     context: {} as SoundtrackContext,
     events: {} as SoundtrackEvent,
   },
   actions: {
+    /**
+     * Cross-fades from the current track to a new track.
+     * Fades out the current track while simultaneously fading in the new one,
+     * creating a smooth transition without jarring cuts or volume overlap.
+     */
     crossFadeToTrack: ({ context, event }) => {
       if (event.type !== 'PLAY_TRACK') return
 
@@ -33,10 +46,14 @@ export const soundtrackMachine = setup({
         fadeOut(currentTrack.sound, { duration })
       }
 
-      // Fade in new track
+      // Fade in new track to its base volume
       const newTrack = TRACKS[newTrackId]
-      fadeIn(newTrack.sound, { duration })
+      fadeIn(newTrack.sound, { duration, targetVolume: newTrack.baseVolume })
     },
+    /**
+     * Stops all music playback by fading out the current track.
+     * Used when transitioning to the silent state.
+     */
     stopAllTracks: ({ context }) => {
       const duration = context.fadeDuration
 

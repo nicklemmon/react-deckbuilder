@@ -4,19 +4,26 @@ import battleMusicSfx from '../../sfx/music/music.battle.wav'
 import storeMusicSfx from '../../sfx/music/music.store.wav'
 import boogieMusicSfx from '../../sfx/music/music.boogie.wav'
 
+/** Identifier for available music tracks in the game */
 export type TrackId = 'battle' | 'store' | 'boogie'
 
+/** Represents a music track with its Howl instance and volume settings */
 export type Track = {
   id: TrackId
   sound: Howl
   baseVolume: number
 }
 
+/**
+ * Central registry of all music tracks in the game.
+ * Each track is created once and shared across the application to ensure
+ * the soundtrack machine can properly coordinate playback and cross-fading.
+ */
 export const TRACKS: Record<TrackId, Track> = {
   battle: {
     id: 'battle',
-    sound: getSound({ src: battleMusicSfx, volume: 0.7, loop: true }),
-    baseVolume: 0.7,
+    sound: getSound({ src: battleMusicSfx, volume: 0.4, loop: true }),
+    baseVolume: 0.4,
   },
   store: {
     id: 'store',

@@ -71,9 +71,9 @@ const cashRegisterSound = getSound({ src: cashRegisterSfx, volume: 0.5 })
 
 const coinsSound = getSound({ src: coinsSfx, volume: 0.7 })
 
-const winSound = getSound({ src: winSfx })
+const winSound = getSound({ src: winSfx, volume: 1.0 })
 
-const loseSound = getSound({ src: loseSfx })
+const loseSound = getSound({ src: loseSfx, volume: 1.0 })
 
 /** Prefetches assets from multiple sources returned by `import.meta.glob` */
 async function prefetchAssets() {
@@ -542,33 +542,39 @@ export const appMachine = setup({
     ModeSelection: {
       on: {
         STANDARD_MODE_SELECTION: {
-          actions: assign({
-            game: ({ context }) => {
-              const mode = 'standard'
-              return {
-                ...context.game,
-                mode,
-                availablePlayerPortraits: context.assets.playerPortraits.filter((portrait) =>
-                  portrait.path.includes(`.${mode}.`),
-                ),
-              }
-            },
-          }),
+          actions: [
+            () => buttonClickSound.play(),
+            assign({
+              game: ({ context }) => {
+                const mode = 'standard'
+                return {
+                  ...context.game,
+                  mode,
+                  availablePlayerPortraits: context.assets.playerPortraits.filter((portrait) =>
+                    portrait.path.includes(`.${mode}.`),
+                  ),
+                }
+              },
+            }),
+          ],
           target: 'CharacterCreation',
         },
         RAINBOW_MODE_SELECTION: {
-          actions: assign({
-            game: ({ context }) => {
-              const mode = 'rainbow'
-              return {
-                ...context.game,
-                mode,
-                availablePlayerPortraits: context.assets.playerPortraits.filter((portrait) =>
-                  portrait.path.includes(`.${mode}.`),
-                ),
-              }
-            },
-          }),
+          actions: [
+            () => buttonClickSound.play(),
+            assign({
+              game: ({ context }) => {
+                const mode = 'rainbow'
+                return {
+                  ...context.game,
+                  mode,
+                  availablePlayerPortraits: context.assets.playerPortraits.filter((portrait) =>
+                    portrait.path.includes(`.${mode}.`),
+                  ),
+                }
+              },
+            }),
+          ],
           target: 'CharacterCreation',
         },
       },

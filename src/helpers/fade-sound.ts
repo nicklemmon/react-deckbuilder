@@ -8,11 +8,13 @@ const pendingStops = new WeakMap<Howl, ReturnType<typeof setTimeout>>()
 type FadeOptions = {
   /** Duration of the fade in milliseconds (default: 500) */
   duration?: number
+  /** Target volume to fade to (default: 1) */
+  targetVolume?: number
 }
 
-/** Fade in a sound from silence to full volume */
+/** Fade in a sound from silence to target volume */
 export function fadeIn(sound: Howl, options: FadeOptions = {}) {
-  const { duration = DEFAULT_FADE_DURATION } = options
+  const { duration = DEFAULT_FADE_DURATION, targetVolume = 1 } = options
 
   // Cancel any pending stop from a previous fadeOut
   const pendingTimeout = pendingStops.get(sound)
@@ -27,9 +29,9 @@ export function fadeIn(sound: Howl, options: FadeOptions = {}) {
     sound.play()
   }
 
-  // Fade from current volume to full
+  // Fade from current volume to target volume
   const currentVolume = sound.volume()
-  sound.fade(currentVolume, 1, duration)
+  sound.fade(currentVolume, targetVolume, duration)
 }
 
 /** Fade out a sound from current volume to silence, then stop */

@@ -12,8 +12,7 @@ repository.
 
 ## Code Quality
 
-**IMPORTANT**: Always run `npm run prettier:write` on files you have changed to ensure consistent
-formatting.
+Run `npm run qa` before considering any task complete. If failures occur, address them.
 
 ## Architecture Overview
 
