@@ -11,8 +11,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint:types": "tsc --noEmit",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
+    "test": "npx vitest",
+    "test:ui": "npx vitest --ui",
     "prettier:write": "prettier --write .",
     "qa": "npx concurrently --names 'test,lint,format' 'npm run test' 'npm run lint:types' 'npm run prettier:write'"
   },
