@@ -29,7 +29,6 @@ export default defineConfig(({ mode }) => {
   return {
     plugins,
     test: {
-      environment: 'happy-dom',
       setupFiles: ['./src/test-setup.ts'],
       browser: {
         enabled: true,
