@@ -1,4 +1,4 @@
-import { assign, fromPromise, setup } from 'xstate'
+import { assign, fromPromise, sendTo, setup, type ActorRefFrom } from 'xstate'
 import arrayShuffle from 'array-shuffle'
 import impactSfx from '../../sfx/impact.slice.wav'
 import cardUseSfx from '../../sfx/card.use.wav'
@@ -8,7 +8,6 @@ import coinsSfx from '../../sfx/coins.wav'
 import cashRegisterSfx from '../../sfx/cash-register.wav'
 import winSfx from '../../sfx/win.wav'
 import loseSfx from '../../sfx/lose.wav'
-import storeMusicSfx from '../../sfx/music/music.store.wav'
 import { resolveModules, resolveModulesWithPaths } from '../../helpers/vite.ts'
 import { rng } from '../../helpers/rng.ts'
 import { getSound } from '../../helpers/get-sound.ts'
@@ -22,7 +21,7 @@ import type { Card } from '../../types/cards.ts'
 import type { Item } from '../../types/items.ts'
 import type { GameMode } from '../../types/global.ts'
 import type { AvatarStatus } from '../../components/avatar.tsx'
-import { fadeIn, fadeOut } from '../../helpers/fade-sound.ts'
+import { soundtrackMachine } from '../soundtrack-machine/soundtrack-machine.ts'
 
 /** Unique ID for the application machine */
 const APP_MACHINE_ID = 'app'
@@ -72,11 +71,9 @@ const cashRegisterSound = getSound({ src: cashRegisterSfx, volume: 0.5 })
 
 const coinsSound = getSound({ src: coinsSfx, volume: 0.7 })
 
-const winSound = getSound({ src: winSfx })
+const winSound = getSound({ src: winSfx, volume: 1.0 })
 
-const loseSound = getSound({ src: loseSfx })
-
-const storeMusicSound = getSound({ src: storeMusicSfx, volume: 0.7, loop: true })
+const loseSound = getSound({ src: loseSfx, volume: 1.0 })
 
 /** Prefetches assets from multiple sources returned by `import.meta.glob` */
 async function prefetchAssets() {
@@ -142,6 +139,7 @@ async function prefetchAssets() {
 
 /** Context for the app-machine */
 export type AppMachineContext = {
+  soundtrackRef: ActorRefFrom<typeof soundtrackMachine> | null
   assets: {
     characterClasses: Array<CharacterClass>
     cards: Array<Card>
@@ -433,9 +431,19 @@ export const appMachine = setup({
         }
       },
     }),
+    playBattleMusic: sendTo(({ context }) => context.soundtrackRef!, {
+      type: 'PLAY_TRACK',
+      track: 'battle',
+    }),
+    playStoreMusic: sendTo(({ context }) => context.soundtrackRef!, {
+      type: 'PLAY_TRACK',
+      track: 'store',
+    }),
+    stopMusic: sendTo(({ context }) => context.soundtrackRef!, { type: 'STOP' }),
   },
   actors: {
     loadAllAssets: fromPromise(prefetchAssets),
+    soundtrackMachine: soundtrackMachine,
   },
   guards: {
     playerIsAlive: ({ context }) => {
@@ -467,7 +475,11 @@ export const appMachine = setup({
 }).createMachine({
   id: APP_MACHINE_ID,
   initial: 'LoadingAssets',
+  entry: assign({
+    soundtrackRef: ({ spawn }) => spawn('soundtrackMachine'),
+  }),
   context: {
+    soundtrackRef: null,
     assets: {
       characterClasses: CHARACTER_CLASSES,
       cards: CARDS,
@@ -530,33 +542,39 @@ export const appMachine = setup({
     ModeSelection: {
       on: {
         STANDARD_MODE_SELECTION: {
-          actions: assign({
-            game: ({ context }) => {
-              const mode = 'standard'
-              return {
-                ...context.game,
-                mode,
-                availablePlayerPortraits: context.assets.playerPortraits.filter((portrait) =>
-                  portrait.path.includes(`.${mode}.`),
-                ),
-              }
-            },
-          }),
+          actions: [
+            () => buttonClickSound.play(),
+            assign({
+              game: ({ context }) => {
+                const mode = 'standard'
+                return {
+                  ...context.game,
+                  mode,
+                  availablePlayerPortraits: context.assets.playerPortraits.filter((portrait) =>
+                    portrait.path.includes(`.${mode}.`),
+                  ),
+                }
+              },
+            }),
+          ],
           target: 'CharacterCreation',
         },
         RAINBOW_MODE_SELECTION: {
-          actions: assign({
-            game: ({ context }) => {
-              const mode = 'rainbow'
-              return {
-                ...context.game,
-                mode,
-                availablePlayerPortraits: context.assets.playerPortraits.filter((portrait) =>
-                  portrait.path.includes(`.${mode}.`),
-                ),
-              }
-            },
-          }),
+          actions: [
+            () => buttonClickSound.play(),
+            assign({
+              game: ({ context }) => {
+                const mode = 'rainbow'
+                return {
+                  ...context.game,
+                  mode,
+                  availablePlayerPortraits: context.assets.playerPortraits.filter((portrait) =>
+                    portrait.path.includes(`.${mode}.`),
+                  ),
+                }
+              },
+            }),
+          ],
           target: 'CharacterCreation',
         },
       },
@@ -594,7 +612,7 @@ export const appMachine = setup({
     },
     NewRound: {
       tags: ['gameplay'],
-      entry: ['discardCurrentHand', 'getNextMonster', 'createDrawPile'],
+      entry: ['discardCurrentHand', 'getNextMonster', 'createDrawPile', 'playBattleMusic'],
       always: ['Surveying'],
     },
     Surveying: {
@@ -841,20 +859,11 @@ export const appMachine = setup({
     },
     Shopping: {
       tags: ['gameplay'],
-      entry: [
-        'disableUnaffordableItems',
-        () => {
-          doorOpenSound.play()
-          fadeIn(storeMusicSound) // TODO: How do I loop this?
-        },
-      ],
+      entry: ['disableUnaffordableItems', () => doorOpenSound.play(), 'playStoreMusic'],
       on: {
         LEAVE_SHOP_CLICK: {
           target: 'BetweenRounds',
-          actions: () => {
-            buttonClickSound.play()
-            fadeOut(storeMusicSound)
-          },
+          actions: [() => buttonClickSound.play(), 'playBattleMusic'],
         },
         ITEM_SHOP_CARD_CLICK: {
           target: 'Shopping',

@@ -13,7 +13,8 @@
     "lint:types": "tsc --noEmit",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "prettier:write": "prettier --write ."
+    "prettier:write": "prettier --write .",
+    "qa": "npx concurrently --names 'test,lint,format' 'npm run test' 'npm run lint:types' 'npm run prettier:write'"
   },
   "dependencies": {
     "@vercel/analytics": "1.6.1",
@@ -38,6 +39,7 @@
     "@vitest/browser": "^4.0.17",
     "@vitest/browser-playwright": "^4.0.17",
     "@vitest/ui": "^4.0.16",
+    "concurrently": "9.2.1",
     "eslint": "9.39.2",
     "playwright": "^1.57.0",
     "prettier": "3.7.4",

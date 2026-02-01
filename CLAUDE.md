@@ -12,8 +12,7 @@ repository.
 
 ## Code Quality
 
-**IMPORTANT**: Always run `npm run prettier:write` on files you have changed to ensure consistent
-formatting.
+Run `npm run qa` before considering any task complete. If failures occur, address them.
 
 ## Architecture Overview
 
@@ -22,9 +21,9 @@ Motion for animations. The game uses Vite as the build tool and Howler.js for au
 
 ### Core Architecture
 
-- **State Management**: XState machine (`src/machines/app-machine/app-machine.ts`) controls the
-  entire game flow with states like `CharacterCreation`, `PlayerChoosing`, `ApplyingCardEffects`,
-  `Shopping`, etc.
+- **State Management**: XState machines control game flow and music playback
+  - `app-machine` - Main game states (character creation, battles, shopping, etc.)
+  - `soundtrack-machine` - Music playback with cross-fading between tracks
 - **Component Structure**: Modular React components in `src/components/` with CSS modules for
   styling
 - **Asset Management**: Organized folder structure for cards, monsters, character classes, and items
@@ -37,8 +36,9 @@ Motion for animations. The game uses Vite as the build tool and Howler.js for au
 - `src/character-classes/` - Character class definitions with deck configurations
 - `src/items/` - Consumable items (potions) with effects and sounds
 - `src/components/` - React components with corresponding CSS modules
+- `src/machines/` - XState machines for game logic and music
 - `src/types/` - TypeScript type definitions
-- `src/helpers/` - Utility functions for cards, monsters, items, etc.
+- `src/helpers/` - Utility functions for cards, monsters, items, audio, etc.
 
 ### Asset Convention
 
@@ -65,17 +65,35 @@ entity-name/
 
 Assets are automatically discovered and loaded via Vite's glob imports in the helper files.
 
-### State Machine Flow
+### State Machines
 
-The XState machine handles complex game flow including:
+**App Machine** (`src/machines/app-machine/app-machine.ts`)
+
+Handles game flow including:
 
 - Asset loading → Character creation → Battle rounds
 - Turn-based combat with card play, effects, and monster responses
 - Shopping phases between battles
 - Card destruction mechanics
 - Inventory item usage
+- Spawns and communicates with the soundtrack machine
+
+**Soundtrack Machine** (`src/machines/soundtrack-machine/soundtrack-machine.ts`)
+
+Manages music playback:
+
+- Ensures only one track plays at a time
+- Cross-fades between tracks (battle, store, boogie)
+- Respects base volume settings defined in `tracks.ts`
+- Controlled via events sent from the app machine
 
 ### Audio System
 
-Uses Howler.js with the `getSound()` helper for audio management. Sound effects are automatically
-loaded for each game entity and triggered by state machine actions.
+**Music**: Centralized in `src/machines/soundtrack-machine/tracks.ts` with Howl instances shared
+across the app. The soundtrack machine coordinates playback and cross-fading.
+
+**Sound Effects**: Uses Howler.js with the `getSound()` helper. Effects are automatically loaded for
+each game entity and triggered by state machine actions.
+
+**Fade Utilities**: `fadeIn()` and `fadeOut()` in `src/helpers/fade-sound.ts` provide smooth audio
+transitions with configurable duration and target volume.
