@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react'
 import compression from 'vite-plugin-compression'
 import imageMin from 'vite-plugin-imagemin'
 import { imagetools } from 'vite-imagetools'
-import { playwright } from '@vitest/browser-playwright'
 
 const DEFAULT_PLUGINS: PluginOption = [
   react(),
@@ -28,18 +27,5 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins,
-    test: {
-      setupFiles: ['./src/test-setup.ts'],
-      browser: {
-        enabled: true,
-        instances: [
-          {
-            browser: 'chromium',
-          },
-        ],
-        provider: playwright(),
-        headless: true,
-      },
-    },
   }
 })
