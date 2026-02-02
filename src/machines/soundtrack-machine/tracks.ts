@@ -27,7 +27,7 @@ export const TRACKS: Record<TrackId, Track> = {
   },
   store: {
     id: 'store',
-    sound: getSound({ src: storeMusicSfx, volume: 0.7, loop: true }),
+    sound: getSound({ src: storeMusicSfx, volume: 1.0, loop: true }),
     baseVolume: 0.7,
   },
   boogie: {
