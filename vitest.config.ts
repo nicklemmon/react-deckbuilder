@@ -5,16 +5,30 @@ import { playwright } from '@vitest/browser-playwright'
 export default defineConfig({
   plugins: [react()],
   test: {
-    setupFiles: ['./src/test-setup.ts'],
-    browser: {
-      enabled: true,
-      instances: [
-        {
-          browser: 'chromium',
+    projects: [
+      {
+        test: {
+          // an example of file based convention,
+          // you don't have to follow it
+          include: ['tests/unit/**/*.{test,spec}.ts', 'tests/**/*.unit.{test,spec}.ts'],
+          name: 'unit',
+          environment: 'node',
         },
-      ],
-      provider: playwright(),
-      headless: true,
-    },
+      },
+      {
+        test: {
+          // an example of file based convention,
+          // you don't have to follow it
+          include: ['tests/**/*.{test,spec}.tsx', 'tests/**/*.{test,spec}.tsx'],
+          name: 'browser',
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright(),
+            instances: [{ browser: 'chromium' }],
+          },
+        },
+      },
+    ],
   },
 })
