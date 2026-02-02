@@ -10,7 +10,7 @@ export default defineConfig({
         test: {
           // an example of file based convention,
           // you don't have to follow it
-          include: ['tests/unit/**/*.{test,spec}.ts', 'tests/**/*.unit.{test,spec}.ts'],
+          include: ['**/*.{test,spec}.ts', '**/*.{test,spec}.ts'],
           name: 'unit',
           environment: 'node',
         },
@@ -19,7 +19,7 @@ export default defineConfig({
         test: {
           // an example of file based convention,
           // you don't have to follow it
-          include: ['tests/**/*.{test,spec}.tsx', 'tests/**/*.{test,spec}.tsx'],
+          include: ['**/*.{test,spec}.tsx', '**/*.{test,spec}.tsx'],
           name: 'browser',
           browser: {
             enabled: true,
