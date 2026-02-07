@@ -47,9 +47,8 @@ const CHARACTER_CLASS_MODULES = import.meta.glob('../../character-classes/**/con
 })
 
 /** All player portrait files */
-const PLAYER_PORTRAIT_MODULES = import.meta.glob('../../images/player-portraits/*.(png|webp)', {
+const PLAYER_PORTRAIT_MODULES = import.meta.glob('../../images/player-portraits/*.webp', {
   eager: true,
-  query: { format: 'webp' },
 })
 
 /* Resolved character class configs */
@@ -431,6 +430,10 @@ export const appMachine = setup({
         }
       },
     }),
+    playIntroMusic: sendTo(({ context }) => context.soundtrackRef!, {
+      type: 'PLAY_TRACK',
+      track: 'intro',
+    }),
     playBattleMusic: sendTo(({ context }) => context.soundtrackRef!, {
       type: 'PLAY_TRACK',
       track: 'battle',
@@ -540,6 +543,7 @@ export const appMachine = setup({
       },
     },
     ModeSelection: {
+      entry: ['playIntroMusic'],
       on: {
         STANDARD_MODE_SELECTION: {
           actions: [
@@ -917,29 +921,31 @@ export const appMachine = setup({
     },
     DestroyingCard: {
       tags: ['gameplay'],
-      entry: assign({
-        game: ({ context }) => {
-          buttonClickSound.play()
-          cashRegisterSound.play()
+      entry: [
+        assign({
+          game: ({ context }) => {
+            buttonClickSound.play()
+            cashRegisterSound.play()
 
-          const cardToDestroy = context.game.cardToDestroy
+            const cardToDestroy = context.game.cardToDestroy
 
-          if (!cardToDestroy) return context.game
+            if (!cardToDestroy) return context.game
 
-          const nextDeck = [
-            ...context.game.player.deck.filter((card) => card.id !== cardToDestroy.id),
-          ]
+            const nextDeck = [
+              ...context.game.player.deck.filter((card) => card.id !== cardToDestroy.id),
+            ]
 
-          return {
-            ...context.game,
-            player: {
-              ...context.game.player,
-              deck: nextDeck,
-              gold: context.game.player.gold - context.game.cardDestructionPrice,
-            },
-          }
-        },
-      }),
+            return {
+              ...context.game,
+              player: {
+                ...context.game.player,
+                deck: nextDeck,
+                gold: context.game.player.gold - context.game.cardDestructionPrice,
+              },
+            }
+          },
+        }),
+      ],
       on: {
         CARD_DESTRUCTION_ANIMATION_COMPLETE: {
           target: 'DestroyingCards',
@@ -948,6 +954,7 @@ export const appMachine = setup({
     },
     DestroyingCards: {
       tags: ['gameplay'],
+      entry: ['playStoreMusic'],
       on: {
         DESTRUCTION_SHOP_CARD_CLICK: {
           target: 'DestroyingCard',
@@ -967,11 +974,11 @@ export const appMachine = setup({
         },
         LEAVE_DESTROYING_CARDS_CLICK: {
           target: 'BetweenRounds',
-          actions: () => buttonClickSound.play(),
+          actions: [() => buttonClickSound.play(), 'playBattleMusic'],
         },
         NEXT_BATTLE_CLICK: {
           target: 'NewRound',
-          actions: () => buttonClickSound.play(),
+          actions: [() => buttonClickSound.play(), 'playBattleMusic'],
         },
       },
     },
