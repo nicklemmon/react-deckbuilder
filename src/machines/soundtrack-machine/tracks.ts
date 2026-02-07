@@ -1,11 +1,12 @@
 import type { Howl } from 'howler'
 import { getSound } from '../../helpers/get-sound'
 import battleMusicSfx from '../../sfx/music/music.battle.wav'
-import storeMusicSfx from '../../sfx/music/music.store.wav'
 import boogieMusicSfx from '../../sfx/music/music.boogie.wav'
+import introMusicSfx from '../../sfx/music/music.intro.wav'
+import storeMusicSfx from '../../sfx/music/music.store.wav'
 
 /** Identifier for available music tracks in the game */
-export type TrackId = 'battle' | 'store' | 'boogie'
+export type TrackId = 'battle' | 'store' | 'boogie' | 'intro'
 
 /** Represents a music track with its Howl instance and volume settings */
 export type Track = {
@@ -23,6 +24,11 @@ export const TRACKS: Record<TrackId, Track> = {
   battle: {
     id: 'battle',
     sound: getSound({ src: battleMusicSfx, volume: 0.4, loop: true }),
+    baseVolume: 0.4,
+  },
+  intro: {
+    id: 'intro',
+    sound: getSound({ src: introMusicSfx, volume: 0.4, loop: true }),
     baseVolume: 0.4,
   },
   store: {
