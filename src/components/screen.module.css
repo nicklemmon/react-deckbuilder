@@ -5,4 +5,5 @@
   align-items: center;
   justify-content: center;
   padding: var(--spacing-400);
+  background-color: var(--color-stone-100);
 }
