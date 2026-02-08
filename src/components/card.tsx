@@ -1,8 +1,8 @@
 import { clsx } from 'clsx'
 import { useState, type MouseEvent } from 'react'
 import type { Card } from '../types/cards'
-import cardBackImg from '../images/card-back.png'
-import swordIcon from '../images/sword.png'
+import cardBackImg from '../images/card-back.webp'
+import swordIcon from '../images/sword.webp'
 import { StatsRow, StatIcon, StatVal } from './stats'
 import css from './card.module.css'
 

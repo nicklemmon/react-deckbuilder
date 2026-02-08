@@ -31,7 +31,7 @@ Motion for animations. The game uses Vite as the build tool and Howler.js for au
 
 ### Key Directories
 
-- `src/cards/` - Card definitions with config.ts, artwork.png, and sfx.wav files
+- `src/cards/` - Card definitions with config.ts, artwork.webp, and sfx.wav files
 - `src/monsters/` - Monster definitions with similar structure
 - `src/character-classes/` - Character class definitions with deck configurations
 - `src/items/` - Consumable items (potions) with effects and sounds
@@ -47,7 +47,7 @@ Each game entity (card, monster, character class, item) follows a consistent fol
 ```
 entity-name/
 ├── config.ts (game data and stats)
-├── artwork.png (visual asset)
+├── artwork.webp (visual asset)
 └── sfx.wav (sound effects)
 ```
 
