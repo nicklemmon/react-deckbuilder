@@ -14,7 +14,9 @@
     "test": "npx vitest",
     "test:ui": "npx vitest --ui",
     "prettier:write": "prettier --write .",
-    "qa": "npx concurrently --names 'test,lint,format' 'npm run test' 'npm run lint:types' 'npm run prettier:write'"
+    "qa": "npx concurrently --names 'test,lint,format' 'npm run test' 'npm run lint:types' 'npm run prettier:write'",
+    "convert:webp": "node --experimental-strip-types scripts/convert-to-webp.ts",
+    "convert:webp:dry": "node --experimental-strip-types scripts/convert-to-webp.ts --dry-run"
   },
   "dependencies": {
     "@vercel/analytics": "1.6.1",

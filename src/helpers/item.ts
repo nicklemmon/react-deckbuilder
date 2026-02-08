@@ -27,7 +27,7 @@ const ITEM_SFX_MODULES = import.meta.glob('../items/**/*.wav', {
   import: 'default',
 })
 
-const ITEM_ARTWORK = import.meta.glob('../items/**/*.png', {
+const ITEM_ARTWORK = import.meta.glob('../items/**/*.webp', {
   eager: true,
   import: 'default',
   query: { format: 'webp' },
@@ -42,7 +42,7 @@ export const getAllItems = () =>
     return {
       ...(mod as Item),
       id,
-      artwork: ITEM_ARTWORK[`${dir}/artwork.png`],
+      artwork: ITEM_ARTWORK[`${dir}/artwork.webp`],
       sfx: {
         obtain: getItemSound(ITEM_SFX_MODULES[`${dir}/sfx.obtain.wav`] as string),
         use: getItemSound(ITEM_SFX_MODULES[`${dir}/sfx.use.wav`] as string),

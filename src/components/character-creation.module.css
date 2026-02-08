@@ -32,6 +32,7 @@
   display: grid;
   width: 100%;
   grid-template-columns: repeat(auto-fit, minmax(var(--size-500), 1fr));
+  max-width: 1000px;
   gap: var(--spacing-500);
   padding: 0;
   padding-top: var(--spacing-100);

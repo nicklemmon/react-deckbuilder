@@ -1,5 +1,5 @@
 import { StatsRow, StatIcon, StatVal } from './stats'
-import coinsIcon from '../images/gold-coins.png'
+import coinsIcon from '../images/gold-coins.webp'
 import css from './price-stats-row.module.css'
 
 export function PriceStatsRow({ price }: { price: number }) {

@@ -147,5 +147,5 @@ html {
 body,
 button,
 .dagger-cursor-override {
-  cursor: url('./images/dagger.png'), auto;
+  cursor: url('./images/dagger.webp'), auto;
 }

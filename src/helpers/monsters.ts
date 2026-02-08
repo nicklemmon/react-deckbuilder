@@ -22,7 +22,7 @@ const MONSTER_SFX_MODULES = import.meta.glob('../monsters/**/*.wav', {
   import: 'default',
 })
 
-const MONSTER_ARTWORK = import.meta.glob('../monsters/**/*.png', {
+const MONSTER_ARTWORK = import.meta.glob('../monsters/**/*.webp', {
   eager: true,
   import: 'default',
   query: { format: 'webp' },
@@ -37,7 +37,7 @@ export const getAllMonsters = () =>
     return {
       ...(mod as Monster),
       id,
-      artwork: MONSTER_ARTWORK[`${dir}/artwork.png`],
+      artwork: MONSTER_ARTWORK[`${dir}/artwork.webp`],
       sfx: {
         intro: getMonsterSound(MONSTER_SFX_MODULES[`${dir}/sfx.intro.wav`] as string),
         damage: getMonsterSound(MONSTER_SFX_MODULES[`${dir}/sfx.damage.wav`] as string),
