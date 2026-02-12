@@ -10,7 +10,7 @@ import { Banner } from './components/banner.tsx'
 import { Screen } from './components/screen.tsx'
 import { ScreenTransition } from './components/screen-transition.tsx'
 import { Card } from './components/card.tsx'
-import { Deck } from './components/deck.tsx'
+import { AnimatedDeck } from './components/animated-deck.tsx'
 import { Dialog, DialogContent } from './components/dialog.tsx'
 import { HealthBar } from './components/health-bar.tsx'
 import { Feedback } from './components/feedback.tsx'
@@ -284,7 +284,7 @@ export function App() {
             </Stack>
           </Stack>
           <Stack className={css['discard-pile']}>
-            <Deck>
+            <AnimatedDeck>
               {context.game.discardPile.map((card, index) => {
                 return (
                   <Card
@@ -294,7 +294,7 @@ export function App() {
                   />
                 )
               })}
-            </Deck>
+            </AnimatedDeck>
           </Stack>
 
           <AnimatePresence
@@ -322,7 +322,7 @@ export function App() {
           </AnimatePresence>
 
           <Stack className={css['draw-pile']}>
-            <Deck>
+            <AnimatedDeck>
               {context.game.drawPile.map((card, index) => {
                 return (
                   <Card
@@ -332,7 +332,7 @@ export function App() {
                   />
                 )
               })}
-            </Deck>
+            </AnimatedDeck>
           </Stack>
         </div>
 
