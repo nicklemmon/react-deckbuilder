@@ -5,6 +5,19 @@
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    background-image: url('./images/background.webp');
+    background-size: cover;
+    background-position: center;
+    filter: blur(4px);
+    z-index: -1;
+  }
 }
 
 .play-area-debugger {

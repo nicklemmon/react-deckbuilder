@@ -6,7 +6,7 @@
   height: var(--size-500);
   overflow: hidden;
   border: var(--border-width-400) solid var(--color-stone-400);
-  outline: var(--border-width-200) solid var(--color-stone-300);
+  outline: var(--border-width-200) solid var(--color-stone-700);
 }
 
 .avatar-img {

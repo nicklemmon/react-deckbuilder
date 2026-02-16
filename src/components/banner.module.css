@@ -4,14 +4,14 @@
   align-items: center;
   width: auto;
   padding: var(--spacing-100) var(--spacing-300);
-  background-color: rgba(0, 0, 0, 0.15);
+  background-color: var(--color-stone-900);
   clip-path: var(--clip-path-banner);
 }
 
 .banner-content {
   font-weight: 700;
   text-align: center;
-  color: var(--color-stone-700);
+  color: var(--color-stone-100);
   font-family: var(--font-secondary);
   font-size: var(--font-size-400);
 }
