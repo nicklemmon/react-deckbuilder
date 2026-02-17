@@ -29,7 +29,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "reset-css": "5.0.2",
-    "xstate": "5.25.1"
+    "xstate": "5.28.0"
   },
   "devDependencies": {
     "@types/howler": "2.2.12",
