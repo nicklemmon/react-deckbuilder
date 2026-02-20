@@ -42,7 +42,7 @@
     "@vitest/browser-playwright": "^4.0.17",
     "@vitest/ui": "^4.0.16",
     "concurrently": "9.2.1",
-    "eslint": "9.39.2",
+    "eslint": "10.0.1",
     "playwright": "^1.57.0",
     "prettier": "3.7.4",
     "semver": "^7.7.3",
