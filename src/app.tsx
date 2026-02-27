@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react'
 import { appMachine } from './machines/app-machine/app-machine.ts'
 import { type Card as CardType } from './types/cards.ts'
 import coinsIcon from './images/gold-coins.webp'
+import introBg from './images/intro-bg.webp'
 import { AppPreloader } from './components/app-preloader.tsx'
 import { CharacterCreation } from './components/character-creation.tsx'
 import { Avatar } from './components/avatar.tsx'
@@ -494,8 +495,11 @@ export function App() {
     )
   }
 
+  const introStates = ['TitleScreen', 'ModeSelection', 'CharacterCreation']
+  const backgroundImage = introStates.includes(value as string) ? introBg : undefined
+
   return (
-    <Screen>
+    <Screen backgroundImage={backgroundImage}>
       <AnimatePresence mode="popLayout">
         <ScreenTransition screenKey={screenKey}>{renderScreenContent()}</ScreenTransition>
       </AnimatePresence>
