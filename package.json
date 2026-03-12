@@ -19,7 +19,7 @@
     "convert:webp:dry": "node --experimental-strip-types scripts/convert-to-webp.ts --dry-run"
   },
   "dependencies": {
-    "@vercel/analytics": "1.6.1",
+    "@vercel/analytics": "2.0.1",
     "@xstate/react": "6.0.0",
     "array-shuffle": "4.0.0",
     "clsx": "2.1.1",
