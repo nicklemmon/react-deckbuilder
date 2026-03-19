@@ -434,6 +434,10 @@ export const appMachine = setup({
       type: 'PLAY_TRACK',
       track: 'intro',
     }),
+    playBoogieMusic: sendTo(({ context }) => context.soundtrackRef!, {
+      type: 'PLAY_TRACK',
+      track: 'boogie',
+    }),
     playBattleMusic: sendTo(({ context }) => context.soundtrackRef!, {
       type: 'PLAY_TRACK',
       track: 'battle',
@@ -566,6 +570,7 @@ export const appMachine = setup({
         RAINBOW_MODE_SELECTION: {
           actions: [
             () => buttonClickSound.play(),
+            'playBoogieMusic',
             assign({
               game: ({ context }) => {
                 const mode = 'rainbow'
