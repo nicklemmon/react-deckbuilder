@@ -74,7 +74,7 @@ export function App() {
 
     // Default: Main game play area
     return (
-      <div className={css['play-area']}>
+      <div className={css['play-area']} data-game-mode={context.game.mode}>
         <div className={css['play-area-wrapper']}>
           <div className={css['play-area-banner']}>
             <Inline>
