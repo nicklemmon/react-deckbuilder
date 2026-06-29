@@ -280,6 +280,7 @@ export function App() {
                       >
                         <Card
                           {...card}
+                          mode={context.game.mode}
                           orientation="face-up"
                           status={context.game.cardInPlay !== undefined ? 'disabled' : card.status}
                           onClick={() => send({ type: 'PLAY_CARD', data: { card } })}
@@ -296,6 +297,7 @@ export function App() {
                   return (
                     <Card
                       {...card}
+                      mode={context.game.mode}
                       key={`discard-pile-card-${card.id}-${index}`}
                       orientation="face-down"
                     />
@@ -323,7 +325,7 @@ export function App() {
                     })
                   }
                 >
-                  <Card {...context.game.cardInPlay} />
+                  <Card {...context.game.cardInPlay} mode={context.game.mode} />
                 </motion.div>
               ) : null}
             </AnimatePresence>
@@ -334,6 +336,7 @@ export function App() {
                   return (
                     <Card
                       {...card}
+                      mode={context.game.mode}
                       key={`draw-pile-card-${card.id}-${index}`}
                       orientation="face-down"
                     />
@@ -451,7 +454,10 @@ export function App() {
                         })
                       }}
                     >
-                      <Card {...(context.game.cardToDestroy as CardType)} />
+                      <Card
+                        {...(context.game.cardToDestroy as CardType)}
+                        mode={context.game.mode}
+                      />
                     </motion.div>
                   ) : null}
                 </AnimatePresence>

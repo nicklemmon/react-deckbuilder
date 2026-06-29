@@ -2,9 +2,11 @@ import { clsx } from 'clsx'
 import { useState, type MouseEvent } from 'react'
 import type { Card } from '../types/cards'
 import cardBackImg from '../images/card-back.webp'
+import cardBackRainbowImg from '../images/card-back.rainbow.webp'
 import swordIcon from '../images/sword.webp'
 import { StatsRow, StatIcon, StatVal } from './stats'
 import css from './card.module.css'
+import { AppMachineContext } from '../machines/app-machine/app-machine'
 
 export function Card({
   className,
@@ -17,8 +19,14 @@ export function Card({
   status = 'idle',
   stats,
   artwork,
+  mode = 'standard',
   id,
-}: { isStacked?: boolean; onClick?: () => void; className?: string } & Card) {
+}: {
+  isStacked?: boolean
+  onClick?: () => void
+  mode: AppMachineContext['game']['mode']
+  className?: string
+} & Card) {
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 })
   const [isHovering, setIsHovering] = useState(false)
 
@@ -75,6 +83,7 @@ export function Card({
 
   return (
     <div
+      data-game-mode={mode}
       className={withClsx(css['card'], className)}
       onClick={onClick}
       id={id}
@@ -112,7 +121,12 @@ export function Card({
       </div>
 
       <div className={withClsx(css['card-back'])}>
-        <img className={css['card-back-img']} src={cardBackImg} alt="" role="presentation" />
+        <img
+          className={css['card-back-img']}
+          src={mode === 'standard' ? cardBackImg : cardBackRainbowImg}
+          alt=""
+          role="presentation"
+        />
         <div className={css['card-back-overlay']} />
       </div>
     </div>
