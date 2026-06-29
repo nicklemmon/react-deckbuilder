@@ -1,3 +1,11 @@
+.play-area[data-game-mode='rainbow'] {
+  --bg-image: url('./images/background.rainbow.webp');
+}
+
+.play-area[data-game-mode='standard'] {
+  --bg-image: url('./images/background.webp');
+}
+
 .play-area {
   --play-area-bleed: var(--spacing-500);
 
@@ -12,7 +20,7 @@
     content: '';
     position: absolute;
     inset: -10px;
-    background-image: url('./images/background.webp');
+    background-image: var(--bg-image);
     background-size: cover;
     background-position: center;
     filter: blur(4px);
