@@ -97,3 +97,37 @@ each game entity and triggered by state machine actions.
 
 **Fade Utilities**: `fadeIn()` and `fadeOut()` in `src/helpers/fade-sound.ts` provide smooth audio
 transitions with configurable duration and target volume.
+
+## Domain Vocabulary
+
+Use these terms exactly in code, comments, and reviews.
+
+**Run** — one playthrough: persists across battles. Holds run-level resources on `game.player`
+(`gold`, `deck`, `inventory`, `characterClass`, and the player's combat `stats` — `maxHealth`,
+`health`, `defense`). These survive every new battle.
+
+**Battle** — one fight against one monster. Its ephemeral state lives in `game.battle` and is wiped
+and rebuilt on each `NewRound`: `monster`, `hand`, `drawPile`, `discardPile`, `cardInPlay`,
+`itemInPlay`. Player combat stats deliberately do **not** live here — they are run-level.
+
+**BattleState** — the value the battle resolvers operate on. Assembled at the seam from
+`game.player` (combat `stats` + `status`) and `game.battle` (the ephemeral fields) by
+`toBattleState(game)`, and written back to both by `writeBattleState(game, next, cues)`. See
+`src/machines/app-machine/battle-state.ts`.
+
+**Resolver** — a pure function `(BattleState, …args) -> { state, cues }`. No I/O, no audio, no
+randomness except through an injected `Rng`. The resolvers are the test surface for game rules;
+they are exercised directly, without booting the XState actor. Live in
+`src/machines/app-machine/battle.ts`.
+
+**Cue** — a semantic descriptor of a sound a reducer wants played, returned as data rather than
+played inline (e.g. `{ type: 'card-hit' }`). Reducers stay pure; the `playCues` action drains
+`game.pendingCues`, maps each `Cue` to its `Howl` (reading entity `sfx` from context), and plays
+it. Defined in `src/machines/app-machine/cues.ts`. Sounds fired from sibling action literals
+(button click, door, win, lose, music) are not cues — they were never inside an `assign`.
+
+**Rng** — the injectable seam over all gameplay nondeterminism:
+`{ int(maxExclusive), shuffle(xs), id() }`. `int` returns `[0, maxExclusive)`. `id()` replaces
+`crypto.randomUUID()`. Two adapters: `MathRandomRng` (prod singleton) and `SeededRng` (tests).
+Lives in `src/helpers/rng.ts`. Presentation-only randomness (e.g. avatar UI jitter) is **not**
+gameplay nondeterminism and must not go through this seam.
