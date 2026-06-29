@@ -1,5 +1,4 @@
 import { motion } from 'motion/react'
-import { rng } from '../helpers/rng'
 import css from './avatar.module.css'
 
 const DAMAGE_FLASH_DURATION = 0.4
@@ -42,9 +41,11 @@ function AvatarAnimationWrapper({
   children: React.ReactNode
   status: AvatarStatus
 }) {
+  const r = () => Math.floor(Math.random() * 25)
+  const ry = () => Math.floor(Math.random() * 15)
   const animation =
     status === 'taking-damage'
-      ? { x: [0, -rng(25), rng(25), rng(-25), 0], y: [0, -rng(15), rng(15), rng(-15), 0] }
+      ? { x: [0, -r(), r(), -r(), 0], y: [0, -ry(), ry(), -ry(), 0] }
       : { x: [0, 0], y: [0, 0] }
 
   return (

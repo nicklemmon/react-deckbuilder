@@ -147,7 +147,7 @@ export function App() {
                       }
                     >
                       {/* TODO: This is the wrong value! */}
-                      {context.game.monster?.stats.attack}
+                      {context.game.battle.monster?.stats.attack}
                     </Feedback>
                   ) : null}
                 </motion.div>
@@ -158,10 +158,10 @@ export function App() {
               <AnimatePresence
                 onExitComplete={() => send({ type: 'MONSTER_DEATH_ANIMATION_COMPLETE' })}
               >
-                {context.game.monster
+                {context.game.battle.monster
                   ? [
                       <motion.div
-                        key={`monster-${context.game.monster.id}`}
+                        key={`monster-${context.game.battle.monster.id}`}
                         initial={{ x: 50, y: 0, opacity: 0, filter: 'grayscale(0)' }}
                         animate={{ x: 0, y: 0, opacity: 1, filter: 'grayscale(0)' }}
                         exit={{
@@ -175,10 +175,10 @@ export function App() {
                       >
                         <div className={css['monster']}>
                           <Stack spacing="200">
-                            {context.game.monster.artwork ? (
+                            {context.game.battle.monster.artwork ? (
                               <Avatar
-                                src={context.game.monster.artwork}
-                                status={context.game.monster.status}
+                                src={context.game.battle.monster.artwork}
+                                status={context.game.battle.monster.status}
                               />
                             ) : null}
 
@@ -189,7 +189,7 @@ export function App() {
                                   send({ type: 'CARD_EFFECTS_ANIMATION_COMPLETE' })
                                 }
                               >
-                                {context.game.cardInPlay?.stats.attack}
+                                {context.game.battle.cardInPlay?.stats.attack}
                               </Feedback>
                             ) : null}
                           </Stack>
@@ -197,7 +197,7 @@ export function App() {
                       </motion.div>,
 
                       <motion.div
-                        key={`monster-name-${context.game.monster?.id}`}
+                        key={`monster-name-${context.game.battle.monster?.id}`}
                         initial={{ x: 0, y: 0, scaleX: 0.9, opacity: 0 }}
                         animate={{ x: 0, y: 0, scaleX: 1, opacity: 1, transition: { delay: 0.25 } }}
                         exit={{
@@ -206,11 +206,11 @@ export function App() {
                         }}
                         transition={{ duration: 0.25 }}
                       >
-                        <Banner>{context.game.monster?.name}</Banner>
+                        <Banner>{context.game.battle.monster?.name}</Banner>
                       </motion.div>,
 
                       <motion.div
-                        key={`health-bar-${context.game.monster?.id}`}
+                        key={`health-bar-${context.game.battle.monster?.id}`}
                         initial={{ x: 0, y: -25, opacity: 0 }}
                         animate={{ x: 0, y: 0, opacity: 1, transition: { delay: 0.25 } }}
                         exit={{
@@ -221,8 +221,8 @@ export function App() {
                         style={{ width: '100%' }}
                       >
                         <HealthBar
-                          health={context.game.monster?.stats.health}
-                          maxHealth={context.game.monster?.stats.maxHealth}
+                          health={context.game.battle.monster?.stats.health}
+                          maxHealth={context.game.battle.monster?.stats.maxHealth}
                         />
                       </motion.div>,
                     ]
@@ -234,8 +234,8 @@ export function App() {
           <Stack className={css['current-hand']}>
             <Stack spacing="100">
               <div className={css['current-hand-wrapper']}>
-                {context.game.currentHand.map((card, index) => {
-                  const totalCards = context.game.currentHand.length
+                {context.game.battle.hand.map((card, index) => {
+                  const totalCards = context.game.battle.hand.length
                   const middleIndex = (totalCards - 1) / 2
                   const offset = index - middleIndex
 
@@ -274,7 +274,9 @@ export function App() {
                       <Card
                         {...card}
                         orientation="face-up"
-                        status={context.game.cardInPlay !== undefined ? 'disabled' : card.status}
+                        status={
+                          context.game.battle.cardInPlay !== undefined ? 'disabled' : card.status
+                        }
                         onClick={() => send({ type: 'PLAY_CARD', data: { card } })}
                       />
                     </motion.div>
@@ -285,7 +287,7 @@ export function App() {
           </Stack>
           <Stack className={css['discard-pile']}>
             <AnimatedDeck>
-              {context.game.discardPile.map((card, index) => {
+              {context.game.battle.discardPile.map((card, index) => {
                 return (
                   <Card
                     {...card}
@@ -301,9 +303,9 @@ export function App() {
             onExitComplete={() => send({ type: 'DISCARD_CARD_ANIMATION_COMPLETE' })}
             mode="popLayout"
           >
-            {context.game.cardInPlay ? (
+            {context.game.battle.cardInPlay ? (
               <motion.div
-                key={`card-in-play-${context.game.cardInPlay.id}`}
+                key={`card-in-play-${context.game.battle.cardInPlay.id}`}
                 style={{ position: 'absolute', left: '50%', bottom: 0, zIndex: 100 }}
                 initial={{ y: 0, opacity: 0.25, x: '-50%', scale: 1 }}
                 animate={{ y: '-33vh', opacity: 1, x: '-50%', scale: 1.25 }}
@@ -312,18 +314,18 @@ export function App() {
                 onAnimationComplete={() =>
                   send({
                     type: 'PLAY_CARD_ANIMATION_COMPLETE',
-                    data: { card: context.game.cardInPlay as CardType },
+                    data: { card: context.game.battle.cardInPlay as CardType },
                   })
                 }
               >
-                <Card {...context.game.cardInPlay} />
+                <Card {...context.game.battle.cardInPlay} />
               </motion.div>
             ) : null}
           </AnimatePresence>
 
           <Stack className={css['draw-pile']}>
             <AnimatedDeck>
-              {context.game.drawPile.map((card, index) => {
+              {context.game.battle.drawPile.map((card, index) => {
                 return (
                   <Card
                     {...card}
@@ -437,7 +439,6 @@ export function App() {
                       stiffness: 30,
                     }}
                     onAnimationComplete={() => {
-                      console.log('here')
                       send({
                         type: 'CARD_DESTRUCTION_ANIMATION_COMPLETE',
                         data: { card: context.game.cardToDestroy as CardType },
