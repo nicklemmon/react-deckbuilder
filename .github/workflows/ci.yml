@@ -17,7 +17,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Lint workflow files
-        uses: rhysd/actionlint@v1
+        run: |
+          bash <(curl -s https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+          ./actionlint -color
 
   type-check:
     runs-on: ubuntu-latest
