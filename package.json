@@ -39,7 +39,7 @@
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "5.1.2",
     "@vitest/browser": "^4.0.17",
-    "@vitest/browser-playwright": "^4.0.17",
+    "@vitest/browser-playwright": "^4.1.9",
     "@vitest/ui": "^4.0.16",
     "concurrently": "9.2.1",
     "eslint": "9.39.2",
