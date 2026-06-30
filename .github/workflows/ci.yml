@@ -16,10 +16,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Lint workflow files
-        run: |
-          bash <(curl -s https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
-          ./actionlint -color
+      - name: Audit workflow files
+        run: pip install zizmor && zizmor .github/workflows/
 
   type-check:
     runs-on: ubuntu-latest
