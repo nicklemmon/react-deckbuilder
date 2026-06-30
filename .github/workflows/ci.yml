@@ -9,6 +9,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+permissions:
+  contents: read
+
 jobs:
   lint-actions:
     runs-on: ubuntu-latest
@@ -55,8 +58,9 @@ jobs:
           VERSION=$(node -p "require('./package-lock.json').packages['node_modules/playwright'].version")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
       - name: Verify Playwright image exists
+        env:
+          VERSION: ${{ steps.read.outputs.version }}
         run: |
-          VERSION=${{ steps.read.outputs.version }}
           if ! docker manifest inspect mcr.microsoft.com/playwright:v${VERSION}-noble > /dev/null 2>&1; then
             echo "::error::No Playwright Docker image found for v${VERSION}-noble."
             echo "::error::Check available tags at https://mcr.microsoft.com/en-us/artifact/mar/playwright/tags"
