@@ -2,39 +2,92 @@ name: CI
 
 on:
   push:
+    branches: [main]
   pull_request:
 
-jobs:
-  qa:
-    runs-on: ubuntu-latest
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+jobs:
+  lint-actions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
+      - name: Lint workflow files
+        uses: rhysd/actionlint@v1
 
+  type-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: 'npm'
-
       - name: Install dependencies
         run: npm ci
-
-      - name: Cache Playwright browsers
-        uses: actions/cache@v5
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-
-      - name: Run tests
-        run: npm test
-
       - name: Type check
         run: npm run lint:types
 
+  playwright-version:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.read.outputs.version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Read Playwright version
+        id: read
+        run: |
+          VERSION=$(node -p "require('./package-lock.json').packages['node_modules/playwright'].version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: Verify Playwright image exists
+        run: |
+          VERSION=${{ steps.read.outputs.version }}
+          if ! docker manifest inspect mcr.microsoft.com/playwright:v${VERSION}-noble > /dev/null 2>&1; then
+            echo "::error::No Playwright Docker image found for v${VERSION}-noble."
+            echo "::error::Check available tags at https://mcr.microsoft.com/en-us/artifact/mar/playwright/tags"
+            exit 1
+          fi
+
+  test:
+    needs: playwright-version
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: mcr.microsoft.com/playwright:v${{ needs.playwright-version.outputs.version }}-noble
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run tests
+        run: npm test
+
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
       - name: Build project
         run: npm run build
