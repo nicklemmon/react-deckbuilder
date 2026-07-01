@@ -491,6 +491,15 @@ export function App() {
             </Stack>
           </DialogContent>
         </Dialog>
+
+        <Dialog open={value === 'Defeat'}>
+          <DialogContent>
+            <Stack align="center">
+              <h2>Defeated!</h2>
+              <Button onClick={() => send({ type: 'RESTART_CLICK' })}>Play again</Button>
+            </Stack>
+          </DialogContent>
+        </Dialog>
       </div>
     )
   }

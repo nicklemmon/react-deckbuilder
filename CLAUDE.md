@@ -116,18 +116,18 @@ and rebuilt on each `NewRound`: `monster`, `hand`, `drawPile`, `discardPile`, `c
 `src/machines/app-machine/battle-state.ts`.
 
 **Resolver** — a pure function `(BattleState, …args) -> { state, cues }`. No I/O, no audio, no
-randomness except through an injected `Rng`. The resolvers are the test surface for game rules;
-they are exercised directly, without booting the XState actor. Live in
+randomness except through an injected `Rng`. The resolvers are the test surface for game rules; they
+are exercised directly, without booting the XState actor. Live in
 `src/machines/app-machine/battle.ts`.
 
 **Cue** — a semantic descriptor of a sound a reducer wants played, returned as data rather than
 played inline (e.g. `{ type: 'card-hit' }`). Reducers stay pure; the `playCues` action drains
-`game.pendingCues`, maps each `Cue` to its `Howl` (reading entity `sfx` from context), and plays
-it. Defined in `src/machines/app-machine/cues.ts`. Sounds fired from sibling action literals
-(button click, door, win, lose, music) are not cues — they were never inside an `assign`.
+`game.pendingCues`, maps each `Cue` to its `Howl` (reading entity `sfx` from context), and plays it.
+Defined in `src/machines/app-machine/cues.ts`. Sounds fired from sibling action literals (button
+click, door, win, lose, music) are not cues — they were never inside an `assign`.
 
 **Rng** — the injectable seam over all gameplay nondeterminism:
 `{ int(maxExclusive), shuffle(xs), id() }`. `int` returns `[0, maxExclusive)`. `id()` replaces
-`crypto.randomUUID()`. Two adapters: `MathRandomRng` (prod singleton) and `SeededRng` (tests).
-Lives in `src/helpers/rng.ts`. Presentation-only randomness (e.g. avatar UI jitter) is **not**
-gameplay nondeterminism and must not go through this seam.
+`crypto.randomUUID()`. Two adapters: `MathRandomRng` (prod singleton) and `SeededRng` (tests). Lives
+in `src/helpers/rng.ts`. Presentation-only randomness (e.g. avatar UI jitter) is **not** gameplay
+nondeterminism and must not go through this seam.

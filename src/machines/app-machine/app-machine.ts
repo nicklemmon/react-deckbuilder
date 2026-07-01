@@ -77,6 +77,49 @@ const winSound = getSound({ src: winSfx, volume: 1.0 })
 
 const loseSound = getSound({ src: loseSfx, volume: 1.0 })
 
+/** Returns a fresh game state. Pass overrides to preserve run-level fields like mode. */
+function makeInitialGame(
+  overrides: Partial<AppMachineContext['game']> = {},
+): AppMachineContext['game'] {
+  return {
+    mode: 'standard',
+    availablePlayerPortraits: [],
+    player: {
+      characterClass: undefined,
+      characterClassDeck: [],
+      characterName: undefined,
+      characterPortrait: undefined,
+      deck: STARTING_DECK.map((card) => ({
+        ...card,
+        id: `${card.id}-${rng.id()}`,
+      })),
+      gold: 125,
+      status: 'idle' as const,
+      stats: {
+        // TODO: Update with character class stats
+        maxHealth: 100,
+        health: 100,
+        defense: 0,
+      },
+      inventory: [],
+    },
+    monsters: [],
+    items: [],
+    shop: { cards: [], items: [] },
+    cardDestructionPrice: CARD_DESTRUCTION_PRICE,
+    battle: {
+      monster: undefined,
+      hand: [],
+      drawPile: [],
+      discardPile: [],
+      cardInPlay: undefined,
+      itemInPlay: undefined,
+    },
+    pendingCues: [],
+    ...overrides,
+  }
+}
+
 /** Prefetches assets from multiple sources returned by `import.meta.glob` */
 async function prefetchAssets() {
   // Initialize helper functions to ensure all assets are discovered
@@ -215,6 +258,7 @@ type AppMachineEvent =
   | { type: 'DESTRUCTION_SHOP_CARD_CLICK'; data: { card: Card } }
   | { type: 'ITEM_SHOP_ITEM_CLICK'; data: { item: Item } }
   | { type: 'INVENTORY_ITEM_CLICK'; data: { item: Item } }
+  | { type: 'RESTART_CLICK' }
 
 export const appMachine = setup({
   types: {
@@ -499,48 +543,7 @@ export const appMachine = setup({
       cards: CARDS,
       playerPortraits: PLAYER_PORTRAITS,
     },
-    game: {
-      mode: 'standard',
-      availablePlayerPortraits: [],
-      player: {
-        characterClass: undefined,
-        characterClassDeck: [],
-        characterName: undefined,
-        characterPortrait: undefined,
-        deck: STARTING_DECK.map((card) => {
-          return {
-            ...card,
-            // Create a unique identifier for every card in the game
-            id: `${card.id}-${rng.id()}`,
-          }
-        }),
-        gold: 125,
-        status: 'idle' as const,
-        stats: {
-          // TODO: Update with character class stats
-          maxHealth: 100,
-          health: 100,
-          defense: 0,
-        },
-        inventory: [],
-      },
-      monsters: [],
-      items: [],
-      shop: {
-        cards: [],
-        items: [],
-      },
-      cardDestructionPrice: CARD_DESTRUCTION_PRICE,
-      battle: {
-        monster: undefined,
-        hand: [],
-        drawPile: [],
-        discardPile: [],
-        cardInPlay: undefined,
-        itemInPlay: undefined,
-      },
-      pendingCues: [],
-    },
+    game: makeInitialGame(),
   },
   states: {
     LoadingAssets: {
@@ -1027,6 +1030,21 @@ export const appMachine = setup({
         loseSound.play()
       },
       tags: ['gameplay'],
+      on: {
+        RESTART_CLICK: {
+          target: 'CharacterCreation',
+          actions: [
+            'playIntroMusic',
+            assign({
+              game: ({ context }) =>
+                makeInitialGame({
+                  mode: context.game.mode,
+                  availablePlayerPortraits: context.game.availablePlayerPortraits,
+                }),
+            }),
+          ],
+        },
+      },
     },
   },
 })
