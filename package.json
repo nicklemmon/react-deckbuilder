@@ -27,7 +27,7 @@
     "howler": "2.2.4",
     "motion": "12.42.2",
     "react": "19.2.3",
-    "react-dom": "19.2.3",
+    "react-dom": "19.2.7",
     "reset-css": "5.0.2",
     "xstate": "5.25.1"
   },
