@@ -1,5 +1,4 @@
 import { assign, fromPromise, sendTo, setup, type ActorRefFrom } from 'xstate'
-import arrayShuffle from 'array-shuffle'
 import impactSfx from '../../sfx/impact.slice.wav'
 import cardUseSfx from '../../sfx/card.use.wav'
 import buttonClickSfx from '../../sfx/button.click.wav'
@@ -22,11 +21,15 @@ import type { Item } from '../../types/items.ts'
 import type { GameMode } from '../../types/global.ts'
 import type { AvatarStatus } from '../../components/avatar.tsx'
 import { soundtrackMachine } from '../soundtrack-machine/soundtrack-machine.ts'
+import type { Cue } from './cues.ts'
+import type { Battle } from './battle-state.ts'
+import { toBattleState, writeBattleState } from './battle-state.ts'
+import { resolveCardPlay, resolveMonsterAttack, resolveItemUse } from './battle.ts'
 
 /** Unique ID for the application machine */
 const APP_MACHINE_ID = 'app'
 
-/** THe maximum number of allowed cards in the `currentHand` */
+/** The maximum number of allowed cards in the `hand` */
 const MAX_HAND_SIZE = 5
 
 /** The price (in gold) of destroying a card */
@@ -168,15 +171,11 @@ export type AppMachineContext = {
     }
     monsters: Array<Monster>
     items: Array<Item>
-    currentHand: Array<Card>
-    discardPile: Array<Card>
-    drawPile: Array<Card>
+    battle: Battle
     cardDestructionPrice: number
-    itemInPlay?: Item
-    cardInPlay?: Card
     cardToDestroy?: Card
-    monster?: Monster
     lastDefeatedMonster?: Monster
+    pendingCues: Array<Cue>
   }
 }
 
@@ -225,54 +224,23 @@ export const appMachine = setup({
   actions: {
     applyCardEffects: assign({
       game: ({ context }) => {
-        context.game?.monster?.sfx?.damage.play()
-        impactSound.play()
-
-        if (!context.game.monster || !context.game.cardInPlay) {
-          return context.game
-        }
-
-        return {
-          ...context.game,
-          monster: {
-            ...context.game.monster,
-            status: 'taking-damage' as const,
-            stats: {
-              ...context.game.monster.stats,
-              health: context.game.monster?.stats.health - context.game.cardInPlay?.stats.attack,
-            },
-          },
-        }
+        const { game } = context
+        if (!game.battle.cardInPlay) return game
+        const result = resolveCardPlay(toBattleState(game), game.battle.cardInPlay)
+        return writeBattleState(game, result.state, result.cues)
       },
     }),
     applyItemEffects: assign({
       game: ({ context }) => {
-        if (!context.game.itemInPlay) return context.game
-
-        context.game.itemInPlay.sfx.effect.play()
-
-        let nextHealth = context.game.player.stats.health + context.game.itemInPlay.value
-
-        if (nextHealth > context.game.player.stats.maxHealth) {
-          nextHealth = context.game.player.stats.maxHealth
-        }
-
-        return {
-          ...context.game,
-          player: {
-            ...context.game.player,
-            stats: {
-              ...context.game.player.stats,
-              health: nextHealth,
-            },
-            status: 'healing' as const,
-          },
-        }
+        const { game } = context
+        if (!game.battle.itemInPlay) return game
+        const result = resolveItemUse(toBattleState(game), game.battle.itemInPlay)
+        return writeBattleState(game, result.state, result.cues)
       },
     }),
     createDrawPile: assign({
       game: ({ context }) => {
-        const newDrawPile = arrayShuffle(context.game.player.deck).map((card) => {
+        const newDrawPile = rng.shuffle(context.game.player.deck).map((card) => {
           return {
             ...card,
             orientation: 'face-down' as const,
@@ -281,8 +249,11 @@ export const appMachine = setup({
 
         return {
           ...context.game,
-          discardPile: [],
-          drawPile: newDrawPile,
+          battle: {
+            ...context.game.battle,
+            discardPile: [],
+            drawPile: newDrawPile,
+          },
         }
       },
     }),
@@ -290,16 +261,15 @@ export const appMachine = setup({
       game: ({ context }) => {
         if (!context.game.player.characterClass) return context.game
 
-        const classDeck = arrayShuffle(context.game.player.characterClassDeck)
-        const rngMax = classDeck.length - 1
+        const classDeck = rng.shuffle(context.game.player.characterClassDeck)
         const cardsOnOffer = [
-          classDeck[rng(rngMax)],
-          classDeck[rng(rngMax)],
-          classDeck[rng(rngMax)],
+          classDeck[rng.int(classDeck.length)],
+          classDeck[rng.int(classDeck.length)],
+          classDeck[rng.int(classDeck.length)],
         ].map((card) => {
           return {
             ...card,
-            id: `${card.id}-${crypto.randomUUID()}`,
+            id: `${card.id}-${rng.id()}`,
           }
         })
 
@@ -317,67 +287,72 @@ export const appMachine = setup({
     }),
     getNextMonster: assign({
       game: ({ context }) => {
-        const shuffledMonsters = arrayShuffle(context.game.monsters)
-        const nextMonster = shuffledMonsters[rng(shuffledMonsters.length)]
-
-        nextMonster.sfx?.intro.play()
+        const shuffledMonsters = rng.shuffle(context.game.monsters)
+        const nextMonster = shuffledMonsters[rng.int(shuffledMonsters.length)]
 
         return {
           ...context.game,
-          monster: {
-            ...nextMonster,
-            id: `${nextMonster.id}-${crypto.randomUUID()}`,
-            stats: {
-              ...nextMonster.stats,
-              health: nextMonster.stats.maxHealth,
+          battle: {
+            ...context.game.battle,
+            monster: {
+              ...nextMonster,
+              id: `${nextMonster.id}-${rng.id()}`,
+              stats: {
+                ...nextMonster.stats,
+                health: nextMonster.stats.maxHealth,
+              },
+              status: 'idle' as const,
             },
-            status: 'idle' as const,
           },
+          pendingCues: [...context.game.pendingCues, { type: 'monster-intro' as const }],
         }
       },
     }),
     reshuffle: assign({
       game: ({ context }) => {
-        const nextDrawPile = arrayShuffle([
-          ...context.game.currentHand,
-          ...context.game.discardPile,
+        const nextDrawPile = rng.shuffle([
+          ...context.game.battle.hand,
+          ...context.game.battle.discardPile,
         ])
 
         return {
           ...context.game,
-          currentHand: [],
-          discardPile: [],
-          drawPile: nextDrawPile,
+          battle: {
+            ...context.game.battle,
+            hand: [],
+            discardPile: [],
+            drawPile: nextDrawPile,
+          },
         }
       },
     }),
     /** Draws a hand of cards from the draw pile */
     drawHand: assign({
       game: ({ context }) => {
-        const drawPile = context.game.drawPile
-        const currentHandSize = context.game.currentHand.length
-
-        // Draw up to 3 cards, but stop if we hit the max hand size
-        const cardsToDrawCount = Math.min(3, MAX_HAND_SIZE - currentHandSize)
-        const drawnCards = drawPile.slice(0, cardsToDrawCount)
-        const remainingCards = drawPile.slice(cardsToDrawCount)
-
-        for (const _card of drawnCards) {
-          cardUseSound.play()
-        }
+        const { battle } = context.game
+        const cardsToDrawCount = Math.min(3, MAX_HAND_SIZE - battle.hand.length)
+        const drawnCards = battle.drawPile.slice(0, cardsToDrawCount)
+        const remainingCards = battle.drawPile.slice(cardsToDrawCount)
 
         return {
           ...context.game,
-          currentHand: [
-            ...context.game.currentHand,
-            ...drawnCards.map((card) => {
-              return {
-                ...card,
-                orientation: 'face-up' as const,
-              }
-            }),
+          battle: {
+            ...battle,
+            hand: [
+              ...battle.hand,
+              ...drawnCards.map((card) => {
+                return {
+                  ...card,
+                  orientation: 'face-up' as const,
+                }
+              }),
+            ],
+            drawPile: remainingCards,
+          },
+          pendingCues: [
+            ...context.game.pendingCues,
+            ...Array<Cue>(drawnCards.length).fill({ type: 'card-draw' }),
           ],
-          drawPile: remainingCards,
         }
       },
     }),
@@ -386,30 +361,18 @@ export const appMachine = setup({
       game: ({ context }) => {
         return {
           ...context.game,
-          currentHand: [],
+          battle: {
+            ...context.game.battle,
+            hand: [],
+          },
         }
       },
     }),
     /** The monster attacks the player */
     monsterAttack: assign({
       game: ({ context }) => {
-        if (!context.game.monster) return context.game
-
-        const rawDamage = context.game.monster.stats.attack - context.game.player.stats.defense
-        const damage = rawDamage > 0 ? rawDamage : 0
-        impactSound.play()
-
-        return {
-          ...context.game,
-          player: {
-            ...context.game.player,
-            status: 'taking-damage' as const,
-            stats: {
-              ...context.game.player.stats,
-              health: context.game.player.stats.health - damage,
-            },
-          },
-        }
+        const result = resolveMonsterAttack(toBattleState(context.game))
+        return writeBattleState(context.game, result.state, result.cues)
       },
     }),
     /** Awards the player with the spoils of war */
@@ -419,15 +382,56 @@ export const appMachine = setup({
 
         if (!lastDefeatedMonster) return context.game
 
-        coinsSound.play()
-
         return {
           ...context.game,
           player: {
             ...context.game.player,
             gold: context.game.player.gold + lastDefeatedMonster.goldBounty,
           },
+          pendingCues: [...context.game.pendingCues, { type: 'coins' as const }],
         }
+      },
+    }),
+    /** Drains `game.pendingCues`, plays each sound, and clears the queue */
+    playCues: assign({
+      game: ({ context }) => {
+        const { game } = context
+
+        for (const cue of game.pendingCues) {
+          switch (cue.type) {
+            case 'card-hit':
+              game.battle.monster?.sfx?.damage.play()
+              impactSound.play()
+              break
+            case 'player-hit':
+              impactSound.play()
+              break
+            case 'heal':
+              game.battle.itemInPlay?.sfx.effect.play()
+              break
+            case 'card-draw':
+              cardUseSound.play()
+              break
+            case 'monster-intro':
+              game.battle.monster?.sfx?.intro.play()
+              break
+            case 'coins':
+              coinsSound.play()
+              break
+            case 'monster-death':
+              game.lastDefeatedMonster?.sfx?.death.play()
+              break
+            case 'card-use':
+              cardUseSound.play()
+              game.battle.cardInPlay?.sfx?.play()
+              break
+            case 'item-use':
+              game.battle.itemInPlay?.sfx.use.play()
+              break
+          }
+        }
+
+        return { ...game, pendingCues: [] }
       },
     }),
     playIntroMusic: sendTo(({ context }) => context.soundtrackRef!, {
@@ -456,23 +460,30 @@ export const appMachine = setup({
       return context.game.player.stats.health <= 0
     },
     monsterIsAlive: ({ context }) => {
-      if (!context.game.monster) return false
+      if (!context.game.battle.monster) return false
 
-      return context.game.monster.stats.health > 0
+      return context.game.battle.monster.stats.health > 0
     },
     monsterIsDead: ({ context }) => {
-      if (!context.game.monster) return false
+      if (!context.game.battle.monster) return false
 
-      return context.game.monster.stats.health <= 0
+      return context.game.battle.monster.stats.health <= 0
     },
     playerCanDraw: ({ context }) => {
-      return context.game.drawPile.length > 0 && context.game.currentHand.length < MAX_HAND_SIZE
+      return (
+        context.game.battle.drawPile.length > 0 && context.game.battle.hand.length < MAX_HAND_SIZE
+      )
     },
     playerCannotDraw: ({ context }) => {
-      return context.game.drawPile.length === 0 && context.game.currentHand.length < MAX_HAND_SIZE
+      return (
+        context.game.battle.drawPile.length === 0 && context.game.battle.hand.length < MAX_HAND_SIZE
+      )
     },
     drawingNotNeeded: ({ context }) => {
-      return context.game.drawPile.length === 0 && context.game.currentHand.length === MAX_HAND_SIZE
+      return (
+        context.game.battle.drawPile.length === 0 &&
+        context.game.battle.hand.length === MAX_HAND_SIZE
+      )
     },
   },
 }).createMachine({
@@ -500,7 +511,7 @@ export const appMachine = setup({
           return {
             ...card,
             // Create a unique identifier for every card in the game
-            id: `${card.id}-${crypto.randomUUID()}`,
+            id: `${card.id}-${rng.id()}`,
           }
         }),
         gold: 125,
@@ -520,9 +531,15 @@ export const appMachine = setup({
         items: [],
       },
       cardDestructionPrice: CARD_DESTRUCTION_PRICE,
-      currentHand: [],
-      discardPile: [],
-      drawPile: [],
+      battle: {
+        monster: undefined,
+        hand: [],
+        drawPile: [],
+        discardPile: [],
+        cardInPlay: undefined,
+        itemInPlay: undefined,
+      },
+      pendingCues: [],
     },
   },
   states: {
@@ -616,7 +633,13 @@ export const appMachine = setup({
     },
     NewRound: {
       tags: ['gameplay'],
-      entry: ['discardCurrentHand', 'getNextMonster', 'createDrawPile', 'playBattleMusic'],
+      entry: [
+        'discardCurrentHand',
+        'getNextMonster',
+        'createDrawPile',
+        'playBattleMusic',
+        'playCues',
+      ],
       always: ['Surveying'],
     },
     Surveying: {
@@ -650,7 +673,7 @@ export const appMachine = setup({
     },
     Drawing: {
       tags: ['gameplay'],
-      entry: ['drawHand'],
+      entry: ['drawHand', 'playCues'],
       always: 'PlayerChoosing',
     },
     PlayerChoosing: {
@@ -658,61 +681,68 @@ export const appMachine = setup({
       on: {
         PLAY_CARD: {
           target: 'CardInPlay',
-          actions: assign({
-            game: ({ context, event }) => {
-              cardUseSound.play()
-
-              // TODO: Need to have a slight delay here
-              event.data.card?.sfx?.play()
-
-              return {
-                ...context.game,
-                // Remove the selected card from the current hand
-                currentHand: context.game.currentHand.filter(
-                  (card) => card.id !== event.data.card.id,
-                ),
-                cardInPlay: {
-                  ...event.data.card,
-                  orientation: 'face-up' as const,
-                  status: 'in-play' as const,
-                },
-              }
-            },
-          }),
+          actions: [
+            assign({
+              game: ({ context, event }) => {
+                return {
+                  ...context.game,
+                  battle: {
+                    ...context.game.battle,
+                    hand: context.game.battle.hand.filter((card) => card.id !== event.data.card.id),
+                    cardInPlay: {
+                      ...event.data.card,
+                      orientation: 'face-up' as const,
+                      status: 'in-play' as const,
+                    },
+                  },
+                  pendingCues: [...context.game.pendingCues, { type: 'card-use' as const }],
+                }
+              },
+            }),
+            'playCues',
+          ],
         },
         INVENTORY_ITEM_CLICK: {
           target: 'UsingItem',
-          actions: assign({
-            game: ({ context, event }) => {
-              const itemInPlay = event.data.item
+          actions: [
+            assign({
+              game: ({ context, event }) => {
+                const itemInPlay = event.data.item
 
-              itemInPlay.sfx.use.play()
-
-              return {
-                ...context.game,
-                itemInPlay,
-                player: {
-                  ...context.game.player,
-                  inventory: context.game.player.inventory.filter((item) => {
-                    return item.id !== itemInPlay.id
-                  }),
-                },
-              }
-            },
-          }),
+                return {
+                  ...context.game,
+                  battle: {
+                    ...context.game.battle,
+                    itemInPlay,
+                  },
+                  player: {
+                    ...context.game.player,
+                    inventory: context.game.player.inventory.filter((item) => {
+                      return item.id !== itemInPlay.id
+                    }),
+                  },
+                  pendingCues: [...context.game.pendingCues, { type: 'item-use' as const }],
+                }
+              },
+            }),
+            'playCues',
+          ],
         },
       },
       entry: assign({
         game: ({ context }) => {
-          if (!context.game.monster) {
+          if (!context.game.battle.monster) {
             return context.game
           }
 
           return {
             ...context.game,
-            monster: {
-              ...context.game.monster,
-              status: 'idle' as const,
+            battle: {
+              ...context.game.battle,
+              monster: {
+                ...context.game.battle.monster,
+                status: 'idle' as const,
+              },
             },
           }
         },
@@ -736,7 +766,7 @@ export const appMachine = setup({
     },
     ApplyingCardEffects: {
       tags: ['gameplay'],
-      entry: 'applyCardEffects',
+      entry: ['applyCardEffects', 'playCues'],
       on: {
         CARD_EFFECTS_ANIMATION_COMPLETE: {
           target: 'CardPlayed',
@@ -745,7 +775,7 @@ export const appMachine = setup({
     },
     ApplyingItemEffects: {
       tags: ['gameplay'],
-      entry: 'applyItemEffects',
+      entry: ['applyItemEffects', 'playCues'],
       on: {
         ITEM_EFFECTS_ANIMATION_COMPLETE: {
           target: 'PlayerChoosing',
@@ -757,34 +787,40 @@ export const appMachine = setup({
       entry: assign({
         game: ({ context }) => {
           // Should be an impossible state, but need to keep TypeScript happy
-          if (!context.game.monster) {
+          if (!context.game.battle.monster) {
             return {
               ...context.game,
-              cardInPlay: undefined,
-              discardPile: [
-                ...context.game.discardPile,
-                {
-                  ...(context.game?.cardInPlay as Card),
-                  status: 'idle',
-                },
-              ],
+              battle: {
+                ...context.game.battle,
+                cardInPlay: undefined,
+                discardPile: [
+                  ...context.game.battle.discardPile,
+                  {
+                    ...(context.game.battle.cardInPlay as Card),
+                    status: 'idle',
+                  },
+                ],
+              },
             }
           }
 
           return {
             ...context.game,
-            cardInPlay: undefined,
-            monster: {
-              ...context.game.monster,
-              status: 'idle' as const,
-            },
-            discardPile: [
-              ...context.game.discardPile,
-              {
-                ...(context.game?.cardInPlay as Card),
-                status: 'idle',
+            battle: {
+              ...context.game.battle,
+              cardInPlay: undefined,
+              monster: {
+                ...context.game.battle.monster,
+                status: 'idle' as const,
               },
-            ],
+              discardPile: [
+                ...context.game.battle.discardPile,
+                {
+                  ...(context.game.battle.cardInPlay as Card),
+                  status: 'idle',
+                },
+              ],
+            },
           }
         },
       }),
@@ -792,22 +828,27 @@ export const appMachine = setup({
         {
           target: 'Victory',
           guard: 'monsterIsDead',
-          actions: assign({
-            game: ({ context }) => {
-              // Should be an impossible state, but need to keep TypeScript happy
-              if (!context.game.monster) {
-                return context.game
-              }
+          actions: [
+            assign({
+              game: ({ context }) => {
+                // Should be an impossible state, but need to keep TypeScript happy
+                if (!context.game.battle.monster) {
+                  return context.game
+                }
 
-              context.game.monster.sfx?.death.play()
-
-              return {
-                ...context.game,
-                lastDefeatedMonster: context.game.monster,
-                monster: undefined,
-              }
-            },
-          }),
+                return {
+                  ...context.game,
+                  battle: {
+                    ...context.game.battle,
+                    monster: undefined,
+                  },
+                  lastDefeatedMonster: context.game.battle.monster,
+                  pendingCues: [...context.game.pendingCues, { type: 'monster-death' as const }],
+                }
+              },
+            }),
+            'playCues',
+          ],
         },
         {
           target: 'Defending',
@@ -817,7 +858,7 @@ export const appMachine = setup({
     },
     Defending: {
       tags: ['gameplay'],
-      entry: 'monsterAttack',
+      entry: ['monsterAttack', 'playCues'],
       on: {
         MONSTER_ATTACK_ANIMATION_COMPLETE: [
           {
@@ -839,7 +880,7 @@ export const appMachine = setup({
       },
       on: {
         MONSTER_DEATH_ANIMATION_COMPLETE: {
-          actions: ['awardSpoils'],
+          actions: ['awardSpoils', 'playCues'],
           target: 'BetweenRounds',
         },
       },
@@ -905,7 +946,7 @@ export const appMachine = setup({
                   inventory: [
                     ...context.game.player.inventory,
                     // We need to add a unique identifier in the case of duplicate inventory items in player inventory
-                    { ...item, id: `${item.id}-${crypto.randomUUID()}` },
+                    { ...item, id: `${item.id}-${rng.id()}` },
                   ],
                   gold: context.game.player.gold - item.cost,
                 },
@@ -960,7 +1001,6 @@ export const appMachine = setup({
           target: 'DestroyingCard',
           actions: assign({
             game: ({ context, event }) => {
-              console.log('event.data.card', event.data.card)
               return {
                 ...context.game,
                 cardToDestroy: {
