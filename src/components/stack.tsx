@@ -7,9 +7,9 @@ const ALIGN_PROP_VALS = ['left', 'right', 'center'] as const
 type AlignProp = (typeof ALIGN_PROP_VALS)[number]
 
 const ALIGN_CLASS_MAP: Record<AlignProp, string> = {
-  left: css['left'],
-  right: css['right'],
-  center: css['center'],
+  left: css['left'] ?? '',
+  right: css['right'] ?? '',
+  center: css['center'] ?? '',
 }
 
 export function Stack({
@@ -21,10 +21,10 @@ export function Stack({
   ...props
 }: {
   children: React.ReactNode
-  className?: string
+  className?: string | undefined
   spacing?: Spacing
   align?: AlignProp
-  style?: React.CSSProperties
+  style?: React.CSSProperties | undefined
 } & React.ComponentPropsWithRef<'div'>) {
   const alignClass = ALIGN_CLASS_MAP[align]
 

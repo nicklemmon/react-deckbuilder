@@ -23,7 +23,7 @@ import { ItemShopCard, type ItemShopCardStatus } from './components/item-shop-ca
 import { ItemShopItem } from './components/item-shop-item.tsx'
 import { StatsRow, StatIcon, StatVal } from './components/stats.tsx'
 import { cardUseSound } from './machines/app-machine/app-machine.ts'
-import { getItem } from './helpers/item.ts'
+import { requireItem } from './helpers/item.ts'
 import css from './app.module.css'
 import { ModeSelection } from './components/mode-selection.tsx'
 
@@ -64,7 +64,6 @@ export function App() {
           onCreate={(formData) => {
             send({
               type: 'CREATE_CHARACTER',
-              // @ts-expect-error
               data: formData,
             })
           }}
@@ -390,23 +389,23 @@ export function App() {
 
               <Inline>
                 <ItemShopItem
-                  item={getItem('small-potion', context.game.items)}
+                  item={requireItem('small-potion', context.game.items)}
                   shopStatus={context.game.player.gold >= 30 ? 'affordable' : 'unaffordable'}
                   onClick={() =>
                     send({
                       type: 'ITEM_SHOP_ITEM_CLICK',
-                      data: { item: getItem('small-potion', context.game.items) },
+                      data: { item: requireItem('small-potion', context.game.items) },
                     })
                   }
                 />
 
                 <ItemShopItem
-                  item={getItem('large-potion', context.game.items)}
+                  item={requireItem('large-potion', context.game.items)}
                   shopStatus={context.game.player.gold >= 50 ? 'affordable' : 'unaffordable'}
                   onClick={() =>
                     send({
                       type: 'ITEM_SHOP_ITEM_CLICK',
-                      data: { item: getItem('large-potion', context.game.items) },
+                      data: { item: requireItem('large-potion', context.game.items) },
                     })
                   }
                 />
@@ -500,7 +499,7 @@ export function App() {
   }
 
   const introStates = ['TitleScreen', 'ModeSelection', 'CharacterCreation']
-  const backgroundImage = introStates.includes(value as string) ? introBg : undefined
+  const backgroundImage = introStates.includes(value) ? introBg : undefined
 
   return (
     <Screen backgroundImage={backgroundImage}>

@@ -5,12 +5,12 @@ import type { AvatarStatus } from '../../components/avatar.tsx'
 import type { Cue } from './cues.ts'
 
 export type Battle = {
-  monster?: Monster
+  monster?: Monster | undefined
   hand: Card[]
   drawPile: Card[]
   discardPile: Card[]
-  cardInPlay?: Card
-  itemInPlay?: Item
+  cardInPlay?: Card | undefined
+  itemInPlay?: Item | undefined
 }
 
 export type BattleState = {
@@ -18,12 +18,12 @@ export type BattleState = {
     stats: { maxHealth: number; health: number; defense: number }
     status: AvatarStatus
   }
-  monster?: Monster
+  monster?: Monster | undefined
   hand: Card[]
   drawPile: Card[]
   discardPile: Card[]
-  cardInPlay?: Card
-  itemInPlay?: Item
+  cardInPlay?: Card | undefined
+  itemInPlay?: Item | undefined
 }
 
 type BattleGame = {
@@ -68,5 +68,5 @@ export function writeBattleState<G extends BattleGame>(game: G, next: BattleStat
       itemInPlay: next.itemInPlay,
     },
     pendingCues: [...game.pendingCues, ...cues],
-  } as G
+  }
 }

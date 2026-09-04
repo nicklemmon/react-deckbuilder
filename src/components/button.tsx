@@ -14,8 +14,8 @@ export function Button({
   const withClsx = (root: string, className?: string) => {
     return clsx(
       {
-        [css[root]]: true,
-        [css[variant]]: true,
+        [css[root] ?? '']: true,
+        [css[variant] ?? '']: true,
       },
       className,
     )

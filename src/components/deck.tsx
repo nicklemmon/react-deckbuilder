@@ -7,7 +7,7 @@ export function Deck({ children }: { children?: React.ReactNode }) {
   return (
     <div
       className={clsx({
-        [css['deck']]: true,
+        [css['deck'] ?? '']: true,
       })}
     >
       {React.Children.count(children) === 0 ? (

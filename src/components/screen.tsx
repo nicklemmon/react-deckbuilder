@@ -13,12 +13,12 @@ export function Screen({
   ...props
 }: {
   children: React.ReactNode
-  className?: string
-  backgroundImage?: string
+  className?: string | undefined
+  backgroundImage?: string | undefined
 } & React.ComponentPropsWithRef<'div'>) {
   return (
     <div
-      className={clsx(styles.screen, backgroundImage && styles['has-background'], className)}
+      className={clsx(styles['screen'], backgroundImage && styles['has-background'], className)}
       style={
         backgroundImage
           ? ({ '--screen-bg-image': `url(${backgroundImage})` } as React.CSSProperties)

@@ -15,17 +15,17 @@ export function ItemShopCard({
 }: {
   shopStatus: ItemShopCardStatus
   onClick: () => void
-  className?: string
+  className?: string | undefined
 } & CardType) {
   const disabled = shopStatus === 'unaffordable' || shopStatus === 'purchased'
 
-  const withClsx = (rootClass: string, className?: string) => {
+  const withClsx = (rootClass: string | undefined, className?: string | undefined) => {
     return clsx(
       {
-        [rootClass]: true,
-        [css['purchased']]: shopStatus === 'purchased',
-        [css['unaffordable']]: shopStatus === 'unaffordable',
-        [css['affordable']]: shopStatus === 'affordable',
+        [rootClass ?? '']: true,
+        [css['purchased'] ?? '']: shopStatus === 'purchased',
+        [css['unaffordable'] ?? '']: shopStatus === 'unaffordable',
+        [css['affordable'] ?? '']: shopStatus === 'affordable',
       },
       className,
     )

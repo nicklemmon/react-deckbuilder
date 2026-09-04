@@ -16,15 +16,15 @@ export function ItemShopItem({
   shopStatus: ItemShopItemStatus
   item: Item
   onClick: () => void
-  price?: number
-  className?: string
+  price?: number | undefined
+  className?: string | undefined
 }) {
-  const withClsx = (rootClass: string, className?: string) => {
+  const withClsx = (rootClass: string | undefined, className?: string | undefined) => {
     return clsx(
       {
-        [rootClass]: true,
-        [css['unaffordable']]: shopStatus === 'unaffordable',
-        [css['affordable']]: shopStatus === 'affordable',
+        [rootClass ?? '']: true,
+        [css['unaffordable'] ?? '']: shopStatus === 'unaffordable',
+        [css['affordable'] ?? '']: shopStatus === 'affordable',
       },
       className,
     )

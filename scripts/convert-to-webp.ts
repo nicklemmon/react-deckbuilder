@@ -53,13 +53,13 @@ function parseCliArgs(): Options {
   })
 
   return {
-    dryRun: values['dry-run'] as boolean,
-    deleteOriginals: values['delete-originals'] as boolean,
-    overwrite: values.overwrite as boolean,
-    quality: parseInt(values.quality as string, 10),
-    exclude: values.exclude as string[],
-    verbose: values.verbose as boolean,
-    help: values.help as boolean,
+    dryRun: values['dry-run'],
+    deleteOriginals: values['delete-originals'],
+    overwrite: values.overwrite,
+    quality: parseInt(values.quality, 10),
+    exclude: values.exclude,
+    verbose: values.verbose,
+    help: values.help,
   }
 }
 

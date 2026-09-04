@@ -6,7 +6,7 @@ import cardBackRainbowImg from '../images/card-back.rainbow.webp'
 import swordIcon from '../images/sword.webp'
 import { StatsRow, StatIcon, StatVal } from './stats'
 import css from './card.module.css'
-import { AppMachineContext } from '../machines/app-machine/app-machine'
+import type { AppMachineContext } from '../machines/app-machine/app-machine'
 
 export function Card({
   className,
@@ -22,28 +22,28 @@ export function Card({
   mode = 'standard',
   id,
 }: {
-  isStacked?: boolean
-  onClick?: () => void
+  isStacked?: boolean | undefined
+  onClick?: (() => void) | undefined
   mode?: AppMachineContext['game']['mode']
-  className?: string
+  className?: string | undefined
 } & Card) {
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 })
   const [isHovering, setIsHovering] = useState(false)
 
-  const withClsx = (rootClass: string, additionalClassName?: string) => {
+  const withClsx = (rootClass: string | undefined, additionalClassName?: string | undefined) => {
     return clsx(
       {
-        [rootClass]: true,
-        [css['disabled']]: status === 'disabled',
-        [css['in-play']]: status === 'in-play',
-        [css['idle']]: status === 'idle',
-        [css['face-down']]: orientation === 'face-down',
-        [css['face-up']]: orientation === 'face-up',
-        [css['stacked']]: isStacked === true,
-        [css['rarity-0']]: rarity === 0,
-        [css['rarity-1']]: rarity === 1,
-        [css['rarity-2']]: rarity === 2,
-        [css['rarity-3']]: rarity === 3,
+        [rootClass ?? '']: true,
+        [css['disabled'] ?? '']: status === 'disabled',
+        [css['in-play'] ?? '']: status === 'in-play',
+        [css['idle'] ?? '']: status === 'idle',
+        [css['face-down'] ?? '']: orientation === 'face-down',
+        [css['face-up'] ?? '']: orientation === 'face-up',
+        [css['stacked'] ?? '']: isStacked === true,
+        [css['rarity-0'] ?? '']: rarity === 0,
+        [css['rarity-1'] ?? '']: rarity === 1,
+        [css['rarity-2'] ?? '']: rarity === 2,
+        [css['rarity-3'] ?? '']: rarity === 3,
       },
       additionalClassName,
     )

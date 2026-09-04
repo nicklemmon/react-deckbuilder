@@ -15,7 +15,7 @@ export function Feedback({
   variant: 'neutral' | 'positive' | 'negative'
   duration?: number
   orientation?: 'bottom' | 'top'
-  onAnimationComplete?: () => void
+  onAnimationComplete?: (() => void) | undefined
 }) {
   return (
     <motion.div
@@ -31,14 +31,14 @@ export function Feedback({
         opacity: [1, 1, 0],
       }}
       transition={{ duration }}
-      onAnimationComplete={onAnimationComplete}
+      {...(onAnimationComplete ? { onAnimationComplete } : {})}
     >
       <div
         className={clsx({
-          [css['feedback-text']]: true,
-          [css['neutral']]: variant === 'neutral',
-          [css['negative']]: variant === 'negative',
-          [css['positive']]: variant === 'positive',
+          [css['feedback-text'] ?? '']: true,
+          [css['neutral'] ?? '']: variant === 'neutral',
+          [css['negative'] ?? '']: variant === 'negative',
+          [css['positive'] ?? '']: variant === 'positive',
         })}
       >
         {variant === 'positive' && '+'}

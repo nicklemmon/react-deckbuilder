@@ -11,8 +11,8 @@ export type Card = {
     attack: number
   }
   // TODO: Can this be removed?
-  align?: 'left' | 'right'
-  artwork?: string
-  status?: 'disabled' | 'in-play' | 'idle'
-  orientation?: 'face-up' | 'face-down'
+  align?: 'left' | 'right' | undefined
+  artwork?: string | undefined
+  status?: 'disabled' | 'in-play' | 'idle' | undefined
+  orientation?: 'face-up' | 'face-down' | undefined
 }

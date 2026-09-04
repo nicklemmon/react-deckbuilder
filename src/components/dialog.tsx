@@ -12,8 +12,8 @@ export function Dialog({
 }) {
   const withStatusClsx = (root: string) =>
     clsx({
-      [css[root]]: true,
-      [css['is-open']]: open === true,
+      [css[root] ?? '']: true,
+      [css['is-open'] ?? '']: open,
     })
 
   return (

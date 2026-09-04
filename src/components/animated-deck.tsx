@@ -25,11 +25,11 @@ export function AnimatedDeck({ children }: AnimatedDeckProps) {
   })
 
   return (
-    <div className={clsx({ [css['deck']]: true })} data-testid="animated-deck-container">
+    <div className={clsx({ [css['deck'] ?? '']: true })} data-testid="animated-deck-container">
       {childArray.length === 0 && <EmptyDeck />}
       <AnimatePresence>
         {childArray.map((child, index) => {
-          const key = childKeys[index]
+          const key = childKeys[index] ?? ''
           const staggerIndex = newKeyOrder.get(key) ?? -1
           const staggerDelay = staggerIndex >= 0 ? staggerIndex * STAGGER_DELAY : 0
           return (

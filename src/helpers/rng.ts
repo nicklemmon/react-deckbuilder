@@ -1,5 +1,6 @@
 export type Rng = {
   int(maxExclusive: number): number
+  pick<T>(xs: readonly T[]): T
   shuffle<T>(xs: T[]): T[]
   id(): string
 }
@@ -9,11 +10,25 @@ export class MathRandomRng implements Rng {
     return Math.floor(Math.random() * maxExclusive)
   }
 
+  pick<T>(xs: readonly T[]): T {
+    if (xs.length === 0) throw new Error('Cannot pick from an empty array')
+    return (
+      xs[this.int(xs.length)] ??
+      (() => {
+        throw new Error('Random index was out of bounds')
+      })()
+    )
+  }
+
   shuffle<T>(xs: T[]): T[] {
     const arr = [...xs]
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
-      ;[arr[i], arr[j]] = [arr[j], arr[i]]
+      const left = arr[i]
+      const right = arr[j]
+      if (left === undefined || right === undefined)
+        throw new Error('Shuffle index was out of bounds')
+      ;[arr[i], arr[j]] = [right, left]
     }
     return arr
   }
@@ -39,11 +54,25 @@ export class SeededRng implements Rng {
     return Math.floor(this.next() * maxExclusive)
   }
 
+  pick<T>(xs: readonly T[]): T {
+    if (xs.length === 0) throw new Error('Cannot pick from an empty array')
+    return (
+      xs[this.int(xs.length)] ??
+      (() => {
+        throw new Error('Random index was out of bounds')
+      })()
+    )
+  }
+
   shuffle<T>(xs: T[]): T[] {
     const arr = [...xs]
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(this.next() * (i + 1))
-      ;[arr[i], arr[j]] = [arr[j], arr[i]]
+      const left = arr[i]
+      const right = arr[j]
+      if (left === undefined || right === undefined)
+        throw new Error('Shuffle index was out of bounds')
+      ;[arr[i], arr[j]] = [right, left]
     }
     return arr
   }

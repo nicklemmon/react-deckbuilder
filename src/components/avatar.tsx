@@ -14,7 +14,7 @@ export function Avatar({
 }: {
   src: string
   status?: AvatarStatus
-  onAnimationComplete?: () => void
+  onAnimationComplete?: (() => void) | undefined
 }) {
   return (
     <div>
@@ -56,10 +56,10 @@ function AvatarAnimationWrapper({
 }
 
 /** Overlays the avatar and applies a flash when taking damage */
-function DamageFlash({ onAnimationComplete }: { onAnimationComplete?: () => void }) {
+function DamageFlash({ onAnimationComplete }: { onAnimationComplete?: (() => void) | undefined }) {
   return (
     <motion.div
-      onAnimationComplete={onAnimationComplete}
+      {...(onAnimationComplete ? { onAnimationComplete } : {})}
       style={{
         position: 'absolute',
         top: 0,
@@ -79,10 +79,10 @@ function DamageFlash({ onAnimationComplete }: { onAnimationComplete?: () => void
 }
 
 /** Overlays the avatar and applies a flash when healing */
-function HealingFlash({ onAnimationComplete }: { onAnimationComplete?: () => void }) {
+function HealingFlash({ onAnimationComplete }: { onAnimationComplete?: (() => void) | undefined }) {
   return (
     <motion.div
-      onAnimationComplete={onAnimationComplete}
+      {...(onAnimationComplete ? { onAnimationComplete } : {})}
       style={{
         position: 'absolute',
         top: 0,

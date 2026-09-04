@@ -1,14 +1,14 @@
 import { defineCharacterClass } from '../../helpers/character-classes'
-import { getCard, CARDS } from '../../helpers/cards'
+import { requireCard, CARDS } from '../../helpers/cards'
 
 export default defineCharacterClass({
   id: 'rogue',
   name: 'Rogue',
   deck: [
-    getCard('shield-slam', CARDS),
-    getCard('shield-slam', CARDS),
-    getCard('lightning', CARDS),
-    getCard('earthquake', CARDS),
-    getCard('assassinate', CARDS),
-  ].filter(Boolean),
+    requireCard('shield-slam', CARDS),
+    requireCard('shield-slam', CARDS),
+    requireCard('lightning', CARDS),
+    requireCard('earthquake', CARDS),
+    requireCard('assassinate', CARDS),
+  ],
 })

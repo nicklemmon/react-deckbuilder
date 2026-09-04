@@ -12,21 +12,30 @@ const MONSTER_SFX_VOLUME = 0.55
 /** Retrieves monster sound with build in defaults */
 const getMonsterSound = (sfx: string) => getSound({ src: sfx, volume: MONSTER_SFX_VOLUME })
 
-const MONSTER_CONFIG_MODULES = import.meta.glob('../monsters/**/config.ts', {
+const MONSTER_CONFIG_MODULES = import.meta.glob<Omit<Monster, 'id' | 'artwork' | 'sfx' | 'status'>>(
+  '../monsters/**/config.ts',
+  {
+    eager: true,
+    import: 'default',
+  },
+)
+
+const MONSTER_SFX_MODULES = import.meta.glob<string>('../monsters/**/*.wav', {
   eager: true,
   import: 'default',
 })
 
-const MONSTER_SFX_MODULES = import.meta.glob('../monsters/**/*.wav', {
-  eager: true,
-  import: 'default',
-})
-
-const MONSTER_ARTWORK = import.meta.glob('../monsters/**/*.webp', {
+const MONSTER_ARTWORK = import.meta.glob<string>('../monsters/**/*.webp', {
   eager: true,
   import: 'default',
   query: { format: 'webp' },
 })
+
+function requireAsset(assets: Record<string, string | undefined>, path: string): string {
+  const asset = assets[path]
+  if (!asset) throw new Error(`Missing required asset: ${path}`)
+  return asset
+}
 
 /** Array of available monsters derived from `src/monsters` file contents */
 export const getAllMonsters = () =>
@@ -35,13 +44,14 @@ export const getAllMonsters = () =>
     const id = dir.replace('../monsters/', '')
 
     return {
-      ...(mod as Monster),
+      ...mod,
       id,
-      artwork: MONSTER_ARTWORK[`${dir}/artwork.webp`],
+      status: 'idle',
+      artwork: requireAsset(MONSTER_ARTWORK, `${dir}/artwork.webp`),
       sfx: {
-        intro: getMonsterSound(MONSTER_SFX_MODULES[`${dir}/sfx.intro.wav`] as string),
-        damage: getMonsterSound(MONSTER_SFX_MODULES[`${dir}/sfx.damage.wav`] as string),
-        death: getMonsterSound(MONSTER_SFX_MODULES[`${dir}/sfx.death.wav`] as string),
+        intro: getMonsterSound(requireAsset(MONSTER_SFX_MODULES, `${dir}/sfx.intro.wav`)),
+        damage: getMonsterSound(requireAsset(MONSTER_SFX_MODULES, `${dir}/sfx.damage.wav`)),
+        death: getMonsterSound(requireAsset(MONSTER_SFX_MODULES, `${dir}/sfx.death.wav`)),
       },
     }
-  }) as Array<Monster>
+  }) satisfies Monster[]

@@ -10,11 +10,12 @@ export function Inline({
   ...props
 }: {
   children: React.ReactNode
-  className?: string
+  className?: string | undefined
   spacing?: Spacing
   align?: 'top' | 'bottom' | 'center'
 } & React.ComponentPropsWithRef<'div'>) {
-  const alignClass = align === 'top' ? css.top : align === 'bottom' ? css.bottom : css.center
+  const alignClass =
+    align === 'top' ? css['top'] : align === 'bottom' ? css['bottom'] : css['center']
 
   return (
     <div
