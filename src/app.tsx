@@ -74,7 +74,7 @@ export function App() {
 
     // Default: Main game play area
     return (
-      <div className={css['play-area']}>
+      <div className={css['play-area']} data-game-mode={context.game.mode}>
         <div className={css['play-area-wrapper']}>
           <div className={css['play-area-banner']}>
             <Inline>
@@ -274,6 +274,7 @@ export function App() {
                     >
                       <Card
                         {...card}
+                        mode={context.game.mode}
                         orientation="face-up"
                         status={
                           context.game.battle.cardInPlay !== undefined ? 'disabled' : card.status
@@ -292,6 +293,7 @@ export function App() {
                 return (
                   <Card
                     {...card}
+                    mode={context.game.mode}
                     key={`discard-pile-card-${card.id}-${index}`}
                     orientation="face-down"
                   />
@@ -319,7 +321,7 @@ export function App() {
                   })
                 }
               >
-                <Card {...context.game.battle.cardInPlay} />
+                <Card {...context.game.battle.cardInPlay} mode={context.game.mode} />
               </motion.div>
             ) : null}
           </AnimatePresence>
@@ -330,6 +332,7 @@ export function App() {
                 return (
                   <Card
                     {...card}
+                    mode={context.game.mode}
                     key={`draw-pile-card-${card.id}-${index}`}
                     orientation="face-down"
                   />
@@ -446,7 +449,7 @@ export function App() {
                       })
                     }}
                   >
-                    <Card {...(context.game.cardToDestroy as CardType)} />
+                    <Card {...(context.game.cardToDestroy as CardType)} mode={context.game.mode} />
                   </motion.div>
                 ) : null}
               </AnimatePresence>
