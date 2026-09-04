@@ -23,7 +23,7 @@ describe('Avatar', () => {
   const mockSrc = '/path/to/avatar.png'
 
   it('renders with provided image src', async () => {
-    render(<Avatar src={mockSrc} />)
+    await render(<Avatar src={mockSrc} />)
 
     const img = page.getByRole('img')
     await expect.element(img).toBeInTheDocument()
@@ -31,7 +31,7 @@ describe('Avatar', () => {
   })
 
   it('renders with idle status by default', async () => {
-    render(<Avatar src={mockSrc} />)
+    await render(<Avatar src={mockSrc} />)
 
     const img = page.getByRole('img')
     await expect.element(img).toHaveAttribute('class', expect.stringContaining('avatar-img'))
@@ -44,7 +44,7 @@ describe('Avatar', () => {
   })
 
   it('renders with idle status when explicitly set', async () => {
-    render(<Avatar src={mockSrc} status="idle" />)
+    await render(<Avatar src={mockSrc} status="idle" />)
 
     const img = page.getByRole('img')
     await expect.element(img).toBeInTheDocument()
@@ -57,7 +57,7 @@ describe('Avatar', () => {
   })
 
   it('renders damage flash when taking damage', async () => {
-    render(<Avatar src={mockSrc} status="taking-damage" />)
+    await render(<Avatar src={mockSrc} status="taking-damage" />)
 
     const img = page.getByRole('img')
     await expect.element(img).toBeInTheDocument()
@@ -69,7 +69,7 @@ describe('Avatar', () => {
   })
 
   it('renders healing flash when healing', async () => {
-    render(<Avatar src={mockSrc} status="healing" />)
+    await render(<Avatar src={mockSrc} status="healing" />)
 
     const img = page.getByRole('img')
     await expect.element(img).toBeInTheDocument()
@@ -81,7 +81,7 @@ describe('Avatar', () => {
   })
 
   it('renders normally when dead', async () => {
-    render(<Avatar src={mockSrc} status="dead" />)
+    await render(<Avatar src={mockSrc} status="dead" />)
 
     const img = page.getByRole('img')
     await expect.element(img).toBeInTheDocument()
@@ -95,7 +95,7 @@ describe('Avatar', () => {
 
   it('calls onAnimationComplete when provided', async () => {
     const mockCallback = vi.fn()
-    render(<Avatar src={mockSrc} status="taking-damage" onAnimationComplete={mockCallback} />)
+    await render(<Avatar src={mockSrc} status="taking-damage" onAnimationComplete={mockCallback} />)
 
     // Simulate animation completion
     const motionDivs = page.getByTestId('motion-div')
@@ -111,7 +111,7 @@ describe('Avatar', () => {
   })
 
   it('has proper structure with avatar container', async () => {
-    render(<Avatar src={mockSrc} />)
+    await render(<Avatar src={mockSrc} />)
 
     const img = page.getByRole('img')
     const imgElement = await img.element()
@@ -122,7 +122,7 @@ describe('Avatar', () => {
   })
 
   it('renders image with correct CSS class', async () => {
-    render(<Avatar src={mockSrc} />)
+    await render(<Avatar src={mockSrc} />)
 
     const img = page.getByRole('img')
     await expect.element(img).toHaveAttribute('class', expect.stringContaining('avatar-img'))

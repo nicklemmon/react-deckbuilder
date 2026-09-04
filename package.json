@@ -19,42 +19,42 @@
     "convert:webp:dry": "node --experimental-strip-types scripts/convert-to-webp.ts --dry-run"
   },
   "dependencies": {
-    "@vercel/analytics": "1.6.1",
-    "@xstate/react": "6.0.0",
-    "array-shuffle": "4.0.0",
+    "@vercel/analytics": "2.0.1",
+    "@xstate/react": "6.1.0",
+    "array-shuffle": "4.1.0",
     "clsx": "2.1.1",
     "eslint-plugin-react": "^7.37.5",
     "howler": "2.2.4",
-    "motion": "12.42.2",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
+    "motion": "13.2.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "reset-css": "5.0.2",
-    "xstate": "5.25.1"
+    "xstate": "5.32.6"
   },
   "devDependencies": {
-    "@types/howler": "2.2.12",
-    "@types/node": "25.0.3",
+    "@types/howler": "2.2.13",
+    "@types/node": "26.4.1",
     "@types/random": "3.0.1",
-    "@types/react": "19.2.7",
-    "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react": "5.1.2",
-    "@vitest/browser": "^4.0.17",
-    "@vitest/browser-playwright": "^4.1.9",
-    "@vitest/ui": "^4.0.16",
-    "concurrently": "9.2.1",
-    "eslint": "9.39.2",
-    "playwright": "^1.61.1",
-    "prettier": "3.7.4",
-    "semver": "^7.7.3",
-    "typescript": "5.9.3",
-    "vite": "7.3.0",
-    "vite-imagetools": "^9.0.2",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "@vitejs/plugin-react": "6.1.1",
+    "@vitest/browser": "^5.0.0",
+    "@vitest/browser-playwright": "^5.0.0",
+    "@vitest/ui": "^5.0.0",
+    "concurrently": "10.0.5",
+    "eslint": "10.10.0",
+    "playwright": "^1.62.1",
+    "prettier": "3.9.6",
+    "semver": "^7.8.5",
+    "typescript": "7.0.2",
+    "vite": "8.2.2",
+    "vite-imagetools": "^12.0.1",
     "vite-plugin-compression": "0.5.1",
     "vite-plugin-imagemin": "^0.6.1",
-    "vitest": "^4.0.16",
-    "vitest-browser-react": "^2.0.2"
+    "vitest": "^5.0.0",
+    "vitest-browser-react": "^2.3.0"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.54.0"
+    "@rollup/rollup-linux-x64-gnu": "4.63.1"
   }
 }

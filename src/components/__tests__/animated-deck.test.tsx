@@ -5,7 +5,7 @@ import { AnimatedDeck } from '../animated-deck'
 
 describe('AnimatedDeck', () => {
   it('renders children', async () => {
-    render(
+    await render(
       <AnimatedDeck>
         <div>Card 1</div>
         <div>Card 2</div>
@@ -17,7 +17,7 @@ describe('AnimatedDeck', () => {
   })
 
   it('renders EmptyDeck when no children are provided', async () => {
-    render(<AnimatedDeck />)
+    await render(<AnimatedDeck />)
 
     const container = page.getByTestId('animated-deck-container')
     const emptyDeck = (await container.element()).querySelector('[class*="empty-deck"]')
@@ -27,7 +27,7 @@ describe('AnimatedDeck', () => {
   })
 
   it('does not render EmptyDeck when children are present', async () => {
-    render(
+    await render(
       <AnimatedDeck>
         <div>Card 1</div>
       </AnimatedDeck>,
@@ -40,7 +40,7 @@ describe('AnimatedDeck', () => {
   })
 
   it('wraps each child in an absolutely positioned element', async () => {
-    render(
+    await render(
       <AnimatedDeck>
         <div data-testid="card-a">Card A</div>
         <div data-testid="card-b">Card B</div>
@@ -57,7 +57,7 @@ describe('AnimatedDeck', () => {
   })
 
   it('offsets each card by 5px per index', async () => {
-    render(
+    await render(
       <AnimatedDeck>
         <div data-testid="card-0">Card 0</div>
         <div data-testid="card-1">Card 1</div>
@@ -75,7 +75,7 @@ describe('AnimatedDeck', () => {
   })
 
   it('assigns ascending z-index per card', async () => {
-    render(
+    await render(
       <AnimatedDeck>
         <div data-testid="card-0">Card 0</div>
         <div data-testid="card-1">Card 1</div>

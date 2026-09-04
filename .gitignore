@@ -21,3 +21,4 @@ __screenshots__
 test-results
 playwright-report
 .playwright-mcp
+.vitest

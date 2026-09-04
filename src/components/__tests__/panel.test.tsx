@@ -5,7 +5,7 @@ import { Panel, PanelBody } from '../panel'
 
 describe('Panel', () => {
   it('renders children', async () => {
-    render(
+    await render(
       <Panel>
         <div>Panel content</div>
       </Panel>,
@@ -15,14 +15,14 @@ describe('Panel', () => {
   })
 
   it('applies panel class', async () => {
-    render(<Panel data-testid="panel">Content</Panel>)
+    await render(<Panel data-testid="panel">Content</Panel>)
     const panel = page.getByTestId('panel')
 
     await expect.element(panel).toHaveAttribute('class', expect.stringContaining('panel'))
   })
 
   it('accepts custom className', async () => {
-    render(
+    await render(
       <Panel className="custom-panel" data-testid="panel">
         Content
       </Panel>,
@@ -34,7 +34,7 @@ describe('Panel', () => {
   })
 
   it('forwards other div props', async () => {
-    render(
+    await render(
       <Panel data-testid="panel" aria-label="Test panel" id="test-panel">
         Content
       </Panel>,
@@ -46,14 +46,14 @@ describe('Panel', () => {
   })
 
   it('renders as a div element', async () => {
-    render(<Panel data-testid="panel">Content</Panel>)
+    await render(<Panel data-testid="panel">Content</Panel>)
     const panel = page.getByTestId('panel')
 
     expect((await panel.element()).tagName).toBe('DIV')
   })
 
   it('renders with nested PanelBody', async () => {
-    render(
+    await render(
       <Panel data-testid="panel">
         <PanelBody>
           <p>Body content</p>
@@ -68,7 +68,7 @@ describe('Panel', () => {
 
 describe('PanelBody', () => {
   it('renders children', async () => {
-    render(
+    await render(
       <PanelBody>
         <div>Body content</div>
       </PanelBody>,
@@ -78,14 +78,14 @@ describe('PanelBody', () => {
   })
 
   it('applies panel-body class', async () => {
-    render(<PanelBody data-testid="panel-body">Content</PanelBody>)
+    await render(<PanelBody data-testid="panel-body">Content</PanelBody>)
     const panelBody = page.getByTestId('panel-body')
 
     await expect.element(panelBody).toHaveAttribute('class', expect.stringContaining('panel-body'))
   })
 
   it('accepts custom className', async () => {
-    render(
+    await render(
       <PanelBody className="custom-body" data-testid="panel-body">
         Content
       </PanelBody>,
@@ -97,7 +97,7 @@ describe('PanelBody', () => {
   })
 
   it('forwards other div props', async () => {
-    render(
+    await render(
       <PanelBody data-testid="panel-body" role="region" aria-labelledby="heading">
         Content
       </PanelBody>,
@@ -109,14 +109,14 @@ describe('PanelBody', () => {
   })
 
   it('renders as a div element', async () => {
-    render(<PanelBody data-testid="panel-body">Content</PanelBody>)
+    await render(<PanelBody data-testid="panel-body">Content</PanelBody>)
     const panelBody = page.getByTestId('panel-body')
 
     expect((await panelBody.element()).tagName).toBe('DIV')
   })
 
   it('renders multiple children', async () => {
-    render(
+    await render(
       <PanelBody>
         <h2>Title</h2>
         <p>Paragraph 1</p>
