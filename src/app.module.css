@@ -7,12 +7,13 @@
   overflow: hidden;
   position: relative;
   isolation: isolate;
+  background-color: var(--color-stone-950);
 
   &::before {
     content: '';
     position: absolute;
     inset: -10px;
-    background-image: url('./images/background.webp');
+    background-image: url('./images/play-area-bg.webp');
     background-size: cover;
     background-position: center;
     filter: blur(4px);

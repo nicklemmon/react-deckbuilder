@@ -9,13 +9,23 @@ import { VolumeControl } from './volume-control.tsx'
 export function Screen({
   children,
   className,
+  backgroundImage,
   ...props
 }: {
   children: React.ReactNode
   className?: string
+  backgroundImage?: string
 } & React.ComponentPropsWithRef<'div'>) {
   return (
-    <div className={clsx(styles.screen, className)} {...props}>
+    <div
+      className={clsx(styles.screen, backgroundImage && styles['has-background'], className)}
+      style={
+        backgroundImage
+          ? ({ '--screen-bg-image': `url(${backgroundImage})` } as React.CSSProperties)
+          : undefined
+      }
+      {...props}
+    >
       <VolumeControl />
       {children}
     </div>

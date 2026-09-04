@@ -1,4 +1,6 @@
 .form {
+  color: var(--color-stone-100);
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.75));
 }
 
 .input-ctrl {
@@ -12,6 +14,8 @@
 .input-label {
   font-family: var(--font-secondary);
   font-weight: var(--font-weight-700);
+  color: var(--color-stone-100);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
 .input {

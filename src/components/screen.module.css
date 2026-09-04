@@ -4,5 +4,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-stone-100);
+  background-color: var(--color-stone-950);
+  overflow: hidden;
+  position: relative;
+  isolation: isolate;
+}
+
+.has-background {
+  background-color: var(--color-stone-950);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    background-image: var(--screen-bg-image);
+    background-size: cover;
+    background-position: center;
+    filter: blur(4px);
+    z-index: -1;
+  }
 }
