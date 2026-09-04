@@ -35,7 +35,7 @@ describe('Screen', () => {
     vi.unstubAllGlobals()
   })
   it('renders children', async () => {
-    render(
+    await render(
       <Screen>
         <div>Screen content</div>
       </Screen>,
@@ -45,7 +45,7 @@ describe('Screen', () => {
   })
 
   it('applies screen class', async () => {
-    render(<Screen data-testid="screen">Content</Screen>)
+    await render(<Screen data-testid="screen">Content</Screen>)
 
     const screenElement = page.getByTestId('screen')
 
@@ -53,7 +53,7 @@ describe('Screen', () => {
   })
 
   it('accepts custom className', async () => {
-    render(
+    await render(
       <Screen className="custom-screen" data-testid="screen">
         Content
       </Screen>,
@@ -67,7 +67,7 @@ describe('Screen', () => {
   })
 
   it('renders as a div element', async () => {
-    render(<Screen data-testid="screen">Content</Screen>)
+    await render(<Screen data-testid="screen">Content</Screen>)
 
     const screenElement = page.getByTestId('screen')
 
@@ -75,7 +75,7 @@ describe('Screen', () => {
   })
 
   it('renders multiple children', async () => {
-    render(
+    await render(
       <Screen>
         <h1>Title</h1>
         <p>Paragraph 1</p>
@@ -89,7 +89,7 @@ describe('Screen', () => {
   })
 
   it('renders with nested components', async () => {
-    render(
+    await render(
       <Screen data-testid="screen">
         <div>
           <h1>Nested Title</h1>
@@ -106,7 +106,7 @@ describe('Screen', () => {
   })
 
   it('handles className merging', async () => {
-    render(
+    await render(
       <Screen className="custom-class-1 custom-class-2" data-testid="screen">
         Content
       </Screen>,
@@ -123,7 +123,7 @@ describe('Screen', () => {
   })
 
   it('renders without className prop', async () => {
-    render(<Screen data-testid="screen">Content</Screen>)
+    await render(<Screen data-testid="screen">Content</Screen>)
     const screenElement = page.getByTestId('screen')
 
     await expect.element(screenElement).toHaveAttribute('class', expect.stringContaining('screen'))
@@ -132,7 +132,7 @@ describe('Screen', () => {
   })
 
   it('includes volume control', async () => {
-    render(
+    await render(
       <Screen>
         <div>Screen content</div>
       </Screen>,
@@ -143,7 +143,7 @@ describe('Screen', () => {
   })
 
   it('renders volume control before children', async () => {
-    render(
+    await render(
       <Screen data-testid="screen">
         <div data-testid="child-content">Child content</div>
       </Screen>,

@@ -39,7 +39,7 @@ describe('VolumeControl', () => {
   })
 
   it('renders with default volume when no stored value exists', async () => {
-    render(<VolumeControl />)
+    await render(<VolumeControl />)
 
     const slider = page.getByRole('slider', { name: 'Volume control' })
     await expect.element(slider).toBeInTheDocument()
@@ -49,7 +49,7 @@ describe('VolumeControl', () => {
   it('renders with stored volume from localStorage', async () => {
     localStorageMock[VOLUME_STORAGE_KEY] = '0.5'
 
-    render(<VolumeControl />)
+    await render(<VolumeControl />)
 
     const slider = page.getByRole('slider', { name: 'Volume control' })
     await expect.element(slider).toHaveValue('0.5')
@@ -58,7 +58,7 @@ describe('VolumeControl', () => {
   it('clamps stored volume to valid range (0-1)', async () => {
     localStorageMock[VOLUME_STORAGE_KEY] = '1.5'
 
-    render(<VolumeControl />)
+    await render(<VolumeControl />)
 
     const slider = page.getByRole('slider', { name: 'Volume control' })
     await expect.element(slider).toHaveValue('1')
@@ -67,7 +67,7 @@ describe('VolumeControl', () => {
   it('uses default volume when stored value is invalid', async () => {
     localStorageMock[VOLUME_STORAGE_KEY] = 'invalid'
 
-    render(<VolumeControl />)
+    await render(<VolumeControl />)
 
     const slider = page.getByRole('slider', { name: 'Volume control' })
     await expect.element(slider).toHaveValue('0.7')
@@ -76,7 +76,7 @@ describe('VolumeControl', () => {
   it('sets Howler volume on mount', async () => {
     localStorageMock[VOLUME_STORAGE_KEY] = '0.8'
 
-    render(<VolumeControl />)
+    await render(<VolumeControl />)
 
     expect(Howler.volume).toHaveBeenCalledWith(0.8)
   })
@@ -84,14 +84,14 @@ describe('VolumeControl', () => {
   it('displays correct volume percentage', async () => {
     localStorageMock[VOLUME_STORAGE_KEY] = '0.7'
 
-    render(<VolumeControl />)
+    await render(<VolumeControl />)
 
     const percentageLabel = page.getByText('70%')
     await expect.element(percentageLabel).toBeInTheDocument()
   })
 
   it('updates volume when slider changes', async () => {
-    render(<VolumeControl />)
+    await render(<VolumeControl />)
 
     const slider = page.getByRole('slider', { name: 'Volume control' })
 
@@ -102,7 +102,7 @@ describe('VolumeControl', () => {
   })
 
   it('updates Howler volume when slider changes', async () => {
-    render(<VolumeControl />)
+    await render(<VolumeControl />)
 
     const slider = page.getByRole('slider', { name: 'Volume control' })
 
@@ -115,7 +115,7 @@ describe('VolumeControl', () => {
   })
 
   it('persists volume to localStorage when slider changes', async () => {
-    render(<VolumeControl />)
+    await render(<VolumeControl />)
 
     const slider = page.getByRole('slider', { name: 'Volume control' })
 
@@ -125,7 +125,7 @@ describe('VolumeControl', () => {
   })
 
   it('has correct slider attributes', async () => {
-    render(<VolumeControl />)
+    await render(<VolumeControl />)
 
     const slider = page.getByRole('slider', { name: 'Volume control' })
     await expect.element(slider).toHaveAttribute('type', 'range')
@@ -138,7 +138,7 @@ describe('VolumeControl', () => {
     it('renders muted icon when volume is 0', async () => {
       localStorageMock[VOLUME_STORAGE_KEY] = '0'
 
-      render(<VolumeControl />)
+      await render(<VolumeControl />)
 
       // Get the volume control element and query the SVG
       const slider = page.getByRole('slider', { name: 'Volume control' })
@@ -154,7 +154,7 @@ describe('VolumeControl', () => {
     it('renders low volume icon when volume is less than 0.5', async () => {
       localStorageMock[VOLUME_STORAGE_KEY] = '0.3'
 
-      render(<VolumeControl />)
+      await render(<VolumeControl />)
 
       const slider = page.getByRole('slider', { name: 'Volume control' })
       const sliderElement = await slider.element()
@@ -169,7 +169,7 @@ describe('VolumeControl', () => {
     it('renders high volume icon when volume is 0.5 or greater', async () => {
       localStorageMock[VOLUME_STORAGE_KEY] = '0.8'
 
-      render(<VolumeControl />)
+      await render(<VolumeControl />)
 
       const slider = page.getByRole('slider', { name: 'Volume control' })
       const sliderElement = await slider.element()
@@ -186,7 +186,7 @@ describe('VolumeControl', () => {
     it('sets slider fill width based on volume percentage', async () => {
       localStorageMock[VOLUME_STORAGE_KEY] = '0.75'
 
-      render(<VolumeControl />)
+      await render(<VolumeControl />)
 
       // Query the slider fill from the document
       const percentageLabel = page.getByText('75%')
@@ -194,7 +194,7 @@ describe('VolumeControl', () => {
     })
 
     it('updates slider fill width when volume changes', async () => {
-      render(<VolumeControl />)
+      await render(<VolumeControl />)
 
       const slider = page.getByRole('slider', { name: 'Volume control' })
 

@@ -5,7 +5,7 @@ import { Inline } from '../inline'
 
 describe('Inline', () => {
   it('renders children', async () => {
-    render(
+    await render(
       <Inline>
         <span>Item 1</span>
         <span>Item 2</span>
@@ -17,7 +17,7 @@ describe('Inline', () => {
   })
 
   it('applies default spacing and alignment', async () => {
-    render(<Inline data-testid="inline">Content</Inline>)
+    await render(<Inline data-testid="inline">Content</Inline>)
     const inline = page.getByTestId('inline')
 
     await expect.element(inline).toHaveAttribute('class', expect.stringContaining('inline'))
@@ -27,7 +27,7 @@ describe('Inline', () => {
   })
 
   it('applies custom spacing', async () => {
-    render(
+    await render(
       <Inline spacing="100" data-testid="inline">
         Content
       </Inline>,
@@ -39,7 +39,7 @@ describe('Inline', () => {
   })
 
   it('applies top alignment', async () => {
-    render(
+    await render(
       <Inline align="top" data-testid="inline">
         Content
       </Inline>,
@@ -50,7 +50,7 @@ describe('Inline', () => {
   })
 
   it('applies center alignment', async () => {
-    render(
+    await render(
       <Inline align="center" data-testid="inline">
         Content
       </Inline>,
@@ -61,7 +61,7 @@ describe('Inline', () => {
   })
 
   it('applies bottom alignment', async () => {
-    render(
+    await render(
       <Inline align="bottom" data-testid="inline">
         Content
       </Inline>,
@@ -72,7 +72,7 @@ describe('Inline', () => {
   })
 
   it('accepts custom className', async () => {
-    render(
+    await render(
       <Inline className="flex-row" data-testid="inline">
         Content
       </Inline>,
@@ -87,7 +87,7 @@ describe('Inline', () => {
     const spacingValues = ['100', '200', '300', '400', '500'] as const
 
     for (const spacing of spacingValues) {
-      render(
+      await render(
         <Inline spacing={spacing} data-testid={`inline-${spacing}`}>
           Content
         </Inline>,
@@ -108,7 +108,7 @@ describe('Inline', () => {
     ]
 
     for (const { align, expectedClass } of alignments) {
-      render(
+      await render(
         <Inline align={align} data-testid={`inline-${align}`}>
           Content
         </Inline>,

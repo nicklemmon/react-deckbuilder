@@ -5,7 +5,7 @@ import { Stack } from '../stack'
 
 describe('Stack', () => {
   it('renders children', async () => {
-    render(
+    await render(
       <Stack>
         <div>Item 1</div>
         <div>Item 2</div>
@@ -17,7 +17,7 @@ describe('Stack', () => {
   })
 
   it('applies default spacing and alignment', async () => {
-    render(<Stack data-testid="stack">Content</Stack>)
+    await render(<Stack data-testid="stack">Content</Stack>)
     const stack = page.getByTestId('stack')
 
     await expect.element(stack).toHaveAttribute('class', expect.stringContaining('stack'))
@@ -27,7 +27,7 @@ describe('Stack', () => {
   })
 
   it('applies custom spacing', async () => {
-    render(
+    await render(
       <Stack spacing="500" data-testid="stack">
         Content
       </Stack>,
@@ -39,7 +39,7 @@ describe('Stack', () => {
   })
 
   it('applies left alignment', async () => {
-    render(
+    await render(
       <Stack align="left" data-testid="stack">
         Content
       </Stack>,
@@ -50,7 +50,7 @@ describe('Stack', () => {
   })
 
   it('applies center alignment', async () => {
-    render(
+    await render(
       <Stack align="center" data-testid="stack">
         Content
       </Stack>,
@@ -61,7 +61,7 @@ describe('Stack', () => {
   })
 
   it('applies right alignment', async () => {
-    render(
+    await render(
       <Stack align="right" data-testid="stack">
         Content
       </Stack>,
@@ -72,7 +72,7 @@ describe('Stack', () => {
   })
 
   it('accepts custom className', async () => {
-    render(
+    await render(
       <Stack className="custom-class" data-testid="stack">
         Content
       </Stack>,
@@ -84,7 +84,7 @@ describe('Stack', () => {
   })
 
   it('accepts custom style prop', async () => {
-    render(
+    await render(
       <Stack style={{ backgroundColor: 'red' }} data-testid="stack">
         Content
       </Stack>,
@@ -97,7 +97,7 @@ describe('Stack', () => {
   })
 
   it('merges custom styles with gap style', async () => {
-    render(
+    await render(
       <Stack spacing="400" style={{ padding: '10px', color: 'blue' }} data-testid="stack">
         Content
       </Stack>,
