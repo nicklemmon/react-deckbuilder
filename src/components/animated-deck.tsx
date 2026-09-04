@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { clsx } from 'clsx'
 import { EmptyDeck } from './empty-deck'
 import css from './deck.module.css'
 
@@ -25,7 +24,7 @@ export function AnimatedDeck({ children }: AnimatedDeckProps) {
   })
 
   return (
-    <div className={clsx({ [css['deck'] ?? '']: true })} data-testid="animated-deck-container">
+    <div className={css['deck']} data-testid="animated-deck-container">
       {childArray.length === 0 && <EmptyDeck />}
       <AnimatePresence>
         {childArray.map((child, index) => {

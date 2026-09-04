@@ -1,5 +1,6 @@
 import type { Card } from '../types/cards'
 import { getSound } from './get-sound'
+import { requireAsset } from './vite'
 
 /** Defines a card config. */
 export function defineCard(config: Omit<Card, 'id' | 'artwork' | 'sfx'>) {
@@ -16,13 +17,6 @@ export function requireCard(id: string, deck: readonly Card[]): Card {
   const card = getCard(id, deck)
   if (!card) throw new Error(`Unknown card: ${id}`)
   return card
-}
-
-/** Gets a required asset. Throws when the asset is missing. */
-function requireAsset(assets: Record<string, string | undefined>, path: string): string {
-  const asset = assets[path]
-  if (!asset) throw new Error(`Missing required asset: ${path}`)
-  return asset
 }
 
 const CARD_CONFIG_MODULES = import.meta.glob<Omit<Card, 'id' | 'artwork' | 'sfx'>>(

@@ -1,5 +1,5 @@
-import { clsx } from 'clsx'
 import { AnimatePresence, motion } from 'motion/react'
+import { cx } from '../helpers/css'
 import css from './dialog.module.css'
 
 export function Dialog({
@@ -11,9 +11,9 @@ export function Dialog({
   onClose?: () => void
 }) {
   const withStatusClsx = (root: string) =>
-    clsx({
-      [css[root] ?? '']: true,
-      [css['is-open'] ?? '']: open,
+    cx(css, {
+      [root]: true,
+      'is-open': open,
     })
 
   return (

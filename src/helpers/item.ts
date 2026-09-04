@@ -1,5 +1,6 @@
 import type { Item } from '../types/items'
 import { getSound } from './get-sound'
+import { requireAsset } from './vite'
 
 /** Defines an item config */
 export function defineItem(config: Omit<Item, 'id' | 'artwork' | 'sfx'>) {
@@ -42,13 +43,6 @@ const ITEM_ARTWORK = import.meta.glob<string>('../items/**/*.webp', {
   import: 'default',
   query: { format: 'webp' },
 })
-
-/** Gets a required asset. Throws when the asset is missing. */
-function requireAsset(assets: Record<string, string | undefined>, path: string): string {
-  const asset = assets[path]
-  if (!asset) throw new Error(`Missing required asset: ${path}`)
-  return asset
-}
 
 /** Array of available monsters derived from `src/monsters` file contents */
 export const getAllItems = () =>

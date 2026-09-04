@@ -18,3 +18,10 @@ export function resolveModules<T>(modules: Record<string, ModuleWithDefault<T>>)
 export function resolveModulesWithPaths<T>(modules: Record<string, ModuleWithDefault<T>>) {
   return Object.entries(modules).map(([path, module]) => ({ path, url: module.default }))
 }
+
+/** Gets a required asset. Throws when the asset is missing. */
+export function requireAsset(assets: Record<string, string | undefined>, path: string): string {
+  const asset = assets[path]
+  if (!asset) throw new Error(`Missing required asset: ${path}`)
+  return asset
+}

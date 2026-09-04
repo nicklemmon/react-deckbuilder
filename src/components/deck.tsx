@@ -1,15 +1,10 @@
 import React from 'react'
-import { clsx } from 'clsx'
 import { EmptyDeck } from './empty-deck'
 import css from './deck.module.css'
 
 export function Deck({ children }: { children?: React.ReactNode }) {
   return (
-    <div
-      className={clsx({
-        [css['deck'] ?? '']: true,
-      })}
-    >
+    <div className={css['deck']}>
       {React.Children.count(children) === 0 ? (
         <EmptyDeck />
       ) : (
