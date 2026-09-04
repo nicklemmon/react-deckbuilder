@@ -11,12 +11,14 @@ export function getCard(id: string, deck: readonly Card[]): Card | undefined {
   return deck.find((card) => card.id === id)
 }
 
+/** Gets a required card. Throws when the deck does not contain the card. */
 export function requireCard(id: string, deck: readonly Card[]): Card {
   const card = getCard(id, deck)
   if (!card) throw new Error(`Unknown card: ${id}`)
   return card
 }
 
+/** Gets a required asset. Throws when the asset is missing. */
 function requireAsset(assets: Record<string, string | undefined>, path: string): string {
   const asset = assets[path]
   if (!asset) throw new Error(`Missing required asset: ${path}`)

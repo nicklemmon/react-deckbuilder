@@ -55,6 +55,14 @@ entity-name/
 
 - Use `type` over `interface`
 
+### JSDoc conventions
+
+- Add a JSDoc description when you add or extract a function with a domain rule, a side effect, or
+  a failure condition.
+- Use Simplified Technical English: use short, direct sentences in the present tense.
+- Describe intent and observable behavior. Do not repeat type information in `@param`, `@returns`,
+  or prose; TypeScript already provides it.
+
 ### Adding New Game Content
 
 - **Cards**: Create folder in `src/cards/` with config.ts using `defineCard()` helper

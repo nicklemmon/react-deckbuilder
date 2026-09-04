@@ -1,5 +1,6 @@
 export type Rng = {
   int(maxExclusive: number): number
+  /** Gets one random value. Throws when the array is empty. */
   pick<T>(xs: readonly T[]): T
   shuffle<T>(xs: T[]): T[]
   id(): string

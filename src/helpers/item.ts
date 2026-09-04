@@ -11,6 +11,7 @@ export function getItem(id: string, items: readonly Item[]): Item | undefined {
   return items.find((item) => item.id === id)
 }
 
+/** Gets a required item. Throws when the item list does not contain the item. */
 export function requireItem(id: string, items: readonly Item[]): Item {
   const item = getItem(id, items)
   if (!item) throw new Error(`Unknown item: ${id}`)
@@ -42,6 +43,7 @@ const ITEM_ARTWORK = import.meta.glob<string>('../items/**/*.webp', {
   query: { format: 'webp' },
 })
 
+/** Gets a required asset. Throws when the asset is missing. */
 function requireAsset(assets: Record<string, string | undefined>, path: string): string {
   const asset = assets[path]
   if (!asset) throw new Error(`Missing required asset: ${path}`)

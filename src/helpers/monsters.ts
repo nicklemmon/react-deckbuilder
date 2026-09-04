@@ -31,6 +31,7 @@ const MONSTER_ARTWORK = import.meta.glob<string>('../monsters/**/*.webp', {
   query: { format: 'webp' },
 })
 
+/** Gets a required asset. Throws when the asset is missing. */
 function requireAsset(assets: Record<string, string | undefined>, path: string): string {
   const asset = assets[path]
   if (!asset) throw new Error(`Missing required asset: ${path}`)
