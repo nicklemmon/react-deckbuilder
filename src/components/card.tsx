@@ -1,12 +1,12 @@
-import { clsx } from 'clsx'
 import { useState, type MouseEvent } from 'react'
 import type { Card } from '../types/cards'
 import cardBackImg from '../images/card-back.webp'
 import cardBackRainbowImg from '../images/card-back.rainbow.webp'
 import swordIcon from '../images/sword.webp'
+import { cx } from '../helpers/css'
 import { StatsRow, StatIcon, StatVal } from './stats'
 import css from './card.module.css'
-import { AppMachineContext } from '../machines/app-machine/app-machine'
+import type { AppMachineContext } from '../machines/app-machine/app-machine'
 
 export function Card({
   className,
@@ -30,21 +30,22 @@ export function Card({
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 })
   const [isHovering, setIsHovering] = useState(false)
 
-  const withClsx = (rootClass: string, additionalClassName?: string) => {
-    return clsx(
+  const withClsx = (rootClass: string | undefined, additionalClassName?: string | undefined) => {
+    return cx(
+      css,
       {
-        [rootClass]: true,
-        [css['disabled']]: status === 'disabled',
-        [css['in-play']]: status === 'in-play',
-        [css['idle']]: status === 'idle',
-        [css['face-down']]: orientation === 'face-down',
-        [css['face-up']]: orientation === 'face-up',
-        [css['stacked']]: isStacked === true,
-        [css['rarity-0']]: rarity === 0,
-        [css['rarity-1']]: rarity === 1,
-        [css['rarity-2']]: rarity === 2,
-        [css['rarity-3']]: rarity === 3,
+        disabled: status === 'disabled',
+        'in-play': status === 'in-play',
+        idle: status === 'idle',
+        'face-down': orientation === 'face-down',
+        'face-up': orientation === 'face-up',
+        stacked: isStacked === true,
+        'rarity-0': rarity === 0,
+        'rarity-1': rarity === 1,
+        'rarity-2': rarity === 2,
+        'rarity-3': rarity === 3,
       },
+      rootClass,
       additionalClassName,
     )
   }

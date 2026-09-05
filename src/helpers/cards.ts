@@ -1,5 +1,6 @@
 import type { Card } from '../types/cards'
 import { getSound } from './get-sound'
+import { requireAsset } from './vite'
 
 /** Defines a card config. */
 export function defineCard(config: Omit<Card, 'id' | 'artwork' | 'sfx'>) {
@@ -7,18 +8,31 @@ export function defineCard(config: Omit<Card, 'id' | 'artwork' | 'sfx'>) {
 }
 
 /** Returns a card from a deck by its id */
-export function getCard(id: string, deck: Array<Card>): Card {
-  return [...deck].find((card) => card.id === id) as Card
+export function getCard(id: string, deck: readonly Card[]): Card | undefined {
+  return deck.find((card) => card.id === id)
 }
 
-const CARD_CONFIG_MODULES = import.meta.glob('../cards/**/config.ts', {
+/** Gets a required card. Throws when the deck does not contain the card. */
+export function requireCard(id: string, deck: readonly Card[]): Card {
+  const card = getCard(id, deck)
+  if (!card) throw new Error(`Unknown card: ${id}`)
+  return card
+}
+
+const CARD_CONFIG_MODULES = import.meta.glob<Omit<Card, 'id' | 'artwork' | 'sfx'>>(
+  '../cards/**/config.ts',
+  {
+    eager: true,
+    import: 'default',
+  },
+)
+
+const CARD_SFX_MODULES = import.meta.glob<string>('../cards/**/*.wav', {
   eager: true,
   import: 'default',
 })
 
-const CARD_SFX_MODULES = import.meta.glob('../cards/**/*.wav', { eager: true, import: 'default' })
-
-const CARD_ARTWORK_MODULES = import.meta.glob('../cards/**/*.webp', {
+const CARD_ARTWORK_MODULES = import.meta.glob<string>('../cards/**/*.webp', {
   eager: true,
   import: 'default',
   query: { format: 'webp' },
@@ -30,19 +44,19 @@ export const CARDS = Object.entries(CARD_CONFIG_MODULES).map(([path, mod]) => {
   const id = dir.replace('../cards/', '')
 
   return {
-    ...(mod as Card),
+    ...mod,
     id,
-    artwork: CARD_ARTWORK_MODULES[`${dir}/artwork.webp`],
-    sfx: getSound({ src: CARD_SFX_MODULES[`${dir}/sfx.wav`] as string }),
+    artwork: requireAsset(CARD_ARTWORK_MODULES, `${dir}/artwork.webp`),
+    sfx: getSound({ src: requireAsset(CARD_SFX_MODULES, `${dir}/sfx.wav`) }),
   }
-}) as Array<Card>
+}) satisfies Card[]
 
 /** Default starting deck - TODO: Build starting decks per character class */
 export const STARTING_DECK = [
-  getCard('earthquake', CARDS),
-  getCard('strike', CARDS),
-  getCard('strike', CARDS),
-  getCard('strike', CARDS),
-  getCard('firebolt', CARDS),
-  getCard('firebolt', CARDS),
-].filter(Boolean) as Array<Card>
+  requireCard('earthquake', CARDS),
+  requireCard('strike', CARDS),
+  requireCard('strike', CARDS),
+  requireCard('strike', CARDS),
+  requireCard('firebolt', CARDS),
+  requireCard('firebolt', CARDS),
+]

@@ -4,13 +4,19 @@ import css from './character-creation.module.css'
 import { Stack } from './stack'
 import type { CharacterClass } from '../types/character-classes'
 
+export type CharacterCreationData = {
+  characterClass: string
+  characterName: string
+  characterPortrait: string
+}
+
 /** UI view for character creation */
 export function CharacterCreation({
   onCreate,
   characterClasses,
   playerPortraits,
 }: {
-  onCreate: (data: Record<string, FormDataEntryValue>) => void
+  onCreate: (data: CharacterCreationData) => void
   characterClasses: Array<CharacterClass>
   playerPortraits: Array<{ path: string; url: string }>
 }) {
@@ -18,11 +24,17 @@ export function CharacterCreation({
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const target = e.target as HTMLFormElement
-    const formData = new FormData(target)
-    const json = Object.fromEntries(formData)
-
-    onCreate(json)
+    const formData = new FormData(e.currentTarget)
+    const characterClass = formData.get('characterClass')
+    const characterName = formData.get('characterName')
+    const characterPortrait = formData.get('characterPortrait')
+    if (
+      typeof characterClass !== 'string' ||
+      typeof characterName !== 'string' ||
+      typeof characterPortrait !== 'string'
+    )
+      return
+    onCreate({ characterClass, characterName, characterPortrait })
   }
 
   return (

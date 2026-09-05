@@ -1,4 +1,4 @@
-import { assign, fromPromise, sendTo, setup, type ActorRefFrom } from 'xstate'
+import { assign, fromPromise, setup, type ActorRefFrom } from 'xstate'
 import impactSfx from '../../sfx/impact.slice.wav'
 import cardUseSfx from '../../sfx/card.use.wav'
 import buttonClickSfx from '../../sfx/button.click.wav'
@@ -36,23 +36,29 @@ const MAX_HAND_SIZE = 5
 const CARD_DESTRUCTION_PRICE = 100
 
 /** All image files in the project */
-const IMAGE_MODULES = import.meta.glob('../../**/*.(png|webp)', {
+const IMAGE_MODULES = import.meta.glob<{ default: string }>('../../**/*.(png|webp)', {
   eager: true,
   query: { format: 'webp' },
 })
 
 /** All sound effect files in the project */
-const SFX_MODULES = import.meta.glob('../../**/*.wav', { eager: true })
+const SFX_MODULES = import.meta.glob<{ default: string }>('../../**/*.wav', { eager: true })
 
 /** All character class config files in the project */
-const CHARACTER_CLASS_MODULES = import.meta.glob('../../character-classes/**/config.ts', {
-  eager: true,
-})
+const CHARACTER_CLASS_MODULES = import.meta.glob<{ default: CharacterClass }>(
+  '../../character-classes/**/config.ts',
+  {
+    eager: true,
+  },
+)
 
 /** All player portrait files */
-const PLAYER_PORTRAIT_MODULES = import.meta.glob('../../images/player-portraits/*.webp', {
-  eager: true,
-})
+const PLAYER_PORTRAIT_MODULES = import.meta.glob<{ default: string }>(
+  '../../images/player-portraits/*.webp',
+  {
+    eager: true,
+  },
+)
 
 /* Resolved character class configs */
 const CHARACTER_CLASSES = resolveModules<CharacterClass>(CHARACTER_CLASS_MODULES)
@@ -88,28 +94,28 @@ async function prefetchAssets() {
   const allSounds = new Set<string>()
 
   // Add glob-imported images
-  Object.values(IMAGE_MODULES).forEach((module: any) => {
+  Object.values(IMAGE_MODULES).forEach((module) => {
     allImages.add(module.default)
   })
 
   // Add glob-imported sound effects
-  Object.values(SFX_MODULES).forEach((module: any) => {
+  Object.values(SFX_MODULES).forEach((module) => {
     allSounds.add(module.default)
   })
 
   // Add assets from cards
   CARDS.forEach((card) => {
-    if (card.artwork) allImages.add(card.artwork as string)
+    if (card.artwork) allImages.add(card.artwork)
   })
 
   // Add assets from monsters
   allMonsters.forEach((monster) => {
-    if (monster.artwork) allImages.add(monster.artwork as string)
+    if (monster.artwork) allImages.add(monster.artwork)
   })
 
   // Add assets from items
   allItems.forEach((item) => {
-    if (item.artwork) allImages.add(item.artwork as string)
+    if (item.artwork) allImages.add(item.artwork)
   })
 
   // Add player portraits
@@ -262,16 +268,14 @@ export const appMachine = setup({
         if (!context.game.player.characterClass) return context.game
 
         const classDeck = rng.shuffle(context.game.player.characterClassDeck)
-        const cardsOnOffer = [
-          classDeck[rng.int(classDeck.length)],
-          classDeck[rng.int(classDeck.length)],
-          classDeck[rng.int(classDeck.length)],
-        ].map((card) => {
-          return {
-            ...card,
-            id: `${card.id}-${rng.id()}`,
-          }
-        })
+        const cardsOnOffer = [rng.pick(classDeck), rng.pick(classDeck), rng.pick(classDeck)].map(
+          (card) => {
+            return {
+              ...card,
+              id: `${card.id}-${rng.id()}`,
+            }
+          },
+        )
 
         return {
           ...context.game,
@@ -288,7 +292,7 @@ export const appMachine = setup({
     getNextMonster: assign({
       game: ({ context }) => {
         const shuffledMonsters = rng.shuffle(context.game.monsters)
-        const nextMonster = shuffledMonsters[rng.int(shuffledMonsters.length)]
+        const nextMonster = rng.pick(shuffledMonsters)
 
         return {
           ...context.game,
@@ -434,23 +438,15 @@ export const appMachine = setup({
         return { ...game, pendingCues: [] }
       },
     }),
-    playIntroMusic: sendTo(({ context }) => context.soundtrackRef!, {
-      type: 'PLAY_TRACK',
-      track: 'intro',
-    }),
-    playBoogieMusic: sendTo(({ context }) => context.soundtrackRef!, {
-      type: 'PLAY_TRACK',
-      track: 'boogie',
-    }),
-    playBattleMusic: sendTo(({ context }) => context.soundtrackRef!, {
-      type: 'PLAY_TRACK',
-      track: 'battle',
-    }),
-    playStoreMusic: sendTo(({ context }) => context.soundtrackRef!, {
-      type: 'PLAY_TRACK',
-      track: 'store',
-    }),
-    stopMusic: sendTo(({ context }) => context.soundtrackRef!, { type: 'STOP' }),
+    playIntroMusic: ({ context }) =>
+      context.soundtrackRef?.send({ type: 'PLAY_TRACK', track: 'intro' }),
+    playBoogieMusic: ({ context }) =>
+      context.soundtrackRef?.send({ type: 'PLAY_TRACK', track: 'boogie' }),
+    playBattleMusic: ({ context }) =>
+      context.soundtrackRef?.send({ type: 'PLAY_TRACK', track: 'battle' }),
+    playStoreMusic: ({ context }) =>
+      context.soundtrackRef?.send({ type: 'PLAY_TRACK', track: 'store' }),
+    stopMusic: ({ context }) => context.soundtrackRef?.send({ type: 'STOP' }),
   },
   actors: {
     loadAllAssets: fromPromise(prefetchAssets),

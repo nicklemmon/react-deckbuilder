@@ -1,6 +1,6 @@
-import { clsx } from 'clsx'
 import { AnimatePresence, motion } from 'motion/react'
 import type { Card as CardType } from '../types/cards'
+import { cx } from '../helpers/css'
 import { PriceStatsRow } from './price-stats-row'
 import { Card } from './card'
 import css from './item-shop-card.module.css'
@@ -15,18 +15,19 @@ export function ItemShopCard({
 }: {
   shopStatus: ItemShopCardStatus
   onClick: () => void
-  className?: string
+  className?: string | undefined
 } & CardType) {
   const disabled = shopStatus === 'unaffordable' || shopStatus === 'purchased'
 
-  const withClsx = (rootClass: string, className?: string) => {
-    return clsx(
+  const withClsx = (rootClass: string | undefined, className?: string | undefined) => {
+    return cx(
+      css,
       {
-        [rootClass]: true,
-        [css['purchased']]: shopStatus === 'purchased',
-        [css['unaffordable']]: shopStatus === 'unaffordable',
-        [css['affordable']]: shopStatus === 'affordable',
+        purchased: shopStatus === 'purchased',
+        unaffordable: shopStatus === 'unaffordable',
+        affordable: shopStatus === 'affordable',
       },
+      rootClass,
       className,
     )
   }

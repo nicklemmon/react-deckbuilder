@@ -1,4 +1,4 @@
-import { clsx } from 'clsx'
+import { cx } from '../helpers/css'
 import css from './button.module.css'
 
 /** Re-usable button component */
@@ -12,10 +12,11 @@ export function Button({
   variant?: 'primary' | 'secondary' | 'tertiary' | 'destructive' | 'unstyled'
 } & React.ComponentPropsWithRef<'button'>) {
   const withClsx = (root: string, className?: string) => {
-    return clsx(
+    return cx(
+      css,
       {
-        [css[root]]: true,
-        [css[variant]]: true,
+        [root]: true,
+        [variant]: true,
       },
       className,
     )

@@ -1,5 +1,5 @@
-import { clsx } from 'clsx'
 import { AnimatePresence, motion } from 'motion/react'
+import { cx } from '../helpers/css'
 import { PriceStatsRow } from './price-stats-row'
 import type { Item } from '../types/items'
 import css from './item-shop-item.module.css'
@@ -16,16 +16,17 @@ export function ItemShopItem({
   shopStatus: ItemShopItemStatus
   item: Item
   onClick: () => void
-  price?: number
-  className?: string
+  price?: number | undefined
+  className?: string | undefined
 }) {
-  const withClsx = (rootClass: string, className?: string) => {
-    return clsx(
+  const withClsx = (rootClass: string | undefined, className?: string | undefined) => {
+    return cx(
+      css,
       {
-        [rootClass]: true,
-        [css['unaffordable']]: shopStatus === 'unaffordable',
-        [css['affordable']]: shopStatus === 'affordable',
+        unaffordable: shopStatus === 'unaffordable',
+        affordable: shopStatus === 'affordable',
       },
+      rootClass,
       className,
     )
   }

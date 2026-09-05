@@ -3,15 +3,10 @@
  * @param modules - The return value of import.meta.glob with eager loading enabled.
  * @returns An object containing the resolved modules.
  */
-export function resolveModules<T>(modules: Record<string, any>) {
-  const result: Array<any> = []
+type ModuleWithDefault<T> = { default: T }
 
-  // Loop through each module entry and assign the default export to the result.
-  for (const [_path, module] of Object.entries(modules)) {
-    result.push(module.default || module) // Handle cases where there's no default export
-  }
-
-  return result as Array<T>
+export function resolveModules<T>(modules: Record<string, ModuleWithDefault<T>>): T[] {
+  return Object.values(modules).map((module) => module.default)
 }
 
 /**
@@ -20,16 +15,13 @@ export function resolveModules<T>(modules: Record<string, any>) {
  * @param modules - The return value of import.meta.glob with eager loading enabled.
  * @returns An array of objects containing both the original path and resolved URL.
  */
-export function resolveModulesWithPaths<T = string>(modules: Record<string, any>) {
-  const result: Array<{ path: string; url: T }> = []
+export function resolveModulesWithPaths<T>(modules: Record<string, ModuleWithDefault<T>>) {
+  return Object.entries(modules).map(([path, module]) => ({ path, url: module.default }))
+}
 
-  // Loop through each module entry and preserve both path and resolved URL
-  for (const [path, module] of Object.entries(modules)) {
-    result.push({
-      path,
-      url: (module.default || module) as T,
-    })
-  }
-
-  return result
+/** Gets a required asset. Throws when the asset is missing. */
+export function requireAsset(assets: Record<string, string | undefined>, path: string): string {
+  const asset = assets[path]
+  if (!asset) throw new Error(`Missing required asset: ${path}`)
+  return asset
 }
