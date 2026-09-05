@@ -14,7 +14,7 @@ export function Avatar({
 }: {
   src: string
   status?: AvatarStatus
-  onAnimationComplete?: (() => void) | undefined
+  onAnimationComplete?: () => void
 }) {
   return (
     <div>
@@ -23,10 +23,12 @@ export function Avatar({
           <img className={css['avatar-img']} src={src} />
 
           {status === 'taking-damage' ? (
-            <DamageFlash onAnimationComplete={onAnimationComplete} />
+            <DamageFlash {...(onAnimationComplete ? { onAnimationComplete } : {})} />
           ) : null}
 
-          {status === 'healing' ? <HealingFlash onAnimationComplete={onAnimationComplete} /> : null}
+          {status === 'healing' ? (
+            <HealingFlash {...(onAnimationComplete ? { onAnimationComplete } : {})} />
+          ) : null}
         </div>
       </AvatarAnimationWrapper>
     </div>
@@ -56,7 +58,7 @@ function AvatarAnimationWrapper({
 }
 
 /** Overlays the avatar and applies a flash when taking damage */
-function DamageFlash({ onAnimationComplete }: { onAnimationComplete?: (() => void) | undefined }) {
+function DamageFlash({ onAnimationComplete }: { onAnimationComplete?: () => void }) {
   return (
     <motion.div
       {...(onAnimationComplete ? { onAnimationComplete } : {})}
@@ -79,7 +81,7 @@ function DamageFlash({ onAnimationComplete }: { onAnimationComplete?: (() => voi
 }
 
 /** Overlays the avatar and applies a flash when healing */
-function HealingFlash({ onAnimationComplete }: { onAnimationComplete?: (() => void) | undefined }) {
+function HealingFlash({ onAnimationComplete }: { onAnimationComplete?: () => void }) {
   return (
     <motion.div
       {...(onAnimationComplete ? { onAnimationComplete } : {})}

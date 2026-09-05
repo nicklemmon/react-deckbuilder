@@ -275,9 +275,9 @@ export function App() {
                         {...card}
                         mode={context.game.mode}
                         orientation="face-up"
-                        status={
-                          context.game.battle.cardInPlay !== undefined ? 'disabled' : card.status
-                        }
+                        {...(context.game.battle.cardInPlay !== undefined
+                          ? { status: 'disabled' }
+                          : {})}
                         onClick={() => send({ type: 'PLAY_CARD', data: { card } })}
                       />
                     </motion.div>

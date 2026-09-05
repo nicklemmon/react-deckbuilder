@@ -22,10 +22,10 @@ export function Card({
   mode = 'standard',
   id,
 }: {
-  isStacked?: boolean | undefined
-  onClick?: (() => void) | undefined
+  isStacked?: boolean
+  onClick?: () => void
   mode?: AppMachineContext['game']['mode']
-  className?: string | undefined
+  className?: string
 } & Card) {
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 })
   const [isHovering, setIsHovering] = useState(false)

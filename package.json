@@ -20,7 +20,7 @@
     "test:ui": "vitest --ui",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
-    "qa": "npm run format:check && npm run typecheck && npm run lint && npm run test",
+    "qa": "concurrently --group --kill-others-on-fail --names 'format,typecheck,lint,test' 'npm run format:check' 'npm run typecheck' 'npm run lint' 'npm run test'",
     "convert:webp": "node --experimental-strip-types scripts/convert-to-webp.ts",
     "convert:webp:dry": "node --experimental-strip-types scripts/convert-to-webp.ts --dry-run"
   },
@@ -46,6 +46,7 @@
     "@vitest/browser": "^5.0.0",
     "@vitest/browser-playwright": "^5.0.0",
     "@vitest/ui": "^5.0.0",
+    "concurrently": "^10.0.5",
     "oxfmt": "^0.66.0",
     "oxlint": "^1.80.0",
     "oxlint-tsgolint": "^7.0.2001",
