@@ -1,0 +1,149 @@
+.demo {
+  min-height: 100vh;
+  padding: 36px 24px;
+  color: #e9e6dc;
+  background: radial-gradient(ellipse at 50% 0, #293531, transparent 65%), #101716;
+}
+.container {
+  max-width: 1180px;
+  margin: auto;
+}
+.header a {
+  color: #b8c8bd;
+  text-decoration: none;
+}
+.eyebrow {
+  margin-top: 48px;
+  color: #c2b382;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+}
+.header h1 {
+  font-family: var(--font-secondary);
+  font-size: clamp(32px, 5vw, 58px);
+  margin: 16px 0;
+  line-height: 1.15;
+}
+.intro {
+  max-width: 610px;
+  color: #aebdb5;
+  line-height: 1.8;
+}
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 32px;
+  margin: 32px 0;
+  padding: 20px 24px;
+  border: 1px solid #ffffff20;
+  border-radius: 12px;
+  background: #ffffff04;
+}
+.controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 12px;
+  color: #c5cec8;
+}
+.controls select {
+  background: #202d28;
+  color: #fff;
+  border: 1px solid #58645a;
+  border-radius: 6px;
+  padding: 8px 12px;
+  min-width: 190px;
+}
+.controls input {
+  accent-color: #d3bd7e;
+}
+.controls input[type='range'] {
+  width: 220px;
+}
+.controls .toggle {
+  flex-direction: row;
+  align-items: center;
+}
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+  gap: 24px;
+}
+.sample {
+  overflow: hidden;
+  border: 1px solid #ffffff15;
+  border-radius: 12px;
+  background: #ffffff03;
+}
+.stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 320px;
+  padding: 30px;
+  background: radial-gradient(ellipse at center, #61776122, transparent 70%);
+}
+.caption {
+  display: flex;
+  gap: 14px;
+  padding: 20px;
+  border-top: 1px solid #ffffff12;
+}
+.number {
+  color: #9b8c65;
+  font-size: 11px;
+  padding-top: 4px;
+}
+.caption h2 {
+  font-family: var(--font-secondary);
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+.caption p {
+  color: #aebdb5;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.footer {
+  margin-top: 32px;
+  color: #899b90;
+  font-size: 11px;
+  text-align: center;
+  line-height: 1.8;
+}
+
+.strength {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 18px;
+  font-size: 11px;
+  color: #c5cec8;
+}
+
+.strength input {
+  width: 100%;
+  min-width: 0;
+  accent-color: #d3bd7e;
+}
+
+.strength span {
+  color: #899b90;
+}
+
+.reset {
+  padding: 10px 14px;
+  border: 1px solid #58645a;
+  border-radius: 6px;
+  background: #202d28;
+  color: #e9e6dc;
+}
+@media (max-width: 500px) {
+  .demo {
+    padding: 24px 16px;
+  }
+  .controls {
+    gap: 24px;
+  }
+}

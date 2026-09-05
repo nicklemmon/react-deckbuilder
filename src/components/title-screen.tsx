@@ -38,6 +38,7 @@ export function TitleScreen({ onStartClick }: { onStartClick: () => void }) {
             <p>A deck-building card game built with React and XState</p>
 
             <Button onClick={onStartClick}>Click to start</Button>
+            <a href="/card-finishes">Explore card finishes</a>
           </Stack>
         </PanelBody>
       </Panel>

@@ -1,0 +1,122 @@
+.finish {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: var(--finish-intensity);
+  background-size: 250% 250%;
+  background-position: var(--sheen-x) var(--sheen-y);
+  mix-blend-mode: soft-light;
+}
+
+.finish::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 25%, #fff9 48%, transparent 65%);
+  background-size: 300% 100%;
+  background-position: var(--sheen-x) 50%;
+  animation: sweep 7s ease-in-out infinite alternate;
+}
+
+.foil {
+  background-image: repeating-conic-gradient(#172d48 0% 5%, #d8faff 8% 10%, #627c9c 15% 20%);
+  background-size: 30px 30px;
+  background-position: 0 0;
+  mix-blend-mode: overlay;
+}
+
+.prismatic {
+  background-image: conic-gradient(
+    from 35deg at var(--sheen-x) var(--sheen-y),
+    #ff3d7f,
+    #ffd84b,
+    #62ffc6,
+    #3295ff,
+    #c667ff,
+    #ff3d7f
+  );
+  mix-blend-mode: color;
+}
+
+.gold {
+  background-image: repeating-linear-gradient(
+    115deg,
+    #382000 0%,
+    #b7740a 12%,
+    #fff0a9 20%,
+    #db9a21 27%,
+    #382000 40%
+  );
+  mix-blend-mode: hard-light;
+}
+
+.ember {
+  background-image: radial-gradient(
+    ellipse at bottom,
+    #fff4ab 0%,
+    #ff9d00 20%,
+    #f32b06 40%,
+    transparent 70%
+  );
+  background-size: 100% 100%;
+  mix-blend-mode: screen;
+}
+
+.ember::after {
+  content: none;
+}
+
+.spark {
+  position: absolute;
+  bottom: 8%;
+  width: var(--spark-size);
+  height: calc(var(--spark-size) * 1.5);
+  border-radius: 50%;
+  background: #ffe8a1;
+  box-shadow: 0 0 4px #ff9d00;
+  opacity: 0;
+  animation: embers var(--spark-duration) linear var(--spark-delay) infinite;
+}
+
+.finish[data-animated='false']::after,
+.finish[data-animated='false'] .spark {
+  animation-play-state: paused;
+}
+
+@keyframes sweep {
+  from {
+    background-position: 100% 50%;
+  }
+  to {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes embers {
+  0% {
+    transform: translate(0, 0) scale(0.5);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(calc(var(--spark-drift) * -0.3), calc(var(--spark-rise) * -0.5)) scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(var(--spark-drift), calc(var(--spark-rise) * -1)) scale(0.25);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .finish::after {
+    animation: none;
+  }
+  .spark {
+    animation-play-state: paused;
+  }
+}

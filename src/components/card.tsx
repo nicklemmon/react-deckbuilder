@@ -6,6 +6,7 @@ import swordIcon from '../images/sword.webp'
 import { cx } from '../helpers/css'
 import { StatsRow, StatIcon, StatVal } from './stats'
 import css from './card.module.css'
+import { CARD_FINISH_DEFAULTS, CardFinishLayer, type CardFinish } from './card-finish'
 import type { AppMachineContext } from '../machines/app-machine/app-machine'
 
 export function Card({
@@ -21,7 +22,13 @@ export function Card({
   artwork,
   mode = 'standard',
   id,
+  finish = 'none',
+  finishIntensity = CARD_FINISH_DEFAULTS[finish],
+  finishAnimated = true,
 }: {
+  finish?: CardFinish
+  finishIntensity?: number
+  finishAnimated?: boolean
   isStacked?: boolean
   onClick?: () => void
   mode?: AppMachineContext['game']['mode']
@@ -120,6 +127,10 @@ export function Card({
           </StatsRow>
         </div>
       </div>
+
+      {orientation === 'face-up' && (
+        <CardFinishLayer finish={finish} intensity={finishIntensity} animated={finishAnimated} />
+      )}
 
       <div className={withClsx(css['card-back'])}>
         <img
