@@ -8,7 +8,8 @@ repository.
 - `npm start` - Start development server using Vite
 - `npm run build` - Build production bundle
 - `npm run preview` - Preview production build locally
-- `npm run prettier:write` - Format all files with Prettier
+- `npm run format` - Format all files with Oxfmt
+- `npm run typecheck` - Check TypeScript types
 
 ## Code Quality
 

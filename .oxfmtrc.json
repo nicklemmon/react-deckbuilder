@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 100,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "semi": false,
+  "proseWrap": "always",
+  "sortPackageJson": false,
+  "ignorePatterns": ["CLAUDE.md", ".github/dependabot.yml"]
+}
