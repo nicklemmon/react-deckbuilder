@@ -1,6 +1,5 @@
 import type { Monster } from '../types/monsters'
 import { getSound } from './get-sound'
-import { requireAsset } from './vite'
 
 /** Helper function to define and configure a monster */
 export function defineMonster(config: Omit<Monster, 'id' | 'artwork' | 'sfx' | 'status'>) {
@@ -37,16 +36,24 @@ export const getAllMonsters = () =>
   Object.entries(MONSTER_CONFIG_MODULES).map(([path, mod]) => {
     const dir = path.replace('/config.ts', '')
     const id = dir.replace('../monsters/', '')
+    const artwork = MONSTER_ARTWORK[`${dir}/artwork.webp`]
+    const introSfx = MONSTER_SFX_MODULES[`${dir}/sfx.intro.wav`]
+    const damageSfx = MONSTER_SFX_MODULES[`${dir}/sfx.damage.wav`]
+    const deathSfx = MONSTER_SFX_MODULES[`${dir}/sfx.death.wav`]
+    const sfx =
+      introSfx && damageSfx && deathSfx
+        ? {
+            intro: getMonsterSound(introSfx),
+            damage: getMonsterSound(damageSfx),
+            death: getMonsterSound(deathSfx),
+          }
+        : undefined
 
     return {
       ...mod,
       id,
       status: 'idle',
-      artwork: requireAsset(MONSTER_ARTWORK, `${dir}/artwork.webp`),
-      sfx: {
-        intro: getMonsterSound(requireAsset(MONSTER_SFX_MODULES, `${dir}/sfx.intro.wav`)),
-        damage: getMonsterSound(requireAsset(MONSTER_SFX_MODULES, `${dir}/sfx.damage.wav`)),
-        death: getMonsterSound(requireAsset(MONSTER_SFX_MODULES, `${dir}/sfx.death.wav`)),
-      },
+      ...(artwork ? { artwork } : {}),
+      ...(sfx ? { sfx } : {}),
     }
   }) satisfies Monster[]
