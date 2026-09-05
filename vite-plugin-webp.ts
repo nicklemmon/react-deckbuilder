@@ -15,13 +15,14 @@ export function webpConversion(): Plugin {
       if (hasRun) return
       hasRun = true
 
-      console.log('\n🖼️  Converting images to WebP...')
+      console.log('🖼️  Converting images to WebP...')
 
       try {
         const { stdout } = await execAsync(
           'node --experimental-strip-types scripts/convert-to-webp.ts',
         )
-        console.log(stdout)
+        const output = stdout.trim()
+        if (output) console.log(output)
       } catch (error) {
         console.error('❌ WebP conversion failed:', error)
         // Don't fail the build, just warn
