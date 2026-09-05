@@ -8,7 +8,7 @@ export function defineItem(config: Omit<Item, 'id' | 'artwork' | 'sfx'>) {
 }
 
 /** Returns an item from an array by its id */
-export function getItem(id: string, items: readonly Item[]): Item | undefined {
+function getItem(id: string, items: readonly Item[]): Item | undefined {
   return items.find((item) => item.id === id)
 }
 

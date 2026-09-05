@@ -8,7 +8,7 @@ export function defineCard(config: Omit<Card, 'id' | 'artwork' | 'sfx'>) {
 }
 
 /** Returns a card from a deck by its id */
-export function getCard(id: string, deck: readonly Card[]): Card | undefined {
+function getCard(id: string, deck: readonly Card[]): Card | undefined {
   return deck.find((card) => card.id === id)
 }
 

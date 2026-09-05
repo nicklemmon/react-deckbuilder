@@ -1,13 +1,4 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "entry": ["scripts/**/*.{js,ts,mjs,cjs}"],
-  "ignoreExportsUsedInFile": true,
-  "include": [
-    "dependencies",
-    "devDependencies",
-    "optionalPeerDependencies",
-    "unlisted",
-    "binaries",
-    "unresolved"
-  ]
+  "entry": ["scripts/**/*.{js,ts,mjs,cjs}"]
 }

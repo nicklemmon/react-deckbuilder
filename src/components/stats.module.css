@@ -5,13 +5,6 @@
   gap: var(--spacing-100);
 }
 
-.stat {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color);
-}
-
 .stat-icon {
   border-radius: var(--rounding-100);
   min-width: var(--size-150);
