@@ -34,7 +34,7 @@ function shuffle<T>(xs: T[], randomIndex: (maxExclusive: number) => number): T[]
   return arr
 }
 
-export class MathRandomRng implements Rng {
+class MathRandomRng implements Rng {
   int(maxExclusive: number): number {
     return Math.floor(Math.random() * maxExclusive)
   }

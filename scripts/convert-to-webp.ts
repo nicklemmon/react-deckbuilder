@@ -161,16 +161,19 @@ async function main() {
   const exclusions = [...defaultExclusions, ...options.exclude]
   const startDir = process.cwd()
 
-  console.log('🔍 Scanning for images...\n')
+  if (options.verbose) {
+    console.log('🔍 Scanning for images...')
+  }
 
   if (options.dryRun) {
-    console.log('🏃 DRY RUN MODE - No files will be modified\n')
+    console.log('🏃 DRY RUN MODE - No files will be modified')
   }
 
   let totalOriginalSize = 0
   let totalWebpSize = 0
   let convertedCount = 0
   let skippedCount = 0
+  let wroteProgress = false
 
   for await (const imagePath of findImages(startDir, exclusions)) {
     const result = await convertImage(imagePath, options)
@@ -179,21 +182,22 @@ async function main() {
       totalOriginalSize += result.originalSize
       totalWebpSize += result.webpSize
       convertedCount++
+      if (!options.verbose) wroteProgress = true
     } else if (!options.dryRun) {
       skippedCount++
     }
   }
 
-  if (!options.verbose && !options.dryRun) {
-    console.log('') // New line after progress dots
+  // Progress dots are written without newlines; finish the line only if we wrote any.
+  if (wroteProgress) {
+    process.stdout.write('\n')
   }
 
-  console.log('\n📊 Summary:')
-  console.log(`   Converted: ${convertedCount} images`)
-
+  const summaryParts = [`converted ${convertedCount}`]
   if (skippedCount > 0) {
-    console.log(`   Skipped: ${skippedCount} images (WebP already exists)`)
+    summaryParts.push(`skipped ${skippedCount} (already exist)`)
   }
+  console.log(`📊 WebP: ${summaryParts.join(', ')}`)
 
   if (convertedCount > 0 && !options.dryRun) {
     const totalSavings = totalOriginalSize - totalWebpSize
@@ -204,10 +208,8 @@ async function main() {
   }
 
   if (options.dryRun) {
-    console.log('\n💡 Run without --dry-run to perform actual conversion')
+    console.log('💡 Run without --dry-run to perform actual conversion')
   }
-
-  console.log('')
 }
 
 main().catch((error) => {
