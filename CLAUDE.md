@@ -10,6 +10,7 @@ repository.
 - `npm run preview` - Preview production build locally
 - `npm run format` - Format all files with Oxfmt
 - `npm run typecheck` - Check TypeScript types
+- `npm run knip` - Find unused or missing dependencies
 
 ## Code Quality
 
