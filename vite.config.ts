@@ -2,7 +2,7 @@ import { defineConfig, type PluginOption } from 'vite'
 import react from '@vitejs/plugin-react'
 import compression from 'vite-plugin-compression'
 import { imagetools } from 'vite-imagetools'
-import { webpConversion } from './vite-plugin-webp'
+import { webpConversion } from './vite-plugin-webp.ts'
 
 const DEFAULT_PLUGINS: PluginOption = [
   react(),
