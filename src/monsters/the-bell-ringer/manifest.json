@@ -1,0 +1,23 @@
+{
+  "status": "approved",
+  "name": "The Bell-Ringer",
+  "slug": "the-bell-ringer",
+  "gameMode": "standard",
+  "level": 9,
+  "concept": "A gaunt, hooded revenant carrying a cracked funeral bell bound in tarnished chains. Each toll summons translucent hands from the earth and extinguishes nearby light.",
+  "visualDescription": "a gaunt hooded revenant bowed beneath a massive cracked bronze funeral bell, the bell lashed to its back and arms with tarnished chains, its ragged burial vestments trailing through mist while translucent hands claw upward around it",
+  "poseAndAction": "the revenant planted in a strained three-quarter stance oriented toward screen-left, wrenching a heavy chain to swing the bell leftward as a visible pulse of grave-cold air rolls toward the viewer's left",
+  "setting": "an ancient rain-darkened graveyard at dusk, crowded with leaning headstones, bare yew branches, low ground fog, and candles being snuffed out by the bell's supernatural toll",
+  "lightingAndPalette": "cold moonlight and spectral blue-green reflections against restrained charcoal, weathered bronze, bone, and muted burgundy tones, with a small warm rim of dying candlelight",
+  "stats": {
+    "maxHealth": 18,
+    "attack": 8,
+    "defense": 6,
+    "rationale": "Level 9 fills the open standard-mode band between the crowded level-8 roster and the level-10 Watcher from the Deep. The Bell-Ringer's 18 health and 6 defense give its burdened revenant concept a durable profile, while 8 attack keeps it threatening without exceeding the strongest nearby attackers. The 11-gold bounty sits between typical level-8 rewards and the level-10 reward. This is a proposal for manual review, not a claim of balance."
+  },
+  "goldBounty": 11,
+  "artDirection": {
+    "referenceImage": "src/monsters/haunting-spirit/artwork.png",
+    "prompt": "Create a square, full-bleed painterly fantasy illustration for a deck-building game monster:\na gaunt hooded revenant bowed beneath a massive cracked bronze funeral bell, the bell lashed to its back and arms with tarnished chains, its ragged burial vestments trailing through mist while translucent hands claw upward around it. Show the revenant planted in a strained three-quarter stance oriented toward screen-left, wrenching a heavy chain to swing the bell leftward as a visible pulse of grave-cold air rolls toward the viewer's left in an ancient rain-darkened graveyard at dusk, crowded with leaning headstones, bare yew branches, low ground fog, and candles being snuffed out by the bell's supernatural toll, using cold moonlight and spectral blue-green reflections against restrained charcoal, weathered bronze, bone, and muted burgundy tones, with a small warm rim of dying candlelight;\nemphasize a readable silhouette, atmospheric depth, tactile materials, dramatic localized lighting,\nand detailed hand-painted rendering. Use the attached Haunting Spirit artwork only as guidance for\nrendering quality, mood, and visual language—do not copy its subject, costume, pose, composition, or\nexact palette.\n\nChoose the framing that best communicates the creature, from close portrait through full-body scene.\nOrient the monster’s head, torso, gaze, and directional movement toward screen-left—the viewer’s\nleft—or keep them neutral and centered; never orient the subject toward screen-right.\n\nCreate only the underlying illustration. Do not include text, lettering, logos, borders, frames,\ncards, badges, UI elements, watermarks, or signatures. Do not show a right-facing pose, gaze,\nattack, or movement."
+  }
+}
