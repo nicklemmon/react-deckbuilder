@@ -11,10 +11,9 @@ npm start
 
 ### Card finishes demo
 
-Open `/card-finishes` on the development server, or select **Explore card finishes** on the title
-screen. Compare four CSS finishes with the original card, change artwork, adjust each finish's
-strength, and pause the animated light. The effects follow the card's hover position and respect
-reduced motion settings.
+Open `/card-finishes` on the development server. Compare four CSS finishes with the original card,
+change artwork, adjust each finish's strength, and pause the animated light. The effects follow the
+card's hover position and respect reduced motion settings.
 
 Reuse a finish through the existing card component:
 
