@@ -1,0 +1,149 @@
+.finish {
+  --finish-glint-color: #ffffff99;
+  --foil-shadow-color: #172d48;
+  --foil-highlight-color: #d8faff;
+  --foil-mid-color: #627c9c;
+  --prismatic-red: #ff3d7f;
+  --prismatic-yellow: #ffd84b;
+  --prismatic-green: #62ffc6;
+  --prismatic-blue: #3295ff;
+  --prismatic-violet: #c667ff;
+  --gold-shadow-color: #382000;
+  --gold-mid-color: #b7740a;
+  --gold-highlight-color: #fff0a9;
+  --gold-bright-color: #db9a21;
+  --ember-highlight-color: #fff4ab;
+  --ember-mid-color: #ff9d00;
+  --ember-shadow-color: #f32b06;
+  --spark-color: #ffe8a1;
+
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-index-300);
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: var(--finish-intensity);
+  background-size: 250% 250%;
+  background-position: var(--sheen-x) var(--sheen-y);
+  mix-blend-mode: soft-light;
+}
+
+.finish::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 25%,
+    var(--finish-glint-color) 48%,
+    transparent 65%
+  );
+  background-size: 300% 100%;
+  background-position: var(--sheen-x) 50%;
+  animation: sweep 7s ease-in-out infinite alternate;
+}
+
+.foil {
+  background-image: repeating-conic-gradient(
+    var(--foil-shadow-color) 0% 5%,
+    var(--foil-highlight-color) 8% 10%,
+    var(--foil-mid-color) 15% 20%
+  );
+  background-size: 30px 30px;
+  background-position: 0 0;
+  mix-blend-mode: overlay;
+}
+
+.prismatic {
+  background-image: conic-gradient(
+    from 35deg at var(--sheen-x) var(--sheen-y),
+    var(--prismatic-red),
+    var(--prismatic-yellow),
+    var(--prismatic-green),
+    var(--prismatic-blue),
+    var(--prismatic-violet),
+    var(--prismatic-red)
+  );
+  mix-blend-mode: color;
+}
+
+.gold {
+  background-image: repeating-linear-gradient(
+    115deg,
+    var(--gold-shadow-color) 0%,
+    var(--gold-mid-color) 12%,
+    var(--gold-highlight-color) 20%,
+    var(--gold-bright-color) 27%,
+    var(--gold-shadow-color) 40%
+  );
+  mix-blend-mode: hard-light;
+}
+
+.ember {
+  background-image: radial-gradient(
+    ellipse at bottom,
+    var(--ember-highlight-color) 0%,
+    var(--ember-mid-color) 20%,
+    var(--ember-shadow-color) 40%,
+    transparent 70%
+  );
+  background-size: 100% 100%;
+  mix-blend-mode: screen;
+}
+
+.ember::after {
+  content: none;
+}
+
+.spark {
+  position: absolute;
+  bottom: 8%;
+  width: var(--spark-size);
+  height: calc(var(--spark-size) * 1.5);
+  border-radius: 50%;
+  background: var(--spark-color);
+  box-shadow: 0 0 4px var(--ember-mid-color);
+  opacity: 0;
+  animation: embers var(--spark-duration) linear var(--spark-delay) infinite;
+}
+
+.finish[data-animated='false']::after,
+.finish[data-animated='false'] .spark {
+  animation-play-state: paused;
+}
+
+@keyframes sweep {
+  from {
+    background-position: 100% 50%;
+  }
+  to {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes embers {
+  0% {
+    transform: translate(0, 0) scale(0.5);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(calc(var(--spark-drift) * -0.3), calc(var(--spark-rise) * -0.5)) scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(var(--spark-drift), calc(var(--spark-rise) * -1)) scale(0.25);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .finish::after {
+    animation: none;
+  }
+  .spark {
+    animation-play-state: paused;
+  }
+}

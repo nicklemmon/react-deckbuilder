@@ -22,3 +22,6 @@ test-results
 playwright-report
 .playwright-mcp
 .vitest
+
+*storybook.log
+storybook-static

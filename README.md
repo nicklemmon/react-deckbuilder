@@ -9,10 +9,45 @@ A simple [deck-building game](https://en.wikipedia.org/wiki/Deck-building_game) 
 npm start
 ```
 
+### Card finishes demo
+
+Open `/card-finishes` on the development server. Compare four CSS finishes with the original card,
+change artwork, adjust each finish's strength, and pause the animated light. The effects follow the
+card's hover position and respect reduced motion settings.
+
+Reuse a finish through the existing card component:
+
+```tsx
+<Card {...card} finish="prismatic" finishIntensity={0.6} finishAnimated />
+```
+
+Each finish has its own default strength in `CARD_FINISH_DEFAULTS` in
+`src/components/card-finish.tsx`. Omit `finishIntensity` to use it. Demo adjustments last until the
+page reloads; **Reset all strengths** restores these defaults.
+
+Available finishes: `none` (default), `foil` (30%), `prismatic` (60%), `gold` (50%), and `ember`
+(85%). These are decorative CSS gradients and blend modes, not WebGL shaders. Names, descriptions,
+and attack values stay above the effects; face-down cards do not render the finish. No gameplay
+rarities or rewards are changed by the demo.
+
 ## Production
 
 ```bash
 npm run build
+```
+
+## Storybook
+
+Run the component workshop locally:
+
+```bash
+npm run storybook
+```
+
+Build the static Storybook site:
+
+```bash
+npm run build-storybook
 ```
 
 ## AI use

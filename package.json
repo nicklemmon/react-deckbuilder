@@ -23,7 +23,9 @@
     "knip": "knip",
     "qa": "concurrently --group --names 'format,typecheck,lint,knip,test' 'npm run format:check' 'npm run typecheck' 'npm run lint' 'npm run knip' 'npm run test'",
     "convert:webp": "node --experimental-strip-types scripts/convert-to-webp.ts",
-    "convert:webp:dry": "node --experimental-strip-types scripts/convert-to-webp.ts --dry-run"
+    "convert:webp:dry": "node --experimental-strip-types scripts/convert-to-webp.ts --dry-run",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@vercel/analytics": "2.0.1",
@@ -36,12 +38,19 @@
     "xstate": "5.32.6"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "latest",
+    "@storybook/addon-a11y": "^10.6.0",
+    "@storybook/addon-docs": "^10.6.0",
+    "@storybook/addon-mcp": "^10.6.0",
+    "@storybook/addon-vitest": "^10.6.0",
+    "@storybook/react-vite": "^10.6.0",
     "@types/howler": "2.2.13",
     "@types/node": "26.4.1",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.7",
     "@vitejs/plugin-react": "6.1.1",
     "@vitest/browser-playwright": "^5.0.0",
+    "@vitest/coverage-v8": "5.0.0",
     "@vitest/ui": "^5.0.0",
     "concurrently": "^10.0.5",
     "knip": "^6.34.0",
@@ -50,6 +59,7 @@
     "oxlint-tsgolint": "^7.0.2001",
     "playwright": "^1.62.1",
     "sharp": "^0.35.4",
+    "storybook": "^10.6.0",
     "typescript": "7.0.2",
     "vite": "8.2.2",
     "vite-imagetools": "^12.0.1",
