@@ -23,7 +23,8 @@
     "knip": "knip",
     "qa": "concurrently --group --names 'format,typecheck,lint,knip,test' 'npm run format:check' 'npm run typecheck' 'npm run lint' 'npm run knip' 'npm run test'",
     "convert:webp": "node --experimental-strip-types scripts/convert-to-webp.ts",
-    "convert:webp:dry": "node --experimental-strip-types scripts/convert-to-webp.ts --dry-run"
+    "convert:webp:dry": "node --experimental-strip-types scripts/convert-to-webp.ts --dry-run",
+    "monster": "node --experimental-strip-types scripts/monster-content.ts"
   },
   "dependencies": {
     "@vercel/analytics": "2.0.1",
