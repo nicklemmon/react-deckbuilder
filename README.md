@@ -36,6 +36,20 @@ rarities or rewards are changed by the demo.
 npm run build
 ```
 
+## Storybook
+
+Run the component workshop locally:
+
+```bash
+npm run storybook
+```
+
+Build the static Storybook site:
+
+```bash
+npm run build-storybook
+```
+
 ## AI use
 
 ### Coding

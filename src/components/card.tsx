@@ -33,7 +33,7 @@ export function Card({
   onClick?: () => void
   mode?: AppMachineContext['game']['mode']
   className?: string
-} & Card) {
+} & Omit<Card, 'align' | 'price' | 'sfx'>) {
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 })
   const [isHovering, setIsHovering] = useState(false)
 
