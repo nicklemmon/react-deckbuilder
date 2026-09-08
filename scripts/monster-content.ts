@@ -216,9 +216,21 @@ function configSource(draft: MonsterDraft): string {
   return `import { defineMonster } from '../../helpers/monsters'\n\nexport default defineMonster({\n  name: ${JSON.stringify(draft.name)},\n  level: ${draft.level},\n  goldBounty: ${draft.goldBounty},\n  gameMode: ${JSON.stringify(draft.gameMode)},\n  stats: {\n    maxHealth: ${draft.stats.maxHealth},\n    health: ${draft.stats.maxHealth},\n    attack: ${draft.stats.attack},\n    defense: ${draft.stats.defense},\n  },\n})\n`
 }
 
-function finalizedManifest(draft: MonsterDraft) {
-  const { artworkSource: _artworkSource, ...manifest } = draft
-  return manifest
+/** Builds creative provenance without duplicating runtime fields owned by config.ts. */
+export function finalizedManifest(draft: MonsterDraft) {
+  return {
+    status: draft.status,
+    name: draft.name,
+    slug: draft.slug,
+    concept: draft.concept,
+    visualDescription: draft.visualDescription,
+    poseAndAction: draft.poseAndAction,
+    setting: draft.setting,
+    lightingAndPalette: draft.lightingAndPalette,
+    statRationale: draft.stats.rationale,
+    artDirection: draft.artDirection,
+    ...(draft.audioDirection ? { audioDirection: draft.audioDirection } : {}),
+  }
 }
 
 async function scaffold(draftPath: string) {

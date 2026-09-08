@@ -81,8 +81,10 @@ npm run qa
 ```
 
 The scaffold command creates `config.ts`, finalized `manifest.json`, `artwork.png`, and
-`artwork.webp`. It may complete a partial directory but never overwrites an existing target file.
-Vite discovers the new monster automatically; do not add a registry entry.
+`artwork.webp`. Treat `config.ts` as the sole source of truth for runtime fields: name, mode, level,
+stats, and gold bounty. The manifest records creative approval provenance and the stat rationale; it
+must not duplicate runtime fields. Scaffold may complete a partial directory but never overwrites an
+existing target file. Vite discovers the new monster automatically; do not add a registry entry.
 
 Treat the monster as complete only when QA passes. Report optional audio assets as deferred, not
 missing requirements.

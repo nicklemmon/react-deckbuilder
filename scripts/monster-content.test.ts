@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { slugify, validateDraft, type MonsterDraft } from './monster-content'
+import { finalizedManifest, slugify, validateDraft, type MonsterDraft } from './monster-content'
 
 const validDraft: MonsterDraft = {
   status: 'approved',
@@ -31,5 +31,16 @@ describe('monster content', () => {
     })
     expect(errors).toContain('level must be a positive integer')
     expect(errors).toContain('setting must contain an approved value')
+  })
+
+  it('keeps runtime gameplay fields out of the finalized manifest', () => {
+    const manifest = finalizedManifest(validDraft)
+
+    expect(manifest.statRationale).toBe(validDraft.stats.rationale)
+    expect(manifest).not.toHaveProperty('gameMode')
+    expect(manifest).not.toHaveProperty('level')
+    expect(manifest).not.toHaveProperty('stats')
+    expect(manifest).not.toHaveProperty('goldBounty')
+    expect(manifest).not.toHaveProperty('artworkSource')
   })
 })

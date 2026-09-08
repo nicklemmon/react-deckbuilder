@@ -1,7 +1,7 @@
 import { defineMonster } from '../../helpers/monsters'
 
 export default defineMonster({
-  name: 'The Bell-Ringer',
+  name: 'Bell-ringer',
   level: 9,
   goldBounty: 11,
   gameMode: 'standard',
