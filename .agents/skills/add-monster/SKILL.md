@@ -26,11 +26,15 @@ validation. Inspect same-mode monsters at nearby levels, then propose stats and 
 short rationale. The project has no balance formula: do not claim the proposal is balanced.
 
 Update the draft JSON directly with the refined concept, final creative fields, proposed stats, and
-rationale. Then render the exact prompt from the appropriate template in `prompts/monster-art/`:
+rationale. Then render and record the exact prompt from the appropriate template in
+`prompts/monster-art/`:
 
 ```bash
 npm run monster -- prompt <draft.json>
 ```
+
+If creative fields changed, this command updates `artDirection` and resets `status` to `draft` so
+the new exact prompt must be approved.
 
 Present the concept, level, stats, rationale, and rendered artwork prompt for review before image
 generation. The scaffold command recomputes this prompt and records it in the finalized manifest.

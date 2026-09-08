@@ -1,4 +1,4 @@
-import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { createInterface } from 'node:readline/promises'
@@ -101,20 +101,27 @@ export function validateDraft(draft: MonsterDraft): string[] {
   }
   requireText(draft.stats.rationale, 'stats.rationale', errors)
   if (!isPositiveInteger(draft.goldBounty)) errors.push('goldBounty must be a positive integer')
+  requireText(draft.artDirection?.referenceImage, 'artDirection.referenceImage', errors)
+  requireText(draft.artDirection?.prompt, 'artDirection.prompt', errors)
   requireText(draft.artworkSource, 'artworkSource', errors)
+  if (draft.audioDirection) {
+    requireText(draft.audioDirection.intro, 'audioDirection.intro', errors)
+    requireText(draft.audioDirection.damage, 'audioDirection.damage', errors)
+    requireText(draft.audioDirection.death, 'audioDirection.death', errors)
+  }
   return errors
 }
 
-async function readPrompt(mode: GameMode) {
-  const source = await readFile(join(ROOT, 'prompts', 'monster-art', `${mode}.md`), 'utf8')
+async function readPrompt(mode: GameMode, root = ROOT) {
+  const source = await readFile(join(root, 'prompts', 'monster-art', `${mode}.md`), 'utf8')
   const match = source.match(/^---\nreference-image:\s*(.+)\n---\n+([\s\S]+)$/)
   if (!match?.[1] || !match[2]) throw new Error(`Invalid ${mode} prompt frontmatter`)
   return { referenceImage: match[1].trim(), template: match[2].trim() }
 }
 
 /** Builds the exact image prompt from approved creative fields. */
-export async function composeArtworkPrompt(draft: MonsterDraft): Promise<string> {
-  const { template } = await readPrompt(draft.gameMode)
+export async function composeArtworkPrompt(draft: MonsterDraft, root = ROOT): Promise<string> {
+  const { template } = await readPrompt(draft.gameMode, root)
   const replacements: Record<string, string> = {
     visualDescription: draft.visualDescription,
     poseAndAction: draft.poseAndAction,
@@ -122,6 +129,22 @@ export async function composeArtworkPrompt(draft: MonsterDraft): Promise<string>
     lightingAndPalette: draft.lightingAndPalette,
   }
   return template.replace(/{{(\w+)}}/g, (_, key: string) => replacements[key] ?? `{{${key}}}`)
+}
+
+/** Validates that the approved artwork prompt still matches the current creative fields. */
+export async function validateDraftForScaffolding(draft: MonsterDraft, root = ROOT) {
+  const errors = validateDraft(draft)
+  if (errors.length) return errors
+
+  const { referenceImage } = await readPrompt(draft.gameMode, root)
+  const expectedPrompt = await composeArtworkPrompt(draft, root)
+  if (draft.artDirection.referenceImage !== referenceImage) {
+    errors.push('artDirection.referenceImage does not match the mode template')
+  }
+  if (draft.artDirection.prompt !== expectedPrompt) {
+    errors.push('artDirection.prompt does not match the current creative fields')
+  }
+  return errors
 }
 
 async function ask(question: string, fallback = ''): Promise<string> {
@@ -212,6 +235,19 @@ async function validateArtwork(path: string) {
   }
 }
 
+async function writeFileIfMissing(path: string, content: string | Uint8Array) {
+  try {
+    await writeFile(path, content, { flag: 'wx' })
+    return
+  } catch (error: unknown) {
+    if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error
+  }
+
+  const existing = await readFile(path)
+  const expected = typeof content === 'string' ? Buffer.from(content) : Buffer.from(content)
+  if (!existing.equals(expected)) throw new Error(`Refusing to overwrite differing file: ${path}`)
+}
+
 function configSource(draft: MonsterDraft): string {
   return `import { defineMonster } from '../../helpers/monsters'\n\nexport default defineMonster({\n  name: ${JSON.stringify(draft.name)},\n  level: ${draft.level},\n  goldBounty: ${draft.goldBounty},\n  gameMode: ${JSON.stringify(draft.gameMode)},\n  stats: {\n    maxHealth: ${draft.stats.maxHealth},\n    health: ${draft.stats.maxHealth},\n    attack: ${draft.stats.attack},\n    defense: ${draft.stats.defense},\n  },\n})\n`
 }
@@ -220,7 +256,6 @@ function configSource(draft: MonsterDraft): string {
 export function finalizedManifest(draft: MonsterDraft) {
   return {
     status: draft.status,
-    name: draft.name,
     slug: draft.slug,
     concept: draft.concept,
     visualDescription: draft.visualDescription,
@@ -233,44 +268,40 @@ export function finalizedManifest(draft: MonsterDraft) {
   }
 }
 
-async function scaffold(draftPath: string) {
+export async function scaffold(draftPath: string, root = ROOT) {
   const draft = await loadDraft(draftPath)
-  const errors = validateDraft(draft)
+  const errors = await validateDraftForScaffolding(draft, root)
   if (errors.length) throw new Error(errors.join('\n'))
   if (draft.status !== 'approved')
     throw new Error('Draft status must be approved before scaffolding')
 
-  const expectedPrompt = await composeArtworkPrompt(draft)
-  const { referenceImage } = await readPrompt(draft.gameMode)
+  const expectedPrompt = await composeArtworkPrompt(draft, root)
+  const { referenceImage } = await readPrompt(draft.gameMode, root)
 
-  const targetDir = join(ROOT, 'src', 'monsters', draft.slug)
+  const targetDir = join(root, 'src', 'monsters', draft.slug)
   const configPath = join(targetDir, 'config.ts')
   const manifestPath = join(targetDir, 'manifest.json')
   const pngPath = join(targetDir, 'artwork.png')
   const webpPath = join(targetDir, 'artwork.webp')
-  if (existsSync(configPath) || existsSync(manifestPath)) {
-    throw new Error(`Refusing to overwrite config.ts or manifest.json in ${targetDir}`)
-  }
-
-  const sourceArtwork = resolve(ROOT, draft.artworkSource)
-  const artworkAlreadyInPlace = sourceArtwork === pngPath && existsSync(pngPath)
-  if (existsSync(pngPath) && !artworkAlreadyInPlace) {
-    throw new Error(`Refusing to overwrite ${pngPath}`)
-  }
-  if (existsSync(webpPath) && !artworkAlreadyInPlace) {
-    throw new Error(`Refusing to overwrite ${webpPath}`)
-  }
-  await validateArtwork(sourceArtwork)
+  const sourceArtwork = resolve(root, draft.artworkSource)
+  const artworkForScaffold = existsSync(pngPath) ? pngPath : sourceArtwork
+  await validateArtwork(artworkForScaffold)
 
   await mkdir(targetDir, { recursive: true })
-  if (!artworkAlreadyInPlace) await copyFile(sourceArtwork, pngPath)
-  await writeFile(configPath, configSource(draft))
+  await writeFileIfMissing(pngPath, await readFile(sourceArtwork))
+  await writeFileIfMissing(configPath, configSource(draft))
   const finalizedDraft = {
     ...draft,
     artDirection: { referenceImage, prompt: expectedPrompt },
   }
-  await writeFile(manifestPath, `${JSON.stringify(finalizedManifest(finalizedDraft), null, 2)}\n`)
-  if (!existsSync(webpPath)) await sharp(pngPath).webp({ quality: 80 }).toFile(webpPath)
+  await writeFileIfMissing(
+    manifestPath,
+    `${JSON.stringify(finalizedManifest(finalizedDraft), null, 2)}\n`,
+  )
+  if (!existsSync(webpPath)) {
+    const webp = await sharp(pngPath).webp({ quality: 80 }).toBuffer()
+    await writeFile(webpPath, webp, { flag: 'wx' })
+  }
   console.log(`Created monster files in ${targetDir}`)
 }
 
@@ -306,12 +337,24 @@ async function main() {
   if (command === 'prompt') {
     const draft = await loadDraft(path)
     const { referenceImage } = await readPrompt(draft.gameMode)
-    console.log(`Reference image: ${referenceImage}\n\n${await composeArtworkPrompt(draft)}`)
+    const prompt = await composeArtworkPrompt(draft)
+    const promptChanged =
+      draft.artDirection.referenceImage !== referenceImage || draft.artDirection.prompt !== prompt
+    if (promptChanged) {
+      const updatedDraft = {
+        ...draft,
+        status: 'draft' as const,
+        artDirection: { referenceImage, prompt },
+      }
+      await writeFile(resolve(path), `${JSON.stringify(updatedDraft, null, 2)}\n`)
+      console.log('Draft prompt updated; approval status reset to draft.\n')
+    }
+    console.log(`Reference image: ${referenceImage}\n\n${prompt}`)
     return
   }
   if (command === 'validate') {
     const draft = await loadDraft(path)
-    const errors = validateDraft(draft)
+    const errors = await validateDraftForScaffolding(draft)
     if (errors.length) throw new Error(errors.join('\n'))
     await validateArtwork(resolve(ROOT, draft.artworkSource))
     console.log('Draft and artwork are valid')
