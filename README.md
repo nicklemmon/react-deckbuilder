@@ -26,7 +26,7 @@ npm run storybook
 Build the static Storybook site:
 
 ```bash
-npm run build-storybook
+npm run storybook:build
 ```
 
 ## AI use

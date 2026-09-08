@@ -25,7 +25,7 @@
     "convert:webp": "node --experimental-strip-types scripts/convert-to-webp.ts",
     "convert:webp:dry": "node --experimental-strip-types scripts/convert-to-webp.ts --dry-run",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook:build": "storybook build"
   },
   "dependencies": {
     "@vercel/analytics": "2.0.1",
@@ -38,7 +38,6 @@
     "xstate": "5.32.6"
   },
   "devDependencies": {
-    "@storybook/addon-a11y": "^10.6.0",
     "@storybook/addon-docs": "^10.6.0",
     "@storybook/addon-mcp": "^10.6.0",
     "@storybook/react-vite": "^10.6.0",
