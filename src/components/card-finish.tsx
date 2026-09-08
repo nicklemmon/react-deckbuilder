@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import { cx } from '../helpers/css'
 import css from './card-finish.module.css'
 
 export type CardFinish = 'none' | 'foil' | 'prismatic' | 'gold' | 'ember'
@@ -32,7 +33,10 @@ export function CardFinishLayer({
   return (
     <div
       aria-hidden="true"
-      className={`${css['finish']} ${css[finish]}`}
+      className={cx(css, {
+        finish: true,
+        [finish]: true,
+      })}
       data-animated={animated}
       style={
         {
