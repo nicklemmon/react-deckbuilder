@@ -15,6 +15,20 @@ npm start
 npm run build
 ```
 
+## Storybook
+
+Run the component workshop locally:
+
+```bash
+npm run storybook
+```
+
+Build the static Storybook site:
+
+```bash
+npm run storybook:build
+```
+
 ## AI use
 
 ### Coding

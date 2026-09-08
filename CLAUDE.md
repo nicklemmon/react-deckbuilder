@@ -8,6 +8,8 @@ repository.
 - `npm start` - Start development server using Vite
 - `npm run build` - Build production bundle
 - `npm run preview` - Preview production build locally
+- `npm run storybook` - Start Storybook component workshop
+- `npm run storybook:build` - Build static Storybook site
 - `npm run format` - Format all files with Oxfmt
 - `npm run typecheck` - Check TypeScript types
 - `npm run knip` - Find unused or missing dependencies
