@@ -12,8 +12,17 @@ export const CARD_FINISH_DEFAULTS: Readonly<Record<CardFinish, number>> = {
   ember: 0.85,
 }
 
+type FinishStyle = CSSProperties & { '--finish-intensity': number }
+type SparkStyle = CSSProperties & {
+  '--spark-size': string
+  '--spark-drift': string
+  '--spark-rise': string
+  '--spark-duration': string
+  '--spark-delay': string
+}
+
 // Fixed, irregular seeds keep sparks stable when the card rerenders during hover.
-const emberSeeds = [
+const EMBER_SEEDS = [
   0.13, 0.72, 0.34, 0.91, 0.46, 0.08, 0.61, 0.83, 0.25, 0.53, 0.97, 0.39, 0.18, 0.67, 0.57, 0.04,
   0.78, 0.31,
 ]
@@ -29,6 +38,9 @@ export function CardFinishLayer({
   animated?: boolean
 }) {
   if (finish === 'none') return null
+  const style: FinishStyle = {
+    '--finish-intensity': Math.max(0, Math.min(1, intensity)),
+  }
 
   return (
     <div
@@ -38,29 +50,21 @@ export function CardFinishLayer({
         [finish]: true,
       })}
       data-animated={animated}
-      style={
-        {
-          '--finish-intensity': Math.max(0, Math.min(1, intensity)),
-        } as CSSProperties
-      }
+      style={style}
     >
       {finish === 'ember' &&
-        emberSeeds.map((seed, index) => (
-          <span
-            key={seed}
-            className={css['spark']}
-            style={
-              {
-                left: `${seed * 100}%`,
-                '--spark-size': `${1 + ((index * 7) % 11) / 6}px`,
-                '--spark-drift': `${Math.sin(index * 2.4) * 24}px`,
-                '--spark-rise': `${85 + ((index * 37) % 115)}px`,
-                '--spark-duration': `${2.6 + seed * 3.8}s`,
-                '--spark-delay': `${-seed * 13}s`,
-              } as CSSProperties
-            }
-          />
-        ))}
+        EMBER_SEEDS.map((seed, index) => {
+          const sparkStyle: SparkStyle = {
+            left: `${seed * 100}%`,
+            '--spark-size': `${1 + ((index * 7) % 11) / 6}px`,
+            '--spark-drift': `${Math.sin(index * 2.4) * 24}px`,
+            '--spark-rise': `${85 + ((index * 37) % 115)}px`,
+            '--spark-duration': `${2.6 + seed * 3.8}s`,
+            '--spark-delay': `${-seed * 13}s`,
+          }
+
+          return <span key={seed} className={css['spark']} style={sparkStyle} />
+        })}
     </div>
   )
 }
