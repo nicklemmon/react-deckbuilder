@@ -6,6 +6,7 @@ import { stdin as input, stdout as output } from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
 import sharp from 'sharp'
+import { z } from 'zod'
 
 export type GameMode = 'standard' | 'rainbow'
 
@@ -56,6 +57,7 @@ The draft command writes ignored working state. Validate is read-only. Scaffold 
 draft and creates only missing files in src/monsters/<slug>.
 `
 
+/** Turns a display name into a stable kebab-case slug. */
 export function slugify(value: string): string {
   return value
     .normalize('NFKD')
@@ -65,53 +67,74 @@ export function slugify(value: string): string {
     .replace(/^-|-$/g, '')
 }
 
-function isPositiveInteger(value: unknown): value is number {
-  return Number.isInteger(value) && Number(value) > 0
-}
+const approvedText = z
+  .string({ error: 'must contain an approved value' })
+  .trim()
+  .min(1, { error: 'must contain an approved value' })
+  .refine((value) => value.toLowerCase() !== 'decide for me', {
+    error: 'must contain an approved value',
+  })
 
-function requireText(value: unknown, field: string, errors: string[]) {
-  if (
-    typeof value !== 'string' ||
-    value.trim() === '' ||
-    value.trim().toLowerCase() === 'decide for me'
-  ) {
-    errors.push(`${field} must contain an approved value`)
-  }
+const positiveInteger = z
+  .number({ error: 'must be a positive integer' })
+  .int({ error: 'must be a positive integer' })
+  .positive({ error: 'must be a positive integer' })
+
+const nonNegativeInteger = z
+  .number({ error: 'must be a non-negative integer' })
+  .int({ error: 'must be a non-negative integer' })
+  .nonnegative({ error: 'must be a non-negative integer' })
+
+const monsterDraftSchema = z.object({
+  status: z.enum(['draft', 'approved'], { error: 'is invalid' }),
+  name: approvedText,
+  slug: z
+    .string({ error: 'must be lowercase kebab-case' })
+    .min(1, { error: 'must be lowercase kebab-case' })
+    .refine((value) => value === slugify(value), { error: 'must be lowercase kebab-case' }),
+  gameMode: z.enum(MODES, { error: 'must be standard or rainbow' }),
+  level: positiveInteger,
+  concept: approvedText,
+  visualDescription: approvedText,
+  poseAndAction: approvedText,
+  setting: approvedText,
+  lightingAndPalette: approvedText,
+  stats: z.object({
+    maxHealth: positiveInteger,
+    attack: positiveInteger,
+    defense: nonNegativeInteger,
+    rationale: approvedText,
+  }),
+  goldBounty: positiveInteger,
+  artDirection: z.object({
+    referenceImage: approvedText,
+    prompt: approvedText,
+  }),
+  artworkSource: approvedText,
+  audioDirection: z
+    .object({
+      intro: approvedText,
+      damage: approvedText,
+      death: approvedText,
+    })
+    .optional(),
+})
+
+/** Formats Zod issues as field-prefixed failure messages. */
+function formatZodErrors(error: z.ZodError): string[] {
+  return error.issues.map((issue) => {
+    const path = issue.path.join('.')
+    return path ? `${path} ${issue.message}` : issue.message
+  })
 }
 
 /** Returns failures that must be resolved before a draft can be scaffolded. */
 export function validateDraft(draft: MonsterDraft): string[] {
-  const errors: string[] = []
-  if (draft.status !== 'draft' && draft.status !== 'approved') errors.push('status is invalid')
-  requireText(draft.name, 'name', errors)
-  if (!draft.slug || draft.slug !== slugify(draft.slug))
-    errors.push('slug must be lowercase kebab-case')
-  if (!MODES.includes(draft.gameMode)) errors.push('gameMode must be standard or rainbow')
-  if (!isPositiveInteger(draft.level)) errors.push('level must be a positive integer')
-  requireText(draft.concept, 'concept', errors)
-  requireText(draft.visualDescription, 'visualDescription', errors)
-  requireText(draft.poseAndAction, 'poseAndAction', errors)
-  requireText(draft.setting, 'setting', errors)
-  requireText(draft.lightingAndPalette, 'lightingAndPalette', errors)
-  if (!isPositiveInteger(draft.stats.maxHealth))
-    errors.push('stats.maxHealth must be a positive integer')
-  if (!isPositiveInteger(draft.stats.attack)) errors.push('stats.attack must be a positive integer')
-  if (!Number.isInteger(draft.stats.defense) || Number(draft.stats.defense) < 0) {
-    errors.push('stats.defense must be a non-negative integer')
-  }
-  requireText(draft.stats.rationale, 'stats.rationale', errors)
-  if (!isPositiveInteger(draft.goldBounty)) errors.push('goldBounty must be a positive integer')
-  requireText(draft.artDirection?.referenceImage, 'artDirection.referenceImage', errors)
-  requireText(draft.artDirection?.prompt, 'artDirection.prompt', errors)
-  requireText(draft.artworkSource, 'artworkSource', errors)
-  if (draft.audioDirection) {
-    requireText(draft.audioDirection.intro, 'audioDirection.intro', errors)
-    requireText(draft.audioDirection.damage, 'audioDirection.damage', errors)
-    requireText(draft.audioDirection.death, 'audioDirection.death', errors)
-  }
-  return errors
+  const result = monsterDraftSchema.safeParse(draft)
+  return result.success ? [] : formatZodErrors(result.error)
 }
 
+/** Reads the mode prompt template and its style-reference path. */
 async function readPrompt(mode: GameMode, root = ROOT) {
   const source = await readFile(join(root, 'prompts', 'monster-art', `${mode}.md`), 'utf8')
   const match = source.match(/^---\nreference-image:\s*(.+)\n---\n+([\s\S]+)$/)
@@ -147,6 +170,7 @@ export async function validateDraftForScaffolding(draft: MonsterDraft, root = RO
   return errors
 }
 
+/** Asks one interactive question and returns the answer or fallback. */
 async function ask(question: string, fallback = ''): Promise<string> {
   const rl = createInterface({ input, output })
   try {
@@ -157,6 +181,7 @@ async function ask(question: string, fallback = ''): Promise<string> {
   }
 }
 
+/** Builds a draft from seeded answers and optional interactive prompts. */
 async function createDraftFromAnswers(
   seed: Partial<MonsterDraft> = {},
   interactive = true,
@@ -221,10 +246,12 @@ async function createDraftFromAnswers(
   return draft
 }
 
+/** Loads a draft JSON file from disk. */
 async function loadDraft(path: string): Promise<MonsterDraft> {
   return JSON.parse(await readFile(resolve(path), 'utf8')) as MonsterDraft
 }
 
+/** Confirms artwork is a 1024×1024 PNG before scaffolding. */
 async function validateArtwork(path: string) {
   const metadata = await sharp(path).metadata()
   if (metadata.format !== 'png') throw new Error('Artwork must be a PNG')
@@ -235,6 +262,7 @@ async function validateArtwork(path: string) {
   }
 }
 
+/** Writes a file only when missing, or when existing bytes already match. */
 async function writeFileIfMissing(path: string, content: string | Uint8Array) {
   try {
     await writeFile(path, content, { flag: 'wx' })
@@ -248,6 +276,7 @@ async function writeFileIfMissing(path: string, content: string | Uint8Array) {
   if (!existing.equals(expected)) throw new Error(`Refusing to overwrite differing file: ${path}`)
 }
 
+/** Renders the monster config.ts source from approved runtime fields. */
 function configSource(draft: MonsterDraft): string {
   return `import { defineMonster } from '../../helpers/monsters'\n\nexport default defineMonster({\n  name: ${JSON.stringify(draft.name)},\n  level: ${draft.level},\n  goldBounty: ${draft.goldBounty},\n  gameMode: ${JSON.stringify(draft.gameMode)},\n  stats: {\n    maxHealth: ${draft.stats.maxHealth},\n    health: ${draft.stats.maxHealth},\n    attack: ${draft.stats.attack},\n    defense: ${draft.stats.defense},\n  },\n})\n`
 }
@@ -268,6 +297,7 @@ export function finalizedManifest(draft: MonsterDraft) {
   }
 }
 
+/** Creates missing monster files from an approved draft without overwriting diffs. */
 export async function scaffold(draftPath: string, root = ROOT) {
   const draft = await loadDraft(draftPath)
   const errors = await validateDraftForScaffolding(draft, root)
@@ -305,6 +335,7 @@ export async function scaffold(draftPath: string, root = ROOT) {
   console.log(`Created monster files in ${targetDir}`)
 }
 
+/** Runs the monster draft, prompt, validate, or scaffold CLI command. */
 async function main() {
   const { values, positionals } = parseArgs({
     options: {
