@@ -25,7 +25,8 @@
     "convert:webp": "node --experimental-strip-types scripts/convert-to-webp.ts",
     "convert:webp:dry": "node --experimental-strip-types scripts/convert-to-webp.ts --dry-run",
     "storybook": "storybook dev -p 6006",
-    "storybook:build": "storybook build"
+    "storybook:build": "storybook build",
+    "monster": "node --experimental-strip-types scripts/monster-content.ts"
   },
   "dependencies": {
     "@vercel/analytics": "2.0.1",
@@ -61,7 +62,8 @@
     "vite-imagetools": "^12.0.1",
     "vite-plugin-compression": "0.5.1",
     "vitest": "^5.0.0",
-    "vitest-browser-react": "^2.3.0"
+    "vitest-browser-react": "^2.3.0",
+    "zod": "^4.6.1"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.63.1"

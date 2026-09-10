@@ -37,6 +37,19 @@ This project was initially built _before_ the LLM explosion, however, it's now a
 explore the capabilities of available models. Some code within the project is authored using
 [Claude Code](https://claude.ai).
 
+### Repository skills
+
+Repository-specific agent workflows live in `.agents/skills/`. The detailed `SKILL.md` files are the
+source of truth for agents; this is the human-facing catalog.
+
+| Skill                                                | Purpose                                                                                                    | Invoke         |
+| ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------- |
+| [`add-monster`](.agents/skills/add-monster/SKILL.md) | Design one standard or rainbow monster, generate artwork for approval, and safely scaffold its game files. | `$add-monster` |
+
+The monster workflow keeps unfinished work in the ignored `.monster-drafts/` directory. Its
+generated `config.ts` is the gameplay source of truth, while `manifest.json` records creative
+provenance.
+
 ### Imagery
 
 The majority of the images used in the game are AI generated, most recently using Nano Banana. Image
