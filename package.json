@@ -50,7 +50,7 @@
     "@vitest/ui": "^5.0.0",
     "concurrently": "^10.0.5",
     "knip": "^6.34.0",
-    "oxfmt": "^0.67.0",
+    "oxfmt": "^0.68.0",
     "oxlint": "^1.80.0",
     "oxlint-tsgolint": "^7.0.2001",
     "playwright": "^1.62.1",
