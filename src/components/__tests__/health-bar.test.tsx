@@ -111,13 +111,18 @@ describe('HealthBar', () => {
     expect((healthBar as HTMLElement)?.style.getPropertyValue('--health-percentage')).toBe('0.9999')
   })
 
-  it('handles negative health with proper percentage calculation', async () => {
+  it('shows an empty fill when health is negative', async () => {
     await render(<HealthBar health={-50} maxHealth={100} />)
 
-    // Text should show 0 but percentage calculation uses actual negative value
     await expect.element(page.getByText('0 HP')).toBeInTheDocument()
 
     const healthBar = document.querySelector('[style*="--health-percentage"]')
-    expect((healthBar as HTMLElement)?.style.getPropertyValue('--health-percentage')).toBe('-0.5')
+    expect((healthBar as HTMLElement)?.style.getPropertyValue('--health-percentage')).toBe('0')
+  })
+
+  it('caps the fill at full health', async () => {
+    await render(<HealthBar health={125} maxHealth={100} />)
+    const healthBar = document.querySelector('[style*="--health-percentage"]')
+    expect((healthBar as HTMLElement)?.style.getPropertyValue('--health-percentage')).toBe('1')
   })
 })

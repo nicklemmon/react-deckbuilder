@@ -23,6 +23,7 @@ import { ItemShopCard, type ItemShopCardStatus } from './components/item-shop-ca
 import { ItemShopItem } from './components/item-shop-item.tsx'
 import { StatsRow, StatIcon, StatVal } from './components/stats.tsx'
 import { cardUseSound } from './machines/app-machine/app-machine.ts'
+import { calculateDamage } from './machines/app-machine/battle.ts'
 import { requireItem } from './helpers/item.ts'
 import css from './app.module.css'
 import { ModeSelection } from './components/mode-selection.tsx'
@@ -146,10 +147,9 @@ export function App() {
                         send({ type: 'MONSTER_ATTACK_ANIMATION_COMPLETE' })
                       }
                     >
-                      {Math.max(
-                        0,
-                        (context.game.battle.monster?.stats.attack ?? 0) -
-                          context.game.player.stats.defense,
+                      {calculateDamage(
+                        context.game.battle.monster?.stats.attack ?? 0,
+                        context.game.player.stats.defense,
                       )}
                     </Feedback>
                   ) : null}
@@ -192,7 +192,10 @@ export function App() {
                                   send({ type: 'CARD_EFFECTS_ANIMATION_COMPLETE' })
                                 }
                               >
-                                {context.game.battle.cardInPlay?.stats.attack}
+                                {calculateDamage(
+                                  context.game.battle.cardInPlay?.stats.attack ?? 0,
+                                  context.game.battle.monster.stats.defense,
+                                )}
                               </Feedback>
                             ) : null}
                           </Stack>
