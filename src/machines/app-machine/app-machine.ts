@@ -453,6 +453,28 @@ export const appMachine = setup({
     soundtrackMachine: soundtrackMachine,
   },
   guards: {
+    cardCanBePurchased: ({ context, event }) => {
+      if (event.type !== 'ITEM_SHOP_CARD_CLICK') return false
+      const card = context.game.shop.cards.find((offer) => offer.id === event.data.card.id)
+      return (
+        !!card &&
+        context.game.player.gold >= card.price &&
+        !context.game.player.deck.some((owned) => owned.id === card.id)
+      )
+    },
+    itemCanBePurchased: ({ context, event }) => {
+      if (event.type !== 'ITEM_SHOP_ITEM_CLICK') return false
+      const item = context.game.items.find((available) => available.id === event.data.item.id)
+      return !!item && context.game.player.gold >= item.cost
+    },
+    cardCanBeDestroyed: ({ context, event }) => {
+      if (event.type !== 'DESTRUCTION_SHOP_CARD_CLICK') return false
+      return (
+        context.game.player.deck.length > 1 &&
+        context.game.player.gold >= context.game.cardDestructionPrice &&
+        context.game.player.deck.some((card) => card.id === event.data.card.id)
+      )
+    },
     playerIsAlive: ({ context }) => {
       return context.game.player.stats.health > 0
     },
@@ -913,8 +935,11 @@ export const appMachine = setup({
         },
         ITEM_SHOP_CARD_CLICK: {
           target: 'Shopping',
+          guard: 'cardCanBePurchased',
           actions: assign({
             game: ({ context, event }) => {
+              const card = context.game.shop.cards.find((offer) => offer.id === event.data.card.id)
+              if (!card) return context.game
               buttonClickSound.play()
               cashRegisterSound.play()
 
@@ -922,8 +947,8 @@ export const appMachine = setup({
                 ...context.game,
                 player: {
                   ...context.game.player,
-                  deck: [...context.game.player.deck, event.data.card],
-                  gold: context.game.player.gold - event.data.card.price,
+                  deck: [...context.game.player.deck, card],
+                  gold: context.game.player.gold - card.price,
                 },
               }
             },
@@ -931,12 +956,15 @@ export const appMachine = setup({
         },
         ITEM_SHOP_ITEM_CLICK: {
           target: 'Shopping',
+          guard: 'itemCanBePurchased',
           actions: assign({
             game: ({ context, event }) => {
+              const item = context.game.items.find(
+                (available) => available.id === event.data.item.id,
+              )
+              if (!item) return context.game
               buttonClickSound.play()
               cashRegisterSound.play()
-
-              const item = event.data.item
 
               item.sfx.obtain.play()
 
@@ -1000,12 +1028,15 @@ export const appMachine = setup({
       on: {
         DESTRUCTION_SHOP_CARD_CLICK: {
           target: 'DestroyingCard',
+          guard: 'cardCanBeDestroyed',
           actions: assign({
             game: ({ context, event }) => {
+              const card = context.game.player.deck.find((owned) => owned.id === event.data.card.id)
+              if (!card) return context.game
               return {
                 ...context.game,
                 cardToDestroy: {
-                  ...event.data.card,
+                  ...card,
                   orientation: 'face-up' as const,
                   status: 'in-play' as const,
                 },
