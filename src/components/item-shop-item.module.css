@@ -36,6 +36,11 @@
     box-shadow: 0 var(--spacing-200) var(--spacing-400) calc(var(--spacing-100) * -1)
       var(--color-stone-700);
   }
+
+  &:focus-visible {
+    outline: 3px solid var(--color-stone-100);
+    outline-offset: 3px;
+  }
 }
 
 .item-shop-item-overlay {

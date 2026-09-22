@@ -101,8 +101,9 @@ export function App() {
                       <button
                         className={css['play-area-item-btn']}
                         onClick={() => send({ type: 'INVENTORY_ITEM_CLICK', data: { item } })}
+                        aria-label={`Use ${item.name}`}
                       >
-                        <img src={item.artwork} />
+                        <img src={item.artwork} alt="" />
                       </button>
                     </motion.div>
                   )

@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react'
+import type { KeyboardEvent } from 'react'
 import type { Card as CardType } from '../types/cards'
 import { cx } from '../helpers/css'
 import { PriceStatsRow } from './price-stats-row'
@@ -41,8 +42,22 @@ export function ItemShopCard({
     return onClick()
   }
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (disabled || (event.key !== 'Enter' && event.key !== ' ')) return
+    event.preventDefault()
+    onClick()
+  }
+
   return (
-    <div className={withClsx(css['item-shop-card'], className)} onClick={handleClick}>
+    <div
+      className={withClsx(css['item-shop-card'], className)}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={disabled ? -1 : 0}
+      aria-label={`${props.name}, ${props.price} gold`}
+      aria-disabled={disabled}
+    >
       <AnimatePresence>
         {shopStatus === 'purchased' ? (
           <motion.div

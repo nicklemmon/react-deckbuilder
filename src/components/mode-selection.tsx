@@ -4,7 +4,7 @@ import { Panel, PanelBody } from './panel'
 import { Stack } from './stack'
 import styles from './mode-selection.module.css'
 import { fadeIn, fadeOut } from '../helpers/fade-sound'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { TRACKS } from '../machines/soundtrack-machine/tracks'
 
 const boogieMusic = TRACKS.boogie.sound
@@ -18,9 +18,11 @@ export function ModeSelection({
   /** Handler for clicks on the rainbow mode button */
   onRainbowModeClick: () => void
 }) {
+  const rainbowSelected = useRef(false)
+
   useEffect(() => {
     return () => {
-      fadeOut(boogieMusic)
+      if (!rainbowSelected.current) fadeOut(boogieMusic)
     }
   }, [])
 
@@ -35,7 +37,10 @@ export function ModeSelection({
               <Button onClick={onStandardModeClick}> Standard mode</Button>
 
               <Button
-                onClick={onRainbowModeClick}
+                onClick={() => {
+                  rainbowSelected.current = true
+                  onRainbowModeClick()
+                }}
                 className={styles['rainbow-btn']}
                 onMouseOver={() => {
                   fadeIn(boogieMusic)
