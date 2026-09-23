@@ -1,6 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
-import { dirname, join, resolve } from 'node:path'
+import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path'
 import { createInterface } from 'node:readline/promises'
 import { stdin as input, stdout as output } from 'node:process'
 import { fileURLToPath } from 'node:url'
@@ -65,6 +65,28 @@ export function slugify(value: string): string {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
+}
+
+/** Resolves a relative path and rejects paths that escape their allowed directory. */
+function resolveWithinDirectory(directory: string, path: string, label: string): string {
+  if (isAbsolute(path)) throw new Error(`${label} must stay inside its allowed directory`)
+
+  const base = resolve(directory)
+  const target = resolve(base, path)
+  const fromBase = relative(base, target)
+  if (fromBase === '..' || fromBase.startsWith(`..${sep}`) || isAbsolute(fromBase)) {
+    throw new Error(`${label} must stay inside its allowed directory`)
+  }
+  return target
+}
+
+/** Returns a safe path for a draft file under the ignored drafts directory. */
+export function draftFilePath(slug: string, draftsDirectory = DRAFTS_DIR): string {
+  const fileSlug = slug || 'unnamed-monster'
+  if (fileSlug !== slugify(fileSlug)) {
+    throw new Error('Draft slug must be lowercase kebab-case')
+  }
+  return resolveWithinDirectory(draftsDirectory, `${fileSlug}.json`, 'Draft path')
 }
 
 const approvedText = z
@@ -136,6 +158,7 @@ export function validateDraft(draft: MonsterDraft): string[] {
 
 /** Reads the mode prompt template and its style-reference path. */
 async function readPrompt(mode: GameMode, root = ROOT) {
+  if (!MODES.includes(mode)) throw new Error('Game mode must be standard or rainbow')
   const source = await readFile(join(root, 'prompts', 'monster-art', `${mode}.md`), 'utf8')
   const match = source.match(/^---\nreference-image:\s*(.+)\n---\n+([\s\S]+)$/)
   if (!match?.[1] || !match[2]) throw new Error(`Invalid ${mode} prompt frontmatter`)
@@ -158,6 +181,13 @@ export async function composeArtworkPrompt(draft: MonsterDraft, root = ROOT): Pr
 export async function validateDraftForScaffolding(draft: MonsterDraft, root = ROOT) {
   const errors = validateDraft(draft)
   if (errors.length) return errors
+
+  try {
+    resolveWithinDirectory(root, draft.artworkSource, 'artworkSource')
+  } catch (error: unknown) {
+    errors.push(error instanceof Error ? error.message : String(error))
+    return errors
+  }
 
   const { referenceImage } = await readPrompt(draft.gameMode, root)
   const expectedPrompt = await composeArtworkPrompt(draft, root)
@@ -313,7 +343,7 @@ export async function scaffold(draftPath: string, root = ROOT) {
   const manifestPath = join(targetDir, 'manifest.json')
   const pngPath = join(targetDir, 'artwork.png')
   const webpPath = join(targetDir, 'artwork.webp')
-  const sourceArtwork = resolve(root, draft.artworkSource)
+  const sourceArtwork = resolveWithinDirectory(root, draft.artworkSource, 'artworkSource')
   const artworkForScaffold = existsSync(pngPath) ? pngPath : sourceArtwork
   await validateArtwork(artworkForScaffold)
 
@@ -356,7 +386,7 @@ async function main() {
       : {}
     const draft = await createDraftFromAnswers(seed, !values.input)
     await mkdir(DRAFTS_DIR, { recursive: true })
-    const path = join(DRAFTS_DIR, `${draft.slug || 'unnamed-monster'}.json`)
+    const path = draftFilePath(draft.slug)
     if (existsSync(path)) throw new Error(`Refusing to overwrite ${path}`)
     await writeFile(path, `${JSON.stringify(draft, null, 2)}\n`)
     console.log(`Draft created: ${path}`)
@@ -387,7 +417,7 @@ async function main() {
     const draft = await loadDraft(path)
     const errors = await validateDraftForScaffolding(draft)
     if (errors.length) throw new Error(errors.join('\n'))
-    await validateArtwork(resolve(ROOT, draft.artworkSource))
+    await validateArtwork(resolveWithinDirectory(ROOT, draft.artworkSource, 'artworkSource'))
     console.log('Draft and artwork are valid')
     return
   }

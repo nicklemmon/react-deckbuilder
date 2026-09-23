@@ -1,10 +1,11 @@
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
-import { join } from 'node:path'
+import { join, resolve } from 'node:path'
 import sharp from 'sharp'
 import { describe, expect, it } from 'vitest'
 import {
   composeArtworkPrompt,
+  draftFilePath,
   finalizedManifest,
   scaffold,
   slugify,
@@ -33,6 +34,17 @@ const validDraft: MonsterDraft = {
 describe('monster content', () => {
   it('creates stable kebab-case slugs', () => {
     expect(slugify('  Cinnamon Swirl! ')).toBe('cinnamon-swirl')
+  })
+
+  it('keeps draft output paths inside the drafts directory', () => {
+    const draftsDirectory = join(tmpdir(), 'monster-drafts')
+
+    expect(draftFilePath('mossback-troll', draftsDirectory)).toBe(
+      join(draftsDirectory, 'mossback-troll.json'),
+    )
+    expect(() => draftFilePath('../../outside', draftsDirectory)).toThrow(
+      'Draft slug must be lowercase kebab-case',
+    )
   })
 
   it('rejects delegated and incomplete values', () => {
@@ -71,6 +83,29 @@ describe('monster content', () => {
     })
 
     expect(errors).toEqual([])
+  })
+
+  it('rejects artwork sources outside the repository', async () => {
+    const traversalErrors = await validateDraftForScaffolding({
+      ...validDraft,
+      artworkSource: '../../outside.png',
+    })
+    const absolutePathErrors = await validateDraftForScaffolding({
+      ...validDraft,
+      artworkSource: resolve(tmpdir(), 'outside.png'),
+    })
+
+    expect(traversalErrors).toContain('artworkSource must stay inside its allowed directory')
+    expect(absolutePathErrors).toContain('artworkSource must stay inside its allowed directory')
+  })
+
+  it('rejects unknown modes before reading a prompt template', async () => {
+    await expect(
+      composeArtworkPrompt({
+        ...validDraft,
+        gameMode: '../../outside' as MonsterDraft['gameMode'],
+      }),
+    ).rejects.toThrow('Game mode must be standard or rainbow')
   })
 
   it('rejects unresolved optional audio direction', () => {
