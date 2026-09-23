@@ -51,6 +51,22 @@ describe('resolveCardPlay', () => {
     expect(state.monster?.stats.health).toBe(85)
   })
 
+  it('reduces card damage by monster defense', () => {
+    const state: BattleState = {
+      ...baseState,
+      monster: { ...baseMonster, stats: { ...baseMonster.stats, defense: 5 } },
+    }
+    expect(resolveCardPlay(state, baseCard).state.monster?.stats.health).toBe(90)
+  })
+
+  it('does not deal negative damage when monster defense exceeds card attack', () => {
+    const state: BattleState = {
+      ...baseState,
+      monster: { ...baseMonster, stats: { ...baseMonster.stats, defense: 20 } },
+    }
+    expect(resolveCardPlay(state, baseCard).state.monster?.stats.health).toBe(100)
+  })
+
   it('sets monster status to taking-damage', () => {
     const { state } = resolveCardPlay(baseState, baseCard)
     expect(state.monster?.status).toBe('taking-damage')

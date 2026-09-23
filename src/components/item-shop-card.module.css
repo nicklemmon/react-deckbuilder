@@ -2,6 +2,11 @@
   position: relative;
 }
 
+.item-shop-card:focus-visible {
+  outline: 3px solid var(--color-stone-100);
+  outline-offset: 3px;
+}
+
 .unaffordable,
 .purchased {
   cursor: not-allowed;

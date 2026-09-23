@@ -38,6 +38,12 @@ export function fadeIn(sound: Howl, options: FadeOptions = {}) {
 export function fadeOut(sound: Howl, options: FadeOptions = {}) {
   const { duration = DEFAULT_FADE_DURATION } = options
 
+  const pendingTimeout = pendingStops.get(sound)
+  if (pendingTimeout) {
+    clearTimeout(pendingTimeout)
+    pendingStops.delete(sound)
+  }
+
   if (sound.playing()) {
     const currentVolume = sound.volume()
     sound.fade(currentVolume, 0, duration)

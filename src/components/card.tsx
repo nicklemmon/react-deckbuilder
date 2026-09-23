@@ -1,4 +1,4 @@
-import { useState, type MouseEvent } from 'react'
+import { useState, type KeyboardEvent, type MouseEvent } from 'react'
 import type { Card } from '../types/cards'
 import cardBackImg from '../images/card-back.webp'
 import cardBackRainbowImg from '../images/card-back.rainbow.webp'
@@ -83,6 +83,12 @@ export function Card({
   }
 
   const isHoverable = orientation === 'face-up' && status === 'idle'
+  const isInteractive = !!onClick && isHoverable
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (!isInteractive || (event.key !== 'Enter' && event.key !== ' ')) return
+    event.preventDefault()
+    onClick()
+  }
   const translateY = isHoverable && isHovering ? 'calc(-1 * var(--spacing-100))' : '0px'
 
   // Calculate sheen position (0 to 100%)
@@ -93,7 +99,12 @@ export function Card({
     <div
       data-game-mode={mode}
       className={withClsx(css['card'], className)}
-      onClick={onClick}
+      onClick={isInteractive ? onClick : undefined}
+      onKeyDown={isInteractive ? handleKeyDown : undefined}
+      role={onClick ? 'button' : undefined}
+      tabIndex={isInteractive ? 0 : undefined}
+      aria-label={onClick ? `${name}, ${stats.attack} attack` : undefined}
+      aria-disabled={onClick ? !isInteractive : undefined}
       id={id}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}

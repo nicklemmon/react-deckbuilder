@@ -2,7 +2,7 @@ import css from './health-bar.module.css'
 
 /** Shows a health bar */
 export function HealthBar({ health, maxHealth }: { health: number; maxHealth: number }) {
-  const healthPercentage = health / maxHealth
+  const healthPercentage = maxHealth > 0 ? Math.min(1, Math.max(0, health / maxHealth)) : 0
   const healthText = health > 0 ? health : 0
 
   return (

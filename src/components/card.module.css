@@ -55,6 +55,11 @@
   will-change: transform;
 }
 
+.card:focus-visible {
+  outline: 3px solid var(--color-stone-100);
+  outline-offset: 3px;
+}
+
 .card.face-up.idle:hover::before {
   opacity: 1;
 }

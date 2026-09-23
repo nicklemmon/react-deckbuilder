@@ -64,8 +64,13 @@ export function ItemShopItem({
         ) : null}
       </AnimatePresence>
 
-      <button className={withClsx(css['item-shop-item-btn'])} onClick={handleClick}>
-        <img src={item.artwork} />
+      <button
+        className={withClsx(css['item-shop-item-btn'])}
+        onClick={handleClick}
+        disabled={shopStatus === 'unaffordable'}
+        aria-label={item.name}
+      >
+        <img src={item.artwork} alt="" />
       </button>
 
       <PriceStatsRow price={price ?? item.cost} />

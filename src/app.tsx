@@ -23,6 +23,7 @@ import { ItemShopCard, type ItemShopCardStatus } from './components/item-shop-ca
 import { ItemShopItem } from './components/item-shop-item.tsx'
 import { StatsRow, StatIcon, StatVal } from './components/stats.tsx'
 import { cardUseSound } from './machines/app-machine/app-machine.ts'
+import { calculateDamage } from './machines/app-machine/battle.ts'
 import { requireItem } from './helpers/item.ts'
 import css from './app.module.css'
 import { ModeSelection } from './components/mode-selection.tsx'
@@ -100,8 +101,9 @@ export function App() {
                       <button
                         className={css['play-area-item-btn']}
                         onClick={() => send({ type: 'INVENTORY_ITEM_CLICK', data: { item } })}
+                        aria-label={`Use ${item.name}`}
                       >
-                        <img src={item.artwork} />
+                        <img src={item.artwork} alt="" />
                       </button>
                     </motion.div>
                   )
@@ -146,8 +148,10 @@ export function App() {
                         send({ type: 'MONSTER_ATTACK_ANIMATION_COMPLETE' })
                       }
                     >
-                      {/* TODO: This is the wrong value! */}
-                      {context.game.battle.monster?.stats.attack}
+                      {calculateDamage(
+                        context.game.battle.monster?.stats.attack ?? 0,
+                        context.game.player.stats.defense,
+                      )}
                     </Feedback>
                   ) : null}
                 </motion.div>
@@ -189,7 +193,10 @@ export function App() {
                                   send({ type: 'CARD_EFFECTS_ANIMATION_COMPLETE' })
                                 }
                               >
-                                {context.game.battle.cardInPlay?.stats.attack}
+                                {calculateDamage(
+                                  context.game.battle.cardInPlay?.stats.attack ?? 0,
+                                  context.game.battle.monster.stats.defense,
+                                )}
                               </Feedback>
                             ) : null}
                           </Stack>
@@ -345,9 +352,11 @@ export function App() {
           <DialogContent>
             <Stack align="center">
               <Inline>
-                <Button onClick={() => send({ type: 'DESTROY_CARDS_CLICK' })} variant="tertiary">
-                  Destroy cards
-                </Button>
+                {context.game.player.deck.length > 1 ? (
+                  <Button onClick={() => send({ type: 'DESTROY_CARDS_CLICK' })} variant="tertiary">
+                    Destroy cards
+                  </Button>
+                ) : null}
 
                 <Button onClick={() => send({ type: 'ITEM_SHOP_CLICK' })} variant="secondary">
                   Item shop
@@ -368,7 +377,7 @@ export function App() {
                 {context.game.shop.cards.map((card) => {
                   let status: ItemShopCardStatus = 'affordable'
 
-                  if (context.game.player.gold <= card.price) {
+                  if (context.game.player.gold < card.price) {
                     status = 'unaffordable'
                   }
 
@@ -390,7 +399,11 @@ export function App() {
               <Inline>
                 <ItemShopItem
                   item={requireItem('small-potion', context.game.items)}
-                  shopStatus={context.game.player.gold >= 30 ? 'affordable' : 'unaffordable'}
+                  shopStatus={
+                    context.game.player.gold >= requireItem('small-potion', context.game.items).cost
+                      ? 'affordable'
+                      : 'unaffordable'
+                  }
                   onClick={() =>
                     send({
                       type: 'ITEM_SHOP_ITEM_CLICK',
@@ -401,7 +414,11 @@ export function App() {
 
                 <ItemShopItem
                   item={requireItem('large-potion', context.game.items)}
-                  shopStatus={context.game.player.gold >= 50 ? 'affordable' : 'unaffordable'}
+                  shopStatus={
+                    context.game.player.gold >= requireItem('large-potion', context.game.items).cost
+                      ? 'affordable'
+                      : 'unaffordable'
+                  }
                   onClick={() =>
                     send({
                       type: 'ITEM_SHOP_ITEM_CLICK',
@@ -464,21 +481,28 @@ export function App() {
                   width: '100%',
                 }}
               >
-                {context.game.player.deck.map((card) => {
-                  return (
-                    <ItemShopCard
-                      key={`destruction-shop-${card.id}`}
-                      {...card}
-                      shopStatus={
-                        context.game.player.gold >= context.game.cardDestructionPrice
-                          ? 'affordable'
-                          : 'unaffordable'
-                      }
-                      price={context.game.cardDestructionPrice}
-                      onClick={() => send({ type: 'DESTRUCTION_SHOP_CARD_CLICK', data: { card } })}
-                    />
-                  )
-                })}
+                {context.game.player.deck.length === 1 ? (
+                  <p>Keep at least one card in your deck.</p>
+                ) : null}
+                {context.game.player.deck.length > 1
+                  ? context.game.player.deck.map((card) => {
+                      return (
+                        <ItemShopCard
+                          key={`destruction-shop-${card.id}`}
+                          {...card}
+                          shopStatus={
+                            context.game.player.gold >= context.game.cardDestructionPrice
+                              ? 'affordable'
+                              : 'unaffordable'
+                          }
+                          price={context.game.cardDestructionPrice}
+                          onClick={() =>
+                            send({ type: 'DESTRUCTION_SHOP_CARD_CLICK', data: { card } })
+                          }
+                        />
+                      )
+                    })
+                  : null}
               </div>
 
               <Inline>

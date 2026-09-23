@@ -3,6 +3,11 @@ import type { Card } from '../../types/cards.ts'
 import type { Item } from '../../types/items.ts'
 import type { Cue } from './cues.ts'
 
+/** Returns attack damage after defense, with a minimum of zero. */
+export function calculateDamage(attack: number, defense: number): number {
+  return Math.max(0, attack - defense)
+}
+
 export function resolveCardPlay(
   state: BattleState,
   card: Card,
@@ -17,7 +22,9 @@ export function resolveCardPlay(
         status: 'taking-damage',
         stats: {
           ...state.monster.stats,
-          health: state.monster.stats.health - card.stats.attack,
+          health:
+            state.monster.stats.health -
+            calculateDamage(card.stats.attack, state.monster.stats.defense),
         },
       },
     },
@@ -28,8 +35,7 @@ export function resolveCardPlay(
 export function resolveMonsterAttack(state: BattleState): { state: BattleState; cues: Cue[] } {
   if (!state.monster) return { state, cues: [] }
 
-  const rawDamage = state.monster.stats.attack - state.player.stats.defense
-  const damage = rawDamage > 0 ? rawDamage : 0
+  const damage = calculateDamage(state.monster.stats.attack, state.player.stats.defense)
 
   return {
     state: {

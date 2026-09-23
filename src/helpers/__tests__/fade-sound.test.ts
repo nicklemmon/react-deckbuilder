@@ -112,5 +112,16 @@ describe('fade-sound', () => {
       // Stop should not have been called because fadeIn cancelled it
       expect(mockSound.stop).not.toHaveBeenCalled()
     })
+
+    it('does not stop a restarted track after repeated fade outs', () => {
+      fadeOut(mockSound, { duration: 500 })
+      vi.advanceTimersByTime(100)
+      fadeOut(mockSound, { duration: 500 })
+      vi.advanceTimersByTime(100)
+      fadeIn(mockSound)
+
+      vi.advanceTimersByTime(500)
+      expect(mockSound.stop).not.toHaveBeenCalled()
+    })
   })
 })
