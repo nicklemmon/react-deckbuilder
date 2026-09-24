@@ -36,12 +36,21 @@ export function App() {
    * Returns a stable screen key for AnimatePresence.
    * Game play states all share the same key to prevent re-animating during gameplay.
    */
-  const screenKey = state.hasTag('gameplay') ? 'game-play' : (value as string)
+  const screenKey = state.hasTag('gameplay')
+    ? 'game-play'
+    : state.hasTag('loading-assets')
+      ? 'loading-assets'
+      : (value as string)
 
   /** Renders the appropriate screen content based on current state */
   const renderScreenContent = () => {
-    if (value === 'LoadingAssets') {
-      return <AppPreloader />
+    if (state.hasTag('loading-assets')) {
+      return (
+        <AppPreloader
+          loaded={context.assetsLoadingProgress.loaded}
+          total={context.assetsLoadingProgress.total}
+        />
+      )
     }
 
     if (value === 'TitleScreen') {
@@ -522,7 +531,13 @@ export function App() {
     )
   }
 
-  const introStates = ['TitleScreen', 'ModeSelection', 'CharacterCreation']
+  const introStates = [
+    'LoadingAssets',
+    'AssetsLoaded',
+    'TitleScreen',
+    'ModeSelection',
+    'CharacterCreation',
+  ]
   const backgroundImage = introStates.includes(value) ? introBg : undefined
 
   return (

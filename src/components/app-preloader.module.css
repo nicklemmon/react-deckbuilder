@@ -1,0 +1,57 @@
+.preloader {
+  width: var(--size-700);
+  box-shadow: 0 1rem 2rem -0.5rem rgba(0, 0, 0, 0.6);
+}
+
+.label {
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-500);
+  color: var(--color-stone-200);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .label {
+    animation: pulse 1.25s var(--anim-easing-100) infinite;
+  }
+}
+
+.progress-bar {
+  --progress-percentage: 0;
+
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: var(--size-150);
+  border-radius: var(--rounding-200);
+  border: var(--border-width-100) solid var(--color-blood-500);
+  background: linear-gradient(0deg, var(--color-stone-600) 50%, var(--color-stone-800) 100%);
+  filter: drop-shadow(0 2px 2px var(--color-stone-900));
+}
+
+.progress-bar-fill {
+  position: absolute;
+  inset: 0;
+  transform: scaleX(var(--progress-percentage));
+  transform-origin: left;
+  /* Progress updates arrive every few ms and restart the transition; ease-out keeps the fill moving */
+  transition: transform var(--anim-dur-300) ease-out;
+  background: linear-gradient(
+    180deg,
+    var(--color-blood-300) 0%,
+    var(--color-blood-900) 60%,
+    var(--color-blood-900) 100%
+  );
+}
+
+.percentage {
+  font-size: var(--font-size-200);
+  color: var(--color-stone-400);
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.6;
+  }
+}
