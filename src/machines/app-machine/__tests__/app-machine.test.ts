@@ -3,11 +3,23 @@ import { describe, expect, it } from 'vitest'
 import { appMachine } from '../app-machine'
 import { getAllItems } from '../../../helpers/item'
 
+/** Stands in for asset preloading and settles immediately with nothing to load. */
+const loadNoAssets = fromPromise(
+  async ({
+    input,
+  }: {
+    input: { onProgress: (progress: { loaded: number; total: number }) => void }
+  }) => {
+    input.onProgress({ loaded: 0, total: 0 })
+  },
+)
+
 describe('appMachine', () => {
   /** Starts the machine in a shop state with a controlled player balance and deck. */
   async function actorIn(state: 'Shopping' | 'DestroyingCards', gold: number, deckSize = 1) {
     const machine = appMachine.provide({
-      actors: { loadAllAssets: fromPromise<unknown[]>(async () => []) },
+      actors: { loadAllAssets: loadNoAssets },
+      delays: { ASSETS_LOADED_HOLD: 0 },
     })
     const initialActor = createActor(machine).start()
     await waitFor(initialActor, (snapshot) => snapshot.matches('TitleScreen'))
@@ -104,8 +116,9 @@ describe('appMachine', () => {
   it('loads shop items after creating a character', async () => {
     const machine = appMachine.provide({
       actors: {
-        loadAllAssets: fromPromise<unknown[]>(async () => []),
+        loadAllAssets: loadNoAssets,
       },
+      delays: { ASSETS_LOADED_HOLD: 0 },
     })
     const actor = createActor(machine)
     actor.start()
