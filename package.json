@@ -66,6 +66,6 @@
     "zod": "^4.6.1"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.63.4"
+    "@rollup/rollup-linux-x64-gnu": "4.63.5"
   }
 }
