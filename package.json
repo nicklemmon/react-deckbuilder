@@ -39,7 +39,7 @@
     "xstate": "5.33.2"
   },
   "devDependencies": {
-    "@storybook/addon-docs": "^10.6.0",
+    "@storybook/addon-docs": "^10.6.1",
     "@storybook/addon-mcp": "^10.6.0",
     "@storybook/react-vite": "^10.6.0",
     "@types/howler": "2.2.13",
