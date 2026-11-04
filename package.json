@@ -36,7 +36,7 @@
     "motion": "13.4.2",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "xstate": "5.33.2"
+    "xstate": "5.33.3"
   },
   "devDependencies": {
     "@storybook/addon-docs": "^10.6.0",
