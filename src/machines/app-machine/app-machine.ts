@@ -36,10 +36,7 @@ const MAX_HAND_SIZE = 5
 const CARD_DESTRUCTION_PRICE = 100
 
 /** All image files in the project */
-const IMAGE_MODULES = import.meta.glob<{ default: string }>('../../**/*.(png|webp)', {
-  eager: true,
-  query: { format: 'webp' },
-})
+const IMAGE_MODULES = import.meta.glob<{ default: string }>('../../**/*.webp', { eager: true })
 
 /** All sound effect files in the project */
 const SFX_MODULES = import.meta.glob<{ default: string }>('../../**/*.wav', { eager: true })
@@ -83,8 +80,15 @@ const winSound = getSound({ src: winSfx, volume: 1.0 })
 
 const loseSound = getSound({ src: loseSfx, volume: 1.0 })
 
-/** Prefetches assets from multiple sources returned by `import.meta.glob` */
-async function prefetchAssets() {
+/**
+ * Prefetches all images and sounds. Calls `onProgress` once before any asset settles, then once
+ * each time an asset settles. A failed asset counts as settled and does not fail the load.
+ */
+async function prefetchAssets({
+  onProgress,
+}: {
+  onProgress: (progress: AssetsLoadingProgress) => void
+}) {
   // Initialize helper functions to ensure all assets are discovered
   const allMonsters = getAllMonsters()
   const allItems = getAllItems()
@@ -123,31 +127,52 @@ async function prefetchAssets() {
     allImages.add(portrait.url)
   })
 
+  const total = allImages.size + allSounds.size
+  let loaded = 0
+  onProgress({ loaded, total })
+
+  /** Returns a handler that counts its asset as settled on the first call only */
+  const settle = (resolve: (value: null) => void) => {
+    let settled = false
+    return () => {
+      if (settled) return
+      settled = true
+      loaded += 1
+      onProgress({ loaded, total })
+      resolve(null)
+    }
+  }
+
   return Promise.all([
     // Preload all images
     ...Array.from(allImages).map((src) => {
-      return new Promise((resolve) => {
+      return new Promise<null>((resolve) => {
         const img = new Image()
+        img.onload = settle(resolve)
+        img.onerror = settle(resolve) // Don't fail the entire load for missing images
         img.src = src
-        img.onload = () => resolve(null)
-        img.onerror = () => resolve(null) // Don't fail the entire load for missing images
       })
     }),
     // Preload all sounds
     ...Array.from(allSounds).map((src) => {
-      return new Promise((resolve) => {
+      return new Promise<null>((resolve) => {
         const audio = new Audio()
+        const done = settle(resolve)
+        audio.oncanplaythrough = done
+        audio.onerror = done // Don't fail the entire load for missing sounds
         audio.src = src
-        audio.oncanplaythrough = () => resolve(null)
-        audio.onerror = () => resolve(null) // Don't fail the entire load for missing sounds
       })
     }),
   ])
 }
 
+/** How many preloaded assets have settled out of the total */
+type AssetsLoadingProgress = { loaded: number; total: number }
+
 /** Context for the app-machine */
 export type AppMachineContext = {
   soundtrackRef: ActorRefFrom<typeof soundtrackMachine> | null
+  assetsLoadingProgress: AssetsLoadingProgress
   assets: {
     characterClasses: Array<CharacterClass>
     cards: Array<Card>
@@ -186,6 +211,7 @@ export type AppMachineContext = {
 }
 
 type AppMachineEvent =
+  | { type: 'ASSETS_LOADING_PROGRESS'; data: AssetsLoadingProgress }
   | { type: 'TITLE_SCREEN_START_CLICK' }
   | { type: 'STANDARD_MODE_SELECTION' }
   | { type: 'RAINBOW_MODE_SELECTION' }
@@ -449,8 +475,19 @@ export const appMachine = setup({
     stopMusic: ({ context }) => context.soundtrackRef?.send({ type: 'STOP' }),
   },
   actors: {
-    loadAllAssets: fromPromise(prefetchAssets),
+    loadAllAssets: fromPromise(
+      async ({ input }: { input: Parameters<typeof prefetchAssets>[0] }) => {
+        await prefetchAssets(input)
+      },
+    ),
     soundtrackMachine: soundtrackMachine,
+  },
+  delays: {
+    /**
+     * Keeps the full progress bar on screen after assets load. It covers the preloader fade-in and
+     * the bar fill transition, so the bar visibly fills even when assets come from the cache.
+     */
+    ASSETS_LOADED_HOLD: 1000,
   },
   guards: {
     cardCanBePurchased: ({ context, event }) => {
@@ -516,6 +553,7 @@ export const appMachine = setup({
   }),
   context: {
     soundtrackRef: null,
+    assetsLoadingProgress: { loaded: 0, total: 0 },
     assets: {
       characterClasses: CHARACTER_CLASSES,
       cards: CARDS,
@@ -566,10 +604,25 @@ export const appMachine = setup({
   },
   states: {
     LoadingAssets: {
+      tags: ['loading-assets'],
       invoke: {
         src: 'loadAllAssets',
-        onDone: 'TitleScreen',
+        input: ({ self }) => ({
+          onProgress: (progress) => self.send({ type: 'ASSETS_LOADING_PROGRESS', data: progress }),
+        }),
+        onDone: 'AssetsLoaded',
         onError: 'LoadingAssetsError',
+      },
+      on: {
+        ASSETS_LOADING_PROGRESS: {
+          actions: assign({ assetsLoadingProgress: ({ event }) => event.data }),
+        },
+      },
+    },
+    AssetsLoaded: {
+      tags: ['loading-assets'],
+      after: {
+        ASSETS_LOADED_HOLD: 'TitleScreen',
       },
     },
     LoadingAssetsError: {},
